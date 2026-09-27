@@ -1485,7 +1485,7 @@
   .proc .pi { flex: none; display: inline-flex; gap: 4px; align-items: center; color: var(--muted); opacity: .75; margin-left: -2px; }
   .proc.done .pl { color: var(--muted); }
   @media (prefers-reduced-motion: no-preference) {
-    .proc.fresh .pl, .proc.fresh .pi, .proc.fresh .cv { animation: lineIn .9s cubic-bezier(.22, 1, .36, 1) var(--fd, 2.6s) both; }
+    .proc.fresh .pl, .proc.fresh .pi, .proc.fresh .cv { animation: lineIn .9s cubic-bezier(.22, 1, .36, 1) var(--fd, 3.9s) both; }
   }
 </style>
 <script src="fonts/script-glyphs.js"></script>
@@ -7040,20 +7040,26 @@
     else if (sources && sources.length) bits.push('已搜索 ' + sources.length + ' 个网页');
     return bits.join(' · ');
   }
-  // 思考标记：JS 画的星轨（连续、可控），想完后慢慢收拢，像用笔写字一样把羽毛笔一笔一笔写出来
+  // 思考标记：JS 画的星轨；想完后收成一滴墨 → 在左边写出羽毛笔 → 羽毛笔往右走，笔尖拖出一道墨迹，停在字前面
   var OrbQ = (function () {
-    var ST = ["M3.7 22.7C3.9 22.6 4.7 22.2 4.8 22C5 21.8 4.6 21.8 4.5 21.7", "M5.2 18.2C5.1 18 4.9 17.3 4.8 16.9C4.8 16.6 4.7 16.4 4.7 16.2C4.7 15.9 4.7 15.7 4.8 15.5C4.8 15.3 4.8 15.2 4.9 15C4.9 14.8 5 14.5 5.1 14.4C5.2 14.4 5.5 14.7 5.5 14.7C5.6 14.6 5.4 14.4 5.4 14.3C5.4 14.1 5.3 14 5.4 13.8C5.4 13.7 5.5 13.4 5.6 13.1C5.7 12.9 5.9 12.7 6 12.4C6.2 12.1 6.3 11.8 6.4 11.5C6.6 11.2 6.6 11 6.8 10.7C7 10.4 7.4 10.1 7.6 9.8C7.9 9.4 8.3 8.9 8.5 8.9C8.6 8.8 8.3 9.5 8.4 9.4C8.5 9.4 8.7 8.8 8.8 8.6C8.9 8.4 9 8.3 9.1 8.2C9.2 8.1 9.2 8.1 9.6 7.7C10 7.3 11 6.5 11.5 6.1C12.1 5.6 12.4 5.3 12.8 5C13.2 4.7 13.5 4.5 13.9 4.2C14.4 4 15.1 3.6 15.4 3.4C15.7 3.2 15.7 3.2 15.8 3.2C15.9 3.2 15.8 3.2 15.9 3.2C16 3.1 15.8 3.2 16.4 2.9C16.9 2.6 18.9 1.8 19.5 1.6C20.1 1.3 19.9 1.5 20 1.4", "M3.7 22.7C3.8 22.4 4.2 21.4 4.5 20.6C4.8 19.7 5.2 18.4 5.5 17.6C5.9 16.7 6.1 16 6.4 15.4C6.6 14.8 6.8 14.4 7.1 13.8C7.4 13.1 7.9 12.2 8.2 11.6C8.5 11 8.8 10.7 9 10.4C9.3 10 9.4 9.8 9.7 9.4C10 9.1 10.4 8.6 10.7 8.2C11 7.8 11.3 7.5 11.6 7.2C11.8 7 12.2 6.6 12.3 6.5", "M5.1 18.9C5.2 18.8 5.5 18.6 5.7 18.4C5.9 18.3 6 18.3 6.3 18.1C6.6 17.8 7.1 17.3 7.3 17.1C7.5 16.8 7.7 16.6 7.7 16.6C7.7 16.5 7.2 16.8 7.1 16.8C7 16.8 7 16.9 7.1 16.7C7.3 16.6 7.7 16.3 8 16C8.2 15.7 8.6 15.5 8.9 15C9.3 14.5 9.9 13.5 10.1 13.2C10.3 12.8 10.1 13.1 10.2 13C10.2 12.9 10.4 12.8 10.6 12.5C10.8 12.3 10.9 11.9 11.2 11.6C11.4 11.2 11.9 10.7 12 10.5C12.2 10.2 12.1 10.3 12.2 10.1C12.3 9.8 12.5 9.3 12.7 9.1C12.8 8.8 13.1 8.4 13.1 8.3C13.1 8.3 12.5 8.6 12.5 8.5C12.5 8.5 13 8.2 13.2 8C13.4 7.8 13.4 7.8 13.7 7.5C13.9 7.2 14.5 6.4 14.8 6C15.1 5.6 15.5 5.3 15.6 5.2C15.7 5 15.2 5.4 15.6 5C16 4.7 17.4 3.5 18.1 2.9C18.9 2.3 19.8 1.7 20.1 1.5", "M5.1 14.4C5.2 14.4 5.3 14.6 5.4 14.6C5.5 14.7 5.5 14.7 5.5 14.7", "M5.5 14.7 L5.8 14.8", "M6.7 17.1 L7.1 16.8", "M7.1 16.8 L7.7 16.5", "M8.1 10.4C8.2 10.3 8.2 10 8.3 9.8C8.3 9.7 8.4 9.5 8.4 9.4", "M8.8 14.4 L10 13.3", "M10.8 9.8 L12.4 8.7", "M12.6 8.6 L13.1 8.3", "M14.1 5.8C14.3 5.7 15.1 5.3 15.3 5.1C15.6 5 15.5 5.1 15.6 5", "M15.5 3.7 L15.9 3.2"], SW = 'M5.1 21.6C5.3 21.5 5.9 21 6.4 20.7C6.9 20.3 7.6 19.9 7.9 19.7C8.2 19.5 8.2 19.5 8.4 19.5C8.6 19.4 8.8 19.4 8.9 19.4C9.1 19.5 9.2 19.5 9.2 19.6C9.3 19.6 9.3 19.6 9.4 19.7C9.4 19.8 9.4 19.9 9.5 19.9C9.5 20 9.5 20 9.4 20.1C9.4 20.3 9.4 20.4 9.2 20.6C9 20.8 8.4 21.4 8.3 21.6C8.1 21.8 8.2 21.8 8.2 21.9C8.2 21.9 8.2 22 8.3 22C8.3 22.1 8.3 22.1 8.5 22.1C8.6 22.1 8.7 22.1 9 22.1C9.3 22 9.8 21.9 10.2 21.7C10.6 21.6 10.9 21.4 11.2 21.2C11.6 21 11.8 20.9 12.3 20.5C12.8 20.2 13.9 19.4 14.4 19C14.9 18.6 15.2 18.5 15.5 18.3C15.8 18.1 16.1 17.9 16.3 17.8C16.5 17.7 16.6 17.7 16.9 17.6C17.1 17.6 17.5 17.5 17.7 17.4C18 17.4 18.2 17.4 18.3 17.4C18.5 17.4 18.7 17.5 18.8 17.5C18.9 17.6 18.9 17.6 19.1 17.6C19.2 17.7 19.6 18 19.7 18.1';
-    var ORBIT = 1700, FLIP = 5200, NIB = [3.66, 22.70];
-    // 时间线（毫秒，从想完那一刻算起）
-    var T_FACE = 1100, T_GATHER = [800, 1900], T_WRITE = [1800, 4900], T_INK = [4900, 5900], T_END = 6100;
+    var ST = ["M3.7 22.7C3.8 22.4 4.2 21.4 4.5 20.6C4.8 19.7 5.2 18.4 5.5 17.6C5.9 16.7 6.1 16 6.4 15.4C6.6 14.8 6.8 14.4 7.1 13.8C7.4 13.1 7.9 12.2 8.2 11.6C8.5 11 8.8 10.7 9 10.4C9.3 10 9.4 9.8 9.7 9.4C10 9.1 10.4 8.6 10.7 8.2C11 7.8 11.3 7.5 11.6 7.2C11.8 7 12.2 6.6 12.3 6.5", "M3.7 22.7C3.9 22.6 4.7 22.2 4.8 22C5 21.8 4.6 21.8 4.5 21.7", "M5.2 18.2C5.1 18 4.9 17.3 4.8 16.9C4.8 16.6 4.7 16.4 4.7 16.2C4.7 15.9 4.7 15.7 4.8 15.5C4.8 15.3 4.8 15.2 4.9 15C4.9 14.8 5 14.5 5.1 14.4C5.2 14.4 5.5 14.7 5.5 14.7C5.6 14.6 5.4 14.4 5.4 14.3C5.4 14.1 5.3 14 5.4 13.8C5.4 13.7 5.5 13.4 5.6 13.1C5.7 12.9 5.9 12.7 6 12.4C6.2 12.1 6.3 11.8 6.4 11.5C6.6 11.2 6.6 11 6.8 10.7C7 10.4 7.4 10.1 7.6 9.8C7.9 9.4 8.3 8.9 8.5 8.9C8.6 8.8 8.3 9.5 8.4 9.4C8.5 9.4 8.7 8.8 8.8 8.6C8.9 8.4 9 8.3 9.1 8.2C9.2 8.1 9.2 8.1 9.6 7.7C10 7.3 11 6.5 11.5 6.1C12.1 5.6 12.4 5.3 12.8 5C13.2 4.7 13.5 4.5 13.9 4.2C14.4 4 15.1 3.6 15.4 3.4C15.7 3.2 15.7 3.2 15.8 3.2C15.9 3.2 15.8 3.2 15.9 3.2C16 3.1 15.8 3.2 16.4 2.9C16.9 2.6 18.9 1.8 19.5 1.6C20.1 1.3 19.9 1.5 20 1.4", "M20.1 1.5C19.8 1.7 18.9 2.3 18.1 2.9C17.4 3.5 16 4.7 15.6 5C15.2 5.4 15.7 5 15.6 5.2C15.5 5.3 15.1 5.6 14.8 6C14.5 6.4 13.9 7.2 13.7 7.5C13.4 7.8 13.4 7.8 13.2 8C13 8.2 12.5 8.5 12.5 8.5C12.5 8.6 13.1 8.3 13.1 8.3C13.1 8.4 12.8 8.8 12.7 9.1C12.5 9.3 12.3 9.8 12.2 10.1C12.1 10.3 12.2 10.2 12 10.5C11.9 10.7 11.4 11.2 11.2 11.6C10.9 11.9 10.8 12.3 10.6 12.5C10.4 12.8 10.2 12.9 10.2 13C10.1 13.1 10.3 12.8 10.1 13.2C9.9 13.5 9.3 14.5 8.9 15C8.6 15.5 8.2 15.7 8 16C7.7 16.3 7.3 16.6 7.1 16.7C7 16.9 7 16.8 7.1 16.8C7.2 16.8 7.7 16.5 7.7 16.6C7.7 16.6 7.5 16.8 7.3 17.1C7.1 17.3 6.6 17.8 6.3 18.1C6 18.3 5.9 18.3 5.7 18.4C5.5 18.6 5.2 18.8 5.1 18.9", "M15.5 3.7 L15.9 3.2", "M15.6 5C15.5 5.1 15.6 5 15.3 5.1C15.1 5.3 14.3 5.7 14.1 5.8", "M12.6 8.6 L13.1 8.3", "M12.4 8.7 L10.8 9.8", "M8.4 9.4C8.4 9.5 8.3 9.7 8.3 9.8C8.2 10 8.2 10.3 8.1 10.4", "M10 13.3 L8.8 14.4", "M5.5 14.7 L5.8 14.8", "M5.1 14.4C5.2 14.4 5.3 14.6 5.4 14.6C5.5 14.7 5.5 14.7 5.5 14.7", "M7.7 16.5 L7.1 16.8", "M6.7 17.1 L7.1 16.8"], SW = '';
+    var ORBIT = 1700, FLIP = 5200, NIB = [3.66, 22.70];     // 羽毛笔笔尖在它自己 24×24 格子里的位置
+    var W = 42, OC = [21, 12], P0 = [4, 21.2], P1 = [21, 21.6]; // 画布 42×24：星轨在中间；墨迹从 P0 写到 P1（羽毛笔最后停在这）
+    var T_FACE = 1000, T_GATHER = [700, 1700], T_WRITE = [1600, 2700], T_MOVE = [2700, 4300], T_END = 4400;
     function ease(x) { x = Math.max(0, Math.min(1, x)); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
     function sine(x) { x = Math.max(0, Math.min(1, x)); return .5 - .5 * Math.cos(Math.PI * x); }
     function sm(a, b, x) { return ease((x - a) / (b - a)); }
+    var TRAIL = (function () {                   // 一道起伏的墨迹：起笔轻、中间一个小波浪、收在笔尖
+      var d = '', n = 40;
+      for (var i = 0; i <= n; i++) { var u = i / n, x = P0[0] + (P1[0] - P0[0]) * u, y = P0[1] + (P1[1] - P0[1]) * u + 1.3 * Math.sin(u * Math.PI * 3) * Math.sin(Math.PI * u);
+        d += (i ? 'L' : 'M') + x.toFixed(2) + ' ' + y.toFixed(2); }
+      return d;
+    })();
     function html() {
-      return '<svg class="oq" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow:visible">' +
+      return '<svg class="oq" viewBox="0 0 ' + W + ' 24" width="' + (W * 22 / 24).toFixed(1) + '" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow:visible">' +
         '<path class="oq-ring" stroke="currentColor" stroke-width=".8" opacity=".25"/>' +
-        '<g class="oq-q" stroke="currentColor" stroke-width="1.05">' + ST.map(function (d) { return '<path class="oq-f" d="' + d + '"/>'; }).join('') +
-        '<path class="oq-s" d="' + SW + '"/></g>' +
+        '<path class="oq-t" stroke="currentColor" stroke-width="1" d="' + TRAIL + '"/>' +
+        '<g class="oq-q" stroke="currentColor" stroke-width="1.05">' + ST.map(function (d) { return '<path class="oq-f" d="' + d + '"/>'; }).join('') + '</g>' +
         '<circle class="oq-d" fill="currentColor"/><circle class="oq-d" fill="currentColor"/><circle class="oq-d" fill="currentColor"/>' +
         '<circle class="oq-nib" fill="currentColor" r="0"/></svg>';
     }
@@ -7066,45 +7072,43 @@
       if (svg._L) return svg._L;
       var ps = svg.querySelectorAll('.oq-f'), L = [], tot = 0;
       for (var i = 0; i < ps.length; i++) { var l = ps[i].getTotalLength() || 1; L.push(l); tot += l; ps[i].style.strokeDasharray = l + ' ' + l; }
-      var s = svg.querySelector('.oq-s'), ls = s.getTotalLength() || 1; s.style.strokeDasharray = ls + ' ' + ls;
-      return (svg._L = { L: L, tot: tot, ls: ls, ps: ps, s: s });
+      var t = svg.querySelector('.oq-t'), lt = t.getTotalLength() || 1; t.style.strokeDasharray = lt + ' ' + lt;
+      return (svg._L = { L: L, tot: tot, ps: ps, t: t, lt: lt, g: svg.querySelector('.oq-q') });
     }
-    // 写到 k（0–1）：前面的笔画写完，当前这笔写到一半，后面的还没落笔；返回笔尖的位置
-    function writeTo(svg, k) {
+    function writeTo(svg, k) {          // 羽毛笔按书写顺序写到 k；返回笔尖（在羽毛笔自己的坐标里）
       var o = lens(svg), goal = o.tot * k, acc = 0, tip = null;
       for (var i = 0; i < o.ps.length; i++) {
         var l = o.L[i], done = Math.max(0, Math.min(l, goal - acc));
-        o.ps[i].style.strokeDashoffset = (l - done).toFixed(2);
-        o.ps[i].style.opacity = done > .05 ? 1 : 0;
+        o.ps[i].style.strokeDashoffset = (l - done).toFixed(2); o.ps[i].style.opacity = done > .05 ? 1 : 0;
         if (!tip && done < l) { var pt = o.ps[i].getPointAtLength(done); tip = [pt.x, pt.y]; }
         acc += l;
       }
       return tip;
     }
-    function inkTo(svg, k) {
-      var o = lens(svg), done = o.ls * k;
-      o.s.style.strokeDashoffset = (o.ls - done).toFixed(2); o.s.style.opacity = done > .05 ? 1 : 0;
-      var pt = o.s.getPointAtLength(done); return [pt.x, pt.y];
-    }
     function draw(svg, now) {
       var t0 = +svg.getAttribute('data-done') || 0, m = t0 ? now - t0 : -1;
       if (svg.getAttribute('data-still') === '1') m = 99999;
-      var tilt = 64, phi = flipAt(now), r = 7.6, cx = 12, cy = 12, ringOp = .25, dotR = 2.3, gOp = 1;
-      var ang = now / ORBIT * Math.PI * 2, nib = null, nibR = 0;
+      var o = lens(svg);
+      var tilt = 64, phi = flipAt(now), r = 7.6, cx = OC[0], cy = OC[1], ringOp = .25, dotR = 2.3, gOp = 1;
+      var ang = now / ORBIT * Math.PI * 2, nib = null, nibR = 0, qx = P0[0] - NIB[0], qy = P0[1] - NIB[1], rot = 0, tk = 0;
       if (m >= 0) {
         var a = sm(0, T_FACE, m); tilt = 64 * (1 - a); phi = phi * (1 - a);
-        var tt = Math.min(m, 1600) / 1000, w = Math.PI * 2 / (ORBIT / 1000);        // 越转越慢（角度连续）
+        var tt = Math.min(m, 1600) / 1000, w = Math.PI * 2 / (ORBIT / 1000);
         ang = t0 / ORBIT * Math.PI * 2 + w * (tt - tt * tt / 3.2);
-        var b = sm(T_GATHER[0], T_GATHER[1], m); r = 7.6 * (1 - b); cx = 12 + (NIB[0] - 12) * b; cy = 12 + (NIB[1] - 12) * b;
+        var b = sm(T_GATHER[0], T_GATHER[1], m); r = 7.6 * (1 - b); cx = OC[0] + (P0[0] - OC[0]) * b; cy = OC[1] + (P0[1] - OC[1]) * b;
         ringOp = .25 * (1 - sm(500, 1300, m)); dotR = 2.3 - .7 * b;
-        gOp = m < T_WRITE[0] ? 1 : 0;                                                 // 墨滴变成笔尖，接着往下写
-        var k = sine((m - T_WRITE[0]) / (T_WRITE[1] - T_WRITE[0]));
-        var tip = writeTo(svg, m < T_WRITE[0] ? 0 : k);
-        var ik = sine((m - T_INK[0]) / (T_INK[1] - T_INK[0]));
-        var tip2 = inkTo(svg, m < T_INK[0] ? 0 : ik);
-        if (m >= T_WRITE[0] && m < T_WRITE[1]) { nib = tip; nibR = 1.6 - .5 * sm(T_WRITE[0], T_WRITE[0] + 600, m); }
-        else if (m >= T_INK[0] && m < T_END) { nib = tip2; nibR = 1.1 * (1 - sm(T_INK[1] - 200, T_END, m)); }
-      } else { writeTo(svg, 0); inkTo(svg, 0); }
+        gOp = m < T_WRITE[0] ? 1 : 0;
+        var k = m < T_WRITE[0] ? 0 : sine((m - T_WRITE[0]) / (T_WRITE[1] - T_WRITE[0]));
+        var tip = writeTo(svg, k);
+        if (m >= T_WRITE[0] && m < T_WRITE[1] && tip) { nib = [tip[0] + qx, tip[1] + qy]; nibR = 1.3; }
+        // 羽毛笔往右走：笔尖沿着墨迹移动，墨迹跟着写出来；走的时候笔杆轻轻摆
+        tk = m < T_MOVE[0] ? 0 : sine((m - T_MOVE[0]) / (T_MOVE[1] - T_MOVE[0]));
+        var pt = o.t.getPointAtLength(o.lt * tk);
+        qx = pt.x - NIB[0]; qy = pt.y - NIB[1];
+        if (m >= T_MOVE[0] && m < T_MOVE[1]) rot = Math.sin((m - T_MOVE[0]) / 170) * 5 * Math.sin(Math.PI * tk);
+      } else writeTo(svg, 0);
+      o.t.style.strokeDashoffset = (o.lt * (1 - tk)).toFixed(2); o.t.style.opacity = tk > .01 ? .85 : 0;
+      o.g.setAttribute('transform', 'translate(' + qx.toFixed(2) + ' ' + qy.toFixed(2) + ') rotate(' + rot.toFixed(2) + ' ' + NIB[0] + ' ' + NIB[1] + ')');
       var rx = tilt * Math.PI / 180, ry = (phi - 14 * (1 - (m >= 0 ? sm(0, T_FACE, m) : 0))) * Math.PI / 180;
       function proj(u) {
         var x = r * Math.cos(u), y = r * Math.sin(u);
@@ -7142,7 +7146,7 @@
       if (live) raf = requestAnimationFrame(loop);
     }
     function kick() { if (!raf) raf = requestAnimationFrame(loop); }
-    return { html: html, kick: kick, draw: draw, END: T_END };
+    return { html: html, kick: kick, draw: draw, END: T_END, TEXT: 3900 };
   })();
   // 4.4.2 思考标记：live=正在想（一直转）；done=刚想完的时刻（收拢成羽毛笔）；都没有=早就想完了（静止的羽毛笔）
   function orbHtml(live, doneAt) {
@@ -7175,7 +7179,7 @@
   }
   function procDoneRow(key, sm, doneAt, extraCls) {
     var fresh = doneAt && Date.now() - doneAt < OrbQ.END;
-    return '<button type="button" class="proc done' + (fresh ? ' fresh' : '') + (extraCls || '') + '"' + (fresh ? ' style="--fd:' + (2600 - (Date.now() - doneAt)) + 'ms"' : '') + ' data-proc="' + key + '" aria-label="查看思考过程：' + esc(sm.text) + '">' + orbHtml(false, doneAt) +
+    return '<button type="button" class="proc done' + (fresh ? ' fresh' : '') + (extraCls || '') + '"' + (fresh ? ' style="--fd:' + (OrbQ.TEXT - (Date.now() - doneAt)) + 'ms"' : '') + ' data-proc="' + key + '" aria-label="查看思考过程：' + esc(sm.text) + '">' + orbHtml(false, doneAt) +
       '<span class="pl">' + esc(sm.text) + '</span>' + (sm.icons.length ? '<span class="pi">' + sm.icons.map(function (n) { return icon(n, 15); }).join('') + '</span>' : '') +
       '<span class="cv">' + icon('chev', 16) + '</span></button>';
   }

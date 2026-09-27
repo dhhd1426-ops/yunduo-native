@@ -71,6 +71,21 @@ public class AmorBridge {
         }
     }
 
+    /** 过几秒再发（测试横幅用：App 在前台时小米不弹横幅，要先回到桌面） */
+    @JavascriptInterface
+    public boolean notifyLater(final String itemJson, int delayMs) {
+        try {
+            final JSONObject it = new JSONObject(itemJson);
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override public void run() { Notif.post(app, it); }
+            }, Math.max(0, Math.min(60000, delayMs)));
+            return true;
+        } catch (Throwable t) {
+            Store.err(app, "notifyLater", t);
+            return false;
+        }
+    }
+
     @JavascriptInterface
     public boolean enabled() {
         try { return Notif.enabled(app); } catch (Throwable t) { return false; }
@@ -147,7 +162,12 @@ public class AmorBridge {
         try {
             String pkg = app.getPackageName();
             Intent i = null;
-            if ("notif".equals(which)) {
+            if (which != null && which.startsWith("channel:")) {
+                Notif.ensureChannels(app);
+                i = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
+                i.putExtra(Settings.EXTRA_APP_PACKAGE, pkg);
+                i.putExtra(Settings.EXTRA_CHANNEL_ID, which.substring(8));
+            } else if ("notif".equals(which)) {
                 i = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
                 i.putExtra(Settings.EXTRA_APP_PACKAGE, pkg);
             } else if ("autostart".equals(which)) {

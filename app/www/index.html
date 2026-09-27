@@ -3736,6 +3736,7 @@
           '<span class="nt-pill' + (inf.enabled ? ' ok' : ' bad') + '">' + (inf.enabled ? '已允许' : '去打开') + '</span></button>' +
         (/xiaomi|redmi|poco/i.test(inf.brand || '') ? '<button type="button" class="entry nt-entry" data-ntopen="autostart"><span><span class="t">自启动</span><span class="d">小米手机要打开，不然关掉 App 后可能收不到提醒</span></span>' + icon('chev', 20) + '</button>' +
           '<button type="button" class="entry nt-entry" data-ntopen="battery"><span><span class="t">省电策略</span><span class="d">选“无限制”，提醒才会准时</span></span>' + icon('chev', 20) + '</button>' +
+          '<button type="button" class="entry nt-entry" data-ntopen="channel:care"><span><span class="t">弹出横幅（悬浮通知）</span><span class="d">小米默认只放进通知栏不弹出：点进去打开“悬浮通知”和“锁屏通知”，“天气”“Amor 陪伴”两个类别也各开一次</span></span>' + icon('chev', 20) + '</button>' +
           '<p class="hint" style="margin:6px 0 4px">小米“一键清理”会把 App 彻底关掉，排好的提醒也会被清空：在最近任务里<b>长按云朵天气的卡片 → 点“锁定”</b>（卡片上出现小锁），清理时就不会清掉它。</p>' : '') +
         (inf.plain ? '<p class="hint" style="margin:6px 0 4px">这台手机显示不了“信笺”样式的通知，已自动改用系统样式。</p>' : '') +
         '<div class="nt-next"><span>' + (inf.next ? '下一条提醒 ' + agoTextFuture(inf.next) + ' · 已排好 ' + inf.planned + ' 条' : '还没有排好的提醒') + (drank ? ' · 今天喝了 ' + drank + ' 杯水 💧' : '') + '</span>' +
@@ -4233,13 +4234,14 @@
     if (ds.ntclear) { try { AmorNative.clearLog(); } catch (e) {} keepScroll(); return; }
     if (ds.nttest) {
       var tv = view(state.current), ok_ = false;
-      try { ok_ = AmorNative.notifyNow(JSON.stringify({ id: 4242, ch: 'care', kind: 'test', title: '测试提醒', short: '这是 ' + (asst.name || 'Amor') + ' 的一条测试', meta: clock(Date.now()), progress: 60,
+      var later_ = !!AmorNative.notifyLater, send_ = function (o) { return later_ ? AmorNative.notifyLater(JSON.stringify(o), 5000) : AmorNative.notifyNow(JSON.stringify(o)); };
+      try { ok_ = send_(({ id: 4242, ch: 'care', kind: 'test', title: '测试提醒', short: '这是 ' + (asst.name || 'Amor') + ' 的一条测试', meta: clock(Date.now()), progress: 60,
         text: ntName() + '，这是一条测试提醒 🌹' + (tv && tv.today ? ' 今天' + tv.m.zh + (tv.today.dt || '') + '，' + deg(tv.today.lo) + '~' + deg(tv.today.hi) + '°。' : ''),
         actions: ['done', 'chat'], doneLabel: '收到', island: nt.island ? islandParam('测试提醒', '这是一条测试提醒', '测试') : '' })); } catch (e) {}
       // 再发一条系统标准样式的，用来判断是不是“信笺”样式在这台手机上显示不出来
-      try { AmorNative.notifyNow(JSON.stringify({ id: 4243, ch: 'care', kind: 'test2', plain: true, title: '测试②·系统样式', short: '如果只看到这条，说明信笺样式在这台手机上显示不了',
+      try { send_(({ id: 4243, ch: 'care', kind: 'test2', plain: true, title: '测试②·系统样式', short: '如果只看到这条，说明信笺样式在这台手机上显示不了',
         text: '如果只看到这条、没看到“测试提醒”，说明信笺样式在这台手机上显示不了，把“通知样式”改成“系统样式”就好。', actions: ['done'], doneLabel: '收到' })); } catch (e) {}
-      ntui.test = ok_ ? '已发送 2 条 ✓' : '没发出去，看下面的诊断'; keepScroll(); setTimeout(function () { ntui.test = ''; if (state.sub === 'notify') keepScroll(); }, 3000); return; }
+      ntui.test = ok_ ? (later_ ? '5 秒后弹出，先回到桌面' : '已发送 2 条 ✓') : '没发出去，看下面的诊断'; keepScroll(); setTimeout(function () { ntui.test = ''; if (state.sub === 'notify') keepScroll(); }, 3000); return; }
     if (ds.msw) { mem[ds.msw] = !mem[ds.msw]; saveMem(); keepScroll(); return; }
     if (ds.memadd) { var mk_ = ds.memadd, mt_ = (mui.draft[mk_] || '').trim(); if (!mt_) { var fi_ = document.getElementById('mem-add-' + mk_); if (fi_) fi_.focus(); return; }
       if (memAdd(mk_, mt_, 'manual')) { mui.draft[mk_] = ''; toast('记住了'); } else toast(memSafe(mt_) ? '这条已经记过了' : '这条不能记（太长或像是密钥、密码）'); keepScroll(); return; }

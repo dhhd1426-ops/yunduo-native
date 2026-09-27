@@ -21,16 +21,21 @@ adb shell am start -W -n $PKG/.MainActivity | tee $O/start.txt
 sleep 25
 (adb shell pidof $PKG || echo DEAD) > $O/pid-after-launch.txt
 shot 1-launch
+# 网页启动后应该已经通过 AmorNative 交来了配置和 7 天计划
+adb shell run-as $PKG cat shared_prefs/amor.xml > $O/prefs-after-launch.xml 2>&1 || true
+adb shell dumpsys alarm | grep -B2 -A6 "$PKG" > $O/alarm-after-launch.txt || true
 adb shell cmd notification allow_listener com.android.shell 2>/dev/null || true
 
 note "2 config + plan (two reminders in 20s / 35s)"
-adb exec-in run-as $PKG sh -c 'mkdir -p files && cat > files/ci_cfg.json' < ci/cfg.json
+adb exec-in "run-as $PKG sh -c 'mkdir -p files && cat > files/ci_cfg.json'" < ci/cfg.json
+adb shell "run-as $PKG ls -la files" | tee $O/files.txt
 T --es cfgFile ci_cfg.json
 PLAN='[{"id":101,"dt":20,"ch":"care","kind":"water","title":"Amor","text":"下午三点啦，起来喝杯水吧 💧 今天北京 26°，有点干燥，多喝两口。","actions":["done","snooze","chat"],"doneLabel":"喝了","snoozeLabel":"30 分钟后"},{"id":102,"dt":35,"ch":"weather","kind":"morning","title":"早安，小宇","text":"今天北京晴，15~26°C，早晚凉、中午暖。出门带件薄外套，中午可以脱。","actions":["chat"]}]'
 T --es plan64 "$(b64 "$PLAN")"
 adb shell dumpsys alarm | grep -B2 -A6 "$PKG" > $O/alarm-after-plan.txt || true
-sleep 21; shot 2-headsup-water
-sleep 16; shot 3-headsup-morning
+sleep 19
+for k in 1 2 3 4 5 6; do shot 2-headsup-$k; sleep 0.5; done
+sleep 12; shot 3-after-morning
 adb shell dumpsys notification --noredact > $O/notif-after-plan.txt
 adb shell cmd statusbar expand-notifications; sleep 3; shot 4-shade; adb shell cmd statusbar collapse; sleep 1
 

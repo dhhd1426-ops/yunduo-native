@@ -999,6 +999,20 @@
   .cx .send-btn.stop { background: var(--ink); opacity: 1; }
   .cx .send-btn svg { transition: transform .25s ease; }
   @media (prefers-reduced-motion: no-preference) { .cx .send-btn.pop-in svg { animation: tickIn .3s cubic-bezier(.22, .9, .24, 1.2) both; } }
+  /* ===== 3.8 通知 ===== */
+  .nt-sel { font: inherit; font-size: 14px; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 12px; height: 38px; padding: 0 10px; flex: none; max-width: 48%; }
+  .nt-sub { display: block; font-size: 12px; color: var(--muted); }
+  .nt-entry { grid-template-columns: minmax(0, 1fr) auto; border-top: 1px solid var(--line); }
+  .nt-entry:first-of-type { border-top: 0; }
+  .nt-pill { font-size: 12px; padding: 3px 10px; border-radius: 10px; background: var(--bg); color: var(--muted); }
+  .nt-pill.ok { color: var(--ink); } .nt-pill.bad { background: var(--accent); color: var(--on-accent); }
+  .nt-next { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 10px 0 12px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+  .nt-up { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); font-size: 13px; }
+  .nt-up:first-of-type { border-top: 0; }
+  .nt-up .tm { color: var(--accent); font-variant-numeric: tabular-nums; }
+  .nt-up .tx { color: var(--muted); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .nt-up .tx b { color: var(--text); font-weight: 500; margin-right: 6px; }
+  .nt-diag { margin: 0 4px; }
   /* ===== 3.6 记忆 ===== */
   .mem-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 4px 0 8px; }
   .mem-tiles .stat { background: var(--bg); }
@@ -1136,6 +1150,7 @@
     stop: '<rect x="7" y="7" width="10" height="10" rx="1.5"/>',
     copy: '<rect x="8.5" y="8.5" width="11" height="11" rx="2.2"/><path d="M15.5 8.5V6.7a2.2 2.2 0 0 0-2.2-2.2H6.7a2.2 2.2 0 0 0-2.2 2.2v6.6a2.2 2.2 0 0 0 2.2 2.2h1.8"/>',
     tick: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+    bell: '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2H4.5z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
     memory: '<path d="M6 4.5h9.5a2.5 2.5 0 0 1 2.5 2.5v12.5H8.5A2.5 2.5 0 0 1 6 17z"/><path d="M6 17a2.5 2.5 0 0 1 2.5-2.5H18"/><path d="M12 7.8c.9-1.3 3-1 3 .6 0 1.4-3 3-3 3s-3-1.6-3-3c0-1.6 2.1-1.9 3-.6z"/>',
     regen: '<path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4.5v4h-4"/>',
     up: '<path d="M12 19V5M6 11l6-6 6 6"/>'
@@ -1361,10 +1376,11 @@
     if (/(sk-|tvly-|Bearer\s)[A-Za-z0-9_\-]{6,}|[A-Za-z0-9_\-]{28,}|api[\s_-]?key|密码|口令|验证码|身份证|银行卡/i.test(t)) return '';
     return t;
   }
-  function memAdd(kind, text, src) {
+  function memAdd(kind, text, src, date) {
     text = memSafe(text); if (!text) return null;
     var dup = mem.items.filter(function (x) { return x.text === text; })[0]; if (dup) return null;
     var it = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), kind: kind, text: text, src: src || 'manual', at: Date.now() };
+    if (/^\d{4}-\d{2}-\d{2}$/.test(date || '')) it.date = date;
     mem.items.push(it); saveMem(); return it;
   }
   function daysBetween(a, b) { var x = new Date(a), y = new Date(b); x.setHours(0, 0, 0, 0); y.setHours(0, 0, 0, 0); return Math.round((y - x) / 86400000); }
@@ -1584,7 +1600,8 @@
       '规则：只记以后还用得上的；天气、闲聊客套、一次性的问题不记；每条一句话，不超过 40 个字，用第三人称写' + who + '；' +
       '和已有记忆重复的不要再加，有变化就 update；' + who + '说“忘掉/别记”就 remove；' + who + '明确说“记住”的一定要加；' +
       '绝对不要记 API Key、密码、验证码、证件号等敏感信息。最多新增 4 条，没有就输出 {}。\n' +
-      '格式：{"add":[{"type":"global|pref|amor","text":"…"}],"update":[{"id":"…","text":"…"}],"remove":["id"]}';
+      '如果是有具体日子的事（面试、考试、生日、出行、约会），加上 date（YYYY-MM-DD，今天是 ' + dayStr(Date.now()) + '，按这个推算“下周三”“明天”），到那天' + an + '会提醒。\n' +
+      '格式：{"add":[{"type":"global|pref|amor","text":"…","date":"可选"}],"update":[{"id":"…","text":"…"}],"remove":["id"]}';
     var user = '已有记忆：\n' + known + '\n\n最近的对话：\n' + dialog;
     var anth = rm.p.type === 'anthropic';
     var body = anth ? { model: rm.id, max_tokens: 600, system: sys, messages: [{ role: 'user', content: user }] }
@@ -1595,7 +1612,7 @@
       var r = JSON.parse(mm[0]), noted = [];
       (r.remove || []).forEach(function (id) { var hit = mem.items.filter(function (x) { return x.id === id; })[0]; if (hit) { mem.items = mem.items.filter(function (x) { return x !== hit; }); noted.push('忘掉了：' + hit.text); } });
       (r.update || []).forEach(function (u) { var hit = mem.items.filter(function (x) { return x.id === u.id; })[0], nt = memSafe(u.text); if (hit && nt && nt !== hit.text) { hit.text = nt; hit.at = Date.now(); hit.src = 'auto'; noted.push(nt); } });
-      (r.add || []).slice(0, 4).forEach(function (a) { var k = ['global', 'pref', 'amor'].indexOf(a.type) >= 0 ? a.type : 'amor', it = memAdd(k, a.text, 'auto'); if (it) noted.push(it.text); });
+      (r.add || []).slice(0, 4).forEach(function (a) { var k = ['global', 'pref', 'amor'].indexOf(a.type) >= 0 ? a.type : 'amor', it = memAdd(k, a.text, 'auto', a.date); if (it) noted.push(it.text); });
       mem.done[conv.id] = conv.msgs.length; saveMem();
       var msg = conv.msgs[msgIndex];
       if (noted.length && msg && msg.role === 'assistant') {
@@ -3102,6 +3119,7 @@
     if (state.sub === 'voice') return voicePage();
     if (state.sub === 'voiceapi') return voiceApiPage();
     if (state.sub === 'memory') return memoryPage();
+    if (state.sub === 'notify') return notifyPage();
     var latest = null;
     Object.keys(DATA).forEach(function (k) { var d = new Date(DATA[k].fetchedAt); if (!isNaN(d) && (!latest || d > latest)) latest = d; });
     return '<section class="view">' +
@@ -3144,6 +3162,8 @@
         (r ? esc(r.p.name + ' · ' + r.id) : '还没有可用的模型') + '</span></span>' + icon('chev', 20) + '</button>' +
       '<button type="button" class="entry" data-ui="memory" style="border-top:1px solid var(--line)"><span class="ds-logo">' + icon('memory', 20) + '</span>' +
         '<span><span class="t">记忆</span><span class="d">' + esc(memSummary()) + '</span></span>' + icon('chev', 20) + '</button>' +
+      '<button type="button" class="entry" data-ui="notify" style="border-top:1px solid var(--line)"><span class="ds-logo">' + icon('bell', 20) + '</span>' +
+        '<span><span class="t">通知</span><span class="d">' + esc(ntSummary()) + '</span></span>' + icon('chev', 20) + '</button>' +
       '<button type="button" class="entry" data-ui="font" style="border-top:1px solid var(--line)"><span class="ds-logo" style="font-family:\'Amor Latin\',\'Amor Serif SC\',serif;font-style:italic;font-size:17px">文</span>' +
         '<span><span class="t">回复字体</span><span class="d">' + esc(fontKind(asst.font.kind).name + (asst.font.italic ? ' · 斜体' : '') + ' · ' + asst.font.size + ' 号 · 只用于 ' + (asst.name || 'Amor') + ' 的回答') + '</span></span>' + icon('chev', 20) + '</button>' +
       '<button type="button" class="entry" data-ui="providers" style="border-top:1px solid var(--line)"><span class="ds-logo">' + icon('box', 20) + '</span>' +
@@ -3295,6 +3315,290 @@
     '</section>';
   }
 
+  /* ---------- 3.8 通知推送：计划在网页里算好，原生层（window.AmorNative）只负责按时发 ---------- */
+  var NT_KEY = 'cloud-weather-notify-v1';
+  var nt = { on: true, eye: { on: true, min: 45 }, water: { on: true, every: 120, from: 9, to: 21 }, move: { on: true, every: 90 },
+    sleep: { on: false, at: '23:30' }, morning: { on: true, at: '07:30' }, alert: { on: true }, miss: { on: true, days: 3 }, memo: { on: true },
+    quiet: { from: 23, to: 7 }, lockFull: true, island: false, aiCopy: true, maxPerDay: 8, copy: null, seenAlarms: [] };
+  try { var sn = JSON.parse(localStorage.getItem(NT_KEY) || 'null'); if (sn) for (var nk in sn) nt[nk] = sn[nk]; } catch (e) {}
+  function saveNt() { try { localStorage.setItem(NT_KEY, JSON.stringify(nt)); } catch (e) {} }
+  function nativeOk() { try { return !!(window.AmorNative && AmorNative.version && AmorNative.version() >= 1); } catch (e) { return false; } }
+  function nInfo() { try { return nativeOk() ? JSON.parse(AmorNative.info() || '{}') : null; } catch (e) { return null; } }
+
+  var NT_COPY = {
+    water: ['{name}，起来喝杯水吧 💧', '该喝水啦，小口慢慢喝～', '水杯空了吗？去接一杯吧，顺便走两步。', '喝口水，歇一歇，眼睛也放松一下。', '{time}啦，补充点水分～'],
+    move: ['坐了挺久了，站起来伸个懒腰吧。', '起来走两步，活动活动肩颈～', '该动一动啦，去窗边站一会儿也好。'],
+    eye: ['已经连续看屏幕 {min} 分钟啦，看看远处 20 秒～', '眼睛累了吧？闭上眼睛休息一分钟。', '看看窗外吧，远处的树、天上的云都行。'],
+    sleep: ['夜深了，今天辛苦啦，早点睡。', '放下手机吧，明天见～'],
+    miss: ['好几天没来找我啦，最近忙什么呢？', '有点想你了，有空跟我说说最近怎么样～']
+  };
+  function ntName() { return state.name.trim() || '你'; }
+  function hm(s) { var m = /^(\d{1,2}):(\d{2})$/.exec(s || ''); return m ? [+m[1], +m[2]] : [8, 0]; }
+  function inQuiet(d) {
+    var h = d.getHours() + d.getMinutes() / 60, f = nt.quiet.from, t = nt.quiet.to;
+    return f === t ? false : f < t ? (h >= f && h < t) : (h >= f || h < t);
+  }
+  function fill(s, vars) { return String(s).replace(/\{(\w+)\}/g, function (_, k) { return vars[k] != null ? vars[k] : ''; }); }
+  function ntPick(kind, i) {
+    var ai = nt.copy && nt.copy.date === dayStr(Date.now()) && nt.copy.lines && nt.copy.lines[kind];
+    var list = ai && ai.length ? ai : NT_COPY[kind] || [''];
+    return list[((i % list.length) + list.length) % list.length];
+  }
+  function clothTip(d) {
+    if (!d) return '';
+    var hi = d.hi, diff = d.hi - d.lo;
+    var t = hi >= 30 ? '天气热，穿透气一点，多喝水。' : hi >= 24 ? '短袖或薄长袖都可以。' : hi >= 16 ? '长袖加件薄外套正好。' : hi >= 8 ? '有点冷，穿毛衣或夹克。' : '很冷，羽绒服穿上。';
+    return t + (diff >= 10 ? '早晚温差大，记得加衣。' : '');
+  }
+  // 小米超级岛（焦点通知）参数；没通过小米审核时系统当普通通知显示
+  function islandParam(title, text, ticker) {
+    return JSON.stringify({ param_v2: { protocol: 1, business: 'reminder', enableFloat: true, ticker: ticker || title, aodTitle: title,
+      param_island: { islandProperty: 1,
+        bigIslandArea: { imageTextInfoLeft: { type: 1, picInfo: { type: 1, pic: 'miui.focus.pic_avatar' }, textInfo: { title: title, content: String(text).slice(0, 24) } } },
+        smallIslandArea: { picInfo: { type: 1, pic: 'miui.focus.pic_avatar' } } },
+      baseInfo: { title: title, content: text, type: 2 } } });
+  }
+  function ntHash(s) { var h = 7; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return Math.abs(h) % 900000 + 1000; }
+
+  // 未来 7 天的提醒
+  function buildPlan() {
+    if (!nt.on) return [];
+    var now = Date.now(), out = [], v = view(state.current), city = v ? v.m.zh : '', name = ntName();
+    var PRI = { alert: 0, memo: 1, morning: 2, miss: 3, water: 4, move: 5, sleep: 6 };
+    function add(kind, ch, d, title, text, extra) {
+      if (d.getTime() < now + 60000 || (kind !== 'alert' && inQuiet(d))) return;
+      var it = { id: ntHash(kind + d.getTime()), t: d.getTime(), ch: ch, kind: kind, title: title, text: text, actions: ['chat'], skipFg: kind !== 'alert' };
+      for (var k in extra || {}) it[k] = extra[k];
+      if (nt.island && /^(water|move)$/.test(kind)) it.island = islandParam(title, text, kind === 'water' ? '喝水' : '起来走走');
+      out.push(it);
+    }
+    for (var di = 0; di < 7; di++) {
+      var base = new Date(); base.setHours(0, 0, 0, 0); base.setDate(base.getDate() + di);
+      var at = function (h, m) { var d = new Date(base); d.setHours(h, m, 0, 0); return d; };
+      var day = v && v.days[di], next = v && v.days[di + 1], slot = di * 10;
+      if (nt.morning.on && day) {
+        var mt = hm(nt.morning.at);
+        add('morning', 'weather', at(mt[0], mt[1]), '早安，' + name,
+          '今天' + city + (day.dt || day.nt || '') + '，' + deg(day.lo) + '~' + deg(day.hi) + '°。' + clothTip(day), {});
+      }
+      if (nt.alert.on && day && next) {
+        var bits = [];
+        if (wet(next.dt) || wet(next.nt)) bits.push((wet(next.dt) ? '白天' + next.dt : '夜里' + next.nt) + '，出门记得带伞 ☔');
+        if (next.hi >= 35) bits.push('最高 ' + deg(next.hi) + '°，注意防晒、多喝水');
+        if (day.lo - next.lo >= 6) bits.push('降温到 ' + deg(next.lo) + '°，记得加件衣服');
+        if (bits.length) add('alert', 'weather', at(21, 0), '明天' + city, '明天' + bits.join('；') + '。', {});
+      }
+      if (nt.water.on) {
+        for (var wm = nt.water.from * 60 + 30, wi = 0; wm < nt.water.to * 60; wm += nt.water.every, wi++) {
+          var wd = at(Math.floor(wm / 60), wm % 60), wtxt = fill(ntPick('water', slot + wi), { name: name, time: wd.getHours() + ' 点' });
+          if (day && day.hi >= 30 && wi % 2 === 0) wtxt += '今天挺热，多喝两口。';
+          add('water', 'care', wd, (asst.name || 'Amor'), wtxt, { actions: ['done', 'snooze', 'chat'], doneLabel: '喝了', snoozeLabel: '30 分钟后' });
+        }
+      }
+      if (nt.move.on) {
+        for (var mm = 9 * 60 + nt.move.every, mi = 0; mm <= 21 * 60; mm += nt.move.every, mi++) {
+          add('move', 'care', at(Math.floor(mm / 60), mm % 60), '起来走走', ntPick('move', slot + mi), { cond: 'screen', actions: ['done', 'snooze'], doneLabel: '好的', snoozeLabel: '等会儿', snoozeMin: 20 });
+        }
+      }
+      if (nt.sleep.on) { var st_ = hm(nt.sleep.at); var sd = at(st_[0], st_[1]); if (st_[0] < 12) sd.setDate(sd.getDate() + 1);
+        add('sleep', 'care', sd, '该睡啦', ntPick('sleep', di), { cond: 'screen' }); }
+    }
+    // 陪伴：好久没聊
+    if (nt.miss.on && mem.meta && mem.meta.last) {
+      var md = new Date(mem.meta.last + nt.miss.days * 86400000);
+      if (md.getHours() < 10) md.setHours(10, 5, 0, 0); else if (md.getHours() >= 20) { md.setDate(md.getDate() + 1); md.setHours(10, 5, 0, 0); }
+      add('miss', 'amor', md, (asst.name || 'Amor') + ' 想你了', ntPick('miss', mem.meta.total || 0), {});
+    }
+    // 陪伴：记得的日子（Amor 记下的带日期的事）
+    if (nt.memo.on) mem.items.forEach(function (x) {
+      if (!x.date) return;
+      var p = /^(\d{4})-(\d{2})-(\d{2})$/.exec(x.date); if (!p) return;
+      var d = new Date(+p[1], +p[2] - 1, +p[3], 8, 40);
+      add('memo', 'amor', d, '今天的事', '记得吗？' + x.text.replace(/之后问问结果|记得问问.*$/, '') + '。' + (asst.name || 'Amor') + '在呢，加油 🌹', {});
+    });
+    // 气象预警：看到新的预警马上提醒一次
+    if (nt.alert.on && v && v.alarms.length) v.alarms.forEach(function (a) {
+      if (nt.seenAlarms.indexOf(a) >= 0) return;
+      nt.seenAlarms = nt.seenAlarms.concat([a]).slice(-20); saveNt();
+      out.push({ id: ntHash('al' + a), t: now + 90000, ch: 'weather', kind: 'alert', title: '气象预警', text: city + '：' + a, actions: ['chat'] });
+    });
+    // 每天最多 N 条（预警和用眼不算）：早安、记得的日子、想你、睡前先占位，
+    // 剩下的名额喝水和久坐按比例分，在一天里均匀地取；两条挨得太近就错开
+    var byDay = {}, keep = [];
+    out.forEach(function (it) { var k = dayStr(it.t); (byDay[k] = byDay[k] || []).push(it); });
+    function even(list, n) { if (n >= list.length) return list; var r = []; for (var q = 0; q < n; q++) r.push(list[Math.floor((q + 0.5) * list.length / n)]); return r; }
+    Object.keys(byDay).forEach(function (k) {
+      var items = byDay[k].sort(function (a, b) { return a.t - b.t; });
+      var fixed = items.filter(function (x) { return !/^(water|move|alert)$/.test(x.kind); }).sort(function (a, b) { return PRI[a.kind] - PRI[b.kind]; }).slice(0, nt.maxPerDay);
+      var water = items.filter(function (x) { return x.kind === 'water'; }), move = items.filter(function (x) { return x.kind === 'move'; });
+      var slots = Math.max(0, nt.maxPerDay - fixed.length);
+      var nw = move.length ? Math.min(water.length, Math.ceil(slots * 0.6)) : Math.min(water.length, slots);
+      var nm = Math.min(move.length, slots - nw);
+      if (nm < slots - nw) nw = Math.min(water.length, slots - nm);
+      keep = keep.concat(items.filter(function (x) { return x.kind === 'alert'; }), fixed, even(water, nw), even(move, nm));
+    });
+    keep.sort(function (a, b) { return a.t - b.t; });
+    for (var i = 1; i < keep.length; i++) if (keep[i].t - keep[i - 1].t < 5 * 60000) keep[i].t = keep[i - 1].t + 10 * 60000;
+    return keep;
+  }
+
+  // 状态栏小图标（白色云朵，系统只看透明度）和 Amor 头像，画成 PNG 交给原生层
+  var ntImgs = null;
+  function ntImages() {
+    var key = asst.color + '|' + initialOf(asst.name);
+    if (ntImgs && ntImgs.key === key) return ntImgs;
+    try {
+      var c = document.createElement('canvas'); c.width = c.height = 96; var g = c.getContext('2d'); g.fillStyle = '#fff';
+      [[0.33, 0.58, 0.16], [0.52, 0.46, 0.21], [0.70, 0.58, 0.15]].forEach(function (e) { g.beginPath(); g.arc(96 * e[0], 96 * e[1], 96 * e[2], 0, 7); g.fill(); });
+      g.beginPath(); if (g.roundRect) g.roundRect(96 * 0.17, 96 * 0.55, 96 * 0.68, 96 * 0.19, 96 * 0.09); else g.rect(96 * 0.17, 96 * 0.55, 96 * 0.68, 96 * 0.19); g.fill();
+      var icon = c.toDataURL('image/png');
+      var a = document.createElement('canvas'); a.width = a.height = 192; var h = a.getContext('2d');
+      h.fillStyle = COLORS[asst.color] || COLORS.rose; h.beginPath(); h.arc(96, 96, 96, 0, 7); h.fill();
+      h.fillStyle = '#faf4f0'; h.font = '500 104px "Cormorant Garamond", "Noto Serif SC", serif'; h.textAlign = 'center'; h.textBaseline = 'middle';
+      h.fillText(initialOf(asst.name), 96, 104);
+      ntImgs = { key: key, icon: icon, avatar: a.toDataURL('image/png') };
+    } catch (e) { ntImgs = { key: key, icon: '', avatar: '' }; }
+    return ntImgs;
+  }
+  function ntConfig() {
+    var im = ntImages(), from = nt.quiet.to, to = nt.quiet.from;
+    var eyeText = [0, 1, 2].map(function (i) { return fill(ntPick('eye', i), { min: nt.eye.min, name: ntName() }); })
+      .filter(function (x, i, arr) { return arr.indexOf(x) === i; });
+    return { icon: im.icon, avatar: im.avatar, color: parseInt((COLORS[asst.color] || COLORS.rose).slice(1), 16) - 16777216, name: asst.name || 'Amor',
+      lockFull: nt.lockFull, island: nt.island,
+      eye: { on: nt.on && nt.eye.on, min: nt.eye.min, from: from, to: to === 0 ? 24 : to, title: '休息一下眼睛', texts: eyeText,
+        island: nt.island ? islandParam('休息一下眼睛', '已经连续看屏幕 ' + nt.eye.min + ' 分钟', '休息眼睛') : '' } };
+  }
+  var ntTimer = 0, ntCfgSent = '';
+  function notifySync(now_) {
+    if (!nativeOk()) return;
+    clearTimeout(ntTimer);
+    ntTimer = setTimeout(function () {
+      try {
+        var cfg = JSON.stringify(ntConfig());
+        if (cfg !== ntCfgSent) { AmorNative.setConfig(cfg); ntCfgSent = cfg; }
+        AmorNative.setPlan(JSON.stringify(buildPlan()));
+      } catch (e) { window.__ntErr = String(e && e.stack || e); }
+    }, now_ ? 0 : 800);
+  }
+  // 每天一次：让 Amor 结合天气和记忆写一批提醒文案（没写好就用内置的）
+  var ntWriting = false;
+  function notifyCopy() {
+    if (!nativeOk() || !nt.on || !nt.aiCopy || ntWriting || !aiReady()) return;
+    var today = dayStr(Date.now());
+    if (nt.copy && (nt.copy.date === today || nt.copy.tried === today)) return;
+    var rm = resolveModel(); if (!rm) return;
+    ntWriting = true; nt.copy = nt.copy || {}; nt.copy.tried = today; saveNt();
+    var v = view(state.current), an = asst.name || 'Amor', who = ntName();
+    var sys = (asst.prompt || DEFAULT_PROMPT).replace(/\{name\}/g, who) + memPrompt(null) +
+      '\n\n现在请你写今天要推送给' + who + '的手机通知文案，用你自己的口吻，温柔自然、有点俏皮，每条不超过 30 个字，不要加引号和编号。' +
+      (v ? '\n今天' + v.m.zh + '：' + (v.today ? (v.today.dt || '') + ' ' + v.today.lo + '~' + v.today.hi + '°C' : '') : '') +
+      '\n只输出 JSON：{"water":[4 条喝水提醒],"move":[3 条久坐起来活动],"eye":[3 条休息眼睛，可以用 {min} 表示分钟数],"sleep":[2 条睡前],"miss":[2 条好几天没聊时想他]}';
+    var anth = rm.p.type === 'anthropic';
+    var body = anth ? { model: rm.id, max_tokens: 900, system: sys, messages: [{ role: 'user', content: '写吧' }] }
+                    : { model: rm.id, stream: false, max_tokens: 900, messages: [{ role: 'system', content: sys }, { role: 'user', content: '写吧' }] };
+    pCall(rm.p, 'POST', joinUrl(rm.p.base, rm.p.path), body, 90000).then(function (j) {
+      var t = anth ? (j.content || []).map(function (c) { return c.text || ''; }).join('') : ((j.choices && j.choices[0] && j.choices[0].message) || {}).content || '';
+      var mm = /\{[\s\S]*\}/.exec(t); if (!mm) return;
+      var r = JSON.parse(mm[0]), lines = {};
+      ['water', 'move', 'eye', 'sleep', 'miss'].forEach(function (k) {
+        var a = (r[k] || []).map(function (s) { return String(s).trim().replace(/^["“]|["”]$/g, ''); }).filter(function (s) { return s && s.length <= 60 && memSafe(s); });
+        if (a.length) lines[k] = a;
+      });
+      if (Object.keys(lines).length) { nt.copy = { date: today, tried: today, lines: lines }; saveNt(); notifySync(true); }
+    }).catch(function () {}).then(function () { ntWriting = false; });
+  }
+  // 点通知打开 App：开一段新对话，Amor 先把那条提醒说出来，接着聊
+  function notifyLaunch() {
+    if (!nativeOk()) return;
+    var s = ''; try { s = AmorNative.takeLaunch(); } catch (e) {}
+    if (!s) return;
+    var it; try { it = JSON.parse(s); } catch (e) { return; }
+    if (!it || !it.text) return;
+    var conv = { id: Date.now().toString(36), title: (it.title && it.title !== (asst.name || 'Amor') ? it.title : '来自提醒') + ' · ' + String(it.text).slice(0, 10),
+      city: state.current, created: Date.now(), updated: Date.now(), pinned: false, model: '', pname: '',
+      notif: it.text, msgs: [{ role: 'assistant', content: it.text, ts: Date.now(), fromNotif: it.kind || true }] };
+    chats.unshift(conv); saveChats();
+    state.tab = 'today'; state.sub = ''; render({ top: true });
+    openChat('', conv.id);
+  }
+  window.__amorLaunch = function () { setTimeout(notifyLaunch, 50); };
+  window.__amorResume = function () { notifySync(); setTimeout(notifyLaunch, 50); };
+  // 和 Amor 聊天时告诉原生层“正在前台聊”，这时不推送普通提醒
+  setInterval(function () { if (chat.open && !document.hidden && nativeOk()) try { AmorNative.fg(); } catch (e) {} }, 30000);
+  /* ---------- 通知：页面 ---------- */
+  function ntGet(path) { return path.split('.').reduce(function (o, k) { return o == null ? o : o[k]; }, nt); }
+  function ntSet(path, val) { var ks = path.split('.'), o = nt; for (var i = 0; i < ks.length - 1; i++) o = o[ks[i]]; o[ks[ks.length - 1]] = val; saveNt(); notifySync(); }
+  function ntSel(path, opts, label, sub) {
+    var cur = ntGet(path);
+    return '<div class="switch-row"><span>' + label + (sub ? '<small class="nt-sub">' + sub + '</small>' : '') + '</span><select class="nt-sel" data-ntsel="' + path + '" aria-label="' + label + '">' +
+      opts.map(function (o) { var v = o[0]; return '<option value="' + v + '"' + (String(v) === String(cur) ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></div>';
+  }
+  function hours(a, b) { var o = []; for (var h = a; h <= b; h++) o.push([h, (h % 24) + ':00']); return o; }
+  function halfHours(a, b) { var o = []; for (var m = a * 60; m <= b * 60; m += 30) { var h = Math.floor(m / 60) % 24, s = h + ':' + (m % 60 ? '30' : '00'); o.push([(h < 10 ? '0' : '') + s, s]); } return o; }
+  function ntSummary() {
+    if (!nativeOk()) return '需要 3.8 以上的安装包';
+    if (!nt.on) return '已关闭';
+    var n = ['eye', 'water', 'move', 'sleep', 'morning', 'alert', 'miss', 'memo'].filter(function (k) { return nt[k].on; }).length;
+    var inf = nInfo();
+    return (inf && inf.enabled === false ? '系统通知没打开 · ' : '') + n + ' 类提醒已开' + (inf && inf.next ? ' · 下一条 ' + clock(inf.next) : '');
+  }
+  var ntui = { test: '' };
+  function notifyPage() {
+    var an = asst.name || 'Amor', ok = nativeOk(), inf = ok ? nInfo() : null;
+    var html = '<section class="view">' + subHead('back-settings', '通知') +
+      '<p class="note" style="margin-top:-6px">' + esc(an) + ' 会在合适的时候提醒你、关心你。App 关着也能按时提醒，不常驻后台耗电。</p>';
+    if (!ok) {
+      html += '<div class="panel"><h2>状态 <em>Status</em></h2><p class="hint" style="margin:0 0 12px">当前安装包还不支持系统通知。装上 3.8 或更新的版本后，这里就能打开。</p></div>';
+    } else {
+      var drank = (inf.log || []).filter(function (x) { return x.e === 'done' && x.k === 'water' && dayStr(x.t) === dayStr(Date.now()); }).length;
+      html += '<div class="panel"><h2>状态 <em>Status</em></h2>' +
+        '<button type="button" class="entry nt-entry" data-ntopen="notif"><span><span class="t">系统通知</span><span class="d">' + (inf.enabled ? '已允许 · 锁屏、横幅都能显示' : '还没允许，点这里去打开') + '</span></span>' +
+          '<span class="nt-pill' + (inf.enabled ? ' ok' : ' bad') + '">' + (inf.enabled ? '已允许' : '去打开') + '</span></button>' +
+        (/xiaomi|redmi|poco/i.test(inf.brand || '') ? '<button type="button" class="entry nt-entry" data-ntopen="autostart"><span><span class="t">自启动</span><span class="d">小米手机要打开，不然关掉 App 后可能收不到提醒</span></span>' + icon('chev', 20) + '</button>' +
+          '<button type="button" class="entry nt-entry" data-ntopen="battery"><span><span class="t">省电策略</span><span class="d">选“无限制”，提醒才会准时</span></span>' + icon('chev', 20) + '</button>' : '') +
+        '<div class="nt-next"><span>' + (inf.next ? '下一条提醒 ' + agoTextFuture(inf.next) + ' · 已排好 ' + inf.planned + ' 条' : '还没有排好的提醒') + (drank ? ' · 今天喝了 ' + drank + ' 杯水 💧' : '') + '</span>' +
+          '<button type="button" class="btn" data-nttest="1">' + icon('bell', 18) + (ntui.test || '发一条试试') + '</button></div>' +
+      '</div>';
+    }
+    var dis = ok ? '' : ' mem-panel off';
+    html += '<div class="panel' + dis + '"><h2>关怀 <em>Care</em></h2>' +
+        sw('eye.on', nt.eye.on, '用眼休息 · 连续看屏幕太久时提醒', 'data-ntsw') + (nt.eye.on ? ntSel('eye.min', [[30, '30 分钟'], [45, '45 分钟'], [60, '60 分钟'], [90, '90 分钟']], '连续多久提醒') : '') +
+        sw('water.on', nt.water.on, '喝水', 'data-ntsw') + (nt.water.on ? ntSel('water.every', [[60, '每 1 小时'], [90, '每 1.5 小时'], [120, '每 2 小时'], [180, '每 3 小时']], '间隔') +
+          ntSel('water.from', hours(6, 12), '从') + ntSel('water.to', hours(17, 23), '到') : '') +
+        sw('move.on', nt.move.on, '久坐起来活动 · 在用手机时才提醒', 'data-ntsw') + (nt.move.on ? ntSel('move.every', [[60, '每 1 小时'], [90, '每 1.5 小时'], [120, '每 2 小时']], '间隔') : '') +
+        sw('sleep.on', nt.sleep.on, '睡前放下手机 · 还在用手机时才提醒', 'data-ntsw') + (nt.sleep.on ? ntSel('sleep.at', halfHours(22, 25), '时间') : '') +
+      '</div>' +
+      '<div class="panel' + dis + '"><h2>天气 <em>Weather</em></h2>' +
+        sw('morning.on', nt.morning.on, '早安播报 · 今天天气和穿衣', 'data-ntsw') + (nt.morning.on ? ntSel('morning.at', halfHours(6, 10), '时间') : '') +
+        sw('alert.on', nt.alert.on, '下雨、降温、高温提前说，气象预警马上说', 'data-ntsw') +
+      '</div>' +
+      '<div class="panel' + dis + '"><h2>陪伴 <em>' + esc(an) + '</em></h2>' +
+        sw('miss.on', nt.miss.on, '好久没聊时 ' + esc(an) + ' 会想你', 'data-ntsw') + (nt.miss.on ? ntSel('miss.days', [[2, '2 天'], [3, '3 天'], [5, '5 天'], [7, '7 天']], '多久没聊') : '') +
+        sw('memo.on', nt.memo.on, '记得的日子当天提醒（比如面试那天）', 'data-ntsw') +
+      '</div>' +
+      '<div class="panel' + dis + '"><h2>方式 <em>Delivery</em></h2>' +
+        sw('on', nt.on, '打开通知推送', 'data-ntsw') +
+        ntSel('quiet.from', hours(20, 24).map(function (h) { return [h[0] % 24, h[1]]; }), '免打扰 从') + ntSel('quiet.to', hours(5, 10), '免打扰 到') +
+        ntSel('maxPerDay', [[4, '4 条'], [6, '6 条'], [8, '8 条'], [12, '12 条']], '每天最多', '气象预警和用眼提醒不算') +
+        sw('lockFull', nt.lockFull, '锁屏时显示完整内容', 'data-ntsw') +
+        sw('aiCopy', nt.aiCopy, esc(an) + ' 每天写新的提醒文案（多用一点额度）', 'data-ntsw') +
+        sw('island', nt.island, '小米超级岛（需小米审核通过才会上岛）', 'data-ntsw') +
+        '<p class="hint" style="margin:4px 0 10px">超级岛只放有进度的提醒：用眼、喝水、久坐。没有审核时，系统会把它当普通通知显示，不影响使用。</p>' +
+      '</div>';
+    var up = buildPlan().slice(0, 6);
+    html += '<div class="panel' + dis + '"><h2>接下来 <em>Coming Up</em></h2>' + (up.length ? up.map(function (it) {
+        return '<div class="nt-up"><span class="tm">' + whenShort(it.t) + '</span><span class="tx"><b>' + esc(it.title) + '</b>' + esc(it.text) + '</span></div>';
+      }).join('') : '<p class="empty mem-empty">这几天没有要发的提醒。</p>') + '</div>';
+    if (inf) html += '<details class="vtrace nt-diag"><summary>通知诊断（出问题时截图发给 Claude）</summary><pre>' + esc(JSON.stringify({
+        enabled: inf.enabled, exact: inf.exact, sdk: inf.sdk, brand: inf.brand, model: inf.model, next: inf.next ? new Date(inf.next).toLocaleString() : '', planned: inf.planned,
+        inUse: inf.inUse, err: inf.err, errAt: inf.errAt ? new Date(inf.errAt).toLocaleString() : '',
+        log: (inf.log || []).slice(-15).map(function (x) { return clock(x.t) + ' ' + x.e + (x.k ? ' ' + x.k : ''); }) }, null, 1)) + '</pre>' +
+      '<button type="button" class="btn" data-ntclear="1" style="margin-top:6px">清空诊断记录</button></details>';
+    return html + '<span class="sign">Have a lovely day</span></section>';
+  }
+  function whenShort(ts) { var d = new Date(ts), dd = daysBetween(Date.now(), ts); return (dd === 0 ? '今天' : dd === 1 ? '明天' : (d.getMonth() + 1) + '/' + d.getDate()) + ' ' + clock(ts); }
+  function agoTextFuture(ts) { var mins = Math.round((ts - Date.now()) / 60000); return mins < 1 ? '马上' : mins < 60 ? mins + ' 分钟后' : whenShort(ts); }
   /* ---------- 记忆：页面 ---------- */
   var mui = { draft: { global: '', pref: '', amor: '' }, edit: '', clear: false, open: {}, rq: '' };
   function recallTryHtml() {
@@ -3316,7 +3620,8 @@
     if (mui.edit === x.id) return '<div class="mem-it editing"><input id="mem-edit" class="txt-in" type="text" maxlength="120" value="' + esc(x.text) + '" data-mid="' + x.id + '" autocomplete="off">' +
       '<button type="button" class="icon-btn" data-memsave="' + x.id + '" aria-label="保存">' + icon('tick', 20) + '</button></div>';
     return '<div class="mem-it"><button type="button" class="tx" data-memedit="' + x.id + '" aria-label="编辑这条记忆"><span>' + esc(x.text) + '</span>' +
-      '<small>' + (x.src === 'auto' ? (asst.name || 'Amor') + ' 记下的' : '你写的') + ' · ' + (d.getMonth() + 1) + '月' + d.getDate() + '日</small></button>' +
+      '<small>' + (x.src === 'auto' ? (asst.name || 'Amor') + ' 记下的' : '你写的') + ' · ' + (d.getMonth() + 1) + '月' + d.getDate() + '日' +
+        (x.date ? ' · 📅 ' + x.date.slice(5).replace('-', '/') + ' 那天提醒' : '') + '</small></button>' +
       '<button type="button" class="icon-btn del" data-memdel="' + x.id + '" aria-label="删除这条记忆">' + icon('x', 18) + '</button></div>';
   }
   function memSaveEdit() {
@@ -3634,6 +3939,15 @@
       vv.voice = ds.vvoice; vv.voiceName = vl ? vl.name : ds.vvoice; saveVoice(); keepScroll();
       if (vl && vl.preview) Speaker.playUrl(vl.preview, 'v:' + ds.vvoice, function () { speakMsg(voiceSampleText(), 'v:' + ds.vvoice); });
       else speakMsg(voiceSampleText(), 'v:' + ds.vvoice); return; }
+    if (ds.ntsw) { ntSet(ds.ntsw, !ntGet(ds.ntsw)); keepScroll(); return; }
+    if (ds.ntopen) { try { AmorNative.open(ds.ntopen); } catch (e) {} return; }
+    if (ds.ntclear) { try { AmorNative.clearLog(); } catch (e) {} keepScroll(); return; }
+    if (ds.nttest) {
+      var tv = view(state.current), ok_ = false;
+      try { ok_ = AmorNative.notifyNow(JSON.stringify({ id: 4242, ch: 'care', kind: 'test', title: asst.name || 'Amor',
+        text: ntName() + '，这是一条测试提醒 🌹' + (tv && tv.today ? ' 今天' + tv.m.zh + (tv.today.dt || '') + '，' + deg(tv.today.lo) + '~' + deg(tv.today.hi) + '°。' : ''),
+        actions: ['done', 'chat'], doneLabel: '收到', island: nt.island ? islandParam('测试提醒', '这是一条测试提醒', '测试') : '' })); } catch (e) {}
+      ntui.test = ok_ ? '已发送 ✓' : '没发出去，看下面的诊断'; keepScroll(); setTimeout(function () { ntui.test = ''; if (state.sub === 'notify') keepScroll(); }, 3000); return; }
     if (ds.msw) { mem[ds.msw] = !mem[ds.msw]; saveMem(); keepScroll(); return; }
     if (ds.memadd) { var mk_ = ds.memadd, mt_ = (mui.draft[mk_] || '').trim(); if (!mt_) { var fi_ = document.getElementById('mem-add-' + mk_); if (fi_) fi_.focus(); return; }
       if (memAdd(mk_, mt_, 'manual')) { mui.draft[mk_] = ''; toast('记住了'); } else toast(memSafe(mt_) ? '这条已经记过了' : '这条不能记（太长或像是密钥、密码）'); keepScroll(); return; }
@@ -3732,6 +4046,10 @@
       var tb = document.querySelector('[data-tool="think"]'); if (tb) tb.classList.toggle('on', asst.think >= 2); return; }
     if (e.target.id === 'chat-in') { fitInput(); chat.draft = e.target.value; var sb = document.getElementById('chat-send');
       if (sb && !chat.busy) { var was = sb.disabled; sb.disabled = !chat.draft.trim(); if (was && !sb.disabled) { sb.classList.remove('pop-in'); void sb.offsetWidth; sb.classList.add('pop-in'); } } }
+  });
+  document.addEventListener('change', function (e) {
+    var ns = e.target.getAttribute && e.target.getAttribute('data-ntsel');
+    if (ns) { var val = e.target.value; ntSet(ns, /^\d+$/.test(val) ? +val : val); keepScroll(); }
   });
   document.addEventListener('keydown', function (e) {
     if (e.target.id === 'city-q' && e.key === 'Enter') { var first = document.querySelector('[data-add]'); if (first) first.click(); }
@@ -3836,6 +4154,7 @@
       var good = res.filter(Boolean).length;
       dbState = (good || Object.keys(DATA).length) ? 'ready' : 'unavailable';
       persist();
+      notifySync(); notifyCopy();
       rerender();
       if (force && good === keys.length) toast('已更新');
       else if (good < keys.length) toast(good ? '部分城市没有更新成功' : '网络连接失败，显示的是上次的数据');
@@ -4533,6 +4852,7 @@
     if (a === 'assistant') { state.sub = 'assistant'; ui.pickModel = false; render({ top: true, anim: 'fwd' }); return; }
     if (a === 'pickmodel') { ui.pickModel = !ui.pickModel; render(); return; }
     if (a === 'font') { state.sub = 'font'; render({ top: true, anim: 'fwd' }); return; }
+    if (a === 'notify') { state.sub = 'notify'; ntui.test = ''; render({ top: true, anim: 'fwd' }); notifySync(true); setTimeout(function () { if (state.sub === 'notify') keepScroll(); }, 900); return; }
     if (a === 'memory') { state.sub = 'memory'; mui.edit = ''; mui.clear = false; render({ top: true, anim: 'fwd' }); return; }
     if (a === 'voiceapi') { state.sub = 'voiceapi'; vui.status = null; vui.pickModel = !vconf().model; vui.mq = ''; render({ top: true, anim: 'fwd' }); return; }
     if (a === 'voice' || a === 'back-voice') { state.sub = 'voice'; vui.pickModel = false; vui.status = null; render({ top: true, anim: a === 'voice' ? 'fwd' : 'back' });
@@ -4661,6 +4981,7 @@
     else setTimeout(function () { var el = document.getElementById('chat-in'); if (el && aiReady() && !('ontouchstart' in window)) el.focus(); }, 560);
   }
   function closeChat() {
+    setTimeout(notifySync, 400);
     var cc = curConv(); if (cc && !chat.busy) memMaybe(cc, '', true);
     var wrap = $sheet.querySelector('.sheet-wrap');
     if (!wrap || reduceMotion) { chat.open = false; $sheet.innerHTML = ''; return; }
@@ -5182,6 +5503,7 @@
     var v = view(conv.city);
     system += '\n\n现在是北京时间 ' + bjDate(0) + ' ' + new Date(Date.now() + 8 * 3600e3).toISOString().slice(11, 16) + '。';
     system += memText;
+    if (conv.notif) system += '\n\n（这段对话是' + (name || '用户') + '点开你推送的一条提醒开始的，提醒内容是：「' + conv.notif + '」。接着这个话题自然地聊，不用再重复提醒。）';
     var systemNoTools = null;
     if (useRecall) { systemNoTools = system + rclFb.text; system += recallRule(); }
     if (asst.weather && v) system += '\n下面是' + v.m.zh + '的中国气象局天气数据，聊到天气、穿衣、出行时参考，不要编造数据里没有的数字：\n' + weatherContext(v);
@@ -5306,7 +5628,8 @@
 
   if (Object.keys(DATA).length) dbState = 'ready';
   refreshAll(false);
-  document.addEventListener('visibilitychange', function () { if (!document.hidden) refreshAll(false); });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) { refreshAll(false); notifySync(); } });
+  setTimeout(function () { notifySync(true); notifyLaunch(); notifyCopy(); }, 1200);
 })();
 </script>
 </body>

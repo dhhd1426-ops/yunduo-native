@@ -95,7 +95,7 @@ final class Scheduler {
             JSONObject it = plan.optJSONObject(i);
             if (it == null) continue;
             long t = it.optLong("t", 0);
-            if (t <= now + 60_000L) {
+            if (t <= now + 5_000L) {
                 if (t >= now - LATE_OK && Notif.post(c, it)) sent++;
             } else {
                 keep.put(it);

@@ -114,7 +114,7 @@ final class Notif {
             Notification.Builder b = new Notification.Builder(c, ch);
             Bitmap ic = plain ? null : bitmap(cfg.optString("icon", ""));
             if (ic != null) b.setSmallIcon(Icon.createWithBitmap(ic));
-            else b.setSmallIcon(c.getApplicationInfo().icon);
+            else b.setSmallIcon(R.drawable.nt_icon);
             Bitmap av = bitmap(cfg.optString("avatar", ""));
             b.setContentTitle(title);
             b.setContentText(item.optString("short", text));
@@ -134,7 +134,7 @@ final class Notif {
             b.setContentIntent(openApp(c, id, item));
 
             JSONArray acts = letter ? null : item.optJSONArray("actions");
-            Icon aic = ic != null ? Icon.createWithBitmap(ic) : Icon.createWithResource(c, c.getApplicationInfo().icon);
+            Icon aic = ic != null ? Icon.createWithBitmap(ic) : Icon.createWithResource(c, R.drawable.nt_icon);
             if (acts != null) {
                 for (int i = 0; i < acts.length(); i++) {
                     String a = acts.optString(i, "");

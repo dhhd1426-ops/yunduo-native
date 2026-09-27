@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 状态栏小图标（单色）：一朵云。常驻通知和“系统样式”兜底时用 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#FFFFFFFF"
+        android:pathData="M7.5,19C4.46,19 2,16.76 2,14C2,11.52 3.99,9.46 6.6,9.07C7.54,6.67 9.84,5 12.5,5C15.87,5 18.62,7.66 18.78,11.01C20.63,11.36 22,12.93 22,14.8C22,17.12 20.12,19 17.8,19Z" />
+</vector>

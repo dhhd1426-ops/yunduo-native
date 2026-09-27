@@ -71,7 +71,7 @@ public class KeepService extends Service {
         open.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pi = PendingIntent.getActivity(c, 7007, open, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         return new Notification.Builder(c, CH)
-                .setSmallIcon(c.getApplicationInfo().icon)
+                .setSmallIcon(R.drawable.nt_icon)
                 .setContentTitle(name + " 在后台陪着你")
                 .setContentText(text)
                 .setOngoing(true)

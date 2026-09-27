@@ -36,6 +36,10 @@ def make_icon(path, size=192):
 NATIVE_DEX = os.environ.get('YD_DEX') or os.path.join(HERE, 'native', 'classes.dex')
 if not os.path.exists(NATIVE_DEX):
     NATIVE_DEX = None
+# 3.8 起清单、资源表（通知的自定义布局、颜色、图标）也由 CI 的 aapt2 生成：native/base.apk
+BASE_APK = os.environ.get('YD_BASE') or os.path.join(HERE, 'native', 'base.apk')
+if not (NATIVE_DEX and os.path.exists(BASE_APK)):
+    BASE_APK = None
 DEBUGGABLE = os.environ.get('YD_DEBUG') == '1'      # 只给 CI 模拟器测试用，正式包永远是 False
 MIN_SDK = 26 if NATIVE_DEX else 24
 PERMS = ['INTERNET'] + (['POST_NOTIFICATIONS', 'RECEIVE_BOOT_COMPLETED', 'VIBRATE', 'SCHEDULE_EXACT_ALARM'] if NATIVE_DEX else [])
@@ -91,15 +95,31 @@ def main(out_path):
     arsc = resources_arsc(PKG, 'mipmap', 'ic_launcher', 'res/mipmap/ic_launcher.png', 640)
     man = manifest()
     html = open(os.path.join(HERE, 'www', 'index.html'), 'rb').read()
-    for name, blob in [('AndroidManifest.xml', man), ('classes.dex', dex), ('resources.arsc', arsc)]:
-        open(os.path.join(work, name), 'wb').write(blob)
-    entries = [
-        ('AndroidManifest.xml', man, True),
-        ('classes.dex', dex, True),
-        ('resources.arsc', arsc, False),
-        ('res/mipmap/ic_launcher.png', icon, False),
-        ('assets/index.html', html, True),
-    ]
+    if BASE_APK:
+        import zipfile
+        zb = zipfile.ZipFile(BASE_APK)
+        base = [(i.filename, zb.read(i.filename), i.compress_type != zipfile.ZIP_STORED) for i in zb.infolist()
+                if not i.filename.startswith('META-INF/') and not i.filename.endswith('/')]
+        names = [b[0] for b in base]
+        assert 'AndroidManifest.xml' in names and 'resources.arsc' in names, names
+        # 资源表必须不压缩（系统要直接映射），图片本来就压缩过，也原样存放
+        entries = [('AndroidManifest.xml', dict((n, b) for n, b, _ in base)['AndroidManifest.xml'], True), ('classes.dex', dex, True)]
+        for n, b, comp in base:
+            if n == 'AndroidManifest.xml':
+                continue
+            entries.append((n, b, comp and n != 'resources.arsc' and not n.endswith('.png')))
+        entries.append(('assets/index.html', html, True))
+        print('base:', BASE_APK, len(base), 'entries')
+    else:
+        for name, blob in [('AndroidManifest.xml', man), ('classes.dex', dex), ('resources.arsc', arsc)]:
+            open(os.path.join(work, name), 'wb').write(blob)
+        entries = [
+            ('AndroidManifest.xml', man, True),
+            ('classes.dex', dex, True),
+            ('resources.arsc', arsc, False),
+            ('res/mipmap/ic_launcher.png', icon, False),
+            ('assets/index.html', html, True),
+        ]
     fonts_dir = os.path.join(HERE, 'www', 'fonts')
     if os.path.isdir(fonts_dir):
         for fn in sorted(os.listdir(fonts_dir)):

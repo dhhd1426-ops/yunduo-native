@@ -30,14 +30,17 @@ note "2 config + plan (two reminders in 20s / 35s)"
 adb exec-in "run-as $PKG sh -c 'mkdir -p files && cat > files/ci_cfg.json'" < ci/cfg.json
 adb shell "run-as $PKG ls -la files" | tee $O/files.txt
 T --es cfgFile ci_cfg.json
-PLAN='[{"id":101,"dt":20,"ch":"care","kind":"water","title":"Amor","text":"下午三点啦，起来喝杯水吧 💧 今天北京 26°，有点干燥，多喝两口。","actions":["done","snooze","chat"],"doneLabel":"喝了","snoozeLabel":"30 分钟后"},{"id":102,"dt":35,"ch":"weather","kind":"morning","title":"早安，小宇","text":"今天北京晴，15~26°C，早晚凉、中午暖。出门带件薄外套，中午可以脱。","actions":["chat"]}]'
+PLAN='[{"id":101,"dt":20,"ch":"care","kind":"water","title":"喝杯水吧","short":"下午三点啦，小口慢慢喝","text":"下午三点啦，小口慢慢喝～今天有点干燥，多喝两口。","meta":"3 / 6","progress":50,"actions":["done","snooze","chat"],"doneLabel":"喝了","snoozeLabel":"30 分钟后"},{"id":102,"dt":35,"ch":"weather","kind":"morning","title":"早安，小宇","short":"晴 · 带件薄外套","text":"今天北京晴，15~26°C，早晚凉、中午暖。出门带件薄外套，中午可以脱。","meta":"15–26°","actions":["chat"]}]'
 T --es plan64 "$(b64 "$PLAN")"
 adb shell dumpsys alarm | grep -B2 -A6 "$PKG" > $O/alarm-after-plan.txt || true
 sleep 19
 for k in 1 2 3 4 5 6; do shot 2-headsup-$k; sleep 0.5; done
 sleep 12; shot 3-after-morning
 adb shell dumpsys notification --noredact > $O/notif-after-plan.txt
-adb shell cmd statusbar expand-notifications; sleep 3; shot 4-shade; adb shell cmd statusbar collapse; sleep 1
+adb shell cmd statusbar expand-notifications; sleep 3; shot 4-shade
+# 展开第一条（喝水）看展开样式：在通知上两指下滑不好模拟，改用长按不稳定；用 dumpsys 已足够核对，这里再截一张全展开
+adb shell cmd statusbar expand-settings; sleep 2; adb shell cmd statusbar expand-notifications; sleep 2; shot 4b-shade
+adb shell cmd statusbar collapse; sleep 1
 
 note "3 DONE button on 101"
 adb shell am broadcast -a $PKG.DONE -n $RCV --ei id 101

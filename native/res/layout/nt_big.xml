@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 展开：标题行 + 完整的话（最多 4 行）+ 细线 + 两个小胶囊按钮 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:paddingTop="2dp" android:paddingBottom="4dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:gravity="center_vertical">
+        <TextView android:id="@+id/mono" android:layout_width="20dp" android:layout_height="20dp"
+            android:background="@drawable/nt_ring" android:gravity="center" android:includeFontPadding="false"
+            android:fontFamily="serif" android:textStyle="italic" android:textSize="10.5sp" android:textColor="@color/nt_rose" android:text="A" />
+        <TextView android:id="@+id/title" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:layout_marginStart="9dp" android:singleLine="true" android:fontFamily="serif" android:textStyle="bold"
+            android:textSize="13.5sp" android:textColor="@color/nt_title" />
+        <TextView android:id="@+id/meta" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginStart="8dp" android:singleLine="true" android:fontFamily="serif"
+            android:textSize="11sp" android:textColor="@color/nt_meta" />
+    </LinearLayout>
+    <TextView android:id="@+id/text" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginStart="29dp" android:layout_marginTop="3dp" android:maxLines="4" android:ellipsize="end"
+        android:lineSpacingMultiplier="1.15" android:fontFamily="serif" android:textStyle="italic"
+        android:textSize="13sp" android:textColor="@color/nt_text" />
+    <ProgressBar android:id="@+id/bar" style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent" android:layout_height="2dp" android:minHeight="2dp" android:maxHeight="2dp"
+        android:layout_marginStart="29dp" android:layout_marginTop="9dp" android:max="100" android:progress="0"
+        android:progressDrawable="@drawable/nt_bar" android:visibility="gone" />
+    <LinearLayout android:id="@+id/pills" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginStart="29dp" android:layout_marginTop="10dp" android:orientation="horizontal" android:visibility="gone">
+        <TextView android:id="@+id/pill1" android:layout_width="wrap_content" android:layout_height="26dp"
+            android:background="@drawable/nt_pill_fill" android:gravity="center" android:paddingStart="13dp" android:paddingEnd="13dp"
+            android:textSize="12sp" android:textColor="@color/nt_on_rose" android:visibility="gone" />
+        <TextView android:id="@+id/pill2" android:layout_width="wrap_content" android:layout_height="26dp"
+            android:layout_marginStart="8dp" android:background="@drawable/nt_pill_line" android:gravity="center"
+            android:paddingStart="13dp" android:paddingEnd="13dp" android:textSize="12sp" android:textColor="@color/nt_rose" android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>

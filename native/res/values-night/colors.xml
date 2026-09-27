@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="nt_title">#EFEDF2</color>
+    <color name="nt_text">#B8B5BF</color>
+    <color name="nt_meta">#97949F</color>
+    <color name="nt_rose">#E3A6B0</color>
+    <color name="nt_rose_line">#66E3A6B0</color>
+    <color name="nt_rose_soft">#2EE3A6B0</color>
+    <color name="nt_on_rose">#231F26</color>
+</resources>

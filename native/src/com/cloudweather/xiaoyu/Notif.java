@@ -13,6 +13,8 @@ import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.util.Base64;
+import android.view.View;
+import android.widget.RemoteViews;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -109,10 +111,14 @@ final class Notif {
             if (ic != null) b.setSmallIcon(Icon.createWithBitmap(ic));
             else b.setSmallIcon(c.getApplicationInfo().icon);
             Bitmap av = bitmap(cfg.optString("avatar", ""));
-            if (av != null) b.setLargeIcon(av);
             b.setContentTitle(title);
-            b.setContentText(text);
-            b.setStyle(new Notification.BigTextStyle().bigText(text));
+            b.setContentText(item.optString("short", text));
+            // 信笺样式：系统外框里放我们自己的一行排版（没有大头像、按钮做成小胶囊）；出错就用系统标准样式
+            boolean letter = "letter".equals(cfg.optString("style", "letter")) && letterViews(c, b, item, cfg, id);
+            if (!letter) {
+                if (av != null) b.setLargeIcon(av);
+                b.setStyle(new Notification.BigTextStyle().bigText(text));
+            }
             b.setAutoCancel(true);
             b.setShowWhen(true);
             b.setWhen(now);
@@ -122,7 +128,7 @@ final class Notif {
             b.setVisibility(cfg.optBoolean("lockFull", true) ? Notification.VISIBILITY_PUBLIC : Notification.VISIBILITY_PRIVATE);
             b.setContentIntent(openApp(c, id, item));
 
-            JSONArray acts = item.optJSONArray("actions");
+            JSONArray acts = letter ? null : item.optJSONArray("actions");
             Icon aic = ic != null ? Icon.createWithBitmap(ic) : Icon.createWithResource(c, c.getApplicationInfo().icon);
             if (acts != null) {
                 for (int i = 0; i < acts.length(); i++) {
@@ -155,6 +161,54 @@ final class Notif {
             return true;
         } catch (Throwable t) {
             Store.err(c, "post:" + kind, t);
+            return false;
+        }
+    }
+
+    /** 信笺样式的收起/展开布局（res/layout/nt_small.xml、nt_big.xml） */
+    private static boolean letterViews(Context c, Notification.Builder b, JSONObject item, JSONObject cfg, int id) {
+        try {
+            String name = cfg.optString("name", "Amor");
+            String mono = name.length() > 0 ? name.substring(0, 1).toUpperCase() : "A";
+            String title = item.optString("title", name), text = item.optString("text", "");
+            String meta = item.optString("meta", "");
+            int prog = item.optInt("progress", -1);
+            RemoteViews[] vs = { new RemoteViews(c.getPackageName(), R.layout.nt_small), new RemoteViews(c.getPackageName(), R.layout.nt_big) };
+            for (int k = 0; k < 2; k++) {
+                RemoteViews v = vs[k];
+                v.setTextViewText(R.id.mono, mono);
+                v.setTextViewText(R.id.title, title);
+                v.setTextViewText(R.id.text, k == 0 ? item.optString("short", text) : text);
+                v.setTextViewText(R.id.meta, meta);
+                v.setViewVisibility(R.id.meta, meta.length() > 0 ? View.VISIBLE : View.GONE);
+                if (prog >= 0) {
+                    v.setProgressBar(R.id.bar, 100, Math.min(100, prog), false);
+                    v.setViewVisibility(R.id.bar, View.VISIBLE);
+                }
+            }
+            RemoteViews big = vs[1];
+            JSONArray acts = item.optJSONArray("actions");
+            int slot = 0;
+            if (acts != null) {
+                for (int i = 0; i < acts.length() && slot < 2; i++) {
+                    String a = acts.optString(i, "");
+                    String act = "done".equals(a) ? ACT_DONE : "snooze".equals(a) ? ACT_SNOOZE : null;
+                    if (act == null) continue;
+                    int vid = slot == 0 ? R.id.pill1 : R.id.pill2;
+                    big.setTextViewText(vid, ACT_DONE.equals(act) ? item.optString("doneLabel", "好的") : item.optString("snoozeLabel", "稍后提醒"));
+                    big.setOnClickPendingIntent(vid, action(c, act, id, item));
+                    big.setViewVisibility(vid, View.VISIBLE);
+                    slot++;
+                }
+            }
+            big.setViewVisibility(R.id.pills, slot > 0 ? View.VISIBLE : View.GONE);
+            b.setStyle(new Notification.DecoratedCustomViewStyle());
+            b.setCustomContentView(vs[0]);
+            b.setCustomHeadsUpContentView(vs[0]);
+            b.setCustomBigContentView(big);
+            return true;
+        } catch (Throwable t) {
+            Store.err(c, "letter", t);
             return false;
         }
     }

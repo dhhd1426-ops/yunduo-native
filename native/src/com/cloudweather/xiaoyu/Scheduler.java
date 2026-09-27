@@ -142,6 +142,9 @@ final class Scheduler {
             item.put("kind", "eye");
             item.put("title", eye.optString("title", "休息一下眼睛"));
             item.put("text", text);
+            item.put("short", eye.optString("short", "望望远处 20 秒"));
+            item.put("meta", eye.optLong("min", 45) + "′");
+            item.put("progress", 100);
             item.put("actions", new JSONArray().put("done").put("snooze"));
             item.put("doneLabel", "好，休息一下");
             item.put("snoozeLabel", "再 10 分钟");

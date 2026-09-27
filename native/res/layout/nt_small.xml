@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 收起 / 横幅：一行。细线字母 A · 衬线标题 · 斜体短句 · 右侧小数字；有进度时下面一根 2dp 细线 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:paddingTop="2dp" android:paddingBottom="2dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:gravity="center_vertical">
+        <TextView android:id="@+id/mono" android:layout_width="20dp" android:layout_height="20dp"
+            android:background="@drawable/nt_ring" android:gravity="center" android:includeFontPadding="false"
+            android:fontFamily="serif" android:textStyle="italic" android:textSize="10.5sp" android:textColor="@color/nt_rose" android:text="A" />
+        <TextView android:id="@+id/title" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginStart="9dp" android:singleLine="true" android:fontFamily="serif" android:textStyle="bold"
+            android:textSize="13.5sp" android:textColor="@color/nt_title" />
+        <TextView android:id="@+id/text" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:layout_marginStart="8dp" android:singleLine="true" android:ellipsize="end" android:fontFamily="serif"
+            android:textStyle="italic" android:textSize="12.5sp" android:textColor="@color/nt_text" />
+        <TextView android:id="@+id/meta" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginStart="8dp" android:singleLine="true" android:fontFamily="serif"
+            android:textSize="11sp" android:textColor="@color/nt_meta" />
+    </LinearLayout>
+    <ProgressBar android:id="@+id/bar" style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent" android:layout_height="2dp" android:minHeight="2dp" android:maxHeight="2dp"
+        android:layout_marginStart="29dp" android:layout_marginTop="7dp" android:max="100" android:progress="0"
+        android:progressDrawable="@drawable/nt_bar" android:visibility="gone" />
+</LinearLayout>

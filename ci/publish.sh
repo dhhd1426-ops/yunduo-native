@@ -3,7 +3,7 @@
 set -euo pipefail
 P=/tmp/pub; rm -rf $P; mkdir -p $P
 cp -r out/emu $P/ 2>/dev/null || true
-cp out/classes.dex out/toolchain.txt $P/ 2>/dev/null || true
+cp out/classes.dex out/toolchain.txt out/base.apk $P/ 2>/dev/null || true
 cp out/*.log $P/ 2>/dev/null || true
 cp out-compile.log $P/compile.log 2>/dev/null || true
 echo "sha=$GITHUB_SHA run=$GITHUB_RUN_ID job=${JOB_STATUS:-?} at=$(date -u +%FT%TZ)" > $P/RESULT.txt

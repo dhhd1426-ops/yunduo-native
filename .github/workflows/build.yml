@@ -17,7 +17,7 @@ jobs:
         run: |
           python3 -m pip install --quiet pillow
           mv out-compile.log out/compile.log
-          YD_DEX=$PWD/out/classes.dex YD_DEBUG=1 python3 app/build.py out/test.apk 2>&1 | tee out/apk.log
+          YD_BASE=$PWD/out/base-debug.apk YD_DEX=$PWD/out/classes.dex python3 app/build.py out/test.apk 2>&1 | tee out/apk.log
           python3 app/verify.py out/test.apk 2>&1 | tee out/verify.log | tail -3
       - name: Enable KVM
         run: |

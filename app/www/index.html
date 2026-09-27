@@ -1452,6 +1452,34 @@
   }
   @keyframes swInR { from { transform: translateX(40%); opacity: 0; } }
   @keyframes swInL { from { transform: translateX(-40%); opacity: 0; } }
+  /* 4.4.1 思考标记（星轨 + 翻转） */
+  .proc .sp { --a: #e3a6b0; width: 22px; height: 22px; position: relative; perspective: 90px; flex: none; display: inline-block; }
+  .sp * { position: absolute; }
+  /* A 星轨：三颗点在倾斜的圆环上绕圈，近大远小 */
+  .sp.orb .ring { inset: 0; transform-style: preserve-3d; transform: rotateY(-14deg) rotateX(64deg); animation: orbFlip 2.2s infinite; }
+  .sp.orb .arm { left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; animation: orbArm .9s linear infinite; }
+  .sp.orb i { left: -2.5px; top: -2.5px; width: 5px; height: 5px; border-radius: 50%; background: var(--a); animation: orbFace 2.2s infinite; }
+  .sp.orb .ring::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; border: 1px solid var(--a); opacity: .22; }
+  @keyframes orbArm { from { transform: rotateZ(0deg) translateX(8px) rotateZ(0deg); } to { transform: rotateZ(360deg) translateX(8px) rotateZ(-360deg); } }
+  /* 圆环隔一会儿整个翻个跟头；点始终正对着你（反着转回来），所以永远是圆的 */
+  @keyframes orbFlip {
+    0%, 22% { transform: rotateY(-14deg) rotateX(64deg); animation-timing-function: cubic-bezier(.55, 0, .25, 1); }
+    50%, 72% { transform: rotateY(-14deg) rotateX(244deg); animation-timing-function: cubic-bezier(.55, 0, .25, 1); }
+    100% { transform: rotateY(-14deg) rotateX(424deg); } }
+  @keyframes orbFace {
+    0%, 22% { transform: rotateX(-64deg) rotateY(14deg); animation-timing-function: cubic-bezier(.55, 0, .25, 1); }
+    50%, 72% { transform: rotateX(-244deg) rotateY(14deg); animation-timing-function: cubic-bezier(.55, 0, .25, 1); }
+    100% { transform: rotateX(-424deg) rotateY(14deg); } }
+  .sp.orb.still .ring, .sp.orb.still i { animation: none; } .sp.orb.still i { transform: rotateX(-64deg) rotateY(14deg); } .sp.orb.still .arm { animation-play-state: paused; }
+  .sp.orb.still i { opacity: .8; }
+  .proc .sp { --a: var(--accent); margin-left: 2px; }
+  .sp.orb .ring, .sp.orb i { animation-delay: var(--ph, 0s); } .sp.orb .arm { animation-delay: var(--ph2, 0s); }
+  .sp.orb .arm:nth-child(2) { animation-delay: calc(var(--ph2, 0s) - .3s); } .sp.orb .arm:nth-child(3) { animation-delay: calc(var(--ph2, 0s) - .6s); }
+  @media (prefers-reduced-motion: reduce) { .sp.orb .ring, .sp.orb .arm, .sp.orb i { animation-play-state: paused !important; } }
+  /* 4.4.1 沉浸式对话：Amor 的回答不套气泡、不加头像行，直接写在纸面上（像 Claude App） */
+  .msgs .msg.bot { background: none; padding: 2px 0; max-width: 100%; border-radius: 0; }
+  .msgs .bot-head { display: none; }
+  .msgs .msg.bot.emo-think { padding: 4px 0; }
 </style>
 <script src="fonts/script-glyphs.js"></script>
 <script src="fonts/pinyin.js"></script>
@@ -7004,10 +7032,12 @@
     else if (sources && sources.length) bits.push('已搜索 ' + sources.length + ' 个网页');
     return bits.join(' · ');
   }
+  // 4.4.1 思考标记：三颗点绕着倾斜的圆环转，圆环隔一会儿翻个跟头（在想的时候一直动，想完停住）
+  function orbHtml(live) { var n = Date.now(); return '<span class="sp orb' + (live ? '' : ' still') + '" aria-hidden="true" style="--ph:-' + (n % 2200) + 'ms;--ph2:-' + (n % 900) + 'ms"><span class="ring"><span class="arm"><i></i></span><span class="arm"><i></i></span><span class="arm"><i></i></span></span></span>'; }
   function procRow(x, key) {
     var lb = procLabel(x.reasoning, x.thinkMs, x.sources, x.recall);
     if (!lb) return '';
-    return '<button type="button" class="proc" data-proc="' + key + '" aria-label="查看' + lb + '"><span class="dots still"><i></i><i></i><i></i></span>' +
+    return '<button type="button" class="proc" data-proc="' + key + '" aria-label="查看' + lb + '">' + orbHtml(false) + '' +
       '<span class="pl">' + lb + '</span><span class="cv">' + icon('chev', 16) + '</span></button>';
   }
   function liveProcRow() {
@@ -7020,7 +7050,7 @@
 
     if (!lb) return '';
     chat.procLine = live ? lb : '';
-    return '<button type="button" class="proc' + (live ? ' live' : '') + '" data-proc="live" aria-label="查看思考过程"><span class="dots' + (live ? '' : ' still') + '"><i></i><i></i><i></i></span>' +
+    return '<button type="button" class="proc' + (live ? ' live' : '') + '" data-proc="live" aria-label="查看思考过程">' + orbHtml(live) + '' +
       '<span class="pl" id="proc-line">' + esc(lb) + '</span><span class="cv">' + icon('chev', 16) + '</span></button>';
   }
   function procData() {

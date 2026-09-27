@@ -1194,8 +1194,7 @@
   .moment svg.hr-t path { fill: currentColor; stroke: currentColor; stroke-width: .8px; vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-linecap: round; }
   .moment svg.hr-t .d { color: var(--ink); }
   .moment svg.hr-t .c { color: var(--accent); }
-  .moment.done svg.hr-t .c { animation: moBreathe 2s steps(1, end) infinite; }
-  @keyframes moBreathe { 0% { opacity: 1; } 50% { opacity: .45; } }
+  .moment svg.hr-t .c { transition: opacity .4s ease; }
   .moment svg.hr-t .pend { fill-opacity: 0; stroke-opacity: 0; }
   .moment svg.hr-t .out { transition: opacity .55s ease, filter .55s ease; opacity: 0; filter: blur(3px); }
   .moment svg.hr-t .nib { fill: var(--accent); opacity: 0; }
@@ -1218,7 +1217,7 @@
   .moment.on3 .arc-mid { opacity: 1; }
   .moment .arc-base { stroke: var(--line); stroke-width: 1; }
   .moment .mo-fly { position: absolute; left: -60px; top: -34px; width: calc(100% + 84px); height: calc(100% + 48px); pointer-events: none; overflow: visible; z-index: 2; }
-  .moment .mo-fly .b { opacity: 0; transition: opacity .8s; }
+  .moment .mo-fly .b { position: absolute; left: 0; top: 0; overflow: visible; opacity: 0; transition: opacity .8s; }
   .moment .mo-fly .b.in { opacity: 1; }
   .mo-slot-p:empty { display: none; }
   @media (min-width: 720px) {
@@ -4587,7 +4586,8 @@
       var src = {}; Array.prototype.forEach.call(tmp.querySelectorAll('g.bfly'), function (g) { src[g.getAttribute('data-seq')] = g.firstElementChild; });
       var r = el.getBoundingClientRect(), W = r.width + 84, Hh = r.height + 48;
       if (W < 100) return;
-      flySvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); flySvg.setAttribute('class', 'mo-fly'); flySvg.setAttribute('viewBox', '0 0 ' + W + ' ' + Hh);
+      // 每只蝴蝶是一个单独的小 svg，用 CSS transform 移动（走合成层，不重画整块）
+      flySvg = document.createElement('div'); flySvg.className = 'mo-fly'; flySvg.setAttribute('data-w', W);
       el.appendChild(flySvg);
       var wide = where === 'w';
       var spots = wide ? [[W * .72, Hh * .38, 32, 16, 36], [W * .93, Hh * .14, 22, 12, 26], [W * .9, Hh * .8, 26, 12, 30], [W * .08, Hh * .18, 18, 10, 20]]
@@ -4596,22 +4596,37 @@
         var inner = src[seq]; if (!inner) return;
         var c = inner.cloneNode(true); c.removeAttribute('transform');
         var html = c.outerHTML.replace(/id="([^"]+)"/g, 'id="$1-mo' + k + '"').replace(/url\(#([^)]+)\)/g, 'url(#$1-mo' + k + ')');
-        var g = document.createElementNS('http://www.w3.org/2000/svg', 'g'); g.setAttribute('class', 'b'); g.innerHTML = html; flySvg.appendChild(g);
-        var sp = spots[k];
-        flies.push({ g: g, w: g.querySelector('.wings'), ax: sp[0], ay: sp[1], rx: sp[2], ry: sp[3], span: sp[4],
+        var sp = spots[k], box = Math.round(sp[4] * 1.25);
+        var g = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); g.setAttribute('class', 'b'); g.setAttribute('viewBox', '-66 -66 132 132');
+        g.setAttribute('width', box); g.setAttribute('height', box); g.style.width = box + 'px'; g.style.height = box + 'px'; g.innerHTML = html; flySvg.appendChild(g);
+        flies.push({ g: g, w: g.querySelector('.wings'), ax: sp[0], ay: sp[1], rx: sp[2], ry: sp[3], span: sp[4], box: box,
           p: [Math.random() * 6, Math.random() * 6, Math.random() * 6, Math.random() * 6], f: 7 + Math.random() * 3, ph: 0,
           from: [-40 - k * 30, Hh * (.3 + .15 * k)], st: 150 + k * 380, lt: 0, px: null, py: null });
       });
-      flyT0 = performance.now();
+      flyT0 = performance.now(); flyWake(25000);
       if (reduce) { flyFrame(flyT0 + 5000); return; }
       flyKick();
     }
-    function flyActive() { return !!(flySvg && flySvg.isConnected && !document.hidden && !(typeof chat !== 'undefined' && chat.open) && state.tab === 'today'); }
+    function flyActive() { return !window.__noFly && !!(flySvg && flySvg.isConnected && !document.hidden && !(typeof chat !== 'undefined' && chat.open) && state.tab === 'today'); }
     function flyKick() { if (!flyRaf && flyActive() && !reduce) { flies.forEach(function (b) { b.lt = 0; }); flyRaf = requestAnimationFrame(flyTick); } }
-    function flyTick(tn) { flyRaf = 0; if (!flyActive()) return; flyFrame(tn); flyRaf = requestAnimationFrame(flyTick); }
-    function flyFrame(tn) {
+    // 省电：飞 25 秒后停下来歇着（原地慢慢扇翅膀，每秒几帧），每隔 45 秒再飞一会儿；换分钟时也会飞起来
+    var flyLast = 0, awakeUntil = 0, nextWake = 0;
+    function flyWake(ms) { var n = performance.now(); awakeUntil = Math.max(awakeUntil, n + ms); nextWake = n + 45000; }
+    function flyTick(tn) {
+      flyRaf = 0; if (!flyActive()) return;
+      if (tn > nextWake && nextWake) flyWake(8000);
+      var awake = tn < awakeUntil;
+      if (tn - flyLast > (awake ? 30 : 180)) { flyLast = tn; flyFrame(tn, !awake); }
+      flyRaf = requestAnimationFrame(flyTick);
+    }
+    function flyFrame(tn, rest) {
       var t = (tn - flyT0) / 1000;
       flies.forEach(function (b, k) {
+        if (rest && b.px != null) {   // 歇着：位置不动，翅膀慢慢开合
+          b.ph += (b.lt ? (tn - b.lt) / 1000 : 0) * 0.7 * Math.PI * 2; b.lt = tn;
+          if (b.w) b.w.setAttribute('transform', 'scale(' + (.55 + .4 * Math.abs(Math.cos(b.ph))).toFixed(3) + ' 1)');
+          return;
+        }
         var p = b.p, sp = 1 + k * .13;
         var x = b.ax + b.rx * Math.sin(t * .55 * sp + p[0]) + b.rx * .45 * Math.sin(t * 1.3 * sp + p[1]);
         var y = b.ay + b.ry * Math.sin(t * .8 * sp + p[2]) + b.ry * .5 * Math.cos(t * 1.7 * sp + p[3]);
@@ -4627,7 +4642,7 @@
         var glide = .5 + .5 * Math.sin(t * .9 + p[1] * 2), rate = glide > .82 ? 1.2 : b.f * (e < 1 ? 1.4 : 1);
         b.ph += (b.lt ? (tn - b.lt) / 1000 : 0) * rate * Math.PI * 2; b.lt = tn;
         var fl = glide > .82 ? .85 + .1 * Math.cos(b.ph) : .22 + .78 * Math.abs(Math.cos(b.ph));
-        b.g.setAttribute('transform', 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + (tilt - 10).toFixed(1) + ') scale(' + (b.span / 110).toFixed(3) + ')');
+        b.g.style.transform = 'translate3d(' + (x - b.box / 2).toFixed(1) + 'px,' + (y - b.box / 2).toFixed(1) + 'px,0) rotate(' + (tilt - 10).toFixed(1) + 'deg)';
         if (b.w) b.w.setAttribute('transform', 'scale(' + fl.toFixed(3) + ' 1)');
       });
     }
@@ -4635,7 +4650,8 @@
       if (!flies.length || !svg || !flySvg) return;
       var paths = svg.querySelectorAll('path.gl'), p = paths[Math.min(ix, paths.length - 1)]; if (!p) return;
       var rb = p.getBoundingClientRect(), rf = flySvg.getBoundingClientRect(); if (!rf.width) return;
-      var k = flySvg.viewBox.baseVal.width / rf.width;
+      var k = 1;
+      flyWake(4000);
       visit = { k: 0, x: (rb.left + rb.width / 2 - rf.left) * k, y: (rb.top - rf.top) * k, t0: performance.now(), dur: 2400 };
     }
 
@@ -4648,7 +4664,7 @@
       if (ov > 0) g.style.marginBottom = Math.ceil(ov) + 'px';
     }
     function mount() {
-      if (state.tab !== 'today') return;
+      if (state.tab !== 'today' || window.__noMoment) return;
       var wide = window.matchMedia('(min-width: 720px)').matches;
       var slot = document.querySelector(wide ? '.greeting .mo-slot' : '.mo-slot-p');
       if (!slot) return;
@@ -4662,7 +4678,11 @@
       requestAnimationFrame(fit);
       flyKick();
     }
-    setInterval(function () { if (!el || !el.isConnected || !ready) return; draw(false); flyKick(); }, 1000);
+    setInterval(function () {
+      if (!el || !el.isConnected || !ready) return;
+      draw(false); flyKick();
+      var c = svg.querySelector('path.c:not(.pend)'); if (c && el.classList.contains('done') && !document.hidden) c.style.opacity = (Math.floor(Date.now() / 1000) % 2) ? '.45' : '';   // 冒号随秒轻轻明暗
+    }, 1000);
     window.addEventListener('resize', function () { if (el && el.isConnected) mount(); });
     return { mount: mount };
   })();

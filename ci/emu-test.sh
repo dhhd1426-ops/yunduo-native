@@ -123,10 +123,14 @@ T --ez ringSnooze true; sleep 3; shot 9b-after-snooze
 adb shell dumpsys alarm | grep -B2 -A6 "ALARM" | grep -E "when|com.cloudweather" | head -20 > $O/alarm-after-snooze.txt || true
 adb shell locksettings clear --old 1234 || true
 adb shell input keyevent KEYCODE_WAKEUP; adb shell wm dismiss-keyguard; sleep 2
-adb shell am start -f 0x30000000 -n $PKG/.MainActivity; sleep 3
+adb shell am start -f 0x30000000 -n $PKG/.MainActivity; sleep 4
+T --es alarms64 "$(b64 "$AL")"
+sleep 1
 T --ei alarmFire 4102
 sleep 5; shot 9c-ring-inuse
-adb shell input swipe 120 2000 900 2000 400 || true
+adb shell wm size > $O/wm-size.txt
+read W H < <(adb shell wm size | tail -1 | sed 's/.*: //; s/x/ /')
+adb shell input swipe $((W*17/100)) $((H*925/1000)) $((W*90/100)) $((H*925/1000)) 600 || true
 sleep 3; shot 9d-after-slide
 T --ez ringOff true; sleep 2; shot 9e-after-off
 adb shell dumpsys notification --noredact | grep -c "id=8 " > $O/ring-notif-after-off.txt || true

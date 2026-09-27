@@ -45,8 +45,15 @@ public class AmorBridge {
     @JavascriptInterface
     public void setPlan(String json) {
         try {
-            new JSONArray(json);
-            Store.put(app, "plan", json);
+            JSONArray next = new JSONArray(json);
+            // 点过“稍后提醒”的条目只存在原生层，网页不知道：同步时保留还没到时间的
+            JSONArray old = Store.plan(app);
+            long now = System.currentTimeMillis();
+            for (int i = 0; i < old.length(); i++) {
+                JSONObject o = old.optJSONObject(i);
+                if (o != null && o.optBoolean("snoozed", false) && o.optLong("t", 0) > now) next.put(o);
+            }
+            Store.put(app, "plan", next.toString());
             Scheduler.rescheduleFire(app);
         } catch (Throwable t) {
             Store.err(app, "setPlan", t);

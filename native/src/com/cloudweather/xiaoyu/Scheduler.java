@@ -163,6 +163,7 @@ final class Scheduler {
             long min = it.optLong("snoozeMin", 30);
             it.put("t", System.currentTimeMillis() + min * 60_000L);
             it.put("cond", "");
+            it.put("snoozed", true);   // 网页下次同步计划时要保留它
             JSONArray plan = Store.plan(c);
             plan.put(it);
             Store.put(c, "plan", plan.toString());

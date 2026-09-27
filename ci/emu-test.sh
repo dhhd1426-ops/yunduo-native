@@ -71,6 +71,13 @@ adb shell input keyevent KEYCODE_WAKEUP; adb shell wm dismiss-keyguard
 T --ei eyeStart 60 --ez eye true
 sleep 2; shot 5-eye; adb shell dumpsys notification --noredact > $O/notif-after-eye.txt
 
+note "5b Amor-set reminder in 8s while app is in foreground (skipFg=false)"
+adb shell am start -f 0x30000000 -n $PKG/.MainActivity; sleep 2
+RPLAN='[{"id":71234,"dt":8,"ch":"amor","kind":"remind","title":"喝杯水吧","short":"说好的，10 秒到啦","text":"说好的，10 秒到啦～去倒杯水吧 💧","meta":"14:17","actions":["done","snooze","chat"],"doneLabel":"好的","snoozeLabel":"10 分钟后","snoozeMin":10,"skipFg":false}]'
+T --es plan64 "$(b64 "$RPLAN")"
+sleep 9; shot 5b-remind; sleep 1; shot 5c-remind
+adb shell dumpsys notification --noredact | grep -A3 "id=71234" > $O/notif-remind.txt || true
+
 note "6 lock screen with notifications"
 adb shell locksettings set-pin 1234 || true
 adb shell input keyevent KEYCODE_POWER; sleep 3

@@ -52,8 +52,8 @@ def manifest():
     A = True
     root = ('manifest', [
         (False, 'package', T_STRING, PKG),
-        (A, 'versionCode', T_INT_DEC, 33),
-        (A, 'versionName', T_STRING, '4.0.2'),
+        (A, 'versionCode', T_INT_DEC, 35),
+        (A, 'versionName', T_STRING, '4.2'),
     ], [
         ('uses-sdk', [(A, 'minSdkVersion', T_INT_DEC, MIN_SDK), (A, 'targetSdkVersion', T_INT_DEC, 29)], []),
     ] + [('uses-permission', [(A, 'name', T_STRING, 'android.permission.' + p)], []) for p in PERMS] + [
@@ -123,6 +123,13 @@ def main(out_path):
     ring = os.path.join(HERE, 'www', 'ring.html')   # 4.1 响铃页
     if os.path.exists(ring):
         entries.append(('assets/ring.html', open(ring, 'rb').read(), True))
+    emo_dir = os.path.join(HERE, 'www', 'emo')   # 4.2 表情引擎（Emotion Ball，含许可文件）
+    if os.path.isdir(emo_dir):
+        for root, _, files in sorted(os.walk(emo_dir)):
+            for fn in sorted(files):
+                full = os.path.join(root, fn)
+                rel = os.path.relpath(full, os.path.join(HERE, 'www')).replace(os.sep, '/')
+                entries.append(('assets/' + rel, open(full, 'rb').read(), True))
     fonts_dir = os.path.join(HERE, 'www', 'fonts')
     if os.path.isdir(fonts_dir):
         for fn in sorted(os.listdir(fonts_dir)):

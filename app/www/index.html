@@ -1396,6 +1396,24 @@
   .al-amor .k { font-size: 12px; color: var(--sepia); display: flex; justify-content: space-between; align-items: center; }
   .al-amor p { margin: 6px 0 0; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 13px; line-height: 1.75; color: var(--paper-ink); }
   .al-save { color: var(--accent) !important; font-weight: 600; }
+
+  /* ---------- 4.2 会动的表情包：没有方框，像抠出来的主体站在对话里 ---------- */
+  .emo-row { display: flex; gap: 2px; margin: 2px 0 4px -8px; align-self: flex-start; }
+  .emo { position: relative; width: 124px; height: 124px; border: 0; background: none; padding: 0; flex: none; -webkit-tap-highlight-color: transparent; }
+  .emo-row.two .emo { width: 106px; height: 106px; }
+  .emo-box, .emo-stage { position: absolute; inset: 0; }
+  .emo-stage svg { overflow: visible; }
+  .emo-shadow { position: absolute; left: 24%; right: 24%; bottom: 5%; height: 9%; border-radius: 50%; background: radial-gradient(closest-side, rgba(20, 28, 50, .20), rgba(20, 28, 50, 0)); }
+  .emo-box.emo-in { animation: emoIn .75s var(--bouncy, cubic-bezier(.34, 1.56, .64, 1)) both; }
+  .emo-row.two .emo:nth-child(2) .emo-box.emo-in { animation-delay: .18s; }
+  @keyframes emoIn { from { transform: translateY(22px) scale(.5); opacity: 0; } 60% { opacity: 1; } }
+  .emo-think { width: 72px; height: 72px; margin: 2px 0 2px -6px; }
+  .emo-think .emo { width: 72px; height: 72px; }
+  .emo-pick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 6px 0 10px; }
+  .emo-ch { border: 1px solid var(--line); background: none; border-radius: 18px; padding: 8px 4px 10px; display: flex; flex-direction: column; align-items: center; gap: 2px; color: var(--text); }
+  .emo-ch[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+  .emo-ch b { font-weight: 500; font-size: 13px; } .emo-ch i { font-family: "Cormorant Garamond", Georgia, serif; font-size: 12px; color: var(--muted); }
+  .emo-pv { position: relative; display: block; width: 72px; height: 72px; }
 </style>
 <script src="fonts/script-glyphs.js"></script>
 <script src="fonts/pinyin.js"></script>
@@ -4233,6 +4251,7 @@
             '<button type="button" class="btn" data-ui="providers" style="align-self:flex-start">管理模型供应商</button></div>' : '') +
         '</div>' +
       '</div>' +
+      emoSettingsPanel() +
       '<div class="panel"><h2>提示词 <em>System Prompt</em></h2>' +
         '<div class="field"><label for="a-prompt">系统提示词</label>' +
           '<textarea id="a-prompt" class="txt-area" spellcheck="false">' + esc(asst.prompt) + '</textarea>' +
@@ -4292,6 +4311,7 @@
     Deco.mount();
     if (Moment) Moment.mount();
     if (tab === 'plan') calAfterRender();
+    if (state.sub === 'assistant') emoAfterRender();
     updateTabs(tab, opts.anim);
     var v = view(state.current);
     $pill.innerHTML = icon('pin', 16) + esc(META[state.current].zh) + (v ? ' ' + deg(v.temp) + '°' : '');
@@ -5239,6 +5259,169 @@
     if (calui.alarm && (e.target.id === 'al-label' || e.target.id === 'al-snooze')) alarmRead();
   });
 
+
+  /* ======================= 4.2：会动的表情包（Emotion Ball / Mood Mates） =======================
+     Amor 在回复里写 [表情:开心] 这样的标记，聊天里就出现一个会动的表情小球——没有方框、没有底色，
+     像抠出来的主体一样站在对话里。可以只发表情、连发两个，也可以先说话再发一个。
+     表情引擎与角色形象来自 github.com/sam70361/emotion-ball（非商业许可，仅供个人使用；许可文件在 emo/ 目录）。 */
+  var EMO_LIST = [
+    ['10', '开心', '高兴、被夸、听到好消息'], ['19', '满意', '事情办妥了、放心了'], ['14', '害羞', '被夸、撒娇、不好意思'], ['13', '惊讶', '意外、哇'],
+    ['03', '好奇', '想知道更多、感兴趣'], ['11', '疑惑', '没听懂、不太确定'], ['20', '困惑', '想不通'], ['16', '专注', '认真听着、在帮你想办法'],
+    ['12', '失落', '难过、遗憾、心疼'], ['15', '疲惫', '累了、困了'], ['17', '慌张', '着急、糟糕'], ['18', '无奈', '哎呀、拿你没办法'],
+    ['21', '生气', '假装生气、吃醋、哼'], ['00', '睡觉', '晚安、要睡了'], ['04', '发呆', '放空、无聊'], ['33', '搞定', '完成了、恭喜'], ['30', '思考', '让我想想']
+  ];
+  var EMO_BY_NAME = {}; EMO_LIST.forEach(function (e) { EMO_BY_NAME[e[1]] = e[0]; });
+  EMO_BY_NAME['庆祝'] = '33'; EMO_BY_NAME['难过'] = '12'; EMO_BY_NAME['委屈'] = '12'; EMO_BY_NAME['困'] = '15'; EMO_BY_NAME['晚安'] = '00'; EMO_BY_NAME['想想'] = '30'; EMO_BY_NAME['哼'] = '21';
+  var EMO_RE = /[\[［]\s*(?:表情|emo)\s*[:：]\s*([^\]］\s]{1,6})\s*[\]］]/g;
+  if (asst.emo == null) asst.emo = true;
+  if (!asst.emoChar) asst.emoChar = 'ball';
+  if (!asst.emoFreq) asst.emoFreq = 'mid';
+  function emoId(tok) { tok = String(tok || '').trim(); if (/^\d{2}$/.test(tok)) return tok; return EMO_BY_NAME[tok] || ''; }
+  function stripEmo(t) { return String(t || '').replace(EMO_RE, '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n'); }
+  // 流式输出时：去掉完整的标记，还有末尾正在写的半截标记
+  function stripEmoLive(t) { return stripEmo(t).replace(/[\[［]\s*(?:表|表情|e|em|emo)?\s*[:：]?[^\]］\n]{0,6}$/, ''); }
+  // 把一条回复拆成「文字 / 表情」段；一次最多两个表情（多了只留前两个）
+  function emoSegments(t) {
+    var out = [], last = 0, m, n = 0; EMO_RE.lastIndex = 0; t = String(t || '');
+    while ((m = EMO_RE.exec(t))) {
+      var id = emoId(m[1]);
+      if (m.index > last) out.push({ t: t.slice(last, m.index) });
+      if (id && n < 2) { out.push({ e: id }); n++; }
+      last = EMO_RE.lastIndex;
+    }
+    if (last < t.length) out.push({ t: t.slice(last) });
+    var seg = [];
+    out.forEach(function (s) {
+      if (s.t != null) { var tx = s.t.replace(/^\s+|\s+$/g, ''); if (!tx) return; var p = seg[seg.length - 1]; if (p && p.t != null) p.t += '\n' + tx; else seg.push({ t: tx }); }
+      else { var q = seg[seg.length - 1]; if (q && q.e) q.e.push(s.e); else seg.push({ e: [s.e] }); }
+    });
+    return seg;
+  }
+  // 一条 Amor 的回复：文字气泡 + 表情（没有气泡）
+  function botBodyHtml(content, key, fresh) {
+    if (!asst.emo) return '<div class="msg bot' + fresh + '">' + md(stripEmo(content)) + '</div>';
+    var seg = emoSegments(content);
+    if (!seg.length) return '<div class="msg bot' + fresh + '">' + md(content) + '</div>';
+    return seg.map(function (s, i) {
+      if (s.t != null) return '<div class="msg bot' + fresh + '">' + md(s.t) + '</div>';
+      return '<div class="emo-row' + (s.e.length > 1 ? ' two' : '') + (fresh ? ' new' : '') + '">' + s.e.map(function (id, j) {
+        var nm = (EMO_LIST.filter(function (x) { return x[0] === id; })[0] || [0, '表情'])[1];
+        return '<button type="button" class="emo" data-emo="' + id + '" data-ek="' + key + ':' + i + ':' + j + '" aria-label="' + nm + '表情"' + (fresh ? ' data-fresh="1"' : '') + '></button>';
+      }).join('') + '</div>';
+    }).join('');
+  }
+  function emoRule() {
+    if (!asst.emo) return '';
+    var who = state.name.trim() || '用户', ch = { ball: '一颗会动的小球', nimbo: '一朵会动的小云（云宝）', twinkle: '一颗会动的小星星（亮亮）' }[asst.emoChar] || '一颗会动的小球';
+    var freq = { low: '偶尔用一次（大约五六条回复一次）', mid: '情绪明显时用（大约三四条回复一次）', high: '可以常用（大约一半的回复）' }[asst.emoFreq] || '情绪明显时用';
+    return '\n\n【表情包】你有一套会动的表情包（' + ch + '），就像微信里发表情：在回复里写 [表情:名字]，' + who + '那边会看到一个会动的表情。可用的有：' +
+      EMO_LIST.map(function (e) { return e[1] + '（' + e[2] + '）'; }).join('、') + '。\n' +
+      '用法：' + freq + '；一条回复最多两个；可以整条只发一个或两个表情（比如对方只说了“哈哈”“晚安”），也可以先说话、最后单独一行放一个表情。' +
+      '表情要和你此刻的情绪一致，别每句都发，严肃话题、讲步骤或讲知识时不要发；标记只能用上面这些名字，不要解释标记，也不要写成 emoji。';
+  }
+  var Emo = (function () {
+    var FILES = ['emo/ball/rings.js', 'emo/ball/emotions.js', 'emo/ball/ball.js', 'emo/ball/engine.js',
+      'emo/mm/geometry.js', 'emo/mm/render.js', 'emo/mm/features.js', 'emo/mm/fx.js', 'emo/mm/emotions.js', 'emo/mm/engine.js', 'emo/mm/nimbo.js', 'emo/mm/twinkle.js'];
+    var ready = false, loading = null, cache = {}, io = null, order = [], MAX = 40;
+    function load() {
+      if (ready) return Promise.resolve(true);
+      if (loading) return loading;
+      loading = FILES.reduce(function (p, f) {
+        return p.then(function () { return new Promise(function (res) { var s = document.createElement('script'); s.src = f; s.onload = res; s.onerror = res; document.head.appendChild(s); }); });
+      }, Promise.resolve()).then(function () { ready = !!(window.EmotionBall && window.EmotionBall.create); return ready; });
+      return loading;
+    }
+    function make(box, id, still) {
+      var ch = asst.emoChar, o = { emotion: id, eyeScale: 1.35, autostart: !still, lite: false };
+      try {
+        if (ch !== 'ball' && window.MoodMates && MoodMates.create) return MoodMates.create(box, Object.assign({ character: ch }, o));
+        return EmotionBall.create(box, o);
+      } catch (e) { window.__emoErr = String(e && e.stack || e); return null; }
+    }
+    function observe(ph) {
+      if (!('IntersectionObserver' in window)) return;
+      if (!io) io = new IntersectionObserver(function (es) {
+        es.forEach(function (en) { var c = cache[en.target.getAttribute('data-ek')]; if (c && c.inst && c.inst.setActive) { try { c.inst.setActive(en.isIntersecting); } catch (e) {} } });
+      }, { root: document.getElementById('msgs') || null, rootMargin: '60px' });
+      io.observe(ph);
+    }
+    // 聊天每次重画后调用：把已经建好的表情挪进新的占位里（动画不中断），新的才创建
+    function mount() {
+      var phs = document.querySelectorAll('.emo[data-ek]');
+      if (!phs.length) { gc(); return; }
+      load().then(function (ok) {
+        if (!ok) return;
+        Array.prototype.forEach.call(document.querySelectorAll('.emo[data-ek]'), function (ph) {
+          var k = ph.getAttribute('data-ek'), id = ph.getAttribute('data-emo'), c = cache[k];
+          if (!c || c.ch !== asst.emoChar) {
+            if (c) destroy(k);
+            var box = document.createElement('div'); box.className = 'emo-box';
+            box.innerHTML = '<i class="emo-shadow"></i>';
+            var stage = document.createElement('div'); stage.className = 'emo-stage'; box.appendChild(stage);
+            c = cache[k] = { box: box, inst: make(stage, id, false), id: id, ch: asst.emoChar };
+            order.push(k);
+            if (ph.getAttribute('data-fresh')) { box.classList.add('emo-in'); setTimeout(function () { box.classList.remove('emo-in'); }, 900); }
+          } else if (c.id !== id && c.inst) { c.inst.setEmotion(id); c.id = id; }
+          if (c.box.parentNode !== ph) ph.appendChild(c.box);
+          observe(ph);
+        });
+        gc();
+      });
+    }
+    function destroy(k) { var c = cache[k]; if (!c) return; try { c.inst && c.inst.destroy(); } catch (e) {} if (c.box.parentNode) c.box.parentNode.removeChild(c.box); delete cache[k]; order = order.filter(function (x) { return x !== k; }); }
+    function gc() { while (order.length > MAX) { var k = order[0], c = cache[k]; if (c && c.box.isConnected) { order.push(order.shift()); if (order.every(function (x) { return cache[x] && cache[x].box.isConnected; })) break; continue; } destroy(k); } }
+    function reset() { Object.keys(cache).forEach(destroy); }
+    function drop(k) { if (cache[k]) destroy(k); }
+    // 点一下：跳一跳，开心时撒花；手指在屏幕上移动时，表情的眼睛跟着看
+    document.addEventListener('click', function (e) {
+      var ph = e.target.closest && e.target.closest('.emo[data-ek]'); if (!ph) return;
+      var c = cache[ph.getAttribute('data-ek')]; if (!c || !c.inst) return;
+      try { if (/^(10|19|33)$/.test(c.id) && c.inst.burst) c.inst.burst(18); if (c.inst.bounce) c.inst.bounce(); } catch (er) {}
+    });
+    var gz = 0;
+    document.addEventListener('pointermove', function (e) {
+      if (gz) return; gz = requestAnimationFrame(function () {
+        gz = 0;
+        Object.keys(cache).forEach(function (k) {
+          var c = cache[k]; if (!c.inst || !c.box.isConnected || !c.inst.setGaze) return;
+          var r = c.box.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
+          try { c.inst.setGaze(Math.max(-1, Math.min(1, (e.clientX - r.left - r.width / 2) / 260)), Math.max(-1, Math.min(1, (e.clientY - r.top - r.height / 2) / 260))); } catch (er) {}
+        });
+      });
+    }, { passive: true });
+    // 设置页里的三个角色预览（静态一帧）
+    function preview(el, ch, id) {
+      load().then(function (ok) {
+        if (!ok || !el.isConnected || el._emo) return;
+        try { el._emo = ch !== 'ball' && window.MoodMates ? MoodMates.create(el, { character: ch, emotion: id, eyeScale: 1.4 }) : EmotionBall.create(el, { emotion: id, eyeScale: 1.4 }); } catch (e) {}
+      });
+    }
+    return { mount: mount, reset: reset, drop: drop, load: load, preview: preview };
+  })();
+  function emoSettingsPanel() {
+    var chs = [['ball', '球球', 'Ball'], ['nimbo', '云宝', 'Nimbo'], ['twinkle', '亮亮', 'Twinkle']];
+    return '<div class="panel"><h2>表情包 <em>Stickers</em></h2>' +
+      sw('emo', asst.emo, esc(asst.name || 'Amor') + ' 会发会动的表情包', 'data-asw') +
+      (asst.emo ? '<div class="emo-pick">' + chs.map(function (c) {
+        return '<button type="button" class="emo-ch" data-emochar="' + c[0] + '" aria-pressed="' + (asst.emoChar === c[0]) + '"><span class="emo-pv" data-pv="' + c[0] + '"></span><b>' + c[1] + '</b><i>' + c[2] + '</i></button>';
+      }).join('') + '</div>' +
+      ntSelLike('emoFreq', [['low', '偶尔'], ['mid', '适中'], ['high', '常用']], '发表情的频率') : '') +
+      '<p class="hint">表情形象和表情引擎来自开源项目 Emotion Ball（作者 sam70361），只能个人自用、不能商用。</p></div>';
+  }
+  function ntSelLike(key, opts, label) {
+    return '<div class="switch-row"><span>' + label + '</span><select class="nt-sel" data-asel="' + key + '" aria-label="' + label + '">' +
+      opts.map(function (o) { return '<option value="' + o[0] + '"' + (asst[key] === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></div>';
+  }
+  function emoAfterRender() {
+    Array.prototype.forEach.call(document.querySelectorAll('.emo-pv[data-pv]'), function (el) {
+      Emo.preview(el, el.getAttribute('data-pv'), { ball: '10', nimbo: '14', twinkle: '19' }[el.getAttribute('data-pv')]);
+    });
+  }
+  document.addEventListener('change', function (e) {
+    var k = e.target && e.target.getAttribute && e.target.getAttribute('data-asel');
+    if (k) { asst[k] = e.target.value; saveAsst(); }
+  });
+
   var tabsBuilt = false;
   function updateTabs(tab, pop) {
     if (!tabsBuilt) {
@@ -5321,7 +5504,7 @@
       mem.items = []; mui.clear = false; saveMem(); keepScroll(); toast('已清空全部记忆'); return; }
     if (ds.vsw) { voice[ds.vsw] = !voice[ds.vsw]; saveVoice(); keepScroll(); return; }
     if (ds.speak) { var sm_ = ds.speak.split(':'), scv = chats.filter(function (c) { return c.id === sm_[0]; })[0], smsg = scv && scv.msgs[+sm_[1]];
-      if (smsg) speakMsg(smsg.content, ds.speak); return; }
+      if (smsg) speakMsg(stripEmo(smsg.content), ds.speak); return; }
     if (ds.openprov) { ui.pid = ds.openprov; state.sub = 'provider'; ui.tab = 'cfg'; ui.draft = null; ui.status = null; ui.showAvail = false; ui.adding = false; render({ top: true });
       var op = prov(ds.openprov); if (op && op.key && op.showBalance && op.balanceKind) uiAction('balance'); return; }
     if (ds.dstab) { ui.tab = ds.dstab; ui.status = null; render(); return; }
@@ -5340,6 +5523,7 @@
     if (ds.fkind) { asst.font.kind = ds.fkind; saveAsst(); applyReplyFont(); keepScroll(); return; }
     if (ds.fsw) { asst.font[ds.fsw] = !asst.font[ds.fsw]; saveAsst(); applyReplyFont(); keepScroll(); return; }
     if (ds.acolor) { asst.color = ds.acolor; saveAsst(); render(); return; }
+    if (ds.emochar) { asst.emoChar = ds.emochar; saveAsst(); Emo.reset(); keepScroll(); return; }
     if (ds.amodel) { asst.model = ds.amodel; ui.pickModel = false; saveAsst(); if (chat.open) { chat.pop = ''; renderSheet(); } else render(); toast(asst.name + ' 改用 ' + ds.amodel.split('::')[1]); return; }
     if (ds.tool) { chat.pop = ds.tool; chat.popSub = ''; chat.popIn = true; chat.mpq = ''; chat.stest = null; renderSheet(); return; }
     if (ds.popclose) { closePop(); return; }
@@ -5347,7 +5531,7 @@
     if (ds.psub != null) { chat.popAnim = ds.psub ? 'fwd' : 'back'; chat.popSub = ds.psub; renderSheet(); return; }
     if (ds.effort != null) { asst.think = +ds.effort; saveAsst(); chat.popAnim = 'back'; chat.popSub = ''; renderSheet(); return; }
     if (ds.copy) { var cm_ = ds.copy.split(':'), ccv = chats.filter(function (c) { return c.id === cm_[0]; })[0], cmsg = ccv && ccv.msgs[+cm_[1]];
-      if (cmsg) copyText(cmsg.content, b); return; }
+      if (cmsg) copyText(stripEmo(cmsg.content).trim(), b); return; }
     if (ds.fav) { var fi = asst.favs.indexOf(ds.fav); if (fi >= 0) asst.favs.splice(fi, 1); else asst.favs.push(ds.fav); saveAsst(); keepPopScroll(); return; }
     if (ds.jump) { var gj = document.getElementById('grp-' + ds.jump); if (gj) gj.scrollIntoView({ block: 'start', behavior: 'smooth' }); return; }
     if (ds.sprov) { srch.provider = ds.sprov; chat.stest = null; saveSearch(); keepPopScroll(); return; }
@@ -6434,7 +6618,7 @@
         if (x.role === 'user') return '<div class="msg me' + nw + '">' + esc(x.content) + '</div>';
         var sk_ = conv.id + ':' + i, son = Speaker.key() === sk_, last = i === msgs.length - 1;
         return botHead(x.model) + procRow(x, sk_) +
-          '<div class="msg bot' + nw + '">' + md(x.content) + '</div>' +
+          botBodyHtml(x.content, sk_, nw) +
           '<div class="acts-row">' +
             '<button type="button" class="act" data-copy="' + sk_ + '" aria-label="复制">' + icon('copy', 18) + '</button>' +
             (voice.btn && voiceReady() ? '<button type="button" class="act' + (son ? ' on' : '') + '" data-speak="' + sk_ + '" aria-label="' + (son ? '停止朗读' : '朗读这条回答') + '">' + icon(son ? 'stop' : 'speaker', 18) + '</button>' : '') +
@@ -6451,7 +6635,7 @@
     }
     body += (chat.busy ? botHead(model) + liveProcRow() +
         (chat.partial ? '<div class="msg bot" id="partial"></div>' :
-          (chat.phase === 'search' || chat.phase === 'recall' || (chat.partialThink && asst.showThink) ? '' : '<div class="typing" aria-label="正在回答" id="typing"><i></i><i></i><i></i></div>')) : '') +
+          (chat.phase === 'search' || chat.phase === 'recall' || (chat.partialThink && asst.showThink) ? '' : (asst.emo ? '<div class="emo-think" id="typing" aria-label="正在思考"><button type="button" class="emo" data-emo="30" data-ek="live-think"></button></div>' : '<div class="typing" aria-label="正在回答" id="typing"><i></i><i></i><i></i></div>'))) : '') +
       (chat.err ? '<div class="err-line">' + esc(chat.err) + '<button type="button" data-chat="retry">重试</button></div>' : '');
     chat.fresh = 0;
     msgs.forEach(function (x) { if (x.memFresh) delete x.memFresh; });
@@ -6511,6 +6695,7 @@
     fitInput();
     bindGestures();
     if (Fluid) Fluid.ranges();
+    Emo.mount();
     chat.popIn = false; chat.popAnim = '';
   }
 
@@ -6583,7 +6768,7 @@
   function paintPartial() {
     var el = document.getElementById('partial');
     if (!el) return;
-    var s = chat.partial.slice(0, Math.ceil(typer.shown));
+    var s = asst.emo ? stripEmoLive(chat.partial.slice(0, Math.ceil(typer.shown))) : stripEmo(chat.partial.slice(0, Math.ceil(typer.shown)));
     var cut = s.lastIndexOf('\n\n');
     if (cut > 0 && (s.slice(0, cut).match(/```/g) || []).length % 2) cut = -1;
     var stable = cut > 0 ? s.slice(0, cut + 2) : '', tail = cut > 0 ? s.slice(cut + 2) : s;
@@ -6904,7 +7089,7 @@
     system += '\n\n现在是北京时间 ' + bjDate(0) + ' ' + new Date(Date.now() + 8 * 3600e3).toISOString().slice(11, 16) + '。';
     system += memText;
     if (conv.notif) system += '\n\n（这段对话是' + (name || '用户') + '点开你推送的一条提醒开始的，提醒内容是：「' + conv.notif + '」。接着这个话题自然地聊，不用再重复提醒。）';
-    system += calPrompt();
+    system += calPrompt() + emoRule();
     var systemNoTools = null, useRemind = nativeOk() && nt.on;
     if (useRecall || useRemind) systemNoTools = system + rclFb.text +
       (useRemind ? '\n\n（现在没法设手机提醒，如果被要求提醒，就坦白说这次设不了，请对方稍后再试。）' : '');
@@ -6944,7 +7129,7 @@
         if (t && !tEnd) { tEnd = Date.now(); if (th) chat.thinkMs = tEnd - chat.t0; }
         var firstThink = th && !chat.partialThink, firstText = t && !chat.partial;
         chat.partial = t; chat.partialThink = th;
-        if (liveRead && t) liveRead.feed(t);
+        if (liveRead && t) liveRead.feed(stripEmoLive(t));
         var wasRecall = chat.phase === 'recall'; if (wasRecall) chat.phase = '';
         if ((firstThink || firstText || wasRecall) && chat.open) renderSheet();
         typerKick();
@@ -6963,12 +7148,12 @@
                          sources: chat.sources, recall: chat.recall, model: rm.id, ts: Date.now() });
         conv.model = rm.id; conv.pname = rm.p.name; conv.updated = Date.now(); saveChats();
         memMaybe(conv, text);
-        if (liveRead) liveRead.done(res.text || '');
+        if (liveRead) liveRead.done(stripEmo(res.text || ''));
         chat.fresh = chat.partial ? 0 : 1;
         typerReset();
       });
     }).catch(function (e) {
-      if (liveRead) liveRead.done(chat.partial || '');
+      if (liveRead) liveRead.done(stripEmo(chat.partial || ''));
       if (e && e.stopped) {
         if (chat.partial || chat.partialThink) {
           conv.msgs.push({ role: 'assistant', content: (chat.partial || '').trim() || '（已停止）', reasoning: (chat.partialThink || '').trim(), thinkMs: chat.thinkMs || (chat.partialThink ? Date.now() - chat.t0 : 0), sources: chat.sources, recall: chat.recall, model: rm.id });

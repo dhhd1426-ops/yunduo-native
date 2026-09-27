@@ -3426,7 +3426,7 @@
   var NT_KEY = 'cloud-weather-notify-v1';
   var nt = { on: true, eye: { on: true, min: 45 }, water: { on: true, every: 120, from: 9, to: 21 }, move: { on: true, every: 90 },
     sleep: { on: false, at: '23:30' }, morning: { on: true, at: '07:30' }, alert: { on: true }, miss: { on: true, days: 3 }, memo: { on: true },
-    quiet: { from: 23, to: 7 }, lockFull: true, island: false, aiCopy: true, maxPerDay: 8, copy: null, seenAlarms: [], style: 'letter', reminders: [] };
+    quiet: { from: 23, to: 7 }, lockFull: true, island: false, aiCopy: true, maxPerDay: 8, copy: null, seenAlarms: [], style: 'letter', reminders: [], keep: true };
   try { var sn = JSON.parse(localStorage.getItem(NT_KEY) || 'null'); if (sn) for (var nk in sn) nt[nk] = sn[nk]; } catch (e) {}
   function saveNt() { try { localStorage.setItem(NT_KEY, JSON.stringify(nt)); } catch (e) {} }
   function nativeOk() { try { return !!(window.AmorNative && AmorNative.version && AmorNative.version() >= 1); } catch (e) { return false; } }
@@ -3644,7 +3644,7 @@
     var eyeText = [0, 1, 2].map(function (i) { return fill(ntPick('eye', i), { min: nt.eye.min, name: ntName() }); })
       .filter(function (x, i, arr) { return arr.indexOf(x) === i; });
     return { icon: im.icon, avatar: im.avatar, color: parseInt((COLORS[asst.color] || COLORS.rose).slice(1), 16) - 16777216, name: asst.name || 'Amor',
-      lockFull: nt.lockFull, island: nt.island, style: nt.style || 'letter',
+      lockFull: nt.lockFull, island: nt.island, style: nt.style || 'letter', keep: !!(nt.on && nt.keep !== false),
       eye: { on: nt.on && nt.eye.on, min: nt.eye.min, from: from, to: to === 0 ? 24 : to, title: '休息一下眼睛', texts: eyeText, short: '望望远处 20 秒',
         island: nt.island ? islandParam('休息一下眼睛', '已经连续看屏幕 ' + nt.eye.min + ' 分钟', '休息眼睛') : '' } };
   }
@@ -3735,7 +3735,9 @@
         '<button type="button" class="entry nt-entry" data-ntopen="notif"><span><span class="t">系统通知</span><span class="d">' + (inf.enabled ? '已允许 · 锁屏、横幅都能显示' : '还没允许，点这里去打开') + '</span></span>' +
           '<span class="nt-pill' + (inf.enabled ? ' ok' : ' bad') + '">' + (inf.enabled ? '已允许' : '去打开') + '</span></button>' +
         (/xiaomi|redmi|poco/i.test(inf.brand || '') ? '<button type="button" class="entry nt-entry" data-ntopen="autostart"><span><span class="t">自启动</span><span class="d">小米手机要打开，不然关掉 App 后可能收不到提醒</span></span>' + icon('chev', 20) + '</button>' +
-          '<button type="button" class="entry nt-entry" data-ntopen="battery"><span><span class="t">省电策略</span><span class="d">选“无限制”，提醒才会准时</span></span>' + icon('chev', 20) + '</button>' : '') +
+          '<button type="button" class="entry nt-entry" data-ntopen="battery"><span><span class="t">省电策略</span><span class="d">选“无限制”，提醒才会准时</span></span>' + icon('chev', 20) + '</button>' +
+          '<p class="hint" style="margin:6px 0 4px">小米“一键清理”会把 App 彻底关掉，排好的提醒也会被清空：在最近任务里<b>长按云朵天气的卡片 → 点“锁定”</b>（卡片上出现小锁），清理时就不会清掉它。</p>' : '') +
+        (inf.plain ? '<p class="hint" style="margin:6px 0 4px">这台手机显示不了“信笺”样式的通知，已自动改用系统样式。</p>' : '') +
         '<div class="nt-next"><span>' + (inf.next ? '下一条提醒 ' + agoTextFuture(inf.next) + ' · 已排好 ' + inf.planned + ' 条' : '还没有排好的提醒') + (drank ? ' · 今天喝了 ' + drank + ' 杯水 💧' : '') + '</span>' +
           '<button type="button" class="btn" data-nttest="1">' + icon('bell', 18) + (ntui.test || '发一条试试') + '</button></div>' +
       '</div>';
@@ -3758,6 +3760,7 @@
       '</div>' +
       '<div class="panel' + dis + '"><h2>方式 <em>Delivery</em></h2>' +
         sw('on', nt.on, '打开通知推送', 'data-ntsw') +
+        sw('keep', nt.keep !== false, '常驻后台 · 通知栏留一条不响的小通知，清后台也不容易被关掉', 'data-ntsw') +
         ntSel('quiet.from', hours(20, 24).map(function (h) { return [h[0] % 24, h[1]]; }), '免打扰 从') + ntSel('quiet.to', hours(5, 10), '免打扰 到') +
         ntSel('maxPerDay', [[4, '4 条'], [6, '6 条'], [8, '8 条'], [12, '12 条']], '每天最多', '气象预警和用眼提醒不算') +
         ntSel('style', [['letter', '信笺（小巧）'], ['system', '系统样式']], '通知样式', '信笺：一行排版，衬线字，细线进度') +

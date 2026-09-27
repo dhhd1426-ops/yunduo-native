@@ -58,11 +58,13 @@ final class Scheduler {
             if (next == Long.MAX_VALUE) {
                 a.cancel(p);
                 Store.putLong(c, "next", 0);
+                KeepService.refresh(c);
                 return;
             }
             long when = Math.max(next, now + 1000);
             a.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, when, p);
             Store.putLong(c, "next", when);
+            KeepService.refresh(c);
         } catch (Throwable t) {
             Store.err(c, "rescheduleFire", t);
         }
@@ -104,6 +106,7 @@ final class Scheduler {
         Store.put(c, "plan", keep.toString());
         Store.log(c, "fire", String.valueOf(sent));
         rescheduleFire(c);
+        KeepService.sync(c);   // 常驻被系统杀掉过的话，借到点的机会再起来
     }
 
     /** 用眼：连续在用手机满 N 分钟就提醒；中间息屏（或手机睡着导致闹钟推迟）就重新计 */

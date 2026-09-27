@@ -97,6 +97,13 @@ sleep 3; shot 7b-cold-3s
 sleep 9; shot 7b-cold-12s
 (adb shell pidof $PKG || echo DEAD) > $O/pid-after-cold.txt
 
+note "7c keep-alive service"
+adb shell dumpsys activity services $PKG > $O/services.txt 2>&1 || true
+adb shell dumpsys notification --noredact | grep -A3 "id=7 " > $O/keep-notif.txt 2>&1 || true
+adb shell input keyevent KEYCODE_HOME; sleep 1
+adb shell cmd statusbar expand-notifications; sleep 3; shot 7c-keep-shade
+adb shell cmd statusbar collapse; sleep 1
+
 note "8 collect"
 (adb shell pidof $PKG || echo DEAD) > $O/pid-end.txt
 adb shell run-as $PKG cat shared_prefs/amor.xml > $O/prefs.xml 2>&1 || true

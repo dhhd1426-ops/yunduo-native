@@ -11,6 +11,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.service.notification.StatusBarNotification;
 import android.os.PowerManager;
 import android.util.Base64;
 import android.view.View;
@@ -106,15 +109,17 @@ final class Notif {
             String title = item.optString("title", "Amor");
             String text = item.optString("text", "");
 
+            // plain = 系统标准样式 + App 自带小图标。信笺样式在某些系统（如部分小米）上显示不出来时会自动切到这里
+            final boolean plain = item.optBoolean("plain", false) || Store.getLong(c, "letterBad", 0) == 1;
             Notification.Builder b = new Notification.Builder(c, ch);
-            Bitmap ic = bitmap(cfg.optString("icon", ""));
+            Bitmap ic = plain ? null : bitmap(cfg.optString("icon", ""));
             if (ic != null) b.setSmallIcon(Icon.createWithBitmap(ic));
             else b.setSmallIcon(c.getApplicationInfo().icon);
             Bitmap av = bitmap(cfg.optString("avatar", ""));
             b.setContentTitle(title);
             b.setContentText(item.optString("short", text));
             // 信笺样式：系统外框里放我们自己的一行排版（没有大头像、按钮做成小胶囊）；出错就用系统标准样式
-            boolean letter = "letter".equals(cfg.optString("style", "letter")) && letterViews(c, b, item, cfg, id);
+            boolean letter = !plain && "letter".equals(cfg.optString("style", "letter")) && letterViews(c, b, item, cfg, id);
             if (!letter) {
                 if (av != null) b.setLargeIcon(av);
                 b.setStyle(new Notification.BigTextStyle().bigText(text));
@@ -157,11 +162,53 @@ final class Notif {
             Notification n = b.build();
             if (cfg.optBoolean("island", false) && island.length() > 0) n.extras.putString("miui.focus.param", island);
             m.notify(id, n);
-            Store.log(c, "posted", kind);
+            Store.log(c, "posted", kind + (letter ? "" : " plain"));
+            verify(c, id, item, letter);
             return true;
         } catch (Throwable t) {
             Store.err(c, "post:" + kind, t);
             return false;
+        }
+    }
+
+    /**
+     * 发出去 1.5 秒后看通知栏里是不是真有这条。系统画不出自定义布局时会直接丢掉通知，不报错：
+     * 这时记下 letterBad，改用标准样式重发一次，以后都用标准样式。
+     */
+    private static void verify(final Context c, final int id, final JSONObject item, final boolean letter) {
+        try {
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override public void run() {
+                    try {
+                        NotificationManager m = nm(c);
+                        if (m == null) return;
+                        boolean found = false;
+                        for (StatusBarNotification sb : m.getActiveNotifications()) if (sb.getId() == id) { found = true; break; }
+                        if (found) { if (letter) Store.putLong(c, "letterOk", System.currentTimeMillis()); return; }
+                        String k = item.optString("kind", "");
+                        NotificationChannel chn = m.getNotificationChannel(item.optString("ch", "care"));
+                        if (!m.areNotificationsEnabled() || (chn != null && chn.getImportance() == NotificationManager.IMPORTANCE_NONE)) {
+                            Store.log(c, "blocked", k);   // 是用户关掉了通知/这个类别，不是样式的问题
+                            return;
+                        }
+                        if (letter && Store.getLong(c, "letterOk", 0) == 0) {
+                            Store.putLong(c, "letterBad", 1);
+                            Store.log(c, "letter-dropped", k);
+                            JSONObject again = new JSONObject(item.toString());
+                            again.put("plain", true);
+                            again.put("cond", "");
+                            again.put("skipFg", false);
+                            post(c, again);
+                        } else {
+                            Store.log(c, "dropped", k);
+                        }
+                    } catch (Throwable t) {
+                        Store.err(c, "verify", t);
+                    }
+                }
+            }, 1500);
+        } catch (Throwable t) {
+            Store.err(c, "verify", t);
         }
     }
 

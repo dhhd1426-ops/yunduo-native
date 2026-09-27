@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <application android:label="云朵天气" android:icon="@mipmap/ic_launcher" android:allowBackup="true">
         <!-- 折叠/展开屏幕、转屏时不重建页面（和 3.7 一样） -->
         <activity android:name=".MainActivity" android:label="云朵天气" android:exported="true"
@@ -15,6 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- 常驻后台（设置 › 通知 里的开关） -->
+        <service android:name=".KeepService" android:exported="false" />
         <receiver android:name=".AmorReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

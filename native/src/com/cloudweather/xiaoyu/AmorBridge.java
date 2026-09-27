@@ -36,6 +36,7 @@ public class AmorBridge {
             Store.put(app, "cfg", json);
             Notif.ensureChannels(app);          // 安卓 13+ 第一次建渠道时系统会弹“允许通知”
             Scheduler.rescheduleEye(app, true);
+            KeepService.sync(app);
         } catch (Throwable t) {
             Store.err(app, "setConfig", t);
         }
@@ -95,6 +96,8 @@ public class AmorBridge {
             o.put("eyeStart", Store.getLong(app, "eyeStart", 0));
             o.put("eyeTick", Store.getLong(app, "eyeTick", 0));
             o.put("inUse", Notif.inUse(app));
+            o.put("plain", Store.getLong(app, "letterBad", 0) == 1);
+            o.put("keep", KeepService.wanted(app));
             o.put("log", new JSONArray(Store.get(app, "log", "[]")));
             o.put("err", Store.get(app, "err", ""));
             o.put("errAt", Store.getLong(app, "errAt", 0));

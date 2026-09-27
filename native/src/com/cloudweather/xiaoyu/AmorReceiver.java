@@ -40,6 +40,7 @@ public class AmorReceiver extends BroadcastReceiver {
                     || "android.intent.action.QUICKBOOT_POWERON".equals(a)) {
                 Store.log(c, "resched", a.substring(a.lastIndexOf('.') + 1));
                 Scheduler.rescheduleAll(c);
+                KeepService.sync(c);
             } else if (ACT_TEST.equals(a) && debuggable(c)) {
                 test(c, intent);
             }
@@ -80,7 +81,7 @@ public class AmorReceiver extends BroadcastReceiver {
     /** CI 测试钩子：cfg / plan（plan 里的 dt = 距现在多少秒）/ post / eye */
     private static void test(Context c, Intent i) throws Exception {
         String cfg = arg(i, "cfg", c);
-        if (cfg != null) Store.put(c, "cfg", cfg);
+        if (cfg != null) { Store.put(c, "cfg", cfg); KeepService.sync(c); }
         String plan = arg(i, "plan", c);
         if (plan != null) {
             JSONArray in = new JSONArray(plan), out = new JSONArray();

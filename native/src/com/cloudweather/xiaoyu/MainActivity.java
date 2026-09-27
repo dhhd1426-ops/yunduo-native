@@ -53,6 +53,12 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         js("window.__amorResume&&window.__amorResume()");
+        try {
+            Scheduler.rescheduleFire(getApplicationContext());   // 被小米“清理后台”强停过的话闹钟已经没了，这里补回来
+            KeepService.sync(getApplicationContext());
+        } catch (Throwable t) {
+            Store.err(this, "resume", t);
+        }
     }
 
     private void js(String code) {

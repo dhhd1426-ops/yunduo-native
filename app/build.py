@@ -52,8 +52,8 @@ def manifest():
     A = True
     root = ('manifest', [
         (False, 'package', T_STRING, PKG),
-        (A, 'versionCode', T_INT_DEC, 39),
-        (A, 'versionName', T_STRING, '4.4.2'),
+        (A, 'versionCode', T_INT_DEC, 40),
+        (A, 'versionName', T_STRING, '4.4.3'),
     ], [
         ('uses-sdk', [(A, 'minSdkVersion', T_INT_DEC, MIN_SDK), (A, 'targetSdkVersion', T_INT_DEC, 29)], []),
     ] + [('uses-permission', [(A, 'name', T_STRING, 'android.permission.' + p)], []) for p in PERMS] + [

@@ -38,8 +38,24 @@ for k in 1 2 3 4 5 6; do shot 2-headsup-$k; sleep 0.5; done
 sleep 12; shot 3-after-morning
 adb shell dumpsys notification --noredact > $O/notif-after-plan.txt
 adb shell cmd statusbar expand-notifications; sleep 3; shot 4-shade
-# 展开第一条（喝水）看展开样式：在通知上两指下滑不好模拟，改用长按不稳定；用 dumpsys 已足够核对，这里再截一张全展开
-adb shell cmd statusbar expand-settings; sleep 2; adb shell cmd statusbar expand-notifications; sleep 2; shot 4b-shade
+# 点开“喝杯水吧”那条的展开箭头，看展开样式（位置从界面树里找，找不到就点第二条通知的右侧）
+adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1; adb shell cat /sdcard/ui.xml > $O/ui-shade.xml
+XY=$(python3 - "$O/ui-shade.xml" <<'PY'
+import re,sys
+x=open(sys.argv[1],encoding='utf-8',errors='ignore').read()
+nodes=re.findall(r'<node [^>]*>',x)
+for i,n in enumerate(nodes):
+    if 'text="喝杯水吧"' in n:
+        b=re.search(r'bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',n); y=(int(b.group(2))+int(b.group(4)))//2
+        for m in nodes[i:i+40]:
+            if 'expand_button' in m or 'content-desc="Expand' in m:
+                c=re.search(r'bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',m); print((int(c.group(1))+int(c.group(3)))//2,(int(c.group(2))+int(c.group(4)))//2); sys.exit()
+        print(9999,y); sys.exit()
+PY
+)
+echo "expand at $XY" >> $O/steps.txt
+set -- $XY; if [ "${1:-9999}" = 9999 ]; then adb shell input tap 280 ${2:-340}; else adb shell input tap $1 $2; fi
+sleep 2; shot 4b-expanded
 adb shell cmd statusbar collapse; sleep 1
 
 note "3 DONE button on 101"

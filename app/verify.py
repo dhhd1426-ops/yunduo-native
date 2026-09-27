@@ -89,7 +89,7 @@ with tempfile.TemporaryDirectory() as td:
 # ---------------- DEX
 print('DEX')
 dex = z.read('classes.dex')
-check(dex[:8] == b'dex\n035\x00', 'magic dex 035')
+check(dex[:4] == b'dex\n' and dex[4:7] in (b'035', b'037', b'038', b'039') and dex[7] == 0, 'magic dex ' + dex[4:7].decode())
 check(struct.unpack('<I', dex[8:12])[0] == zlib.adler32(dex[12:]) & 0xFFFFFFFF, 'adler32 checksum')
 check(dex[12:32] == hashlib.sha1(dex[32:]).digest(), 'sha1 signature')
 H = struct.unpack('<20I', dex[32:112])
@@ -284,17 +284,25 @@ KS, _ = pool(rs, off + kso)
 check(pid == 0x7F and h == 288 and off + psz == len(rs), f'package {pname} id 0x7f')
 p = off + h + (len(rs[off + tso:]) and 0)
 p = off + kso + struct.unpack('<I', rs[off + kso + 4:off + kso + 8])[0]
+# 3.8 起资源表由 aapt2 生成（布局、颜色、图标，多种配置）：列出每个类型的条目，文件型资源要在 apk 里
+nent = 0
 while p < len(rs):
     t, hh, sz = struct.unpack('<HHI', rs[p:p + 8])
     if t == 0x0201:
         tid, _, _, cnt, est = struct.unpack('<BBHII', rs[p + 8:p + 20])
-        dens = struct.unpack('<H', rs[p + 20 + 14:p + 20 + 16])[0]
-        eo = struct.unpack('<I', rs[p + hh:p + hh + 4])[0]
-        e = p + est + eo
-        esz, efl, key = struct.unpack('<HHI', rs[e:e + 8])
-        vsz, _, vdt, vd = struct.unpack('<HBBI', rs[e + 8:e + 16])
-        print(f'    0x7f{tid:02x}0000 {TS[tid - 1]}/{KS[key]} density={dens} -> {G[vd]!r}')
-        check(G[vd] in z.namelist(), 'resource file exists in apk')
+        for i in range(cnt):
+            eo = struct.unpack('<I', rs[p + hh + 4 * i:p + hh + 4 * i + 4])[0]
+            if eo == 0xFFFFFFFF:
+                continue
+            e = p + est + eo
+            esz, efl, key = struct.unpack('<HHI', rs[e:e + 8])
+            nent += 1
+            if efl & 1:
+                continue            # 复杂资源（样式等）
+            vsz, _, vdt, vd = struct.unpack('<HBBI', rs[e + 8:e + 16])
+            if vdt == 0x03 and vd < len(G) and G[vd].startswith('res/'):
+                check(G[vd] in z.namelist(), f'    0x7f{tid:02x}{i:04x} {TS[tid - 1]}/{KS[key]} -> {G[vd]} exists')
     p += sz
+check(nent > 0, f'{nent} resource entries')
 print('ALL CHECKS PASSED' if ok else 'SOME CHECKS FAILED')
 sys.exit(0 if ok else 1)

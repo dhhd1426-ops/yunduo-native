@@ -1071,6 +1071,106 @@
   .size-row input { width: 100%; accent-color: var(--ink); height: 32px; }
   .size-row output { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
   .st-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 6px; max-height: 320px; overflow-y: auto; }
+  /* ===================== 4.0 流体设计 Fluid ===================== */
+  /* 真实的弹簧曲线（阻尼振动采样）：soft 几乎不过冲，bouncy 过冲约 10% 再回落 */
+  :root {
+    --spring: linear(0, 0.02, 0.071, 0.142, 0.223, 0.309, 0.395, 0.477, 0.554, 0.624, 0.687, 0.742, 0.791, 0.832, 0.867, 0.896, 0.921, 0.94, 0.956, 0.969, 0.979, 0.987, 0.993, 0.997, 1, 1.002, 1.004, 1.005, 1.005, 1.005, 1.005, 1.005, 1);
+    --bouncy: linear(0, 0.025, 0.089, 0.181, 0.29, 0.406, 0.523, 0.635, 0.737, 0.828, 0.905, 0.969, 1.019, 1.056, 1.082, 1.098, 1.106, 1.106, 1.102, 1.094, 1.083, 1.071, 1.059, 1.047, 1.035, 1.024, 1.015, 1.007, 1.001, 0.996, 0.993, 0.991, 0.989, 0.989, 0.989, 0.989, 0.99, 0.992, 0.993, 0.994, 0.995, 0.997, 0.998, 0.999, 1);
+    --r-card: 22px; --r-ctl: 16px;
+    --hl: inset 0 1px 0 rgba(255, 255, 255, .7);
+    --lift: 0 1px 2px rgba(28, 38, 64, .04), 0 10px 28px -18px rgba(28, 38, 64, .22);
+    --glow: rgba(255, 255, 255, .75); --glow-tint: rgba(160, 80, 93, .10);
+    --island: rgba(247, 249, 252, .78);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0e1424; --surface: #172039; --line: #26304f; --muted: #a2adc9;
+      --hl: inset 0 1px 0 rgba(255, 255, 255, .05);
+      --lift: 0 1px 2px rgba(0, 0, 0, .25), 0 14px 32px -20px rgba(0, 0, 0, .7);
+      --glow: rgba(227, 166, 176, .22); --glow-tint: rgba(185, 200, 239, .06);
+      --island: rgba(23, 32, 57, .78);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e1424; --surface: #172039; --line: #26304f; --muted: #a2adc9;
+    --hl: inset 0 1px 0 rgba(255, 255, 255, .05);
+    --lift: 0 1px 2px rgba(0, 0, 0, .25), 0 14px 32px -20px rgba(0, 0, 0, .7);
+    --glow: rgba(227, 166, 176, .22); --glow-tint: rgba(185, 200, 239, .06);
+    --island: rgba(23, 32, 57, .78);
+  }
+  :root:not([data-theme="dark"]) { }
+  @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg: #e4ebf2; --surface: #f8fafc; } }
+  :root[data-theme="light"] { --bg: #e4ebf2; --surface: #f8fafc; }
+
+  /* 视觉统一：更柔的圆角、分层阴影、顶部一道细高光 */
+  .panel, .asst, .hero, .stat, .day, .prov-card, .mp-row, .opt, .lrow { box-shadow: var(--hl), var(--lift); }
+  .panel, .asst { border-radius: var(--r-card); }
+  .composer.cx { box-shadow: var(--hl), var(--lift); }
+
+  /* 柔性反馈：按下收缩（快）→ 松手回弹（弹簧，带一点过冲） */
+  @media (prefers-reduced-motion: no-preference) {
+    .btn, .chip, .qchip, .asst-bar, .city-main, .entry, .prov-card, .opt, .icon-btn, .city-pill, .round, .send-btn,
+    .tabs button, .mp-row .pick, .hour, .day, .tool, .stat, .seg button, .lrow, .plus, .mchip, .act, .proc, .rc, .rc-hit,
+    .mem-chip, .qchip, .pill, .conv .open, .side-row, .vchip, .vmodel, .flag {
+      transition: transform .62s var(--bouncy), background-color .25s ease, color .25s ease, border-color .25s ease, opacity .25s ease, box-shadow .3s ease;
+    }
+    .btn:active, .chip:active, .qchip:active, .asst-bar:active, .city-main:active, .entry:active, .prov-card:active, .opt:active,
+    .icon-btn:active, .city-pill:active, .round:active, .send-btn:active, .tabs button:active, .mp-row .pick:active, .day:active,
+    .tool:active, .seg button:active { transform: none; }
+    .fl-press { transform: scale(var(--fl-s, .955)) !important; transition-duration: .14s !important; transition-timing-function: cubic-bezier(.3, .7, .4, 1) !important; }
+    /* 开关：拇指滑过去时先拉长再回弹 */
+    .switch i { transition: transform .55s var(--bouncy), width .35s var(--spring), background-color .2s ease; }
+    .switch:active i { width: 32px; }
+    .switch[aria-checked="true"]:active i { transform: translateX(14px); }
+    /* 底部弹层、聊天窗、页面切换都换成弹簧 */
+    .pop-wrap.in .pop { animation: popUp .62s var(--spring) both; }
+    .sheet-wrap.enter .sheet { animation-timing-function: var(--spring) !important; }
+  }
+
+  /* 凝光：手指按住时，一团柔光跟着手指在卡片里流动；松手化成涟漪散开 */
+  #fl-glow { position: fixed; z-index: 150; pointer-events: none; overflow: hidden; opacity: 0; transition: opacity .35s ease; contain: strict; }
+  #fl-glow.on { opacity: 1; transition-duration: .12s; }
+  #fl-glow i { position: absolute; left: 0; top: 0; width: 220px; height: 220px; margin: -110px 0 0 -110px; border-radius: 50%;
+    background: radial-gradient(closest-side, var(--glow), var(--glow-tint) 55%, transparent 72%); will-change: transform, opacity; }
+  #fl-glow.rip i { transition: transform .7s var(--spring), opacity .7s ease; opacity: 0; }
+
+  /* 浮岛导航：悬浮的磨砂胶囊，指示块像液体一样拉伸着滑过去 */
+  .app { position: relative; }
+  .tabs { position: absolute; left: 14px; right: 14px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); z-index: 15;
+    border: 0; border-radius: 30px; padding: 6px; background: var(--island);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4);
+    box-shadow: var(--hl), 0 2px 6px rgba(20, 28, 50, .06), 0 18px 40px -16px rgba(20, 28, 50, .32); }
+  .tabs button { min-height: 50px; border-radius: 24px; }
+  .tab-ind { top: 6px; left: 6px; height: 50px; width: calc((100% - 12px) / 4); border-radius: 24px; background: var(--surface);
+    background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0) 60%), color-mix(in srgb, var(--accent) var(--ind-mix, 13%), var(--surface));
+    box-shadow: var(--hl), inset 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent), 0 6px 18px -8px color-mix(in srgb, var(--accent) 55%, transparent);
+    transform-origin: center; transition: none; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tab-ind { --ind-mix: 20%; } }
+  :root[data-theme="dark"] .tab-ind { --ind-mix: 20%; }
+  main { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); scroll-padding-bottom: 96px; }
+  @media (min-width: 720px) {
+    .tabs { position: relative; left: auto; right: auto; bottom: auto; grid-column: 1; grid-row: 1 / 3; align-self: center; justify-self: center;
+      width: 76px; margin: 0 0 0 14px; padding: 8px 6px; border-radius: 30px; border-right: 0; }
+    .tabs button { min-height: 64px; border-radius: 22px; }
+    .tab-ind { left: 6px; right: 6px; top: 8px; width: auto; height: 64px; }
+    main { padding-bottom: 36px; }
+    .app { grid-template-columns: 104px minmax(0, 1fr); }
+  }
+
+  /* 滑块：圆润轨道 + 进度填充，拖动时拇指放大、带光晕 */
+  input[type="range"] { -webkit-appearance: none; appearance: none; background: transparent; height: 32px; --p: 50%; }
+  input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent) 0, var(--accent) var(--p), var(--track) var(--p)); }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: -8px; border-radius: 50%;
+    background: var(--surface); box-shadow: 0 0 0 1px rgba(28, 38, 64, .08), 0 3px 8px rgba(28, 38, 64, .25);
+    transition: transform .5s var(--bouncy), box-shadow .3s ease; }
+  input[type="range"].fl-drag::-webkit-slider-thumb { transform: scale(1.22);
+    box-shadow: 0 0 0 1px rgba(28, 38, 64, .08), 0 3px 10px rgba(28, 38, 64, .3), 0 0 0 10px color-mix(in srgb, var(--accent) 16%, transparent); }
+
+  /* 拖动时跟手，松手用弹簧回位（由脚本加减这个类） */
+  .fl-settle { transition: transform .6s var(--bouncy), opacity .4s ease !important; }
+  .fl-follow { transition: none !important; }
+  @media (prefers-reduced-motion: reduce) { #fl-glow { display: none; } }
 </style>
 <script src="fonts/script-glyphs.js"></script>
 <script src="fonts/pinyin.js"></script>
@@ -3966,8 +4066,111 @@
     FX.attach();
     if (chat.open && !chat.busy && document.activeElement && ['chat-in', 'conv-q'].indexOf(document.activeElement.id) < 0) renderSheet();
     if (opts.top) $main.scrollTop = 0;
+    if (Fluid) Fluid.ranges();
     if (opts.focus) { var el = document.getElementById(opts.focus); if (el) { el.focus(); var n = el.value.length; try { el.setSelectionRange(n, n); } catch (e) {} } }
   }
+
+  /* ---------- 4.0 流体交互：柔性按压、凝光、液体指示块、滑块、弹层拖动 ---------- */
+  var Fluid = (function () {
+    var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var PRESS = '.btn, .chip, .qchip, .asst-bar, .city-main, .entry, .prov-card, .opt, .icon-btn, .city-pill, .round, .send-btn, ' +
+      '.tabs button, .mp-row .pick, .hour, .day, .tool, .seg button, .lrow, .plus, .mchip, .act, .proc, .rc, .rc-hit, .mem-chip, ' +
+      '.conv .open, .side-row, .vchip, .vmodel, .flag, .switch, .nt-entry, .pills span';
+    var GLOW_SKIP = '.switch, .icon-btn, .act, .tabs button';
+    var glow = null, dot = null, cur = null, rect = null, raf = 0, px = 0, py = 0, sx = 0, sy = 0, sc = 1, moved = false;
+    function ensure() {
+      if (glow) return;
+      glow = document.createElement('div'); glow.id = 'fl-glow'; glow.setAttribute('aria-hidden', 'true');
+      glow.innerHTML = '<i></i>'; document.body.appendChild(glow); dot = glow.firstChild;
+    }
+    function paint() { raf = 0; if (rect) dot.style.transform = 'translate(' + (px - rect.left) + 'px,' + (py - rect.top) + 'px) scale(' + sc + ')'; }
+    function place(x, y) { px = x; py = y; if (!raf) raf = requestAnimationFrame(paint); }
+    function release(ripple) {
+      if (!cur) return;
+      cur.classList.remove('fl-press'); cur = null;
+      if (!glow) return;
+      if (ripple && rect) {                     // 松手：光从手指处化成一圈涟漪散开
+        glow.classList.add('rip'); sc = Math.max(rect.width, rect.height) / 220 * 2.4; paint();
+      }
+      glow.classList.remove('on');
+    }
+    if (!calm) {
+      document.addEventListener('pointerdown', function (e) {
+        var el = e.target.closest && e.target.closest(PRESS);
+        if (!el || el.disabled || el.getAttribute('aria-disabled') === 'true') return;
+        release(false);
+        cur = el; moved = false; sx = e.clientX; sy = e.clientY;
+        var r = el.getBoundingClientRect(), area = r.width * r.height;
+        el.style.setProperty('--fl-s', area > 60000 ? .985 : area > 14000 ? .97 : area > 3000 ? .955 : .92);
+        el.classList.add('fl-press');
+        if (el.matches(GLOW_SKIP) || r.width < 30) { rect = null; return; }
+        ensure(); rect = r;
+        glow.className = '';
+        glow.style.cssText = 'left:' + r.left + 'px;top:' + r.top + 'px;width:' + r.width + 'px;height:' + r.height + 'px;border-radius:' + getComputedStyle(el).borderRadius;
+        dot.style.transition = 'none'; dot.style.opacity = '1'; sc = Math.min(1, Math.max(.45, Math.max(r.width, r.height) / 260));
+        px = e.clientX; py = e.clientY; paint(); void glow.offsetWidth; dot.style.transition = '';
+        glow.classList.add('on');
+      }, { passive: true });
+      document.addEventListener('pointermove', function (e) {
+        if (!cur) return;
+        if (!moved && Math.abs(e.clientX - sx) + Math.abs(e.clientY - sy) > 12) moved = true;
+        if (rect) place(e.clientX, e.clientY);
+      }, { passive: true });
+      document.addEventListener('pointerup', function () { release(!moved); }, { passive: true });
+      document.addEventListener('pointercancel', function () { release(false); }, { passive: true });
+      window.addEventListener('scroll', function () { if (cur && moved) release(false); }, { passive: true, capture: true });
+    }
+    // 滑块：填充进度 + 拖动时拇指放大发光
+    function rangeFill(el) { var mn = +el.min || 0, mx = +el.max || 100, v = +el.value; el.style.setProperty('--p', ((v - mn) / (mx - mn || 1) * 100) + '%'); }
+    document.addEventListener('input', function (e) { if (e.target.type === 'range') rangeFill(e.target); }, true);
+    document.addEventListener('pointerdown', function (e) { if (e.target.type === 'range') e.target.classList.add('fl-drag'); }, true);
+    document.addEventListener('pointerup', function () { Array.prototype.forEach.call(document.querySelectorAll('input.fl-drag'), function (r) { r.classList.remove('fl-drag'); }); }, true);
+    function ranges() { Array.prototype.forEach.call(document.querySelectorAll('input[type="range"]'), rangeFill); }
+    // 标签指示块：先朝目标拉长，再像液体一样收拢、回弹到位
+    var lastTab = -1;
+    function tab(idx, animate) {
+      var ind = $tabs.querySelector('.tab-ind'), bs = $tabs.querySelectorAll('button'), b = bs[idx];
+      if (!ind || !b) return;
+      var vert = $tabs.offsetHeight > $tabs.offsetWidth;
+      var x = vert ? 0 : b.offsetLeft - ind.offsetLeft, y = vert ? b.offsetTop - ind.offsetTop : 0;
+      var to = 'translate(' + x + 'px,' + y + 'px)', from = ind.style.transform || to;
+      ind.style.transform = to;
+      var jump = lastTab >= 0 ? Math.abs(idx - lastTab) : 0; lastTab = idx;
+      if (!animate || calm || from === to || !ind.animate) return;
+      var m = /translate\(([-\d.]+)px,\s*([-\d.]+)px\)/.exec(from) || [0, x, y], fx = +m[1], fy = +m[2];
+      var st = 1 + Math.min(.55, .22 * jump), mid = 'translate(' + (fx + (x - fx) * .45) + 'px,' + (fy + (y - fy) * .45) + 'px) ' + (vert ? 'scaleY(' : 'scaleX(') + st + ')';
+      ind.animate([{ transform: from }, { transform: mid, offset: .32 }, { transform: to }],
+        { duration: 680, easing: 'linear(0, 0.025, 0.089, 0.181, 0.29, 0.406, 0.523, 0.635, 0.737, 0.828, 0.905, 0.969, 1.019, 1.056, 1.082, 1.098, 1.106, 1.106, 1.102, 1.094, 1.083, 1.071, 1.059, 1.047, 1.035, 1.024, 1.015, 1.007, 1.001, 0.996, 0.993, 0.991, 0.989, 0.989, 0.989, 0.989, 0.99, 0.992, 0.993, 0.994, 0.995, 0.997, 0.998, 0.999, 1)' });
+    }
+    window.addEventListener('resize', function () { if (lastTab >= 0) { var l = lastTab; lastTab = -1; tab(l, false); } });
+    // 底部弹层：按住顶部拖动，跟手；往上拉有阻尼；松手要么收起，要么弹回
+    (function () {
+      var y0 = null, dy = 0, t0 = 0, pop = null, scrim = null;
+      document.addEventListener('touchstart', function (e) {
+        var h = e.target.closest && e.target.closest('.pop-grip, .pop-head');
+        if (!h || e.target.closest('button')) return;
+        pop = h.closest('.pop'); scrim = pop && pop.parentNode.querySelector('.pop-scrim');
+        if (!pop) return; y0 = e.touches[0].clientY; dy = 0; t0 = Date.now();
+      }, { passive: true });
+      document.addEventListener('touchmove', function (e) {
+        if (y0 == null || !pop) return;
+        var raw = e.touches[0].clientY - y0; dy = raw >= 0 ? raw : -Math.pow(-raw, .7);
+        pop.classList.add('fl-follow'); pop.style.animation = 'none';
+        pop.style.transform = 'translateY(' + dy + 'px)' + (dy < 0 ? ' scaleY(' + (1 - dy / 1600) + ')' : '');
+        pop.style.transformOrigin = 'bottom';
+        if (scrim) scrim.style.opacity = String(Math.max(0, 1 - Math.max(0, dy) / 420));
+      }, { passive: true });
+      document.addEventListener('touchend', function () {
+        if (y0 == null || !pop) return; y0 = null;
+        var v = dy / Math.max(1, Date.now() - t0), p = pop; pop = null;
+        p.classList.remove('fl-follow');
+        if (dy > 110 || (v > .6 && dy > 30)) { closePop(); return; }
+        p.classList.add('fl-settle'); p.style.transform = ''; if (scrim) scrim.style.opacity = '';
+        setTimeout(function () { p.classList.remove('fl-settle'); }, 650);
+      });
+    })();
+    return { tab: tab, ranges: ranges };
+  })();
 
   var tabsBuilt = false;
   function updateTabs(tab, pop) {
@@ -3984,6 +4187,7 @@
       if (on && pop) { b.classList.remove('tpop'); void b.offsetWidth; b.classList.add('tpop'); }
     });
     $tabs.style.setProperty('--ti', idx);
+    if (Fluid) Fluid.tab(idx, pop);
   }
 
   var toastTimer;
@@ -5230,6 +5434,7 @@
     if (box) box.scrollTop = box.scrollHeight;
     fitInput();
     bindGestures();
+    if (Fluid) Fluid.ranges();
     chat.popIn = false; chat.popAnim = '';
   }
 
@@ -5546,23 +5751,43 @@
     if (top) {
       var y0 = null, dy = 0;
       top.addEventListener('touchstart', function (e) { if (e.target.closest('button')) return; y0 = e.touches[0].clientY; dy = 0; sheet.style.transition = 'none'; }, { passive: true });
-      top.addEventListener('touchmove', function (e) { if (y0 == null) return; dy = Math.max(0, e.touches[0].clientY - y0); sheet.style.transform = 'translateY(' + dy + 'px)'; sheet.style.borderRadius = Math.min(28, dy / 4) + 'px ' + Math.min(28, dy / 4) + 'px 0 0'; }, { passive: true });
+      var t0_ = 0;
+      top.addEventListener('touchmove', function (e) {
+        if (y0 == null) return; var raw = e.touches[0].clientY - y0;
+        dy = raw >= 0 ? raw : raw * 0.18;   // 往上拉有阻尼
+        if (!t0_) t0_ = Date.now();
+        sheet.style.transform = 'translateY(' + dy + 'px) scale(' + (1 - Math.max(0, dy) / 4000) + ')';
+        sheet.style.borderRadius = Math.min(28, Math.max(0, dy) / 4) + 'px ' + Math.min(28, Math.max(0, dy) / 4) + 'px 0 0'; }, { passive: true });
       top.addEventListener('touchend', function () {
         if (y0 == null) return; y0 = null;
-        sheet.style.transition = 'transform .22s ease, border-radius .22s ease';
-        if (dy > 120) { sheet.style.transform = 'translateY(100%)'; setTimeout(function () { chat.open = false; $sheet.innerHTML = ''; }, 220); }
-        else { sheet.style.transform = ''; sheet.style.borderRadius = ''; }
+        var v = dy / Math.max(1, Date.now() - t0_); t0_ = 0;
+        if (dy > 120 || (v > 0.7 && dy > 40)) { sheet.style.transition = 'transform .32s cubic-bezier(.4, 0, .9, .6)'; sheet.style.transform = 'translateY(100%)'; setTimeout(function () { chat.open = false; $sheet.innerHTML = ''; }, 300); }
+        else { sheet.style.transition = 'transform .62s var(--bouncy), border-radius .4s ease'; sheet.style.transform = ''; sheet.style.borderRadius = ''; }
       });
     }
-    var x0 = null, fromEdge = false;
+    var x0 = null, fromEdge = false, dxs = 0, scrim = sheet.querySelector('.side-scrim');
+    var drawer = side && getComputedStyle(side).position === 'absolute';   // 只有手机上是抽屉
     sheet.addEventListener('touchstart', function (e) {
       var x = e.touches[0].clientX;
       fromEdge = !chat.side && x < 28;
-      x0 = (fromEdge || (chat.side && side && side.contains(e.target))) ? x : null;
+      x0 = (fromEdge || (chat.side && side && side.contains(e.target))) ? x : null; dxs = 0;
+    }, { passive: true });
+    sheet.addEventListener('touchmove', function (e) {
+      if (x0 == null || !drawer) return;
+      dxs = e.touches[0].clientX - x0;
+      var w = side.offsetWidth, off = fromEdge ? Math.min(0, -w + dxs) : Math.min(0, dxs);
+      if (fromEdge && dxs > w) off = (dxs - w) * 0.12;          // 拉过头有阻尼
+      side.classList.add('fl-follow'); side.style.transform = 'translateX(' + off + 'px)';
+      if (scrim) { scrim.classList.add('fl-follow'); scrim.style.opacity = String(Math.max(0, Math.min(1, 1 + off / w))); scrim.style.pointerEvents = 'none'; }
     }, { passive: true });
     sheet.addEventListener('touchend', function (e) {
       if (x0 == null) return;
       var dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (drawer) {
+        side.classList.remove('fl-follow'); side.classList.add('fl-settle'); side.style.transform = '';
+        if (scrim) { scrim.classList.remove('fl-follow'); scrim.style.opacity = ''; scrim.style.pointerEvents = ''; }
+        setTimeout(function () { side.classList.remove('fl-settle'); }, 650);
+      }
       if (fromEdge && dx > 60) setSide(true);
       else if (!fromEdge && dx < -60) setSide(false);
     });

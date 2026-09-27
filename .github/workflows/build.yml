@@ -1,0 +1,41 @@
+name: native
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile Java to classes.dex (official SDK d8)
+        run: bash ci/compile.sh 2>&1 | tee out-compile.log; test ${PIPESTATUS[0]} -eq 0
+      - name: Build debuggable test APK (throwaway key)
+        run: |
+          python3 -m pip install --quiet pillow
+          mv out-compile.log out/compile.log
+          YD_DEX=$PWD/out/classes.dex YD_DEBUG=1 python3 app/build.py out/test.apk 2>&1 | tee out/apk.log
+          python3 app/verify.py out/test.apk 2>&1 | tee out/verify.log | tail -3
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Emulator test
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: bash ci/emu-test.sh
+      - name: Publish results to ci-out
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JOB_STATUS: ${{ job.status }}
+        run: bash ci/publish.sh

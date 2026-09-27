@@ -59,9 +59,17 @@ adb shell input keyevent KEYCODE_WAKEUP; sleep 3; shot 6-lockscreen
 adb shell locksettings clear --old 1234 || true
 adb shell input keyevent KEYCODE_WAKEUP; adb shell wm dismiss-keyguard; sleep 2
 
-note "7 open from notification (intent extra)"
-adb shell "am start -n $PKG/.MainActivity --es amor_item '{\"id\":101,\"kind\":\"water\",\"title\":\"Amor\",\"text\":\"hello\"}'"
-sleep 4; shot 7-opened
+note "7a open from notification while app is running (NEW_TASK|SINGLE_TOP, like the real PendingIntent)"
+adb shell "am start -f 0x30000000 -n $PKG/.MainActivity --es amor_item '{\"id\":101,\"kind\":\"water\",\"title\":\"Amor\",\"text\":\"warm open test\"}'"
+sleep 4; shot 7a-opened-warm
+adb shell input keyevent KEYCODE_BACK; sleep 2
+
+note "7b open from notification when app was killed (cold start, splash plays first)"
+adb shell am force-stop $PKG; sleep 2
+adb shell "am start -f 0x30000000 -n $PKG/.MainActivity --es amor_item '{\"id\":102,\"kind\":\"morning\",\"title\":\"morning title\",\"text\":\"cold open test\"}'"
+sleep 3; shot 7b-cold-3s
+sleep 9; shot 7b-cold-12s
+(adb shell pidof $PKG || echo DEAD) > $O/pid-after-cold.txt
 
 note "8 collect"
 (adb shell pidof $PKG || echo DEAD) > $O/pid-end.txt

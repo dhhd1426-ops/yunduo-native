@@ -1171,6 +1171,232 @@
   .fl-settle { transition: transform .6s var(--bouncy), opacity .4s ease !important; }
   .fl-follow { transition: none !important; }
   @media (prefers-reduced-motion: reduce) { #fl-glow { display: none; } }
+
+  /* ======================= 4.1：此刻 · 外出建议（回信） · 日程 ======================= */
+  :root { --paper: #f7f2e8; --paper-line: #e3d8c3; --sepia: #6f6452; --paper-ink: #3b3226; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --paper: #1c2438; --paper-line: #2e3752; --sepia: #a9a08f; --paper-ink: #e6e1d6; } }
+  :root[data-theme="dark"] { --paper: #1c2438; --paper-line: #2e3752; --sepia: #a9a08f; --paper-ink: #e6e1d6; }
+
+  /* 底部浮岛现在是 5 格 */
+  .tabs { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .tab-ind { width: calc((100% - 12px) / 5); }
+  .tabs button span { font-size: 10.5px; }
+  @media (min-width: 720px) { .tabs { grid-template-columns: 1fr; } .tab-ind { width: auto; } }
+
+  /* ---------- 此刻：手写时间 + 日行轨迹 + 蝴蝶 ---------- */
+  .moment { position: relative; text-align: left; color: var(--text); }
+  .moment .hr-lbl { font-family: "Cormorant Garamond", Georgia, serif; font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--muted);
+    display: flex; align-items: center; gap: 8px; opacity: 0; transform: translateY(4px); transition: opacity .6s, transform .6s var(--spring, ease); }
+  .moment .hr-lbl i { font-style: normal; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; letter-spacing: .3em; }
+  .moment.on .hr-lbl { opacity: 1; transform: none; }
+  .moment .hr-row { display: flex; align-items: flex-end; gap: 10px; margin-top: 2px; }
+  .moment svg.hr-t { height: 68px; width: auto; overflow: visible; display: block; }
+  .moment svg.hr-t path { fill: currentColor; stroke: currentColor; stroke-width: .8px; vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-linecap: round; }
+  .moment svg.hr-t .d { color: var(--ink); }
+  .moment svg.hr-t .c { color: var(--accent); }
+  .moment.done svg.hr-t .c { animation: moBreathe 2s steps(1, end) infinite; }
+  @keyframes moBreathe { 0% { opacity: 1; } 50% { opacity: .45; } }
+  .moment svg.hr-t .pend { fill-opacity: 0; stroke-opacity: 0; }
+  .moment svg.hr-t .out { transition: opacity .55s ease, filter .55s ease; opacity: 0; filter: blur(3px); }
+  .moment svg.hr-t .nib { fill: var(--accent); opacity: 0; }
+  .moment .hr-ap { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: 18px; color: var(--accent); margin-bottom: 10px; opacity: 0; transition: opacity .6s .1s; }
+  .moment .hr-en { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: 16px; color: var(--muted); margin-top: -2px; min-height: 1.3em; }
+  .moment .hr-en span { display: inline-block; opacity: 0; transform: translateY(6px); transition: opacity .5s, transform .6s var(--spring, ease); }
+  .moment .hr-zh { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 11.5px; letter-spacing: .3em; color: var(--muted); margin-left: 4px; opacity: 0; transition: opacity .6s .15s; }
+  .moment .hr-zh b { font-weight: 400; color: var(--accent); }
+  .moment.on2 .hr-ap, .moment.on2 .hr-zh { opacity: 1; }
+  .moment.on2 .hr-en span { opacity: 1; transform: none; }
+  .moment svg.hr-arc { display: block; width: 100%; height: auto; margin-top: 4px; overflow: visible; }
+  .moment .arc-dot { fill: none; stroke: var(--muted); stroke-width: 1.1; stroke-dasharray: 1 6; stroke-linecap: round; opacity: .55; }
+  .moment .arc-run { fill: none; stroke: var(--accent); stroke-width: 1.4; stroke-linecap: round; }
+  .moment .arc-sun { fill: var(--accent); }
+  .moment .arc-halo { fill: var(--accent); opacity: .16; }
+  .moment .arc-moon { fill: var(--surface); stroke: var(--accent); stroke-width: 1.2; }
+  .moment .arc-lb { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 10.5px; letter-spacing: .12em; fill: var(--muted); }
+  .moment .arc-lb.r { text-anchor: end; }
+  .moment .arc-mid { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: 12.5px; fill: var(--accent); text-anchor: middle; opacity: 0; transition: opacity .6s; }
+  .moment.on3 .arc-mid { opacity: 1; }
+  .moment .arc-base { stroke: var(--line); stroke-width: 1; }
+  .moment .mo-fly { position: absolute; left: -60px; top: -34px; width: calc(100% + 84px); height: calc(100% + 48px); pointer-events: none; overflow: visible; z-index: 2; }
+  .moment .mo-fly .b { opacity: 0; transition: opacity .8s; }
+  .moment .mo-fly .b.in { opacity: 1; }
+  .mo-slot-p:empty { display: none; }
+  @media (min-width: 720px) {
+    .greeting .moment { position: absolute; right: 0; top: -6px; width: min(360px, 40%); }
+    .mo-slot-p { display: none; }
+  }
+  @media (max-width: 719px) {
+    .mo-slot { display: none; }
+    .moment { margin: 4px 0 12px; }
+    .moment .hr-row { gap: 6px; }
+    .moment svg.hr-t { height: 54px; }
+    .moment .hr-ap { font-size: 15px; margin-bottom: 9px; }
+    .moment .hr-txt { margin-left: 8px; padding-bottom: 6px; min-width: 0; }
+    .moment .hr-en { font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .moment .hr-zh { margin: 2px 0 0; }
+  }
+
+  /* ---------- 方案 C：Amor 的外出建议 + 回信 ---------- */
+  .adv-lead { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 14.5px; line-height: 1.8; color: var(--text); margin: 2px 0 6px; }
+  .adv-lead i { font-family: "Cormorant Garamond", Georgia, serif; color: var(--accent); font-size: 16px; margin-right: 4px; }
+  .adv-more { display: flex; width: 100%; align-items: center; gap: 6px; border: 0; background: none; padding: 10px 0 2px; font-size: 13px; color: var(--muted); text-align: left; }
+  .adv-more b { font-weight: 400; color: var(--ink); }
+  .adv-reply { display: flex; align-items: center; gap: 10px; width: 100%; margin-top: 10px; padding: 12px 0 0; border: 0; border-top: 1px dashed var(--line); background: none; text-align: left; }
+  .adv-reply .ph { flex: 1; min-width: 0; font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: 16px; color: var(--muted);
+    border-bottom: 1.2px solid color-mix(in srgb, var(--ink) 40%, transparent); padding-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .adv-reply .ph b { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-style: normal; font-weight: 400; font-size: 13.5px; margin-left: 4px; }
+  .adv-reply .pen { width: 34px; height: 34px; border-radius: 17px; background: var(--ink); color: var(--surface); display: grid; place-items: center; flex: none;
+    box-shadow: 0 6px 14px -6px color-mix(in srgb, var(--ink) 70%, transparent); }
+  .adv-asks { margin-top: 6px; display: flex; gap: 4px 12px; flex-wrap: wrap; }
+  .adv-ask { border: 0; background: none; padding: 4px 0; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 12.5px; color: var(--ink);
+    text-decoration: underline wavy color-mix(in srgb, var(--accent) 45%, transparent) 1px; text-underline-offset: 5px; }
+
+  /* ---------- 日程页 ---------- */
+  .plan .pl-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin: 2px 0 12px; }
+  .plan .pl-ttl { white-space: nowrap; min-width: 0; font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: 34px; color: var(--ink); line-height: 1.1; }
+  .plan .pl-ttl small { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-style: normal; font-size: 12.5px; letter-spacing: .28em; color: var(--muted); margin-left: 8px; }
+  .plan .panel + .panel, .plan .pl-cols > .panel + .panel { margin-top: 14px; }
+  @media (min-width: 720px) { .plan .pl-cols > .panel + .panel { margin-top: 0; } }
+  .seg2 { display: inline-flex; background: color-mix(in srgb, var(--ink) 8%, transparent); border-radius: 16px; padding: 3px; flex: none; }
+  .seg2 button { border: 0; background: none; font-size: 13px; padding: 6px 16px; border-radius: 13px; color: var(--muted); }
+  .seg2 button[aria-pressed="true"] { background: var(--surface); color: var(--ink); font-weight: 600; box-shadow: 0 1px 3px rgba(20, 28, 50, .12); }
+  .cal-mh { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .cal-mh .m { font-family: "Cormorant Garamond", Georgia, serif; font-size: 18px; color: var(--ink); }
+  .cal-mh .m i { color: var(--accent); }
+  .cal-mh .icon-btn { width: 36px; height: 36px; }
+  .cal-wk, .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); text-align: center; }
+  .cal-wk span { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 11px; color: var(--muted); padding: 4px 0 6px; border-bottom: 1px solid var(--line); }
+  .cal-wk span.we { color: var(--accent); }
+  .cal-grid button { position: relative; height: 56px; border: 0; background: none; padding: 5px 0 0; border-bottom: 1px dashed color-mix(in srgb, var(--muted) 22%, transparent);
+    display: flex; flex-direction: column; align-items: center; color: var(--text); }
+  .cal-grid .n { font-family: "Cormorant Garamond", Georgia, serif; font-size: 17px; line-height: 1.1; position: relative; z-index: 1; font-variant-numeric: lining-nums; }
+  .cal-grid .we .n { color: var(--accent); }
+  .cal-grid .mute { opacity: .38; }
+  .cal-grid .l { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 9.5px; color: var(--muted); margin-top: 1px; letter-spacing: .02em; white-space: nowrap; position: relative; z-index: 1; }
+  .cal-grid .l.jq { color: var(--accent); }
+  .cal-grid .w { position: absolute; left: 50%; bottom: 5px; transform: translateX(-50%); display: flex; gap: 3px; align-items: center; color: var(--muted); }
+  .cal-grid .w svg { width: 12px; height: 12px; }
+  .cal-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); display: inline-block; }
+  .cal-dot.i { background: var(--ink); }
+  .cal-grid .today .n { color: var(--surface); }
+  .cal-grid .today::before { content: ""; position: absolute; left: 50%; top: 3px; width: 28px; height: 22px; transform: translateX(-50%); border-radius: 12px; background: var(--ink); }
+  .cal-grid .sel::after { content: ""; position: absolute; left: 50%; top: 1px; width: 40px; height: 50px; transform: translateX(-50%) rotate(-3deg);
+    border: 1.3px solid var(--accent); border-radius: 50% 46% 52% 48%; opacity: .85; pointer-events: none; animation: calCircle .5s var(--bouncy, ease) both; }
+  @keyframes calCircle { from { opacity: 0; transform: translateX(-50%) rotate(-12deg) scale(.7); } }
+  .day-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .day-h .d { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 15px; color: var(--text); letter-spacing: .04em; }
+  .day-h .d span { color: var(--muted); font-size: 12px; margin-left: 6px; }
+  .day-h .t { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .day-it { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 9px 0; border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent); font-size: 14px; width: 100%;
+    border-left: 0; border-right: 0; border-bottom: 0; background: none; text-align: left; color: var(--text); }
+  .day-it:first-of-type { border-top: 0; }
+  .day-it .tm { font-family: "Cormorant Garamond", Georgia, serif; color: var(--ink); font-size: 15px; }
+  .day-it .tx { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tg2 { font-size: 10.5px; color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); border-radius: 8px; padding: 0 6px; white-space: nowrap; }
+  .tg2.i { color: var(--ink); border-color: color-mix(in srgb, var(--ink) 30%, transparent); }
+  .day-note { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: 14px; color: var(--sepia); margin: 8px 2px 0; line-height: 1.6; }
+  .day-note b { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-style: normal; font-weight: 400; color: var(--accent); }
+  .day-empty { font-size: 13px; color: var(--muted); padding: 10px 0 2px; }
+  .day-acts { display: flex; gap: 8px; margin-top: 10px; }
+  .day-acts button { flex: 1; height: 38px; border-radius: 19px; border: 1px solid var(--line); background: none; font-size: 13px; color: var(--ink); display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .pl-fab { position: fixed; right: 22px; bottom: calc(92px + env(safe-area-inset-bottom, 0px)); z-index: 12; width: 52px; height: 52px; border-radius: 26px; border: 0; background: var(--ink); color: var(--surface);
+    display: grid; place-items: center; box-shadow: 0 12px 24px -10px color-mix(in srgb, var(--ink) 70%, transparent); }
+  @media (min-width: 720px) { .pl-fab { bottom: 32px; right: 32px; } }
+  @media (min-width: 720px) { .plan .pl-cols { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px; align-items: start; } }
+
+  /* 日签（撕页日历） */
+  .tear { margin-top: 14px; background: var(--paper); border-radius: 6px 6px 18px 18px; position: relative; padding: 26px 22px 20px; color: var(--paper-ink); touch-action: pan-x;
+    box-shadow: 0 2px 0 color-mix(in srgb, var(--paper-line) 70%, var(--paper)), 0 4px 0 var(--paper), 0 6px 0 color-mix(in srgb, var(--paper-line) 60%, var(--paper)), 0 22px 34px -18px rgba(60, 40, 20, .5); }
+  .tear::before { content: ""; position: absolute; left: 0; right: 0; top: -7px; height: 14px; background: radial-gradient(circle at 7px 7px, var(--bg) 4px, transparent 4.5px) 0 0 / 18px 14px repeat-x; }
+  .tear .rings { position: absolute; top: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 120px; }
+  .tear .rings i { width: 10px; height: 10px; border-radius: 50%; background: var(--bg); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2); }
+  .tear .top { display: flex; justify-content: space-between; font-family: "Cormorant Garamond", Georgia, serif; font-size: 12px; letter-spacing: .18em; color: var(--sepia); text-transform: uppercase; margin-top: 6px; }
+  .tear .big { font-family: "Cormorant Garamond", Georgia, serif; font-size: 132px; line-height: 1; color: var(--accent); text-align: center; margin: 10px 0 0; font-variant-numeric: lining-nums; }
+  .tear .wd { text-align: center; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; letter-spacing: .5em; font-size: 15px; margin: 4px 0 0 .5em; }
+  .tear .rule { height: 1px; background: var(--paper-line); margin: 14px 0; position: relative; }
+  .tear .rule::after { content: "❦"; position: absolute; left: 50%; top: -10px; transform: translateX(-50%); background: var(--paper); padding: 0 8px; color: var(--sepia); font-size: 13px; }
+  .tear .lun { display: flex; justify-content: space-between; gap: 8px; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 12.5px; color: var(--sepia); flex-wrap: wrap; }
+  .tear .lun b { font-weight: 400; color: var(--paper-ink); font-size: 14px; letter-spacing: .1em; }
+  .tear .yj { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .tear .yj div { border: 1px solid var(--paper-line); border-radius: 10px; padding: 8px 10px; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 12.5px; line-height: 1.75; }
+  .tear .yj b { font-weight: 400; display: inline-block; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 50%; color: var(--paper); background: var(--accent); font-size: 11px; margin-right: 6px; }
+  .tear .yj .j b { background: var(--sepia); }
+  .tear .quote { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: 15px; text-align: center; color: var(--sepia); margin-top: 14px; line-height: 1.6; }
+  .tear .quote small { display: block; font-style: normal; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 12px; letter-spacing: .12em; margin-top: 2px; opacity: .85; }
+  .tear .sig { text-align: right; font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; color: var(--accent); font-size: 14px; margin-top: 6px; }
+  .tear .evs { margin-top: 12px; border-top: 1px dashed var(--paper-line); padding-top: 8px; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 13px; line-height: 1.8; }
+  .tear .evs span { font-family: "Cormorant Garamond", Georgia, serif; color: var(--accent); margin-right: 8px; font-size: 14px; }
+  @media (min-width: 720px) { .tear, .tear-nav { max-width: 480px; margin-left: auto; margin-right: auto; } .plan .al-card, .plan .al-perm, .plan .al-next, .plan .al-empty { max-width: 640px; } }
+  .tear-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: 12px; color: var(--muted); }
+  .tear-nav button { border: 1px solid var(--line); background: none; border-radius: 16px; height: 34px; padding: 0 14px; color: var(--ink); font-size: 13px; }
+  .tear.fly-up { animation: tearUp .55s cubic-bezier(.5, 0, .75, .3) forwards; transform-origin: 50% 0; }
+  .tear.fly-down { animation: tearIn .6s var(--bouncy, ease) both; }
+  .tear.come { animation: tearCome .5s var(--spring, ease) both; }
+  @keyframes tearUp { to { transform: translateY(-120%) rotate(-8deg); opacity: 0; } }
+  @keyframes tearIn { from { transform: translateY(-40%) rotate(-4deg); opacity: 0; } }
+  @keyframes tearCome { from { transform: translateY(24px) scale(.98); opacity: 0; } }
+
+  /* 记一件事（底部纸片） */
+  .cal-sheet { position: fixed; inset: 0; z-index: 30; display: flex; align-items: flex-end; justify-content: center; }
+  .cal-sheet .scrim { position: absolute; inset: 0; border: 0; background: rgba(17, 23, 42, .32); animation: fadeIn .25s both; }
+  .cal-sheet .card { position: relative; width: 100%; max-width: 560px; background: var(--surface); border-radius: 28px 28px 0 0; padding: 10px 20px calc(22px + env(safe-area-inset-bottom, 0px));
+    box-shadow: 0 -20px 40px -20px rgba(20, 28, 50, .35); animation: calSheetIn .5s var(--spring, ease) both; max-height: 88vh; overflow-y: auto; }
+  @keyframes calSheetIn { from { transform: translateY(100%); } }
+  .cal-sheet .grip { width: 40px; height: 4px; border-radius: 2px; background: var(--line); margin: 0 auto 12px; }
+  .cal-sheet .shh { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .cal-sheet .shh b { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 18px; font-weight: 600; letter-spacing: .06em; }
+  .cal-sheet .shh em { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; color: var(--accent); font-size: 14px; }
+  .cal-sheet input.big { width: 100%; border: 0; border-bottom: 1px solid var(--line); background: none; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 18px; padding: 10px 2px; color: var(--text); outline: none; }
+  .cal-sheet input.big:focus { border-bottom-color: var(--accent); }
+  .cal-parse { font-size: 12px; color: var(--accent); margin: 6px 2px 0; min-height: 18px; display: flex; gap: 6px; align-items: center; }
+  .cal-fld { border-bottom: 1px solid var(--line); padding: 8px 2px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .cal-fld .k { color: var(--muted); font-size: 12.5px; }
+  .cal-fld input[type="date"], .cal-fld input[type="time"] { border: 0; background: none; color: var(--text); font: inherit; font-family: "Cormorant Garamond", Georgia, serif; font-size: 16px; text-align: right; }
+  .cal-chips { display: flex; flex-wrap: wrap; gap: 7px; padding: 10px 0 4px; }
+  .cal-chip { font-size: 12.5px; padding: 5px 12px; border-radius: 14px; border: 1px solid var(--line); color: var(--muted); background: none; }
+  .cal-chip[aria-pressed="true"] { border-color: var(--ink); color: var(--ink); background: color-mix(in srgb, var(--ink) 7%, transparent); }
+  .cal-btn { margin-top: 16px; width: 100%; height: 48px; border-radius: 24px; border: 0; background: var(--ink); color: var(--surface); font-size: 15.5px; letter-spacing: .2em; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; }
+  .cal-del { margin-top: 10px; width: 100%; height: 40px; border: 0; background: none; color: var(--accent); font-size: 13.5px; }
+
+  /* 闹钟 */
+  .al-next { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: 15px; color: var(--sepia); margin: 0 0 12px; }
+  .al-next b { font-style: normal; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-weight: 400; color: var(--ink); }
+  .al-card { background: var(--surface); border-radius: 22px; padding: 14px 16px 12px; margin-bottom: 12px; box-shadow: var(--hl, none), 0 10px 26px -18px rgba(20, 28, 50, .35); display: block; width: 100%;
+    border: 0; text-align: left; color: var(--text); }
+  .al-card.feat { background: linear-gradient(160deg, color-mix(in srgb, var(--paper) 90%, var(--surface)), var(--paper)); }
+  .al-card .row { display: flex; justify-content: space-between; align-items: center; }
+  .al-card .tm { font-family: "Cormorant Garamond", Georgia, serif; font-size: 46px; line-height: 1; color: var(--ink); font-variant-numeric: lining-nums; }
+  .al-card .tm small { font-size: 15px; font-style: italic; color: var(--muted); margin-left: 6px; }
+  .al-card.off .tm { color: color-mix(in srgb, var(--muted) 60%, transparent); }
+  .al-card .days { display: flex; gap: 6px; margin-top: 8px; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 11.5px; color: color-mix(in srgb, var(--muted) 55%, transparent); }
+  .al-card .days .on { color: var(--ink); }
+  .al-card .ln { font-size: 12.5px; color: var(--muted); margin-top: 6px; display: flex; gap: 6px; align-items: center; }
+  .al-card .ln .am { color: var(--accent); font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; }
+  .al-perm { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); border-radius: 18px; padding: 12px 14px; margin-bottom: 12px; font-size: 13px; line-height: 1.7; color: var(--text); }
+  .al-perm button { margin: 8px 8px 0 0; border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); background: none; border-radius: 14px; padding: 5px 12px; font-size: 12.5px; color: var(--accent); }
+  .al-empty { text-align: center; color: var(--muted); padding: 40px 0; font-size: 14px; }
+  .al-empty em { display: block; font-family: "Cormorant Garamond", Georgia, serif; font-size: 28px; color: var(--ink); margin-bottom: 6px; }
+  .wheel { display: flex; justify-content: center; align-items: center; gap: 4px; height: 216px; position: relative; margin: 6px 0 4px; }
+  .wheel .col { height: 216px; width: 96px; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; text-align: center;
+    mask-image: linear-gradient(transparent, #000 32%, #000 68%, transparent); -webkit-mask-image: linear-gradient(transparent, #000 32%, #000 68%, transparent); overscroll-behavior: contain; }
+  .wheel .col::-webkit-scrollbar { display: none; }
+  .wheel .col div { height: 72px; line-height: 72px; scroll-snap-align: center; font-family: "Cormorant Garamond", Georgia, serif; font-size: 54px; color: var(--ink); font-variant-numeric: lining-nums tabular-nums; }
+  .wheel .col .pad { scroll-snap-align: none; }
+  .wheel .colon { font-family: "Cormorant Garamond", Georgia, serif; font-size: 46px; color: var(--accent); margin-top: -6px; }
+  .wheel::before, .wheel::after { content: ""; position: absolute; left: 20%; right: 20%; height: 1px; background: var(--line); pointer-events: none; }
+  .wheel::before { top: 72px; } .wheel::after { bottom: 72px; }
+  .al-until { text-align: center; font-size: 12px; color: var(--muted); margin: 0 0 10px; }
+  .al-days { display: flex; justify-content: space-between; padding: 6px 0 12px; }
+  .al-days button { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: none; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 13px; color: var(--muted); }
+  .al-days button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--surface); }
+  .al-opt { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-top: 1px solid var(--line); font-size: 14px; gap: 10px; }
+  .al-opt .v { color: var(--muted); font-size: 13px; display: flex; gap: 8px; align-items: center; }
+  .al-opt input[type="text"] { border: 0; background: none; text-align: right; color: var(--text); font: inherit; font-size: 14px; min-width: 0; width: 60%; outline: none; }
+  .al-opt select { border: 0; background: none; color: var(--muted); font: inherit; font-size: 13px; }
+  .al-amor { margin-top: 10px; background: linear-gradient(160deg, color-mix(in srgb, var(--paper) 90%, var(--surface)), var(--paper)); border-radius: 18px; padding: 12px 14px; }
+  .al-amor .k { font-size: 12px; color: var(--sepia); display: flex; justify-content: space-between; align-items: center; }
+  .al-amor p { margin: 6px 0 0; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 13px; line-height: 1.75; color: var(--paper-ink); }
+  .al-save { color: var(--accent) !important; font-weight: 600; }
 </style>
 <script src="fonts/script-glyphs.js"></script>
 <script src="fonts/pinyin.js"></script>
@@ -1226,6 +1452,8 @@
     leaf: '<path d="M5 19c0-8 5-13 14-14 0 9-5 14-12 14"/><path d="M5 19l7-7"/>',
     warn: '<path d="M12 4 2.5 20h19z"/><path d="M12 10v4.5M12 17.5v.01"/>',
     home: '<path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/>',
+    book: '<path d="M5 4.5h10.5a3 3 0 0 1 3 3V20H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h10.5M9 8.5h6"/>',
+    pen: '<path d="M4 20l4.2-1 10.6-10.6a2.1 2.1 0 0 0-3-3L5.2 16 4 20z"/><path d="M13.8 7.2l3 3"/>',
     cal: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
     pin: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
     gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
@@ -2062,7 +2290,7 @@
   var $main = document.getElementById('main');
   var $tabs = document.getElementById('tabs');
   var $pill = document.getElementById('city-pill');
-  var TABS = [['today', '今天', 'home'], ['forecast', '预报', 'cal'], ['cities', '城市', 'pin'], ['settings', '设置', 'gear']];
+  var TABS = [['today', '今天', 'home'], ['forecast', '预报', 'cal'], ['plan', '日程', 'book'], ['cities', '城市', 'pin'], ['settings', '设置', 'gear']];
   var flourish = '<svg class="flourish" width="110" height="10" viewBox="0 0 180 16" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true"><path d="M2 8 C 30 8, 50 2, 72 8 S 108 14, 130 8 C 142 4, 152 4, 158 8 C 152 12, 142 12, 130 8"/><circle class="fl-dot" cx="168" cy="8" r="1.6" fill="currentColor"/></svg>';
 
   function statusView() {
@@ -2087,7 +2315,7 @@
     var writing = Writer.isWriting(k1) || (en && Writer.isWriting(k2));
     var title = w1 ? w1 + w2 : esc(hello) + (en ? ', Dear ' + esc(en) : '');
     return '<div class="greeting a' + (writing ? ' gw' : '') + (Writer.linesShown(lastKey) ? ' lines' : '') + '" data-gkey="' + esc(lastKey) + '">' +
-      '<span class="deco-slot"></span>' +
+      '<span class="deco-slot"></span><span class="mo-slot"></span>' +
       '<h1 class="two" aria-label="' + esc(hello + (en ? ', Dear ' + en : '')) + '">' + title + '</h1>' +
       '<p class="date">' + (name && cjk ? '<span class="zh-name">' + esc(name) + '</span>· ' : '') + dateEn + '</p>' + (adv ? '<p class="advice-en">' + adv + '</p>' : '') +
       flourish + '</div>';
@@ -3056,7 +3284,7 @@
     if (!v) return '<section class="view">' + greetingBlock('') + statusView().replace('<section class="view">', '').replace('</section>', '') + '</section>';
     var adv = advise(v), t = v.today, n = v.now;
     var zhDate = (now.getMonth() + 1) + '月' + now.getDate() + '日 ' + DAYS_ZH[now.getDay()];
-    var html = '<section class="view today">' + greetingBlock(adv.en);
+    var html = '<section class="view today">' + greetingBlock(adv.en) + '<div class="mo-slot-p"></div>';
     var heroAnim = !!renderAnim;
 
     if (v.alarms.length) {
@@ -3087,22 +3315,20 @@
     }
     html += '</div><div class="col-b">';
 
-    html += '<div class="asst a">' +
-      '<button type="button" class="asst-bar" data-chat="open">' +
-        '<span class="spark">' + icon('spark', 20) + '</span><span class="ph">和 ' + esc(asst.name || 'Amor') + ' 聊聊…</span>' +
-        '<span class="go">' + icon('send', 18) + '</span></button>' +
-      '<div class="qchips">' + QUESTIONS.map(function (q) {
-        return '<button type="button" class="qchip" data-q="' + q + '">' + q + '</button>';
-      }).join('') + '</div></div>';
-
-    if (adv.tips.length) {
-      html += '<div class="panel a"><h2>外出建议 <em>Before You Go</em></h2>' +
-        adv.tips.map(function (x) {
-          return '<div class="tip"><span class="ic">' + icon(x.ic, 20) + '</span>' +
-            '<div class="body"><span class="ttl">' + x.t + '<em>' + x.en + '</em></span><span class="txt">' + x.txt + '</span></div>' +
-            '<span class="tag' + (x.on ? ' on' : '') + '">' + x.tag + '</span></div>';
-        }).join('') + '</div>';
-    }
+    // 方案 C：「和 Amor 聊聊」写进外出建议——开头是她写给你的一句，末尾一条回信横线
+    var an_ = esc(asst.name || 'Amor'), dear_ = greetName() || state.name.trim();
+    var tipsAll = adv.tips.slice().sort(function (a, b) { return (b.on ? 1 : 0) - (a.on ? 1 : 0); }), shown = calui.advAll ? tipsAll : tipsAll.slice(0, 2), rest = tipsAll.slice(shown.length);
+    html += '<div class="panel a adv-c"><h2>' + an_ + ' 的外出建议 <em>Before You Go</em></h2>' +
+      '<p class="adv-lead"><i>' + (dear_ ? 'Dear ' + esc(dear_) + ',' : 'Hello,') + '</i>' + (tipsAll.length ? '今天出门前，我替你看了一眼天：' : '今天没什么要特别提醒的。想聊点什么吗？') + '</p>' +
+      shown.map(function (x) {
+        return '<div class="tip"><span class="ic">' + icon(x.ic, 20) + '</span>' +
+          '<div class="body"><span class="ttl">' + x.t + '<em>' + x.en + '</em></span><span class="txt">' + x.txt + '</span></div>' +
+          '<span class="tag' + (x.on ? ' on' : '') + '">' + x.tag + '</span></div>';
+      }).join('') +
+      (rest.length ? '<button type="button" class="adv-more" data-advmore="1">还有 ' + rest.length + ' 条：<b>' + rest.map(function (x) { return x.t; }).join(' · ') + '</b> ›</button>' : '') +
+      (calui.advAll && tipsAll.length > 2 ? '<button type="button" class="adv-more" data-advmore="0">收起</button>' : '') +
+      '<button type="button" class="adv-reply" data-chat="open"><span class="ph">Write back<b>还想问点什么？回信给她…</b></span><span class="pen">' + icon('pen', 17) + '</span></button>' +
+      '<div class="adv-asks">' + QUESTIONS.slice(0, 3).map(function (q) { return '<button type="button" class="adv-ask" data-q="' + q + '">' + q + '</button>'; }).join('') + '</div></div>';
 
     if (t) {
       html += '<div class="panel a"><h2>今日昼夜 <em>Day &amp; Night</em></h2><div class="dn">' +
@@ -3618,6 +3844,8 @@
       keep.push({ id: r.id, t: r.t, ch: 'amor', kind: 'remind', title: r.title, text: r.text, short: shortOf(r.text), meta: clock(r.t),
         actions: ['done', 'snooze', 'chat'], doneLabel: '好的', snoozeLabel: '10 分钟后', snoozeMin: 10, skipFg: false });
     });
+    // 日程的提醒（4.1）
+    try { keep = keep.concat(calPlanItems(now)); } catch (e) {}
     return keep.sort(function (a, b) { return a.t - b.t; });
   }
 
@@ -3657,6 +3885,7 @@
         var cfg = JSON.stringify(ntConfig());
         if (cfg !== ntCfgSent) { AmorNative.setConfig(cfg); ntCfgSent = cfg; }
         AmorNative.setPlan(JSON.stringify(buildPlan()));
+        alarmSync();
       } catch (e) { window.__ntErr = String(e && e.stack || e); }
     }, now_ ? 0 : 800);
   }
@@ -3702,7 +3931,7 @@
     openChat('', conv.id);
   }
   window.__amorLaunch = function () { setTimeout(notifyLaunch, 50); };
-  window.__amorResume = function () { notifySync(); setTimeout(notifyLaunch, 50); };
+  window.__amorResume = function () { notifySync(); setTimeout(notifyLaunch, 50); alarmEvents(); };
   // 和 Amor 聊天时告诉原生层“正在前台聊”，这时不推送普通提醒
   setInterval(function () { if (chat.open && !document.hidden && nativeOk()) try { AmorNative.fg(); } catch (e) {} }, 30000);
   /* ---------- 通知：页面 ---------- */
@@ -4044,7 +4273,7 @@
     // 天气第一次出现时（例如刚装好还没有缓存），也播放一次入场
     if (tab === 'today' && !heroEverShown && view(state.current)) { renderAnim = renderAnim || 'up'; }
     if (renderAnim && tab === 'today') placeEpoch++;
-    $main.innerHTML = tab === 'forecast' ? viewForecast() : tab === 'cities' ? viewCities() : tab === 'settings' ? viewSettings() : viewToday();
+    $main.innerHTML = tab === 'forecast' ? viewForecast() : tab === 'plan' ? viewPlan() : tab === 'cities' ? viewCities() : tab === 'settings' ? viewSettings() : viewToday();
     if (tab === 'today' && view(state.current)) heroEverShown = true;
     var vw = $main.querySelector('.view');
     if (vw && renderAnim) {
@@ -4062,6 +4291,8 @@
     Writer.kick();
     Flourish.remount();
     Deco.mount();
+    if (Moment) Moment.mount();
+    if (tab === 'plan') calAfterRender();
     updateTabs(tab, opts.anim);
     var v = view(state.current);
     $pill.innerHTML = icon('pin', 16) + esc(META[state.current].zh) + (v ? ' ' + deg(v.temp) + '°' : '');
@@ -4177,6 +4408,817 @@
     return { tab: tab, ranges: ranges };
   })();
 
+
+  /* ======================= 4.1：此刻 · 日程（日历 + 闹钟） ======================= */
+
+  // ---------- 城市坐标：算日出日落用（自定义站点按省会算，差几分钟） ----------
+  var GEO = { bj: [39.90, 116.40], tj: [39.13, 117.20], sh: [31.23, 121.47], cq: [29.56, 106.55], sjz: [38.04, 114.51], ty: [37.87, 112.55], hhht: [40.84, 111.75],
+    sy: [41.80, 123.43], cc: [43.88, 125.32], hrb: [45.80, 126.53], nj: [32.06, 118.80], hz: [30.27, 120.15], hf: [31.82, 117.23], fz: [26.07, 119.30], nc: [28.68, 115.86],
+    jn: [36.65, 117.12], zz: [34.75, 113.62], wh: [30.59, 114.30], cs: [28.23, 112.94], gz: [23.13, 113.26], nn: [22.82, 108.32], hk: [20.04, 110.32], cd: [30.66, 104.07],
+    gy: [26.65, 106.63], km: [25.04, 102.71], ls: [29.65, 91.13], xa: [34.34, 108.94], lz: [36.06, 103.83], xn: [36.62, 101.78], yc: [38.49, 106.23], wlmq: [43.83, 87.62],
+    xg: [22.32, 114.17], am: [22.20, 113.55], tb: [25.03, 121.56] };
+  var PROV_GEO = { '北京': 'bj', '天津': 'tj', '河北': 'sjz', '山西': 'ty', '内蒙古': 'hhht', '辽宁': 'sy', '吉林': 'cc', '黑龙江': 'hrb', '上海': 'sh', '江苏': 'nj', '浙江': 'hz',
+    '安徽': 'hf', '福建': 'fz', '江西': 'nc', '山东': 'jn', '河南': 'zz', '湖北': 'wh', '湖南': 'cs', '广东': 'gz', '广西': 'nn', '海南': 'hk', '重庆': 'cq', '四川': 'cd',
+    '贵州': 'gy', '云南': 'km', '西藏': 'ls', '陕西': 'xa', '甘肃': 'lz', '青海': 'xn', '宁夏': 'yc', '新疆': 'wlmq', '香港': 'xg', '澳门': 'am', '台湾': 'tb' };
+  function geoOf(key) {
+    if (GEO[key]) return GEO[key];
+    var m = META[key], r = m && String(m.region || '').replace(/(省|市|自治区|特别行政区|壮族|回族|维吾尔).*$/, '');
+    return GEO[PROV_GEO[r]] || GEO.bj;
+  }
+  // NOAA 简化公式：返回那天日出、日落的时间戳（极昼极夜返回 null）
+  function sunTimes(day, geo) {
+    var y = day.getFullYear(), mo = day.getMonth(), d = day.getDate();
+    var N = Math.round((Date.UTC(y, mo, d) - Date.UTC(y, 0, 0)) / 86400000), g = 2 * Math.PI / 365 * (N - 1);
+    var eq = 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g) - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
+    var decl = 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g) + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
+    var la = geo[0] * Math.PI / 180, c = Math.cos(90.833 * Math.PI / 180) / (Math.cos(la) * Math.cos(decl)) - Math.tan(la) * Math.tan(decl);
+    if (c < -1 || c > 1) return null;
+    var ha = Math.acos(c) * 180 / Math.PI, u0 = Date.UTC(y, mo, d);
+    return { rise: u0 + (720 - 4 * (geo[1] + ha) - eq) * 60000, set: u0 + (720 - 4 * (geo[1] - ha) - eq) * 60000 };
+  }
+  function hhmmOf(ts) { var d = new Date(ts); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+  function durZh(ms) { var m = Math.max(1, Math.round(ms / 60000)); return m < 60 ? m + ' 分' : Math.floor(m / 60) + ' 小时 ' + (m % 60) + ' 分'; }
+
+  // ---------- 此刻：手写时间逐笔写出，每分钟只重写变了的那几位；下面是日行轨迹；四只蝴蝶在周围飞 ----------
+  var Moment = (function () {
+    var G = window.SCRIPT_GLYPHS, reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!G) return null;
+    var NUM = ['twelve', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
+    var MIN = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'a quarter', 'sixteen', 'seventeen', 'eighteen', 'nineteen',
+      'twenty', 'twenty-one', 'twenty-two', 'twenty-three', 'twenty-four', 'twenty-five', 'twenty-six', 'twenty-seven', 'twenty-eight', 'twenty-nine', 'half'];
+    var SC = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+    var SCW = ['夜半', '鸡鸣', '平旦', '日出', '食时', '隅中', '日中', '日昳', '日影西斜', '日入', '黄昏', '人定'];
+    function en(d) {
+      var h = d.getHours(), m = d.getMinutes(), part = h < 5 ? 'in the small hours' : h < 12 ? 'in the morning' : h < 18 ? 'in the afternoon' : h < 22 ? 'in the evening' : 'at night', s;
+      if (m === 0) s = NUM[h % 12] + " o'clock";
+      else if (m <= 30) s = MIN[m] + (m === 1 ? ' minute' : '') + ' past ' + NUM[h % 12];
+      else s = MIN[60 - m] + ' to ' + NUM[(h + 1) % 12];
+      return s.charAt(0).toUpperCase() + s.slice(1) + ', ' + part;
+    }
+    function zh(d) { var i = Math.floor(((d.getHours() + 1) % 24) / 2); return '<b>' + SC[i] + '时</b> · ' + SCW[i]; }
+    function hm(d) { var h = d.getHours() % 12 || 12, m = d.getMinutes(); return h + ':' + (m < 10 ? '0' : '') + m; }
+    var H = G.asc - G.desc;
+    function lay(txt) { var x = 0, prev = '', o = []; Array.from(txt).forEach(function (ch) { var g = G.g[ch]; if (!g) return; x += (G.k && G.k[prev + ch]) || 0; o.push({ ch: ch, d: g[0], x: x }); x += g[1]; prev = ch; }); return { gl: o, w: x }; }
+    function ease(p) { return p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; }
+    var el = null, svg = null, cur = '', writing = [], started = false, ready = false, raf = 0, where = '';
+
+    function build() {
+      el = document.createElement('div'); el.className = 'moment'; el.setAttribute('aria-hidden', 'true');
+      el.innerHTML = '<div class="hr-lbl">The Hour<i>此刻</i></div>' +
+        '<div class="hr-row"><svg class="hr-t"></svg><div class="hr-ap"></div><div class="hr-txt"></div></div>' +
+        '<div class="hr-en"><span></span></div><div class="hr-zh"></div>' +
+        '<svg class="hr-arc" viewBox="0 0 380 52"><line class="arc-base" x1="6" y1="38" x2="374" y2="38"/><path class="arc-dot" d="M14 38 Q190 -4 366 38"/>' +
+        '<path class="arc-run" d="M14 38 Q190 -4 366 38"/><circle class="arc-halo" r="11" cx="14" cy="38"/><circle class="arc-sun" r="4.2" cx="14" cy="38"/>' +
+        '<text class="arc-lb" x="6" y="51"></text><text class="arc-lb r" x="374" y="51"></text><text class="arc-mid" x="190" y="51"></text></svg>';
+      svg = el.querySelector('svg.hr-t');
+      svg.innerHTML = '<g class="root" transform="translate(0,' + G.asc + ') scale(1,-1)"></g>';
+    }
+    // 宽屏：时辰跟在标签后面；手机：英文和时辰放到时间右边
+    function arrange(wide) {
+      if (where === (wide ? 'w' : 'p')) return; where = wide ? 'w' : 'p';
+      var lbl = el.querySelector('.hr-lbl'), txt = el.querySelector('.hr-txt'), enEl = el.querySelector('.hr-en'), zhEl = el.querySelector('.hr-zh');
+      if (wide) { lbl.appendChild(zhEl); el.insertBefore(enEl, el.querySelector('svg.hr-arc')); }
+      else { txt.appendChild(enEl); txt.appendChild(zhEl); }
+      flyReset();
+    }
+    // 日行轨迹：白天日出→日落（小太阳），夜里日落→日出（小月亮）
+    function arcState(now) {
+      var g = geoOf(state.current), d0 = new Date(now), st = sunTimes(d0, g);
+      if (!st) return null;
+      var t = now.getTime(), a, b, night = false;
+      if (t < st.rise) { var yd = new Date(d0); yd.setDate(yd.getDate() - 1); var sy = sunTimes(yd, g); a = sy ? sy.set : st.rise - 12 * 3600e3; b = st.rise; night = true; }
+      else if (t > st.set) { var td = new Date(d0); td.setDate(td.getDate() + 1); var sn = sunTimes(td, g); a = st.set; b = sn ? sn.rise : st.set + 12 * 3600e3; night = true; }
+      else { a = st.rise; b = st.set; }
+      return { night: night, a: a, b: b, f: Math.max(0, Math.min(1, (t - a) / (b - a))), left: b - t };
+    }
+    function arcLabels(s) {
+      var t = el.querySelectorAll('.arc-lb'), mid = el.querySelector('.arc-mid'), sun = el.querySelector('.arc-sun');
+      if (!s) { t[0].textContent = ''; t[1].textContent = ''; mid.textContent = ''; return; }
+      t[0].textContent = (s.night ? '日落 ' : '日出 ') + hhmmOf(s.a); t[1].textContent = (s.night ? '日出 ' : '日落 ') + hhmmOf(s.b);
+      mid.textContent = (s.night ? '离天亮还有 ' : '日落还有 ') + durZh(s.left);
+      sun.setAttribute('class', s.night ? 'arc-sun arc-moon' : 'arc-sun');
+    }
+    function arcTo(s, animate) {
+      if (!s) return;
+      var run = el.querySelector('.arc-run'), sun = el.querySelector('.arc-sun'), halo = el.querySelector('.arc-halo'), L = run.getTotalLength();
+      if (!L) return;
+      var t0 = performance.now(), dur = animate && !reduce ? 1300 : 0;
+      run.style.strokeDasharray = L;
+      (function step(tn) {
+        var p = dur ? Math.min(1, (tn - t0) / dur) : 1, e = 1 - Math.pow(1 - p, 3), f = s.f * e;
+        run.style.strokeDashoffset = L * (1 - f);
+        var pt = run.getPointAtLength(L * f);
+        sun.setAttribute('cx', pt.x); sun.setAttribute('cy', pt.y); halo.setAttribute('cx', pt.x); halo.setAttribute('cy', pt.y);
+        halo.setAttribute('r', (11 * (1 + .5 * Math.sin(p * Math.PI))).toFixed(1));
+        if (p < 1) requestAnimationFrame(step);
+      })(t0);
+    }
+    function draw(first) {
+      var d = new Date(), txt = hm(d);
+      if (txt === cur) return;
+      var L = lay(txt), pad = 40, old = cur; cur = txt;
+      var relayout = !old || old.length !== txt.length;
+      svg.setAttribute('viewBox', (-pad) + ' -40 ' + (L.w + pad * 2) + ' ' + (H + 40));
+      var g = svg.querySelector('g.root'), olds = Array.prototype.slice.call(g.querySelectorAll('path.gl')), todo = [];
+      function fade(o) { o.classList.remove('gl'); o.classList.add('out'); setTimeout(function () { o.remove(); }, 600); }
+      L.gl.forEach(function (gl, i) {
+        if (!relayout && old[i] === gl.ch && olds[i]) return;
+        if (olds[i]) fade(olds[i]);
+        var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        p.setAttribute('d', gl.d); p.setAttribute('transform', 'translate(' + gl.x + ',0)');
+        p.setAttribute('class', 'gl ' + (reduce ? '' : 'pend ') + (gl.ch === ':' ? 'c' : 'd')); p.setAttribute('data-x', gl.x); p.setAttribute('data-i', i);
+        g.appendChild(p); todo.push(p);
+      });
+      if (relayout) olds.forEach(function (o) { if (o.classList.contains('gl')) fade(o); });
+      var nib = g.querySelector('.nib'); if (!nib) { nib = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); nib.setAttribute('class', 'nib'); nib.setAttribute('r', '24'); g.appendChild(nib); }
+      var delay = first ? 250 : 380, t = 0;
+      if (!reduce) todo.forEach(function (p) {
+        var len = p.getTotalLength(), dur = Math.max(420, Math.min(900, len / 5)) * (first ? 1 : 1.1);
+        writing.push({ p: p, len: len, st: performance.now() + delay + t, dur: dur, x: +p.getAttribute('data-x') });
+        t += dur * .62;
+      });
+      kick();
+      el.querySelector('.hr-ap').textContent = d.getHours() < 12 ? 'a.m.' : 'p.m.';
+      var enEl = el.querySelector('.hr-en span'), zhEl = el.querySelector('.hr-zh'), s = arcState(d), total = delay + t + 500;
+      if (first) {
+        enEl.textContent = en(d); zhEl.innerHTML = zh(d); arcLabels(s);
+        setTimeout(function () { el.classList.add('on2'); }, reduce ? 0 : total * .7);
+        setTimeout(function () { arcTo(s, true); el.classList.add('on3', 'done'); }, reduce ? 0 : total * .8);
+        setTimeout(flyInit, reduce ? 0 : total * .9);
+      } else {
+        enEl.style.opacity = '0'; enEl.style.transform = 'translateY(-6px)';
+        setTimeout(function () {
+          enEl.style.transition = 'none'; enEl.style.transform = 'translateY(6px)'; enEl.textContent = en(d); zhEl.innerHTML = zh(d); arcLabels(s);
+          void enEl.offsetWidth; enEl.style.transition = ''; enEl.style.opacity = ''; enEl.style.transform = '';
+        }, 420);
+        arcTo(s, false);
+        var ch = 0; for (var q = 0; q < txt.length; q++) if (old[q] !== txt[q]) { ch = q; break; }
+        setTimeout(function () { flyVisit(ch); }, 200);
+      }
+    }
+    function kick() { if (!raf && writing.length) raf = requestAnimationFrame(tick); }
+    function tick(tn) {
+      raf = 0; var nib = svg.querySelector('.nib'), nibOn = false, left = [];
+      writing.forEach(function (w) {
+        var pr = (tn - w.st) / w.dur;
+        if (pr <= 0) { left.push(w); return; }
+        w.p.classList.remove('pend');
+        var e = ease(Math.min(1, pr));
+        w.p.style.strokeDasharray = w.len; w.p.style.strokeDashoffset = w.len * (1 - e);
+        w.p.style.fillOpacity = Math.max(0, Math.min(1, (tn - w.st - w.dur * .45) / 380));
+        if (pr < 1 && nib) { var pt = w.p.getPointAtLength(w.len * e); nib.setAttribute('cx', (w.x + pt.x).toFixed(1)); nib.setAttribute('cy', pt.y.toFixed(1)); nibOn = true; }
+        if (pr < 1 || tn - w.st - w.dur * .45 < 380) left.push(w); else { w.p.style.strokeDasharray = ''; w.p.style.strokeDashoffset = ''; w.p.style.fillOpacity = ''; }
+      });
+      if (nib) nib.style.opacity = nibOn ? .55 : 0;
+      writing = left;
+      if (writing.length) raf = requestAnimationFrame(tick);
+    }
+
+    // ---- 蝴蝶（用问候语装饰里的那几只） ----
+    var flies = [], flyRaf = 0, flySvg = null, flyT0 = 0, visit = null, flyOn = false;
+    var PICK = [3, 4, 10, 5];
+    function flyReset() { if (flySvg) { flySvg.remove(); flySvg = null; } flies = []; if (flyOn) setTimeout(flyInit, 60); }
+    function flyInit() { try { flyInit0(); } catch (e) { window.__flyErr = String(e && e.stack || e); } }
+    function flyInit0() {
+      window.__flyTried = (window.__flyTried || 0) + 1;
+      var A = window.DECO_ARC; if (!A || !el || !el.isConnected || flySvg) return;
+      flyOn = true;
+      var tmp = document.createElement('div'); tmp.innerHTML = '<svg>' + A.svg + '</svg>';
+      var src = {}; Array.prototype.forEach.call(tmp.querySelectorAll('g.bfly'), function (g) { src[g.getAttribute('data-seq')] = g.firstElementChild; });
+      var r = el.getBoundingClientRect(), W = r.width + 84, Hh = r.height + 48;
+      if (W < 100) return;
+      flySvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); flySvg.setAttribute('class', 'mo-fly'); flySvg.setAttribute('viewBox', '0 0 ' + W + ' ' + Hh);
+      el.appendChild(flySvg);
+      var wide = where === 'w';
+      var spots = wide ? [[W * .72, Hh * .38, 32, 16, 36], [W * .93, Hh * .14, 22, 12, 26], [W * .9, Hh * .8, 26, 12, 30], [W * .08, Hh * .18, 18, 10, 20]]
+                       : [[W * .8, Hh * .42, 26, 12, 30], [W * .95, Hh * .15, 16, 10, 22], [W * .88, Hh * .82, 22, 10, 26], [W * .1, Hh * .12, 14, 8, 18]];
+      PICK.forEach(function (seq, k) {
+        var inner = src[seq]; if (!inner) return;
+        var c = inner.cloneNode(true); c.removeAttribute('transform');
+        var html = c.outerHTML.replace(/id="([^"]+)"/g, 'id="$1-mo' + k + '"').replace(/url\(#([^)]+)\)/g, 'url(#$1-mo' + k + ')');
+        var g = document.createElementNS('http://www.w3.org/2000/svg', 'g'); g.setAttribute('class', 'b'); g.innerHTML = html; flySvg.appendChild(g);
+        var sp = spots[k];
+        flies.push({ g: g, w: g.querySelector('.wings'), ax: sp[0], ay: sp[1], rx: sp[2], ry: sp[3], span: sp[4],
+          p: [Math.random() * 6, Math.random() * 6, Math.random() * 6, Math.random() * 6], f: 7 + Math.random() * 3, ph: 0,
+          from: [-40 - k * 30, Hh * (.3 + .15 * k)], st: 150 + k * 380, lt: 0, px: null, py: null });
+      });
+      flyT0 = performance.now();
+      if (reduce) { flyFrame(flyT0 + 5000); return; }
+      flyKick();
+    }
+    function flyActive() { return !!(flySvg && flySvg.isConnected && !document.hidden && !(typeof chat !== 'undefined' && chat.open) && state.tab === 'today'); }
+    function flyKick() { if (!flyRaf && flyActive() && !reduce) { flies.forEach(function (b) { b.lt = 0; }); flyRaf = requestAnimationFrame(flyTick); } }
+    function flyTick(tn) { flyRaf = 0; if (!flyActive()) return; flyFrame(tn); flyRaf = requestAnimationFrame(flyTick); }
+    function flyFrame(tn) {
+      var t = (tn - flyT0) / 1000;
+      flies.forEach(function (b, k) {
+        var p = b.p, sp = 1 + k * .13;
+        var x = b.ax + b.rx * Math.sin(t * .55 * sp + p[0]) + b.rx * .45 * Math.sin(t * 1.3 * sp + p[1]);
+        var y = b.ay + b.ry * Math.sin(t * .8 * sp + p[2]) + b.ry * .5 * Math.cos(t * 1.7 * sp + p[3]);
+        if (visit && visit.k === k) {
+          var q = (tn - visit.t0) / visit.dur;
+          if (q >= 1) visit = null; else { var wgt = Math.sin(Math.PI * q), a = q * Math.PI * 2.2; x = x * (1 - wgt) + (visit.x + 26 * Math.cos(a)) * wgt; y = y * (1 - wgt) + (visit.y - 18 + 14 * Math.sin(a)) * wgt; }
+        }
+        var e = Math.max(0, Math.min(1, (tn - flyT0 - b.st) / 1700)), ee = 1 - Math.pow(1 - e, 3);
+        if (e < 1) { x = b.from[0] + (x - b.from[0]) * ee; y = b.from[1] + (y - b.from[1]) * ee - Math.sin(ee * Math.PI) * 30; }
+        if (e > 0 && !b.g.classList.contains('in')) b.g.classList.add('in');
+        var dx = b.px == null ? 0 : x - b.px; b.px = x; b.py = y;
+        var tilt = Math.max(-35, Math.min(35, dx * 6));
+        var glide = .5 + .5 * Math.sin(t * .9 + p[1] * 2), rate = glide > .82 ? 1.2 : b.f * (e < 1 ? 1.4 : 1);
+        b.ph += (b.lt ? (tn - b.lt) / 1000 : 0) * rate * Math.PI * 2; b.lt = tn;
+        var fl = glide > .82 ? .85 + .1 * Math.cos(b.ph) : .22 + .78 * Math.abs(Math.cos(b.ph));
+        b.g.setAttribute('transform', 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + (tilt - 10).toFixed(1) + ') scale(' + (b.span / 110).toFixed(3) + ')');
+        if (b.w) b.w.setAttribute('transform', 'scale(' + fl.toFixed(3) + ' 1)');
+      });
+    }
+    function flyVisit(ix) {
+      if (!flies.length || !svg || !flySvg) return;
+      var paths = svg.querySelectorAll('path.gl'), p = paths[Math.min(ix, paths.length - 1)]; if (!p) return;
+      var rb = p.getBoundingClientRect(), rf = flySvg.getBoundingClientRect(); if (!rf.width) return;
+      var k = flySvg.viewBox.baseVal.width / rf.width;
+      visit = { k: 0, x: (rb.left + rb.width / 2 - rf.left) * k, y: (rb.top - rf.top) * k, t0: performance.now(), dur: 2400 };
+    }
+
+    // 宽屏时整块在问候语右边；如果问候语比它矮，把下面的卡片往下让一点，不叠在一起
+    function fit() {
+      var g = el.closest('.greeting'); if (!g) return;
+      g.style.marginBottom = '';
+      if (where !== 'w') return;
+      var ov = el.getBoundingClientRect().bottom - g.getBoundingClientRect().bottom + 16;
+      if (ov > 0) g.style.marginBottom = Math.ceil(ov) + 'px';
+    }
+    function mount() {
+      if (state.tab !== 'today') return;
+      var wide = window.matchMedia('(min-width: 720px)').matches;
+      var slot = document.querySelector(wide ? '.greeting .mo-slot' : '.mo-slot-p');
+      if (!slot) return;
+      if (!el) build();
+      if (el.parentNode !== slot) slot.appendChild(el);
+      arrange(wide);
+      if (!started) {
+        started = true;
+        setTimeout(function () { el.classList.add('on'); ready = true; draw(true); }, document.querySelector('.greeting.gw') ? 2300 : 250);
+      } else if (ready) { arcLabels(arcState(new Date())); arcTo(arcState(new Date()), false); }
+      requestAnimationFrame(fit);
+      flyKick();
+    }
+    setInterval(function () { if (!el || !el.isConnected || !ready) return; draw(false); flyKick(); }, 1000);
+    window.addEventListener('resize', function () { if (el && el.isConnected) mount(); });
+    return { mount: mount };
+  })();
+
+  // ---------- 日程：日期、农历、节气、节日 ----------
+  function ymd(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function pymd(s) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; }
+  function addDays(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  var WEEK_ZH = ['日', '一', '二', '三', '四', '五', '六'];
+  var LUNAR_FMT = null;
+  try { LUNAR_FMT = new Intl.DateTimeFormat('zh-CN-u-ca-chinese', { year: 'numeric', month: 'long', day: 'numeric' }); if (!/月/.test(LUNAR_FMT.format(new Date()))) LUNAR_FMT = null; } catch (e) { LUNAR_FMT = null; }
+  var LDAY = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
+    '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十'];
+  var lunarCache = {};
+  function lunar(d) {
+    if (!LUNAR_FMT) return null;
+    var k = ymd(d); if (lunarCache[k]) return lunarCache[k];
+    try {
+      var o = { m: '', d: 0, y: '' };
+      LUNAR_FMT.formatToParts(new Date(d.getFullYear(), d.getMonth(), d.getDate(), 12)).forEach(function (p) {
+        if (p.type === 'month') o.m = p.value; else if (p.type === 'day') o.d = +p.value; else if (p.type === 'yearName') o.y = p.value;
+      });
+      if (!o.m || !o.d) return null;
+      o.m = o.m.replace('十一月', '冬月').replace('十二月', '腊月'); o.dz = LDAY[o.d - 1] || '';
+      return (lunarCache[k] = o);
+    } catch (e) { return null; }
+  }
+  var TERMS = ['小寒', '大寒', '立春', '雨水', '惊蛰', '春分', '清明', '谷雨', '立夏', '小满', '芒种', '夏至', '小暑', '大暑', '立秋', '处暑', '白露', '秋分', '寒露', '霜降', '立冬', '小雪', '大雪', '冬至'];
+  var TERM_C = [5.4055, 20.12, 3.87, 18.73, 5.63, 20.646, 4.81, 20.1, 5.52, 21.04, 5.678, 21.37, 7.108, 22.83, 7.5, 23.13, 7.646, 23.042, 8.318, 23.438, 7.438, 22.36, 7.18, 21.94];
+  function termOf(d) {   // 21 世纪节气公式（寿星通式），误差一般不超过一天
+    var y = d.getFullYear() % 100, mo = d.getMonth(), res = '';
+    [mo * 2, mo * 2 + 1].forEach(function (i) {
+      var L = i < 4 ? y - 1 : y, day = Math.floor(y * 0.2422 + TERM_C[i]) - Math.floor(L / 4);
+      if (day === d.getDate()) res = TERMS[i];
+    });
+    return res;
+  }
+  var SOLAR_FEST = { '01-01': '元旦', '02-14': '情人节', '03-08': '妇女节', '05-01': '劳动节', '05-04': '青年节', '06-01': '儿童节', '09-10': '教师节', '10-01': '国庆', '12-25': '圣诞' };
+  var LUNAR_FEST = { '正月1': '春节', '正月15': '元宵', '五月5': '端午', '七月7': '七夕', '八月15': '中秋', '九月9': '重阳', '腊月8': '腊八' };
+  function festOf(d) {
+    var s = SOLAR_FEST[ymd(d).slice(5)]; if (s) return s;
+    var l = lunar(d); if (!l) return '';
+    if (LUNAR_FEST[l.m + l.d]) return LUNAR_FEST[l.m + l.d];
+    var n = lunar(addDays(d, 1)); if (n && n.m === '正月' && n.d === 1) return '除夕';
+    return '';
+  }
+  function calDayLabel(d) {
+    var f = festOf(d); if (f) return { t: f, hi: true };
+    var t = termOf(d); if (t) return { t: t, hi: true };
+    var l = lunar(d); if (!l) return { t: '', hi: false };
+    return { t: l.d === 1 ? l.m : l.dz, hi: false };
+  }
+
+  // ---------- 数据：日程、闹钟（只存在这台手机上） ----------
+  var CAL_KEY = 'cloud-weather-calendar-v1';
+  var cal = { events: [], alarms: [] };
+  try { var scal = JSON.parse(localStorage.getItem(CAL_KEY) || 'null'); if (scal) { cal.events = scal.events || []; cal.alarms = scal.alarms || []; } } catch (e) {}
+  function saveCal() { try { localStorage.setItem(CAL_KEY, JSON.stringify(cal)); } catch (e) {} alarmSync(); notifySync(); }
+  var calui = { seg: 'cal', ym: null, sel: '', sheet: null, alarm: null, tear: '', advAll: false };
+  window.__calTest = { parseEntry: function (s) { return parseEntry(s); } };
+  function calNewId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 5); }
+  // 某一天有哪些日程（含每周/每月/每年重复的）
+  function eventsOn(ds) {
+    var d = pymd(ds); if (!d) return [];
+    return cal.events.filter(function (e) {
+      var s = pymd(e.d); if (!s || d < s) return false;
+      if (e.d === ds) return true;
+      if (e.rep === 'weekly') return s.getDay() === d.getDay();
+      if (e.rep === 'monthly') return s.getDate() === d.getDate();
+      if (e.rep === 'yearly') return s.getDate() === d.getDate() && s.getMonth() === d.getMonth();
+      return false;
+    }).sort(function (a, b) { return (a.t || '99') < (b.t || '99') ? -1 : 1; });
+  }
+  function memOn(ds) { return (mem.items || []).filter(function (x) { return x.date === ds; }); }
+  function alarmsOn(d) {
+    var wd = d.getDay() || 7, ds = ymd(d);
+    return cal.alarms.filter(function (a) { return a.on && (a.date ? a.date === ds : (a.days && a.days.length ? a.days.indexOf(wd) >= 0 : false)); });
+  }
+  function weatherOn(ds) {
+    var v = view(state.current); if (!v) return null;
+    var key = ds.replace(/-/g, '/');
+    return v.days.filter(function (x) { return x.d === key; })[0] || null;
+  }
+
+  // ---------- 一句话记事：“周二上午十点面试”“明天下午3点半开会”“10月1日 6:15 赶高铁” ----------
+  function cnNum(s) {
+    if (/^\d+$/.test(s)) return +s;
+    var D = { '零': 0, '〇': 0, '一': 1, '二': 2, '两': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9 };
+    if (s === '十') return 10;
+    var m = /^([一二两三四五六七八九])?十([一二三四五六七八九])?$/.exec(s);
+    if (m) return (m[1] ? D[m[1]] : 1) * 10 + (m[2] ? D[m[2]] : 0);
+    if (s.length === 1 && D[s] != null) return D[s];
+    return NaN;
+  }
+  var NUMRE = '(\\d{1,2}|[零〇一二两三四五六七八九十]{1,3})';
+  function parseEntry(text, base) {
+    var s = String(text || ''), now = base || new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate()), d = null, t = '', hit = [], m;
+    var rep = /每(?:个)?(?:周|星期|礼拜)/.test(s) ? 'weekly' : /每(?:个)?月/.test(s) ? 'monthly' : /每年/.test(s) ? 'yearly' : '';
+    if (rep) s = s.replace(/每(?:个)?(?=周|星期|礼拜|月|年)/, '').replace(/^(月|年)/, '');
+    function cut(re) { var r = re.exec(s); if (r) { hit.push(r[0]); s = s.replace(r[0], ' '); } return r; }
+    if ((m = cut(/(\d{4})[-/年](\d{1,2})[-/月](\d{1,2})[日号]?/))) d = new Date(+m[1], +m[2] - 1, +m[3]);
+    else if ((m = cut(new RegExp(NUMRE + '月' + NUMRE + '[日号]?')))) { d = new Date(today.getFullYear(), cnNum(m[1]) - 1, cnNum(m[2])); if (d < today) d.setFullYear(d.getFullYear() + 1); }
+    else if ((m = cut(/(?:^|\D)(\d{1,2})\/(\d{1,2})(?!\d)/))) { d = new Date(today.getFullYear(), +m[1] - 1, +m[2]); if (d < today) d.setFullYear(d.getFullYear() + 1); }
+    else if ((m = cut(/大后天|后天|明天|明早|明晚|今天|今晚|今早/))) {
+      var off = { '今天': 0, '今晚': 0, '今早': 0, '明天': 1, '明早': 1, '明晚': 1, '后天': 2, '大后天': 3 }[m[0]]; d = addDays(today, off);
+      if (/晚/.test(m[0])) s = '晚上 ' + s; if (/早/.test(m[0])) s = '早上 ' + s;
+    } else if ((m = cut(/(下下|下个?|这个?|本)?(?:周|星期|礼拜)([一二三四五六日天1-7])/))) {
+      var W = { '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '日': 7, '天': 7 }, w = W[m[2]] || +m[2], cw = today.getDay() || 7, diff = w - cw;
+      if (/下下/.test(m[1] || '')) diff += 14; else if (/下/.test(m[1] || '')) diff += 7; else if (diff < 0) diff += 7;
+      d = addDays(today, diff);
+    } else if ((m = cut(new RegExp(NUMRE + '[号日](?![子])')))) { d = new Date(today.getFullYear(), today.getMonth(), cnNum(m[1])); if (d < today) d.setMonth(d.getMonth() + 1); }
+    var part = '', pm = cut(/凌晨|早上|早晨|上午|中午|下午|傍晚|晚上|夜里|今晚/);
+    if (pm) part = pm[0];
+    var h = NaN, mi = 0;
+    if ((m = cut(/(\d{1,2})[:：](\d{2})/))) { h = +m[1]; mi = +m[2]; }
+    else if ((m = cut(new RegExp(NUMRE + '[点时](半|一刻|三刻|' + NUMRE + '分?)?')))) {
+      h = cnNum(m[1]);
+      if (m[2] === '半') mi = 30; else if (m[2] === '一刻') mi = 15; else if (m[2] === '三刻') mi = 45; else if (m[3]) mi = cnNum(m[3]) || 0;
+    }
+    if (!isNaN(h) && h >= 0 && h < 24 && mi < 60) {
+      if (/下午|傍晚|晚上|夜里|今晚/.test(part) && h < 12) h += 12;
+      if (part === '中午' && h < 6) h += 12;
+      t = String(h).padStart(2, '0') + ':' + String(mi).padStart(2, '0');
+      if (!d) { d = new Date(today); var hh = new Date(today); hh.setHours(h, mi); if (hh < now) d = addDays(today, 1); }
+    }
+    var title = s.replace(/提醒我|记得|要去|去|在|的时候|有个|有一个|一个/g, ' ').replace(/[，,。.]+/g, ' ').replace(/\s+/g, ' ').trim();
+    return { d: d ? ymd(d) : '', t: t, title: title, hit: hit.length > 0 || !!rep, rep: rep };
+  }
+  function dateZh(ds) { var d = pymd(ds); if (!d) return ''; return (d.getMonth() + 1) + '月' + d.getDate() + '日 周' + WEEK_ZH[d.getDay()]; }
+  function relDay(ds) { var d = pymd(ds); if (!d) return ''; var n = daysBetween(Date.now(), d.getTime()); return n === 0 ? '今天' : n === 1 ? '明天' : n === 2 ? '后天' : n === -1 ? '昨天' : dateZh(ds); }
+
+  // ---------- 日程提醒进通知计划（buildPlan 末尾调用） ----------
+  var REM_OPTS = [['0', '准时'], ['10', '提前 10 分钟'], ['60', '提前 1 小时'], ['eve', '前一晚 21:30'], ['am', '当天 08:30']];
+  function calPlanItems(now) {
+    var out = [];
+    for (var k = 0; k < 8; k++) {
+      var dd = addDays(new Date(now), k), ds = ymd(dd);
+      eventsOn(ds).forEach(function (e, j) {
+        (e.rem || []).forEach(function (r, ri) {
+          var at;
+          if (r === 'eve') at = addDays(dd, -1).setHours(21, 30, 0, 0);
+          else if (r === 'am') at = new Date(dd).setHours(8, 30, 0, 0);
+          else if (e.t) { var p = e.t.split(':'); at = new Date(dd).setHours(+p[0], +p[1], 0, 0) - (+r || 0) * 60000; }
+          if (!at || at <= now + 1000) return;
+          var when = (r === 'eve' ? '明天' : '今天') + (e.t ? ' ' + e.t : '');
+          var txt = r === 'eve' ? '明天' + (e.t ? e.t + ' ' : '') + '有「' + e.title + '」，今晚早点休息。' :
+            r === '0' ? '「' + e.title + '」的时间到了。' : when + '「' + e.title + '」' + (r === 'am' ? '，别忘了。' : '，' + (+r >= 60 ? '还有 1 小时' : '还有 ' + r + ' 分钟') + '。');
+          out.push({ id: 60000 + (hash32(e.id + ds + r) % 9000), t: at, ch: 'amor', kind: 'event', title: e.title.slice(0, 12) || '日程', text: txt, short: shortOf(txt), meta: e.t || '',
+            actions: ['done', 'snooze'], doneLabel: '知道了', snoozeLabel: '10 分钟后', snoozeMin: 10, skipFg: false });
+        });
+      });
+    }
+    return out;
+  }
+  function hash32(s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+
+  // ---------- 闹钟：下一次响的时间、Amor 叫醒的话，交给原生层 ----------
+  function alarmNext(a, from) {
+    if (!a.on) return 0;
+    var now = from || Date.now(), base = new Date(now);
+    for (var k = 0; k < 8; k++) {
+      var d = addDays(base, k); d.setHours(a.h, a.m, 0, 0);
+      if (d.getTime() <= now) continue;
+      var wd = d.getDay() || 7;
+      if (a.date) { if (ymd(d) === a.date) return d.getTime(); continue; }
+      if (a.days && a.days.length) { if (a.days.indexOf(wd) >= 0) return d.getTime(); continue; }
+      return d.getTime();                 // 只响一次：最近的那个时间
+    }
+    return 0;
+  }
+  function wakeText(a, t) {
+    var d = new Date(t), ds = ymd(d), w = weatherOn(ds), name = state.name.trim() ? (state.name.trim().length > 2 ? state.name.trim().slice(-2) : state.name.trim()) : '';
+    var h = d.getHours(), hello = h < 11 ? '早安' : h < 14 ? '午安' : h < 18 ? '下午好' : '晚上好';
+    var s = hello + (name ? '，' + name : '') + '。';
+    if (w) {
+      var tx = h < 18 ? (w.dt || w.nt) : (w.nt || w.dt), city = (META[state.current] || {}).zh || '';
+      s += city + (tx || '') + '，' + deg(w.lo) + '~' + deg(w.hi) + '°' + (wet(w.dt) || wet(w.nt) ? '，记得带伞' : w.hi - w.lo >= 10 ? '，早晚温差大，多带件外套' : '') + '。';
+    }
+    var evs = eventsOn(ds).filter(function (e) { return !e.t || e.t > String(h).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); });
+    var ms = memOn(ds);
+    if (evs.length) s += (evs[0].t ? evs[0].t + ' ' : '今天') + '有「' + evs[0].title + '」，' + (/面试|考试|答辩|汇报/.test(evs[0].title) ? '你已经准备得很好了，慢慢来。' : '别忘啦。');
+    else if (ms.length) s += '今天是' + ms[0].text.slice(0, 20) + '的日子。';
+    else s += h < 11 ? '先喝杯温水，慢慢来。' : '起来活动一下吧。';
+    return s;
+  }
+  function alarmSync() {
+    if (!nativeOk() || !AmorNative.setAlarms) return;
+    try {
+      var list = cal.alarms.map(function (a) {
+        var t = alarmNext(a);
+        return { id: a.id, h: a.h, m: a.m, days: a.days || [], date: a.date || '', on: !!a.on, label: a.label || '', snooze: a.snooze || 10, ramp: a.ramp !== false,
+          text: a.amor !== false && t ? wakeText(a, t) : (a.label || '闹钟'), title: a.label || '闹钟', name: asst.name || 'Amor', city: (META[state.current] || {}).zh || '' };
+      });
+      AmorNative.setAlarms(JSON.stringify(list));
+    } catch (e) { window.__alErr = String(e); }
+  }
+  // 只响一次的闹钟响过以后，在这里关掉
+  function alarmEvents() {
+    if (!nativeOk() || !AmorNative.takeAlarmEvents) return;
+    try {
+      var ev = JSON.parse(AmorNative.takeAlarmEvents() || '[]'), changed = false;
+      ev.forEach(function (x) { var a = cal.alarms.filter(function (y) { return y.id === x.id; })[0]; if (a && !(a.days && a.days.length) && a.on) { a.on = false; changed = true; } });
+      if (changed) { try { localStorage.setItem(CAL_KEY, JSON.stringify(cal)); } catch (e) {} alarmSync(); if (state.tab === 'plan') keepScroll(); }
+    } catch (e) {}
+  }
+
+  // ---------- 给 Amor 的：日程上下文 + 工具 ----------
+  function calPrompt() {
+    var out = [], today = new Date();
+    for (var k = 0; k < 7; k++) {
+      var ds = ymd(addDays(today, k)), evs = eventsOn(ds);
+      if (evs.length) out.push(relDay(ds) + '（' + dateZh(ds) + '）：' + evs.map(function (e) { return (e.t ? e.t + ' ' : '') + e.title; }).join('；'));
+    }
+    var nx = cal.alarms.map(function (a) { return { a: a, t: alarmNext(a) }; }).filter(function (x) { return x.t; }).sort(function (x, y) { return x.t - y.t; })[0];
+    var s = out.length ? '\n\n【日程】接下来 7 天：\n' + out.join('\n') : '';
+    if (nx) s += (s ? '\n' : '\n\n【日程】') + '下一个闹钟：' + whenShort(nx.t) + (nx.a.label ? '（' + nx.a.label + '）' : '');
+    return s;
+  }
+  var CAL_TOOLS = [
+    { name: 'add_event', description: '把一件事记进用户的日历（日程）。用户说“帮我记一下/周三有个会/下周五交房租”之类时使用。',
+      params: { type: 'object', properties: { date: { type: 'string', description: '日期 YYYY-MM-DD（按上面的北京时间推算）' }, time: { type: 'string', description: '时间 HH:MM，没有具体时间就留空' },
+        title: { type: 'string', description: '事情，12 个字以内' }, remind: { type: 'string', description: '提醒方式：0=准时 10=提前10分钟 60=提前1小时 eve=前一晚21:30 am=当天08:30，可以用逗号写多个，默认 60（没有时间时默认 am）' } }, required: ['date', 'title'] } },
+    { name: 'list_events', description: '查看某几天的日程。', params: { type: 'object', properties: { from: { type: 'string', description: 'YYYY-MM-DD，默认今天' }, days: { type: 'integer', description: '看几天，默认 7' } } } },
+    { name: 'delete_event', description: '删除一条日程。', params: { type: 'object', properties: { id: { type: 'string', description: '日程 id（来自 add_event 或 list_events）' } }, required: ['id'] } },
+    { name: 'set_alarm', description: '给用户定一个闹钟（到点全屏响铃，锁屏也会响）。用户说“明早七点半叫我/每个工作日 7 点的闹钟”时使用。',
+      params: { type: 'object', properties: { time: { type: 'string', description: 'HH:MM，24 小时制' }, date: { type: 'string', description: '只响一次时的日期 YYYY-MM-DD；重复闹钟留空' },
+        days: { type: 'string', description: '重复的星期，1=周一…7=周日，用逗号分隔，例如 1,2,3,4,5；只响一次留空' }, label: { type: 'string', description: '备注，8 个字以内' } }, required: ['time'] } }
+  ];
+  function calRule() {
+    var who = state.name.trim() || '用户';
+    return '\n\n【日程与闹钟】你可以用 add_event 把事情记进' + who + '的日历（会按提醒方式到点弹通知），用 list_events / delete_event 查看和删除' +
+      (nativeOk() && AmorNative.setAlarms ? '，用 set_alarm 定闹钟（到点全屏响铃）' : '') + '。' + who + '明确说要记下、要闹钟时再用，设好后一句话确认日期和时间。';
+  }
+  function runCalTool(name, a) {
+    if (name === 'add_event') {
+      var d = pymd(String(a.date || '').trim()); if (!d) return { content: '日期没看懂，请用 YYYY-MM-DD。' };
+      var t = /^\d{1,2}:\d{2}$/.test(String(a.time || '').trim()) ? String(a.time).trim().padStart(5, '0') : '';
+      var rem = String(a.remind || (t ? '60' : 'am')).split(/[,，\s]+/).filter(function (x) { return /^(0|10|60|eve|am)$/.test(x); });
+      var ev = { id: calNewId(), d: ymd(d), t: t, title: String(a.title || '日程').trim().slice(0, 24), rem: rem.length ? rem : [t ? '60' : 'am'], rep: 'none', at: Date.now(), src: 'amor' };
+      cal.events.push(ev); saveCal(); if (state.tab === 'plan' && !chat.open) keepScroll();
+      return { log: { tool: 'event', q: ev.title, hits: [] }, content: '已记下 id=' + ev.id + '：' + dateZh(ev.d) + (ev.t ? ' ' + ev.t : '') + '「' + ev.title + '」' };
+    }
+    if (name === 'list_events') {
+      var f = pymd(a.from) || new Date(), n = Math.max(1, Math.min(31, +a.days || 7)), lines = [];
+      for (var k = 0; k < n; k++) { var ds = ymd(addDays(f, k)); eventsOn(ds).forEach(function (e) { lines.push('id=' + e.id + ' ' + dateZh(ds) + (e.t ? ' ' + e.t : '') + '「' + e.title + '」'); }); }
+      return { log: { tool: 'elist', q: lines.length + ' 条', hits: [] }, content: lines.length ? lines.join('\n') : '这几天没有日程。' };
+    }
+    if (name === 'delete_event') {
+      var hit = cal.events.filter(function (e) { return e.id === String(a.id); })[0];
+      if (!hit) return { content: '没有找到 id=' + a.id + ' 的日程。' };
+      cal.events = cal.events.filter(function (e) { return e !== hit; }); saveCal();
+      return { log: { tool: 'edel', q: hit.title, hits: [] }, content: '已删除「' + hit.title + '」' };
+    }
+    if (name === 'set_alarm') {
+      if (!(nativeOk() && AmorNative.setAlarms)) return { content: '这台设备上定不了闹钟（不是安装版 App）。' };
+      var mm = /^(\d{1,2}):(\d{2})$/.exec(String(a.time || '').trim()); if (!mm || +mm[1] > 23 || +mm[2] > 59) return { content: '时间没看懂，请用 HH:MM。' };
+      var days = String(a.days || '').split(/[,，\s]+/).map(Number).filter(function (x) { return x >= 1 && x <= 7; });
+      var dt = pymd(String(a.date || '').trim());
+      var al = { id: 1 + Math.floor(Math.random() * 90000), h: +mm[1], m: +mm[2], days: days, date: days.length ? '' : (dt ? ymd(dt) : ''), on: true, label: String(a.label || '').slice(0, 10), snooze: 10, ramp: true, amor: true };
+      cal.alarms.push(al); saveCal(); if (state.tab === 'plan' && !chat.open) keepScroll();
+      var nx = alarmNext(al);
+      return { log: { tool: 'alarm', q: mm[1].padStart(2, '0') + ':' + mm[2], at: nx, hits: [] }, content: nx ? '闹钟已定好：' + whenShort(nx) + (days.length ? '（每周 ' + days.map(function (x) { return WEEK_ZH[x % 7]; }).join('') + '）' : '') : '闹钟已存好，但算不出下一次响的时间。' };
+    }
+    return null;
+  }
+
+  // ---------- 日程页 ----------
+  var PEN_SVG = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4.2-1 10.6-10.6a2.1 2.1 0 0 0-3-3L5.2 16 4 20z"/><path d="M13.8 7.2l3 3"/></svg>';
+  function viewPlan() {
+    if (state.sub === 'tear') return tearPage();
+    if (state.sub === 'alarm') return alarmPage();
+    var now = new Date();
+    if (!calui.ym) calui.ym = [now.getFullYear(), now.getMonth()];
+    if (!calui.sel) calui.sel = ymd(now);
+    var y = calui.ym[0], mo = calui.ym[1];
+    var html = '<section class="view plan">' +
+      '<div class="pl-top"><div class="pl-ttl">' + (calui.seg === 'cal' ? MONTHS_EN[mo] + '<small>' + y + ' · ' + (mo + 1) + ' 月</small>' : 'Alarms<small>闹钟</small>') + '</div>' +
+      '<div class="seg2" role="group" aria-label="日历或闹钟"><button type="button" data-cal="seg" data-arg="cal" aria-pressed="' + (calui.seg === 'cal') + '">日历</button>' +
+      '<button type="button" data-cal="seg" data-arg="alarm" aria-pressed="' + (calui.seg === 'alarm') + '">闹钟</button></div></div>';
+    html += calui.seg === 'cal' ? calMonth(y, mo) : alarmList();
+    html += '<button type="button" class="pl-fab" data-cal="' + (calui.seg === 'cal' ? 'new' : 'alarm-new') + '" aria-label="' + (calui.seg === 'cal' ? '记一件事' : '新闹钟') + '">' + icon('plus', 24) + '</button>';
+    html += calui.sheet ? entrySheet() : '';
+    return html + '</section>';
+  }
+  function calMonth(y, mo) {
+    var first = new Date(y, mo, 1), lead = ((first.getDay() || 7) - 1), start = addDays(first, -lead), todayS = ymd(new Date());
+    var cells = '', rows = Math.ceil((lead + new Date(y, mo + 1, 0).getDate()) / 7);
+    for (var i = 0; i < rows * 7; i++) {
+      var d = addDays(start, i), ds = ymd(d), lab = calDayLabel(d), w = weatherOn(ds), evs = eventsOn(ds), ms = memOn(ds), al = alarmsOn(d);
+      var cls = [(d.getDay() === 0 || d.getDay() === 6) ? 'we' : '', d.getMonth() !== mo ? 'mute' : '', ds === todayS ? 'today' : '', ds === calui.sel ? 'sel' : ''].join(' ');
+      var marks = (w ? icon(iconFor(w.dt || w.nt, false), 12) : '') + (evs.length || al.length ? '<i class="cal-dot i"></i>' : '') + (ms.length ? '<i class="cal-dot"></i>' : '');
+      cells += '<button type="button" class="' + cls + '" data-cal="day" data-arg="' + ds + '" aria-label="' + dateZh(ds) + '"><span class="n">' + d.getDate() + '</span>' +
+        (lab.t ? '<span class="l' + (lab.hi ? ' jq' : '') + '">' + lab.t + '</span>' : '') + (marks ? '<span class="w">' + marks + '</span>' : '') + '</button>';
+    }
+    var html = '<div class="pl-cols"><div class="panel cal-card"><div class="cal-mh"><button type="button" class="icon-btn" data-cal="prev" aria-label="上个月">' + icon('back', 20) + '</button>' +
+      '<span class="m">' + MONTHS_EN[mo].slice(0, 4) + (MONTHS_EN[mo].length > 4 ? '.' : '') + ' <i>' + y + '</i></span>' +
+      '<button type="button" class="icon-btn" data-cal="next" aria-label="下个月" style="transform:scaleX(-1)">' + icon('back', 20) + '</button></div>' +
+      '<div class="cal-wk"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span class="we">六</span><span class="we">日</span></div>' +
+      '<div class="cal-grid">' + cells + '</div></div>';
+    return html + dayCard(calui.sel) + '</div>';
+  }
+  function dayNote(ds) {
+    var w = weatherOn(ds), evs = eventsOn(ds), ms = memOn(ds), d = pymd(ds), n = daysBetween(Date.now(), d.getTime()), who = relDay(ds);
+    if (ms.length) return '这天是' + ms[0].text.slice(0, 26) + '，我记着呢。';
+    if (evs.length) {
+      var e = evs[0], hint = w ? (wet(w.dt) || wet(w.nt) ? '那天有雨，记得带伞' : w.hi >= 30 ? '那天挺热，穿薄一点' : w.hi - w.lo >= 10 ? '早晚温差大，带件外套' : '天气还不错') : '';
+      return (hint ? hint + '。' : '') + (e.t && e.t < '10:00' ? '事情挺早，前一晚我提醒你早点睡。' : '到时候我会提醒你。');
+    }
+    if (w && n >= 0 && n <= 6) return who + (w.dt || w.nt || '') + '，' + deg(w.lo) + '~' + deg(w.hi) + '°。' + (wet(w.dt) || wet(w.nt) ? '出门带伞。' : '想做点什么，告诉我，我帮你记下。');
+    if (n < 0) return '';
+    return '这天还空着。想做点什么，告诉我，我帮你记下。';
+  }
+  function dayCard(ds) {
+    var d = pymd(ds), l = lunar(d), w = weatherOn(ds), evs = eventsOn(ds), ms = memOn(ds), al = alarmsOn(d);
+    var lab = [festOf(d), termOf(d)].filter(Boolean).join(' · ');
+    var html = '<div class="panel day-card"><div class="day-h"><span class="d">' + (d.getMonth() + 1) + '月' + d.getDate() + '日<span>周' + WEEK_ZH[d.getDay()] +
+      (l ? ' · 农历' + l.m + l.dz : '') + (lab ? ' · ' + lab : '') + '</span></span>' +
+      (w ? '<span class="t">' + icon(iconFor(w.dt || w.nt, false), 14) + esc(w.dt || w.nt || '') + ' ' + deg(w.lo) + '–' + deg(w.hi) + '°</span>' : '') + '</div>';
+    var items = '';
+    al.slice().sort(function (a, b) { return a.h * 60 + a.m - b.h * 60 - b.m; }).forEach(function (a) {
+      items += '<button type="button" class="day-it" data-cal="alarm-edit" data-arg="' + a.id + '"><span class="tm">' + pad2(a.h) + ':' + pad2(a.m) + '</span><span class="tx">闹钟' + (a.label ? ' · ' + esc(a.label) : '') + '</span><span class="tg2 i">闹钟</span></button>';
+    });
+    evs.forEach(function (e) {
+      items += '<button type="button" class="day-it" data-cal="edit" data-arg="' + e.id + '"><span class="tm">' + (e.t || '全天') + '</span><span class="tx">' + esc(e.title) + '</span>' +
+        (e.amor ? '<span class="tg2">Amor 记得</span>' : e.rep && e.rep !== 'none' ? '<span class="tg2 i">' + { weekly: '每周', monthly: '每月', yearly: '每年' }[e.rep] + '</span>' : '<span></span>') + '</button>';
+    });
+    ms.forEach(function (x) { items += '<div class="day-it"><span class="tm">❦</span><span class="tx">' + esc(x.text) + '</span><span class="tg2">Amor 记得</span></div>'; });
+    html += items || '<div class="day-empty">没有安排</div>';
+    var note = dayNote(ds);
+    if (note) html += '<p class="day-note"><b>' + esc(asst.name || 'Amor') + '：</b>' + esc(note) + '</p>';
+    html += '<div class="day-acts"><button type="button" data-cal="tear" data-arg="' + ds + '">' + icon('cal', 16) + '日签</button><button type="button" data-cal="new" data-arg="' + ds + '">' + icon('plus', 16) + '记一件事</button></div>';
+    return html + '</div>';
+  }
+  function pad2(n) { return String(n).padStart(2, '0'); }
+  var ROMAN = function (n) { var r = '', v = [[1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']]; v.forEach(function (p) { while (n >= p[0]) { r += p[1]; n -= p[0]; } }); return r; };
+  var QUOTES = [['Rain is only the sky, taking its time.', '下雨，只是天空慢一点'], ['Small days make a long life.', '小小的日子，连成长长的一生'], ['Go gently; the day will wait for you.', '慢慢走，今天会等你'],
+    ['Every morning is a letter, unopened.', '每个早晨，都是一封还没拆的信'], ['Let the wind do the hurrying.', '着急的事，交给风'], ['Tea first, then the world.', '先喝口茶，再去面对世界'],
+    ['The light always finds the window.', '光总会找到窗口'], ['Be kind to the person in the mirror.', '对镜子里的人好一点'], ['A quiet day is still a good day.', '安静的一天，也是好的一天'],
+    ['Clouds pass. So do Mondays.', '云会散，周一也会过去'], ['Carry the sun in your pocket.', '把太阳装进口袋'], ['Tonight, sleep before the stars do.', '今晚，比星星先睡']];
+  function yiji(ds) {
+    var w = weatherOn(ds), d = pymd(ds), yi = [], ji = [], evs = eventsOn(ds);
+    if (w) {
+      if (wet(w.dt) || wet(w.nt)) { yi.push('带伞出门'); yi.push('喝碗热汤'); ji.push('穿白鞋'); }
+      else if (/晴/.test(w.dt) && w.hi >= 28) { yi.push('涂防晒'); yi.push('多喝水'); ji.push('正午暴晒'); }
+      else if (/晴|多云/.test(w.dt)) { yi.push('出门散步'); yi.push('晒晒被子'); }
+      if (w.hi - w.lo >= 10) yi.push('带件外套');
+      if (w.lo <= 5) { yi.push('穿厚一点'); ji.push('贪凉'); }
+    }
+    if (evs.some(function (e) { return /面试|考试|答辩|汇报/.test(e.title); })) { yi.unshift('早点出门'); ji.push('临时抱佛脚'); }
+    if (d.getDay() === 0 || d.getDay() === 6) yi.push('睡个懒觉'); else yi.push('按时吃饭');
+    ji.push('熬夜刷手机');
+    function uniq(a) { return a.filter(function (x, i) { return a.indexOf(x) === i; }).slice(0, 3); }
+    return { yi: uniq(yi), ji: uniq(ji) };
+  }
+  function tearPage() {
+    var ds = calui.tear || ymd(new Date()), d = pymd(ds), l = lunar(d), w = weatherOn(ds), yj = yiji(ds), evs = eventsOn(ds);
+    var doy = Math.round((d - new Date(d.getFullYear(), 0, 0)) / 86400000), q = QUOTES[(doy + d.getFullYear()) % QUOTES.length];
+    var lab = [festOf(d), termOf(d)].filter(Boolean).join(' · ');
+    return '<section class="view plan">' + subHead('back-plan', '日签') +
+      '<div class="tear' + (calui.tearDir === 'up' ? ' fly-down' : calui.tearDir === 'back' ? ' come' : '') + '" id="tear">' +
+      '<div class="rings"><i></i><i></i></div>' +
+      '<div class="top"><span>' + MONTHS_EN[d.getMonth()].slice(0, 4) + ' · ' + ROMAN(d.getFullYear()) + '</span><span>No. ' + doy + '</span></div>' +
+      '<div class="big">' + d.getDate() + '</div><div class="wd">星期' + WEEK_ZH[d.getDay()] + '</div><div class="rule"></div>' +
+      '<div class="lun"><span>' + (l ? '<b>农历' + l.m + l.dz + '</b>　' + l.y + '年' : '') + (lab ? '　' + lab : '') + '</span><span>' + (w ? esc((META[state.current] || {}).zh || '') + ' ' + esc(w.dt || w.nt || '') + ' ' + deg(w.lo) + '–' + deg(w.hi) + '°' : '') + '</span></div>' +
+      '<div class="yj"><div><b>宜</b>' + yj.yi.join('　') + '</div><div class="j"><b>忌</b>' + yj.ji.join('　') + '</div></div>' +
+      (evs.length ? '<div class="evs">' + evs.map(function (e) { return '<div><span>' + (e.t || '全天') + '</span>' + esc(e.title) + '</div>'; }).join('') + '</div>' : '') +
+      '<div class="quote">“' + q[0] + '”<small>' + q[1] + '</small></div><div class="sig">— ' + esc(asst.name || 'Amor') + '</div></div>' +
+      '<div class="tear-nav"><button type="button" data-cal="tear-prev">‹ 前一天</button><span>往上撕一页，看明天</span><button type="button" data-cal="tear-next">明天 ›</button></div></section>';
+  }
+  function entrySheet() {
+    var s = calui.sheet, p = s.parsed;
+    var rem = REM_OPTS;
+    return '<div class="cal-sheet" role="dialog" aria-label="记一件事"><button type="button" class="scrim" data-cal="sheet-close" aria-label="关闭"></button><div class="card">' +
+      '<div class="grip"></div><div class="shh"><b>' + (s.id ? '改一改' : '记一件事') + '</b><em>' + (s.id ? 'Edit' : 'New Entry') + '</em></div>' +
+      '<input class="big" id="cal-title" type="text" placeholder="比如：周二上午十点面试" value="' + esc(s.title) + '" autocomplete="off">' +
+      '<div class="cal-parse" id="cal-parse">' + (p ? icon('spark', 13) + '看懂了：' + esc(dateZh(p.d)) + (p.t ? ' ' + p.t : '') + (p.title ? ' · ' + esc(p.title) : '') : '') + '</div>' +
+      '<div class="cal-fld"><span class="k">日期</span><input type="date" id="cal-date" value="' + s.d + '"></div>' +
+      '<div class="cal-fld"><span class="k">时间</span><input type="time" id="cal-time" value="' + (s.t || '') + '"></div>' +
+      '<div class="cal-fld" style="border:0;padding-bottom:0"><span class="k">提醒</span></div>' +
+      '<div class="cal-chips">' + rem.map(function (o) { return '<button type="button" class="cal-chip" data-cal="rem" data-arg="' + o[0] + '" aria-pressed="' + (s.rem.indexOf(o[0]) >= 0) + '">' + o[1] + '</button>'; }).join('') + '</div>' +
+      '<div class="cal-fld" style="border:0;padding-bottom:0"><span class="k">重复</span></div>' +
+      '<div class="cal-chips">' + [['none', '不重复'], ['weekly', '每周'], ['monthly', '每月'], ['yearly', '每年']].map(function (o) { return '<button type="button" class="cal-chip" data-cal="rep" data-arg="' + o[0] + '" aria-pressed="' + (s.rep === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div>' +
+      sw('amor', s.amor, '让 ' + esc(asst.name || 'Amor') + ' 记住这件事 · 她会在那天前后关心你', 'data-calsw') +
+      '<button type="button" class="cal-btn" data-cal="save">记　下</button>' + (s.id ? '<button type="button" class="cal-del" data-cal="del">删掉这件事</button>' : '') + '</div></div>';
+  }
+  function alarmList() {
+    var list = cal.alarms.slice().sort(function (a, b) { return a.h * 60 + a.m - b.h * 60 - b.m; });
+    var nx = list.map(function (a) { return alarmNext(a); }).filter(Boolean).sort()[0];
+    var html = '<p class="al-next">' + (nx ? '下一个闹钟在 <b>' + whenShort(nx) + '</b>，还有 ' + durZh(nx - Date.now()) : '现在没有开着的闹钟') + '</p>';
+    if (nativeOk() && !AmorNative.setAlarms) html += '<div class="al-perm">这个版本的原生层还不支持闹钟，请更新到最新的安装包。</div>';
+    else if (!nativeOk()) html += '<div class="al-perm">闹钟要在安装版 App 里才能响。</div>';
+    else {
+      var inf = nInfo();
+      if (inf && /xiaomi|redmi|poco/i.test(inf.brand || '') && !calui.permSeen) html += '<div class="al-perm">小米手机锁屏时要全屏响铃，需要打开两个权限：「锁屏显示」和「后台弹出界面」。<br>' +
+        '<button type="button" data-ntopen="lockperm">去打开权限</button><button type="button" data-cal="perm-ok">已经打开了</button></div>';
+    }
+    if (!list.length) return html + '<div class="al-empty"><em>No alarms yet</em>点右下角的 + 定一个，也可以直接跟 ' + esc(asst.name || 'Amor') + ' 说「明早七点半叫我」。</div>';
+    list.forEach(function (a) {
+      var ap = a.h < 12 ? 'a.m.' : 'p.m.', t = alarmNext(a);
+      html += '<div class="al-card' + (a.on ? '' : ' off') + (a.amor !== false && a.on ? ' feat' : '') + '"><div class="row">' +
+        '<button type="button" data-cal="alarm-edit" data-arg="' + a.id + '" style="border:0;background:none;padding:0;text-align:left;color:inherit;flex:1"><span class="tm">' + pad2(a.h) + ':' + pad2(a.m) + '<small>' + ap + '</small></span></button>' +
+        '<button type="button" class="switch" role="switch" aria-checked="' + !!a.on + '" aria-label="开关" data-cal="alarm-sw" data-arg="' + a.id + '"><i></i></button></div>' +
+        (a.days && a.days.length ? '<div class="days">' + [1, 2, 3, 4, 5, 6, 7].map(function (k) { return '<span class="' + (a.days.indexOf(k) >= 0 ? 'on' : '') + '">' + WEEK_ZH[k % 7] + '</span>'; }).join('') + '</div>' : '') +
+        '<div class="ln">' + (a.amor !== false ? '<span class="am">' + icon('spark', 12) + ' ' + esc(asst.name || 'Amor') + ' 叫醒</span>· ' : '') +
+        esc(a.days && a.days.length ? (a.label || '重复') : (a.date ? '只响一次 · ' + dateZh(a.date) : '只响一次') + (a.label ? ' · ' + a.label : '')) + (a.on && t ? ' · ' + whenShort(t) : '') + '</div></div>';
+    });
+    return html;
+  }
+  function alarmPage() {
+    var a = calui.alarm; if (!a) { state.sub = ''; return viewPlan(); }
+    var hours = '', mins = '';
+    for (var h = 0; h < 24; h++) hours += '<div data-v="' + h + '">' + pad2(h) + '</div>';
+    for (var m = 0; m < 60; m++) mins += '<div data-v="' + m + '">' + pad2(m) + '</div>';
+    var t = alarmNext(Object.assign({}, a, { on: true }));
+    var preview = t ? wakeText(a, t) : '';
+    var geo = geoOf(state.current), st = t ? sunTimes(new Date(t), geo) : null;
+    return '<section class="view plan">' + subHead('back-plan', a.isNew ? '新闹钟' : '设闹钟', '<button type="button" class="icon-btn al-save" data-cal="alarm-save" style="width:auto;padding:0 12px">存好</button>') +
+      '<div class="panel"><div class="wheel"><div class="col" id="wh-h"><div class="pad"></div>' + hours + '<div class="pad"></div></div><div class="colon">:</div>' +
+      '<div class="col" id="wh-m"><div class="pad"></div>' + mins + '<div class="pad"></div></div></div>' +
+      '<p class="al-until" id="al-until">' + (t ? durZh(t - Date.now()) + '后响' + (st ? ' · 那天日出 ' + hhmmOf(st.rise) : '') : '') + '</p>' +
+      '<div class="al-days">' + [1, 2, 3, 4, 5, 6, 7].map(function (k) { return '<button type="button" data-cal="al-day" data-arg="' + k + '" aria-pressed="' + ((a.days || []).indexOf(k) >= 0) + '">' + WEEK_ZH[k % 7] + '</button>'; }).join('') + '</div>' +
+      '<div class="al-opt"><span>重复</span><span class="v">' + (a.days && a.days.length ? (a.days.length === 7 ? '每天' : a.days.join() === '1,2,3,4,5' ? '工作日' : a.days.join() === '6,7' ? '周末' : '每周 ' + a.days.length + ' 天') : '只响一次') +
+        ' <button type="button" class="cal-chip" data-cal="al-preset" data-arg="work">工作日</button><button type="button" class="cal-chip" data-cal="al-preset" data-arg="all">每天</button></span></div>' +
+      '<div class="al-opt"><span>备注</span><input type="text" id="al-label" maxlength="10" placeholder="比如：上班" value="' + esc(a.label || '') + '"></div>' +
+      '<div class="al-opt"><span>再睡一会儿</span><select id="al-snooze">' + [5, 10, 15, 20].map(function (n) { return '<option value="' + n + '"' + ((a.snooze || 10) === n ? ' selected' : '') + '>' + n + ' 分钟</option>'; }).join('') + '</select></div>' +
+      sw('ramp', a.ramp !== false, '渐强音量 · 60 秒内慢慢变大', 'data-alsw') +
+      '<div class="al-amor"><div class="k"><span>' + icon('spark', 12) + ' ' + esc(asst.name || 'Amor') + ' 叫醒 · 她会这样说</span></div><p>' + esc(a.amor !== false ? preview : '（关掉了，只显示时间和备注）') + '</p></div>' +
+      sw('amor', a.amor !== false, '响铃时显示 ' + esc(asst.name || 'Amor') + ' 写的叫醒的话', 'data-alsw') +
+      (a.isNew ? '' : '<button type="button" class="cal-del" data-cal="alarm-del">删掉这个闹钟</button>') + '</div></section>';
+  }
+  // 滚轮：滚到哪个数字就是哪个
+  function wheelInit() {
+    var a = calui.alarm; if (!a || state.sub !== 'alarm') return;
+    [['wh-h', 'h'], ['wh-m', 'm']].forEach(function (p) {
+      var col = document.getElementById(p[0]); if (!col) return;
+      col.scrollTop = a[p[1]] * 72;
+      var tm = 0;
+      col.addEventListener('scroll', function () {
+        clearTimeout(tm);
+        tm = setTimeout(function () {
+          var v = Math.round(col.scrollTop / 72), max = p[1] === 'h' ? 23 : 59; v = Math.max(0, Math.min(max, v));
+          if (a[p[1]] !== v) { a[p[1]] = v; var t = alarmNext(Object.assign({}, a, { on: true })), u = document.getElementById('al-until'); if (u && t) u.textContent = durZh(t - Date.now()) + '后响'; }
+        }, 120);
+      }, { passive: true });
+    });
+  }
+  function calAfterRender() {
+    wheelInit();
+    var ti = document.getElementById('cal-title');
+    if (ti && calui.sheet && calui.sheet.focus) { calui.sheet.focus = false; setTimeout(function () { try { ti.focus(); } catch (e) {} }, 350); }
+    // 日签：往上甩撕掉一页
+    var tear = document.getElementById('tear');
+    if (tear && !tear._b) {
+      tear._b = 1; var y0 = null, t0 = 0;
+      tear.addEventListener('touchstart', function (e) { y0 = e.touches[0].clientY; t0 = Date.now(); tear.style.transition = 'none'; }, { passive: true });
+      tear.addEventListener('touchmove', function (e) { if (y0 == null) return; var dy = e.touches[0].clientY - y0; if (dy < 0) tear.style.transform = 'translateY(' + dy * .6 + 'px) rotate(' + (dy / 60) + 'deg)'; }, { passive: true });
+      tear.addEventListener('touchend', function (e) {
+        if (y0 == null) return; var dy = (e.changedTouches[0] || {}).clientY - y0, v = dy / Math.max(1, Date.now() - t0); y0 = null;
+        tear.style.transition = ''; tear.style.transform = '';
+        if (dy < -90 || v < -.6) calAction('tear-next');
+      });
+    }
+  }
+  function openEntry(ds, ev) {
+    if (ev) calui.sheet = { id: ev.id, title: ev.title, d: ev.d, t: ev.t || '', rem: (ev.rem || []).slice(), rep: ev.rep || 'none', amor: !!ev.amor, parsed: null };
+    else calui.sheet = { id: '', title: '', d: ds || calui.sel || ymd(new Date()), t: '', rem: ['am'], rep: 'none', amor: false, parsed: null, focus: true, touched: false };
+    keepScroll();
+  }
+  function calAction(a, arg) {
+    var s = calui.sheet;
+    if (a === 'seg') { calui.seg = arg; render({ anim: arg === 'alarm' ? 'fwd' : 'back' }); return; }
+    if (a === 'prev' || a === 'next') { var ym = calui.ym, d = new Date(ym[0], ym[1] + (a === 'next' ? 1 : -1), 1); calui.ym = [d.getFullYear(), d.getMonth()]; render({ anim: a === 'next' ? 'fwd' : 'back' }); return; }
+    if (a === 'day') {
+      if (calui.sel === arg) { calui.tear = arg; calui.tearDir = ''; state.sub = 'tear'; render({ top: true, anim: 'fwd' }); return; }
+      calui.sel = arg; var pd = pymd(arg); if (pd.getMonth() !== calui.ym[1]) calui.ym = [pd.getFullYear(), pd.getMonth()];
+      keepScroll(); return;
+    }
+    if (a === 'tear') { calui.tear = arg; calui.tearDir = ''; state.sub = 'tear'; render({ top: true, anim: 'fwd' }); return; }
+    if (a === 'tear-next' || a === 'tear-prev') {
+      var el = document.getElementById('tear'), nd = ymd(addDays(pymd(calui.tear), a === 'tear-next' ? 1 : -1));
+      function go() { calui.tear = nd; calui.sel = nd; calui.tearDir = a === 'tear-next' ? 'back' : 'up'; keepScroll(); }
+      if (el && a === 'tear-next') { el.classList.add('fly-up'); setTimeout(go, 420); } else go();
+      return;
+    }
+    if (a === 'new') { openEntry(arg || calui.sel); return; }
+    if (a === 'edit') { var ev = cal.events.filter(function (e) { return e.id === arg; })[0]; if (ev) openEntry(null, ev); return; }
+    if (a === 'sheet-close') { calui.sheet = null; keepScroll(); return; }
+    if (a === 'rem' && s) { s.touched = true; var i = s.rem.indexOf(arg); if (i >= 0) s.rem.splice(i, 1); else s.rem.push(arg); calSheetRefresh(); return; }
+    if (a === 'rep' && s) { s.rep = arg; calSheetRefresh(); return; }
+    if (a === 'save' && s) {
+      calSheetRead();
+      var title = (s.parsed && s.parsed.title) || s.title;
+      title = String(title || '').trim();
+      if (!title) { var ti = document.getElementById('cal-title'); if (ti) ti.focus(); toast('先写下是什么事'); return; }
+      if (!pymd(s.d)) { toast('日期不对'); return; }
+      var rec = { id: s.id || calNewId(), d: s.d, t: s.t || '', title: title.slice(0, 24), rem: s.rem.filter(function (r) { return s.t || r === 'eve' || r === 'am'; }), rep: s.rep, amor: !!s.amor, at: Date.now() };
+      cal.events = cal.events.filter(function (e) { return e.id !== rec.id; }); cal.events.push(rec);
+      if (rec.amor && !s.id) memAdd('global', rec.title + (rec.t ? '（' + rec.t + '）' : ''), 'cal', rec.d);
+      calui.sheet = null; calui.sel = rec.d; var rd = pymd(rec.d); calui.ym = [rd.getFullYear(), rd.getMonth()];
+      saveCal(); keepScroll(); toast('记下了：' + relDay(rec.d) + (rec.t ? ' ' + rec.t : '') + ' ' + rec.title); return;
+    }
+    if (a === 'del' && s) { cal.events = cal.events.filter(function (e) { return e.id !== s.id; }); calui.sheet = null; saveCal(); keepScroll(); toast('删掉了'); return; }
+    if (a === 'alarm-new') {
+      var nx = new Date(); nx.setHours(7, 30);
+      calui.alarm = { id: 1 + Math.floor(Math.random() * 90000), h: 7, m: 30, days: [1, 2, 3, 4, 5], date: '', on: true, label: '', snooze: 10, ramp: true, amor: true, isNew: true };
+      state.sub = 'alarm'; render({ top: true, anim: 'fwd' }); return;
+    }
+    if (a === 'alarm-edit') { var al = cal.alarms.filter(function (x) { return String(x.id) === String(arg); })[0]; if (!al) return; calui.alarm = JSON.parse(JSON.stringify(al)); state.sub = 'alarm'; render({ top: true, anim: 'fwd' }); return; }
+    if (a === 'alarm-sw') { var aw = cal.alarms.filter(function (x) { return String(x.id) === String(arg); })[0]; if (!aw) return; aw.on = !aw.on; saveCal(); keepScroll(); if (aw.on) { var tt = alarmNext(aw); if (tt) toast(durZh(tt - Date.now()) + '后响'); } return; }
+    if (a === 'al-day' && calui.alarm) { var dd = calui.alarm.days = calui.alarm.days || [], k = +arg, j = dd.indexOf(k); if (j >= 0) dd.splice(j, 1); else dd.push(k); dd.sort(); alarmRead(); keepScroll(); return; }
+    if (a === 'al-preset' && calui.alarm) { calui.alarm.days = arg === 'work' ? [1, 2, 3, 4, 5] : [1, 2, 3, 4, 5, 6, 7]; alarmRead(); keepScroll(); return; }
+    if (a === 'alarm-save' && calui.alarm) {
+      alarmRead(); var x = calui.alarm; delete x.isNew; x.on = true;
+      if (!(x.days && x.days.length)) { var t1 = alarmNext(Object.assign({}, x, { date: '' })); x.date = t1 ? ymd(new Date(t1)) : ''; } else x.date = '';
+      cal.alarms = cal.alarms.filter(function (y) { return String(y.id) !== String(x.id); }); cal.alarms.push(x);
+      calui.alarm = null; state.sub = ''; calui.seg = 'alarm'; saveCal(); render({ top: true, anim: 'back' });
+      var t2 = alarmNext(x); if (t2) toast('闹钟定好了，' + durZh(t2 - Date.now()) + '后响'); return;
+    }
+    if (a === 'alarm-del' && calui.alarm) { var id = calui.alarm.id; cal.alarms = cal.alarms.filter(function (y) { return String(y.id) !== String(id); }); calui.alarm = null; state.sub = ''; saveCal(); render({ top: true, anim: 'back' }); toast('删掉了'); return; }
+    if (a === 'perm-ok') { calui.permSeen = true; keepScroll(); return; }
+  }
+  function alarmRead() {
+    var a = calui.alarm; if (!a) return;
+    var l = document.getElementById('al-label'), s = document.getElementById('al-snooze');
+    if (l) a.label = l.value.trim().slice(0, 10); if (s) a.snooze = +s.value || 10;
+  }
+  function calSheetRead() {
+    var s = calui.sheet; if (!s) return;
+    var ti = document.getElementById('cal-title'), di = document.getElementById('cal-date'), tm = document.getElementById('cal-time');
+    if (ti) s.title = ti.value; if (di && di.value) s.d = di.value; if (tm) s.t = tm.value || '';
+  }
+  function calSheetRefresh() { calSheetRead(); var y = $main.scrollTop; var card = document.querySelector('.cal-sheet .card'), cy = card ? card.scrollTop : 0; render(); $main.scrollTop = y;
+    var c2 = document.querySelector('.cal-sheet .card'); if (c2) { c2.style.animation = 'none'; c2.scrollTop = cy; } var sc = document.querySelector('.cal-sheet .scrim'); if (sc) sc.style.animation = 'none'; }
+  // 输入框：一边打字一边识别日期和时间
+  document.addEventListener('input', function (e) {
+    var s = calui.sheet; if (!s) return;
+    if (e.target.id === 'cal-title') {
+      s.title = e.target.value;
+      var p = parseEntry(s.title);
+      s.parsed = p.hit || p.t ? p : null;
+      if (s.parsed) {
+        if (p.d) { s.d = p.d; var di = document.getElementById('cal-date'); if (di) di.value = p.d; }
+        if (p.t) { s.t = p.t; var tm = document.getElementById('cal-time'); if (tm) tm.value = p.t; if (!s.touched) s.rem = p.t < '10:00' ? ['60', 'eve'] : ['60']; }
+        if (p.rep) { s.rep = p.rep; Array.prototype.forEach.call(document.querySelectorAll('.cal-sheet [data-cal="rep"]'), function (c) { c.setAttribute('aria-pressed', c.getAttribute('data-arg') === s.rep); }); }
+        Array.prototype.forEach.call(document.querySelectorAll('.cal-sheet [data-cal="rem"]'), function (c) { c.setAttribute('aria-pressed', s.rem.indexOf(c.getAttribute('data-arg')) >= 0); });
+      }
+      var pe = document.getElementById('cal-parse');
+      if (pe) pe.innerHTML = s.parsed ? icon('spark', 13) + '看懂了：' + esc(dateZh(s.d)) + (s.t ? ' ' + s.t : '') + (p.title ? ' · ' + esc(p.title) : '') : '';
+    }
+  });
+  document.addEventListener('change', function (e) {
+    var s = calui.sheet;
+    if (s && (e.target.id === 'cal-date' || e.target.id === 'cal-time')) { var hadT = !!s.t; calSheetRead(); if (hadT !== !!s.t) { s.rem = s.t ? ['60'] : ['am']; calSheetRefresh(); } }
+    if (calui.alarm && (e.target.id === 'al-label' || e.target.id === 'al-snooze')) alarmRead();
+  });
+
   var tabsBuilt = false;
   function updateTabs(tab, pop) {
     if (!tabsBuilt) {
@@ -4220,6 +5262,10 @@
     if (ds.day != null) { state.openDay = state.openDay === +ds.day ? -1 : +ds.day; render(); return; }
     if (ds.refresh) { refreshAll(true); return; }
     if (ds.ui) { uiAction(ds.ui); return; }
+    if (ds.cal) { calAction(ds.cal, ds.arg); return; }
+    if (ds.calsw && calui.sheet) { calui.sheet[ds.calsw] = !calui.sheet[ds.calsw]; calSheetRefresh(); return; }
+    if (ds.alsw && calui.alarm) { alarmRead(); calui.alarm[ds.alsw] = calui.alarm[ds.alsw] === false; keepScroll(); return; }
+    if (ds.advmore != null) { calui.advAll = ds.advmore === '1'; keepScroll(); return; }
     if (ds.vui) { voiceAction(ds.vui); return; }
     if (ds.vprov) { Speaker.stop(); voice.pid = ds.vprov; vui.status = null; vui.pickModel = false; vui.mq = ''; saveVoice(); keepScroll(); return; }
     if (ds.vmodel) { var vc = vconf(); if (vc.model !== ds.vmodel) { vc.model = ds.vmodel; vc.voices = []; vc.voice = ''; vc.voiceName = ''; vc.formOk = false; } vui.pickModel = false; vui.mq = ''; vui.status = null; saveVoice(); keepScroll(); return; }
@@ -5140,6 +6186,7 @@
   }
 
   function uiAction(a) {
+    if (a === 'back-plan') { state.sub = ''; calui.alarm = null; calui.sheet = null; render({ top: true, anim: 'back' }); return; }
     var pv = prov(ui.pid), d = ui.draft;
     if (a === 'back-settings') { state.sub = ''; ui.draft = null; ui.pickModel = false; render({ top: true, anim: 'back' }); return; }
     if (a === 'back-providers' || a === 'providers') { state.sub = 'providers'; ui.draft = null; ui.status = null; render({ top: true, anim: a === 'providers' ? 'fwd' : 'back' }); return; }
@@ -5589,8 +6636,11 @@
   function recallConvs(logs) { var seen = {}, out = []; (logs || []).forEach(function (l) { (l.hits || []).forEach(function (h) { if (!seen[h.id]) { seen[h.id] = 1; out.push(h); } }); }); return out; }
   function procLabel(reasoning, ms, sources, recall) {
     var bits = [];
-    var rms = (recall || []).filter(function (l) { return l.tool === 'remind'; }).length, rec = (recall || []).filter(function (l) { return !/^(remind|rlist|rcancel)$/.test(l.tool); });
+    var rms = (recall || []).filter(function (l) { return l.tool === 'remind'; }).length, rec = (recall || []).filter(function (l) { return !/^(remind|rlist|rcancel|event|elist|edel|alarm)$/.test(l.tool); });
+    var evn = (recall || []).filter(function (l) { return l.tool === 'event'; }).length, aln = (recall || []).filter(function (l) { return l.tool === 'alarm'; }).length;
     if (rms) bits.push('设了 ' + rms + ' 个提醒');
+    if (evn) bits.push('记了 ' + evn + ' 件事');
+    if (aln) bits.push('定了 ' + aln + ' 个闹钟');
     if (rec.length) { var nc = recallConvs(rec).length; bits.push(nc ? '查阅了 ' + nc + ' 段过去的对话' : '翻看了过去的对话'); }
     if (reasoning && asst.showThink) bits.push('思考过程' + (secsOf(ms) ? ' · ' + secsOf(ms) + ' 秒' : ''));
     if (sources && sources.length) bits.push('已搜索 ' + sources.length + ' 个网页');
@@ -5605,7 +6655,7 @@
   function liveProcRow() {
     var live = false, lb = '';
     if (chat.phase === 'search') { live = true; lb = '正在搜索网页…'; }
-    else if (chat.phase === 'recall') { live = true; var lg = chat.recall && chat.recall[chat.recall.length - 1]; lb = lg && lg.tool === 'search' ? '正在回想“' + lg.q + '”…' : lg && /^(remind|rlist|rcancel)$/.test(lg.tool) ? '正在设提醒…' : '正在翻看过去的对话…'; }
+    else if (chat.phase === 'recall') { live = true; var lg = chat.recall && chat.recall[chat.recall.length - 1]; lb = lg && lg.tool === 'search' ? '正在回想“' + lg.q + '”…' : lg && /^(remind|rlist|rcancel)$/.test(lg.tool) ? '正在设提醒…' : lg && /^(event|elist|edel|alarm)$/.test(lg.tool) ? '正在记进日程…' : '正在翻看过去的对话…'; }
     else if (!chat.partial && chat.partialThink && asst.showThink) { live = true; lb = thinkLine(chat.partialThink) || '正在思考…'; }
     else if (chat.partial) lb = procLabel(chat.partialThink, chat.thinkMs, chat.sources, chat.recall);
 
@@ -5627,6 +6677,10 @@
     if (!d) return '<p class="sub">这条回答已经结束了。</p>';
     var h = '', ring = function (ic) { return '<span class="ring">' + icon(ic, 15) + '</span>'; }, dot = '<span class="dot"></span>';
     function recallItem(lg) {
+      if (/^(event|elist|edel|alarm)$/.test(lg.tool)) {
+        h += tlItem('', ring(lg.tool === 'alarm' ? 'bell' : 'cal'), '<b>' + { event: '记进日程', elist: '查看日程', edel: '删除日程', alarm: '定好闹钟' }[lg.tool] + '</b><small>' + esc((lg.at ? whenShort(lg.at) + ' · ' : '') + lg.q) + '</small>');
+        return;
+      }
       if (/^(remind|rlist|rcancel)$/.test(lg.tool)) {
         h += tlItem('', ring('bell'), '<b>' + { remind: '设好提醒', rlist: '查看提醒', rcancel: '取消提醒' }[lg.tool] + '</b><small>' + esc((lg.at ? remindLabel(lg.at) + ' · ' : '') + lg.q) + '</small>');
         return;
@@ -5830,11 +6884,14 @@
     system += '\n\n现在是北京时间 ' + bjDate(0) + ' ' + new Date(Date.now() + 8 * 3600e3).toISOString().slice(11, 16) + '。';
     system += memText;
     if (conv.notif) system += '\n\n（这段对话是' + (name || '用户') + '点开你推送的一条提醒开始的，提醒内容是：「' + conv.notif + '」。接着这个话题自然地聊，不用再重复提醒。）';
+    system += calPrompt();
     var systemNoTools = null, useRemind = nativeOk() && nt.on;
     if (useRecall || useRemind) systemNoTools = system + rclFb.text +
       (useRemind ? '\n\n（现在没法设手机提醒，如果被要求提醒，就坦白说这次设不了，请对方稍后再试。）' : '');
     if (useRecall) system += recallRule();
     if (useRemind) system += remindRule();
+    if (!systemNoTools) systemNoTools = system;
+    system += calRule();
     if (asst.weather && v) system += '\n下面是' + v.m.zh + '的中国气象局天气数据，聊到天气、穿衣、出行时参考，不要编造数据里没有的数字：\n' + weatherContext(v);
 
     var hist = conv.msgs.slice();
@@ -5871,13 +6928,13 @@
         var wasRecall = chat.phase === 'recall'; if (wasRecall) chat.phase = '';
         if ((firstThink || firstText || wasRecall) && chat.open) renderSheet();
         typerKick();
-      }, useRecall || useRemind ? {
-        tools: (useRecall ? RECALL_TOOLS : []).concat(useRemind ? REMIND_TOOLS : []),
-        runTool: function (n, a) { return runRemindTool(n, a, conv) || runRecallTool(n, a, conv.id); },
+      }, {
+        tools: (useRecall ? RECALL_TOOLS : []).concat(useRemind ? REMIND_TOOLS : []).concat(CAL_TOOLS),
+        runTool: function (n, a) { return runCalTool(n, a) || runRemindTool(n, a, conv) || runRecallTool(n, a, conv.id); },
         onTool: function (log) { log.tpos = (chat.partialThink || '').length; (chat.recall = chat.recall || []).push(log); chat.phase = 'recall'; if (chat.open) renderSheet(); },
         onNoTools: function () { chat.recall = rclFb.hits.length ? [{ tool: 'auto', q: text, hits: rclFb.hits }] : null; },
         systemNoTools: systemNoTools
-      } : null).then(function (res) {
+      }).then(function (res) {
         if (res.text && res.text.length > chat.partial.length) chat.partial = res.text;
         return typerFinish().then(function () { return res; });
       }).then(function (res) {
@@ -5920,6 +6977,7 @@
       if (chat.pop) d += 1;
       if (chat.pop && chat.popSub) d += 1;
     }
+    if (calui.sheet) d += 1;
     var back = document.querySelector('#main .sub-head [data-ui^="back-"]');
     if (back) d += /^back-(providers|voice)$/.test(back.getAttribute('data-ui')) ? 2 : 1;
     if (state.tab !== 'today') d += 1;
@@ -5932,6 +6990,7 @@
       if (chat.side) { setSide(false); return; }
       closeChat(); return;
     }
+    if (calui.sheet) { calui.sheet = null; keepScroll(); return; }
     var back = document.querySelector('#main .sub-head [data-ui^="back-"]');
     if (back) { back.click(); return; }
     if (state.tab !== 'today') { var t = document.querySelector('[data-tab="today"]'); if (t) t.click(); }

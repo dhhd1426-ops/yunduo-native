@@ -19,7 +19,9 @@ public class AmorReceiver extends BroadcastReceiver {
         String a = intent == null ? null : intent.getAction();
         if (a == null) return;
         try {
-            if (Notif.ACT_FIRE.equals(a)) {
+            if (Alarms.ACT_ALARM.equals(a)) {
+                Alarms.fire(c, intent.getIntExtra("id", 0), intent.getBooleanExtra("snz", false));
+            } else if (Notif.ACT_FIRE.equals(a)) {
                 Scheduler.fire(c);
             } else if (Notif.ACT_EYE.equals(a)) {
                 Scheduler.eyeTick(c);
@@ -40,6 +42,7 @@ public class AmorReceiver extends BroadcastReceiver {
                     || "android.intent.action.QUICKBOOT_POWERON".equals(a)) {
                 Store.log(c, "resched", a.substring(a.lastIndexOf('.') + 1));
                 Scheduler.rescheduleAll(c);
+                Alarms.rescheduleAll(c);
                 KeepService.sync(c);
             } else if (ACT_TEST.equals(a) && debuggable(c)) {
                 test(c, intent);
@@ -100,6 +103,19 @@ public class AmorReceiver extends BroadcastReceiver {
         if (i.hasExtra("eyeStart")) Store.putLong(c, "eyeStart", System.currentTimeMillis() - i.getIntExtra("eyeStart", 0) * 60_000L);
         if (i.getBooleanExtra("eye", false)) Scheduler.eyeTick(c);
         if (i.getBooleanExtra("fire", false)) Scheduler.fire(c);
+        String al = arg(i, "alarms", c);
+        if (al != null) {   // dt = 距现在多少秒响（只响一次）
+            JSONArray in = new JSONArray(al), out = new JSONArray();
+            for (int k = 0; k < in.length(); k++) {
+                JSONObject o = in.getJSONObject(k);
+                if (o.has("dt")) { java.util.Calendar cc = java.util.Calendar.getInstance(); cc.add(java.util.Calendar.SECOND, o.getInt("dt") + 60); o.put("h", cc.get(java.util.Calendar.HOUR_OF_DAY)); o.put("m", cc.get(java.util.Calendar.MINUTE)); }
+                out.put(o);
+            }
+            Alarms.set(c, out.toString());
+        }
+        if (i.hasExtra("alarmFire")) Alarms.fire(c, i.getIntExtra("alarmFire", 0), false);
+        if (i.getBooleanExtra("ringOff", false)) c.startService(new Intent(c, AlarmService.class).setAction(AlarmService.ACT_DISMISS));
+        if (i.getBooleanExtra("ringSnooze", false)) c.startService(new Intent(c, AlarmService.class).setAction(AlarmService.ACT_SNOOZE));
         Store.log(c, "test", null);
     }
 }

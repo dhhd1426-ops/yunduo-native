@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <application android:label="云朵天气" android:icon="@mipmap/ic_launcher" android:allowBackup="true">
         <!-- 折叠/展开屏幕、转屏时不重建页面（和 3.7 一样） -->
         <activity android:name=".MainActivity" android:label="云朵天气" android:exported="true"
@@ -18,6 +20,11 @@
         </activity>
         <!-- 常驻后台（设置 › 通知 里的开关） -->
         <service android:name=".KeepService" android:exported="false" />
+        <!-- 闹钟（4.1）：响铃服务 + 锁屏上的响铃页 -->
+        <service android:name=".AlarmService" android:exported="false" />
+        <activity android:name=".RingActivity" android:exported="false" android:excludeFromRecents="true" android:launchMode="singleInstance"
+            android:taskAffinity="com.cloudweather.xiaoyu.ring" android:showWhenLocked="true" android:turnScreenOn="true"
+            android:configChanges="orientation|keyboardHidden|screenLayout|screenSize|smallestScreenSize" />
         <receiver android:name=".AmorReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

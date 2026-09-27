@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>闹钟</title>
+<style>
+  @font-face { font-family: "AL"; src: url("fonts/reply-lora.woff") format("woff"); }
+  @font-face { font-family: "AL"; src: url("fonts/reply-lora-italic.woff") format("woff"); font-style: italic; }
+  @font-face { font-family: "AS"; src: url("fonts/reply-serif-sc.woff") format("woff"); }
+  :root { --acc: #e3a6b0; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; }
+  body { background: radial-gradient(120% 70% at 50% 18%, #25325a 0%, #111a33 55%, #0a1022 100%); color: #eef1f8; font-family: "AS", "Noto Serif CJK SC", serif;
+    overflow: hidden; user-select: none; -webkit-user-select: none; }
+  .wrap { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; padding: calc(56px + env(safe-area-inset-top, 0px)) 24px calc(30px + env(safe-area-inset-bottom, 0px)); }
+  .date { font-size: 14px; letter-spacing: .3em; color: #b9c3de; margin-left: .3em; opacity: 0; animation: up .8s .1s forwards; }
+  .clock { font-family: "AL", Georgia, serif; font-size: min(28vw, 128px); line-height: 1; margin-top: 12px; letter-spacing: -.02em; color: #f5f2ea;
+    text-shadow: 0 0 40px rgba(227, 166, 176, .25); font-variant-numeric: lining-nums; opacity: 0; animation: up .9s .2s forwards; }
+  .lab { font-size: 13.5px; color: #c7cfe6; margin-top: 12px; letter-spacing: .08em; opacity: 0; animation: up .8s .35s forwards; }
+  .letter { margin-top: 30px; width: 100%; max-width: 420px; padding: 18px 18px 14px; border-radius: 18px; background: rgba(247, 242, 232, .07); border: 1px solid rgba(247, 242, 232, .14);
+    opacity: 0; animation: up 1s .5s forwards; }
+  .letter .to { font-family: "AL", Georgia, serif; font-style: italic; color: var(--acc); font-size: 16px; }
+  .letter p { font-size: 15px; line-height: 1.9; color: #e6e3dc; margin: 6px 0 0; letter-spacing: .02em; }
+  .letter .sg { text-align: right; font-family: "AL", Georgia, serif; font-style: italic; color: var(--acc); font-size: 14px; margin-top: 4px; }
+  .fox { position: relative; width: 170px; height: 113px; margin-top: auto; opacity: .95; filter: saturate(.78) sepia(.1) brightness(.92); animation: breathe 4s ease-in-out infinite; }
+  .fox img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .snooze { margin-top: 18px; font-size: 14px; color: var(--acc); letter-spacing: .12em; border: 1px solid rgba(227, 166, 176, .45); padding: 8px 20px; border-radius: 18px; background: none; font-family: inherit; }
+  .slide { position: relative; margin-top: 22px; width: 100%; max-width: 360px; height: 60px; border-radius: 30px; background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .14);
+    touch-action: none; overflow: hidden; }
+  .slide .k { position: absolute; left: 6px; top: 6px; width: 46px; height: 46px; border-radius: 23px; background: #f5f2ea; color: #1c2640; display: grid; place-items: center;
+    box-shadow: 0 0 24px rgba(245, 242, 234, .4); will-change: transform; }
+  .slide .k.back { transition: transform .5s cubic-bezier(.34, 1.56, .64, 1); }
+  .slide span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; letter-spacing: .3em; color: #c7cfe6; padding-left: 40px;
+    background: linear-gradient(90deg, #c7cfe6 30%, #fff 50%, #c7cfe6 70%) 0 0 / 200% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: shine 2.6s linear infinite; }
+  .bye { position: absolute; inset: 0; display: grid; place-items: center; font-family: "AL", Georgia, serif; font-style: italic; font-size: 28px; color: var(--acc); background: #0a1022; opacity: 0; pointer-events: none; transition: opacity .5s; }
+  .bye.on { opacity: 1; }
+  @keyframes up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes breathe { 50% { transform: translateY(-2px) scale(1.01); } }
+  @keyframes shine { to { background-position: -200% 0; } }
+</style></head><body>
+<div class="wrap">
+  <div class="date" id="date"></div>
+  <div class="clock" id="clock"></div>
+  <div class="lab" id="lab"></div>
+  <div class="letter"><div class="to" id="to"></div><p id="txt"></p><div class="sg" id="sg"></div></div>
+  <div class="fox"><img src="fonts/fox-lie-body.webp" alt=""><img src="fonts/fox-lie-head.webp" alt=""></div>
+  <button type="button" class="snooze" id="snooze">再睡 10 分钟</button>
+  <div class="slide" id="slide"><div class="k" id="knob"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div><span>滑动起床</span></div>
+</div>
+<div class="bye" id="bye">Have a lovely day</div>
+<script>
+(function () {
+  var R = window.Ring || { data: function () { return JSON.stringify(window.__ringDemo || {}); }, alive: function () { return true; }, dismiss: function () {}, snooze: function () {}, close: function () {} };
+  var d = {}; try { d = JSON.parse(R.data() || '{}'); } catch (e) {}
+  var a = d.alarm || {}, CN = ['〇', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+  function cn(n) { return n <= 10 ? CN[n] : n < 20 ? '十' + CN[n - 10] : CN[Math.floor(n / 10)] + '十' + (n % 10 ? CN[n % 10] : ''); }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function tick() { var t = new Date(); document.getElementById('clock').textContent = pad(t.getHours()) + ':' + pad(t.getMinutes());
+    document.getElementById('date').textContent = cn(t.getMonth() + 1) + '月' + cn(t.getDate()) + '日　星期' + '日一二三四五六'.charAt(t.getDay()); }
+  tick(); setInterval(tick, 1000);
+  var h = new Date().getHours();
+  document.getElementById('lab').textContent = (a.label || '闹钟') + (a.city ? ' · ' + a.city : '');
+  document.getElementById('to').textContent = h < 11 ? 'Good morning' : h < 14 ? 'Good noon' : h < 18 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('txt').textContent = a.text || '时间到啦。';
+  document.getElementById('sg').textContent = '— ' + (a.name || 'Amor');
+  document.getElementById('snooze').textContent = '再睡 ' + (a.snooze || 10) + ' 分钟';
+  var done = false;
+  function bye(fn) { if (done) return; done = true; document.getElementById('bye').classList.add('on'); setTimeout(fn, 650); }
+  document.getElementById('snooze').addEventListener('click', function () { bye(function () { R.snooze(); }); });
+  // 滑动起床：拖到右边关掉；没拖到头就弹回去
+  var slide = document.getElementById('slide'), knob = document.getElementById('knob'), x0 = null, dx = 0, max = 0;
+  slide.addEventListener('pointerdown', function (e) { if (done) return; x0 = e.clientX; dx = 0; max = slide.clientWidth - knob.offsetWidth - 12; knob.classList.remove('back'); slide.setPointerCapture(e.pointerId); });
+  slide.addEventListener('pointermove', function (e) { if (x0 == null) return; dx = Math.max(0, Math.min(max, e.clientX - x0)); knob.style.transform = 'translateX(' + dx + 'px)'; });
+  function end() { if (x0 == null) return; x0 = null; if (dx > max * .8) { knob.style.transform = 'translateX(' + max + 'px)'; bye(function () { R.dismiss(); }); } else { knob.classList.add('back'); knob.style.transform = ''; } }
+  slide.addEventListener('pointerup', end); slide.addEventListener('pointercancel', end);
+  // 在通知上点了「关闭」或「再睡」：这一页也跟着关
+  setInterval(function () { try { if (!done && !R.alive()) { done = true; R.close(); } } catch (e) {} }, 1000);
+})();
+</script>
+</body></html>

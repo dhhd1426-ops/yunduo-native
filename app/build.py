@@ -52,8 +52,8 @@ def manifest():
     A = True
     root = ('manifest', [
         (False, 'package', T_STRING, PKG),
-        (A, 'versionCode', T_INT_DEC, 28),
-        (A, 'versionName', T_STRING, '3.7'),
+        (A, 'versionCode', T_INT_DEC, 33),
+        (A, 'versionName', T_STRING, '4.0.2'),
     ], [
         ('uses-sdk', [(A, 'minSdkVersion', T_INT_DEC, MIN_SDK), (A, 'targetSdkVersion', T_INT_DEC, 29)], []),
     ] + [('uses-permission', [(A, 'name', T_STRING, 'android.permission.' + p)], []) for p in PERMS] + [
@@ -120,6 +120,9 @@ def main(out_path):
             ('res/mipmap/ic_launcher.png', icon, False),
             ('assets/index.html', html, True),
         ]
+    ring = os.path.join(HERE, 'www', 'ring.html')   # 4.1 响铃页
+    if os.path.exists(ring):
+        entries.append(('assets/ring.html', open(ring, 'rb').read(), True))
     fonts_dir = os.path.join(HERE, 'www', 'fonts')
     if os.path.isdir(fonts_dir):
         for fn in sorted(os.listdir(fonts_dir)):

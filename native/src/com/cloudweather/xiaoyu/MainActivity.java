@@ -56,6 +56,7 @@ public class MainActivity extends Activity {
         try {
             Scheduler.rescheduleFire(getApplicationContext());   // 被小米“清理后台”强停过的话闹钟已经没了，这里补回来
             KeepService.sync(getApplicationContext());
+            Alarms.rescheduleAll(getApplicationContext());
         } catch (Throwable t) {
             Store.err(this, "resume", t);
         }

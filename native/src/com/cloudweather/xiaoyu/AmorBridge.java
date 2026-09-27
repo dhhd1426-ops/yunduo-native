@@ -86,6 +86,20 @@ public class AmorBridge {
         }
     }
 
+    /** 闹钟列表（4.1），替换原来的 */
+    @JavascriptInterface
+    public void setAlarms(String json) {
+        Alarms.set(app, json);
+    }
+
+    /** 响过的闹钟（只响一次的，网页要把它关掉）；取一次就清掉 */
+    @JavascriptInterface
+    public String takeAlarmEvents() {
+        String s = Store.get(app, "alarmEv", "[]");
+        Store.remove(app, "alarmEv");
+        return s;
+    }
+
     @JavascriptInterface
     public boolean enabled() {
         try { return Notif.enabled(app); } catch (Throwable t) { return false; }
@@ -126,6 +140,8 @@ public class AmorBridge {
                 o.put("active", act);
             }
             o.put("keep", KeepService.wanted(app));
+            o.put("alarmNext", Store.getLong(app, "alarmNext", 0));
+            o.put("alarms", Alarms.list(app).length());
             o.put("log", new JSONArray(Store.get(app, "log", "[]")));
             o.put("err", Store.get(app, "err", ""));
             o.put("errAt", Store.getLong(app, "errAt", 0));
@@ -167,6 +183,11 @@ public class AmorBridge {
                 i = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
                 i.putExtra(Settings.EXTRA_APP_PACKAGE, pkg);
                 i.putExtra(Settings.EXTRA_CHANNEL_ID, which.substring(8));
+            } else if ("lockperm".equals(which)) {   // 小米：锁屏显示、后台弹出界面
+                i = new Intent("miui.intent.action.APP_PERM_EDITOR");
+                i.setClassName("com.miui.securitycenter", "com.miui.permcenter.permissions.PermissionsEditorActivity");
+                i.putExtra("extra_pkgname", pkg);
+                if (!tryStart(i)) { i = new Intent("miui.intent.action.APP_PERM_EDITOR"); i.putExtra("extra_pkgname", pkg); }
             } else if ("notif".equals(which)) {
                 i = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
                 i.putExtra(Settings.EXTRA_APP_PACKAGE, pkg);

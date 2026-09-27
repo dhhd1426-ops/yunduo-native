@@ -104,6 +104,33 @@ adb shell input keyevent KEYCODE_HOME; sleep 1
 adb shell cmd statusbar expand-notifications; sleep 3; shot 7c-keep-shade
 adb shell cmd statusbar collapse; sleep 1
 
+note "9 alarm: setAlarmClock + ring on the lock screen + snooze + ring while in use + dismiss"
+AL='[{"id":4101,"dt":120,"days":[],"date":"","on":true,"label":"上班","snooze":10,"ramp":true,"text":"早安，小宇。北京多云，16~23°。今天 10:00 有「面试」，你已经准备得很好了，慢慢来。","title":"上班","name":"Amor","city":"北京"},{"id":4102,"h":7,"m":30,"days":[1,2,3,4,5],"date":"","on":true,"label":"","snooze":10,"ramp":true,"text":"早安","title":"闹钟","name":"Amor","city":"北京"}]'
+T --es alarms64 "$(b64 "$AL")"
+sleep 2
+adb shell dumpsys alarm > $O/alarm-clock-full.txt
+grep -iE "nextAlarmClock|AlarmClockInfo|alarm_clock|ALARM\b" $O/alarm-clock-full.txt | head -40 > $O/alarm-clock.txt || true
+grep -B3 -A8 "com.cloudweather.xiaoyu.ALARM" $O/alarm-clock-full.txt | head -60 >> $O/alarm-clock.txt || true
+adb shell locksettings set-pin 1234 || true
+adb shell input keyevent KEYCODE_HOME; sleep 1
+adb shell input keyevent KEYCODE_POWER; sleep 3
+T --ei alarmFire 4101
+sleep 7; shot 9a-ring-locked
+adb shell dumpsys activity activities | grep -iE "RingActivity|topResumed|mResumed" | head -8 > $O/ring-activity.txt || true
+adb shell dumpsys notification --noredact | grep -B1 -A4 "id=8 " > $O/ring-notif.txt || true
+adb shell dumpsys audio | grep -iE "usage=USAGE_ALARM|AudioPlaybackConfiguration" | head -10 > $O/ring-audio.txt || true
+T --ez ringSnooze true; sleep 3; shot 9b-after-snooze
+adb shell dumpsys alarm | grep -B2 -A6 "ALARM" | grep -E "when|com.cloudweather" | head -20 > $O/alarm-after-snooze.txt || true
+adb shell locksettings clear --old 1234 || true
+adb shell input keyevent KEYCODE_WAKEUP; adb shell wm dismiss-keyguard; sleep 2
+adb shell am start -f 0x30000000 -n $PKG/.MainActivity; sleep 3
+T --ei alarmFire 4102
+sleep 5; shot 9c-ring-inuse
+adb shell input swipe 120 2000 900 2000 400 || true
+sleep 3; shot 9d-after-slide
+T --ez ringOff true; sleep 2; shot 9e-after-off
+adb shell dumpsys notification --noredact | grep -c "id=8 " > $O/ring-notif-after-off.txt || true
+
 note "8 collect"
 (adb shell pidof $PKG || echo DEAD) > $O/pid-end.txt
 adb shell run-as $PKG cat shared_prefs/amor.xml > $O/prefs.xml 2>&1 || true

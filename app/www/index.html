@@ -3774,7 +3774,8 @@
         return '<div class="nt-up"><span class="tm">' + whenShort(it.t) + '</span><span class="tx"><b>' + esc(it.title) + '</b>' + esc(it.text) + '</span></div>';
       }).join('') : '<p class="empty mem-empty">这几天没有要发的提醒。</p>') + '</div>';
     if (inf) html += '<details class="vtrace nt-diag"><summary>通知诊断（出问题时截图发给 Claude）</summary><pre>' + esc(JSON.stringify({
-        enabled: inf.enabled, exact: inf.exact, sdk: inf.sdk, brand: inf.brand, model: inf.model, next: inf.next ? new Date(inf.next).toLocaleString() : '', planned: inf.planned,
+        ver: inf.ver, enabled: inf.enabled, exact: inf.exact, sdk: inf.sdk, brand: inf.brand, model: inf.model,
+        channels: inf.channels, active: inf.active, filter: inf.filter, keep: inf.keep, plain: inf.plain, letterOk: inf.letterOk, next: inf.next ? new Date(inf.next).toLocaleString() : '', planned: inf.planned,
         inUse: inf.inUse, err: inf.err, errAt: inf.errAt ? new Date(inf.errAt).toLocaleString() : '',
         log: (inf.log || []).slice(-15).map(function (x) { return clock(x.t) + ' ' + x.e + (x.k ? ' ' + x.k : ''); }) }, null, 1)) + '</pre>' +
       '<button type="button" class="btn" data-ntclear="1" style="margin-top:6px">清空诊断记录</button></details>';
@@ -4235,7 +4236,10 @@
       try { ok_ = AmorNative.notifyNow(JSON.stringify({ id: 4242, ch: 'care', kind: 'test', title: '测试提醒', short: '这是 ' + (asst.name || 'Amor') + ' 的一条测试', meta: clock(Date.now()), progress: 60,
         text: ntName() + '，这是一条测试提醒 🌹' + (tv && tv.today ? ' 今天' + tv.m.zh + (tv.today.dt || '') + '，' + deg(tv.today.lo) + '~' + deg(tv.today.hi) + '°。' : ''),
         actions: ['done', 'chat'], doneLabel: '收到', island: nt.island ? islandParam('测试提醒', '这是一条测试提醒', '测试') : '' })); } catch (e) {}
-      ntui.test = ok_ ? '已发送 ✓' : '没发出去，看下面的诊断'; keepScroll(); setTimeout(function () { ntui.test = ''; if (state.sub === 'notify') keepScroll(); }, 3000); return; }
+      // 再发一条系统标准样式的，用来判断是不是“信笺”样式在这台手机上显示不出来
+      try { AmorNative.notifyNow(JSON.stringify({ id: 4243, ch: 'care', kind: 'test2', plain: true, title: '测试②·系统样式', short: '如果只看到这条，说明信笺样式在这台手机上显示不了',
+        text: '如果只看到这条、没看到“测试提醒”，说明信笺样式在这台手机上显示不了，把“通知样式”改成“系统样式”就好。', actions: ['done'], doneLabel: '收到' })); } catch (e) {}
+      ntui.test = ok_ ? '已发送 2 条 ✓' : '没发出去，看下面的诊断'; keepScroll(); setTimeout(function () { ntui.test = ''; if (state.sub === 'notify') keepScroll(); }, 3000); return; }
     if (ds.msw) { mem[ds.msw] = !mem[ds.msw]; saveMem(); keepScroll(); return; }
     if (ds.memadd) { var mk_ = ds.memadd, mt_ = (mui.draft[mk_] || '').trim(); if (!mt_) { var fi_ = document.getElementById('mem-add-' + mk_); if (fi_) fi_.focus(); return; }
       if (memAdd(mk_, mt_, 'manual')) { mui.draft[mk_] = ''; toast('记住了'); } else toast(memSafe(mt_) ? '这条已经记过了' : '这条不能记（太长或像是密钥、密码）'); keepScroll(); return; }

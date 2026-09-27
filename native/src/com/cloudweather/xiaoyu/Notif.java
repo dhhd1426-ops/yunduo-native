@@ -129,7 +129,7 @@ final class Notif {
             b.setWhen(now);
             b.setCategory(Notification.CATEGORY_REMINDER);
             b.setColor(cfg.optInt("color", 0xFFA0505D));
-            b.setGroup("amor");
+            // 不设 setGroup：部分小米系统上“有分组但没有分组摘要”的通知会不显示
             b.setVisibility(cfg.optBoolean("lockFull", true) ? Notification.VISIBILITY_PUBLIC : Notification.VISIBILITY_PRIVATE);
             b.setContentIntent(openApp(c, id, item));
 

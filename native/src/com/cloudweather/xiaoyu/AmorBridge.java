@@ -97,6 +97,19 @@ public class AmorBridge {
             o.put("eyeTick", Store.getLong(app, "eyeTick", 0));
             o.put("inUse", Notif.inUse(app));
             o.put("plain", Store.getLong(app, "letterBad", 0) == 1);
+            o.put("letterOk", Store.getLong(app, "letterOk", 0) > 0);
+            try { o.put("ver", app.getPackageManager().getPackageInfo(app.getPackageName(), 0).versionName); } catch (Throwable t) { o.put("ver", "?"); }
+            android.app.NotificationManager m = Notif.nm(app);
+            if (m != null) {
+                o.put("filter", m.getCurrentInterruptionFilter());   // 1=正常 2/3/4=勿扰
+                JSONObject chs = new JSONObject();
+                for (android.app.NotificationChannel ch : m.getNotificationChannels()) chs.put(ch.getId(), ch.getImportance());   // 0=被关掉 1=最低 2=低 3=默认 4=高
+                o.put("channels", chs);
+                JSONArray act = new JSONArray();
+                for (android.service.notification.StatusBarNotification sb : m.getActiveNotifications())
+                    act.put(sb.getId() + ":" + sb.getNotification().getChannelId());
+                o.put("active", act);
+            }
             o.put("keep", KeepService.wanted(app));
             o.put("log", new JSONArray(Store.get(app, "log", "[]")));
             o.put("err", Store.get(app, "err", ""));

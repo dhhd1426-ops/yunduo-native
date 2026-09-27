@@ -1480,6 +1480,13 @@
   .msgs .msg.bot { background: none; padding: 2px 0; max-width: 100%; border-radius: 0; }
   .msgs .bot-head { display: none; }
   .msgs .msg.bot.emo-think { padding: 4px 0; }
+  /* 4.4.2 想完以后：一句话小结 + 小图标 + ›；刚想完时字等羽毛快画好再换上 */
+  .proc .oq { flex: none; color: var(--accent); margin-left: 1px; }
+  .proc .pi { flex: none; display: inline-flex; gap: 4px; align-items: center; color: var(--muted); opacity: .75; margin-left: -2px; }
+  .proc.done .pl { color: var(--muted); }
+  @media (prefers-reduced-motion: no-preference) {
+    .proc.fresh .pl, .proc.fresh .pi, .proc.fresh .cv { animation: lineIn .7s cubic-bezier(.22, 1, .36, 1) var(--fd, 1.1s) both; }
+  }
 </style>
 <script src="fonts/script-glyphs.js"></script>
 <script src="fonts/pinyin.js"></script>
@@ -6875,6 +6882,7 @@
     bindGestures();
     if (Fluid) Fluid.ranges();
     Emo.mount();
+    OrbQ.kick();
     chat.popIn = false; chat.popAnim = '';
   }
 
@@ -7032,9 +7040,121 @@
     else if (sources && sources.length) bits.push('已搜索 ' + sources.length + ' 个网页');
     return bits.join(' · ');
   }
-  // 4.4.1 思考标记：三颗点绕着倾斜的圆环转，圆环隔一会儿翻个跟头（在想的时候一直动，想完停住）
-  function orbHtml(live) { var n = Date.now(); return '<span class="sp orb' + (live ? '' : ' still') + '" aria-hidden="true" style="--ph:-' + (n % 2200) + 'ms;--ph2:-' + (n % 900) + 'ms"><span class="ring"><span class="arm"><i></i></span><span class="arm"><i></i></span><span class="arm"><i></i></span></span></span>'; }
+  // 思考标记：JS 画的星轨（连续、可控），想完后收拢成羽毛笔
+  var OrbQ = (function () {
+    var F = 'M8.4 9.4C8.5 9.3 8.7 8.8 8.8 8.6C8.9 8.4 9 8.3 9.1 8.2C9.2 8.1 9.2 8.1 9.6 7.7C10 7.3 11 6.5 11.5 6.1C12.1 5.6 12.4 5.3 12.8 5C13.2 4.7 13.5 4.5 13.9 4.2C14.4 4 15.1 3.6 15.4 3.4C15.7 3.2 15.7 3.2 15.8 3.2C15.9 3.2 15.9 3.2 15.9 3.2M20 1.4C19.9 1.5 20.1 1.3 19.5 1.6C18.9 1.8 16.9 2.6 16.4 2.9C15.8 3.2 16 3.1 15.9 3.2M20.3 1.3 L20.1 1.4M20.1 1.5C19.8 1.7 18.9 2.3 18.1 2.9C17.4 3.5 16 4.7 15.6 5M15.6 5.1C15.6 5.1 15.7 5 15.6 5.2C15.5 5.3 15.1 5.6 14.8 6C14.5 6.4 13.9 7.2 13.7 7.5C13.4 7.8 13.4 7.8 13.2 8C13 8.2 12.6 8.4 12.5 8.5M10.1 13.2C10.1 13.1 10.1 13.1 10.2 13C10.2 12.9 10.4 12.8 10.6 12.5C10.8 12.3 10.9 11.9 11.2 11.6C11.4 11.2 11.9 10.7 12 10.5C12.2 10.2 12.1 10.3 12.2 10.1C12.3 9.8 12.5 9.3 12.7 9.1C12.8 8.8 13 8.5 13.1 8.3M7.1 16.8C7.1 16.8 7 16.9 7.1 16.7C7.3 16.6 7.7 16.3 8 16C8.2 15.7 8.6 15.4 8.9 15C9.3 14.6 9.8 13.7 10 13.4M8.5 8.9C8.3 9 7.9 9.4 7.6 9.8C7.4 10.1 7 10.4 6.8 10.7C6.6 11 6.6 11.2 6.4 11.5C6.3 11.8 6.2 12.1 6 12.4C5.9 12.7 5.7 12.9 5.6 13.1C5.5 13.4 5.4 13.7 5.4 13.8C5.3 14 5.4 14.1 5.4 14.3C5.4 14.4 5.5 14.6 5.5 14.7M5.1 14.4C5.1 14.5 4.9 14.8 4.9 15C4.8 15.2 4.8 15.3 4.8 15.5C4.7 15.7 4.7 15.9 4.7 16.2C4.7 16.4 4.8 16.6 4.8 16.9C4.9 17.3 5.1 18 5.2 18.2M5.5 14.7 L5.8 14.8M5.1 14.4C5.2 14.4 5.3 14.6 5.4 14.6C5.5 14.7 5.5 14.7 5.5 14.7M7.7 16.5 L7.1 16.8M6.7 17.1 L7.1 16.8M12.4 8.7 L10.8 9.8M15.6 5C15.5 5.1 15.6 5 15.3 5.1C15.1 5.3 14.3 5.7 14.1 5.8M10 13.3 L8.8 14.4M8.4 9.4C8.4 9.5 8.3 9.7 8.3 9.8C8.2 10 8.2 10.3 8.1 10.4M15.5 3.7 L15.9 3.2M12.6 8.6 L13.1 8.3M12.3 6.5C12.2 6.6 11.8 7 11.6 7.2C11.3 7.5 11 7.8 10.7 8.2C10.4 8.6 10 9.1 9.7 9.4C9.4 9.8 9.3 10 9 10.4C8.8 10.7 8.5 11 8.2 11.6C7.9 12.2 7.4 13.1 7.1 13.8C6.8 14.4 6.6 14.8 6.4 15.4C6.1 16 5.9 16.7 5.5 17.6C5.2 18.4 4.8 19.7 4.5 20.6C4.2 21.4 3.8 22.4 3.7 22.7M3.7 22.7C3.9 22.6 4.7 22.2 4.8 22C5 21.8 4.6 21.8 4.5 21.7M5.1 18.9C5.2 18.8 5.5 18.6 5.7 18.4C5.9 18.3 6 18.3 6.3 18.1C6.6 17.8 7.1 17.3 7.3 17.1C7.5 16.8 7.6 16.6 7.7 16.6', S = 'M5.1 21.6C5.3 21.5 5.9 21 6.4 20.7C6.9 20.3 7.6 19.9 7.9 19.7C8.2 19.5 8.2 19.5 8.4 19.5C8.6 19.4 8.8 19.4 8.9 19.4C9.1 19.5 9.2 19.5 9.2 19.6C9.3 19.6 9.3 19.6 9.4 19.7C9.4 19.8 9.4 19.9 9.5 19.9C9.5 20 9.5 20 9.4 20.1C9.4 20.3 9.4 20.4 9.2 20.6C9 20.8 8.4 21.4 8.3 21.6C8.1 21.8 8.2 21.8 8.2 21.9C8.2 21.9 8.2 22 8.3 22C8.3 22.1 8.3 22.1 8.5 22.1C8.6 22.1 8.7 22.1 9 22.1C9.3 22 9.8 21.9 10.2 21.7C10.6 21.6 10.9 21.4 11.2 21.2C11.6 21 11.8 20.9 12.3 20.5C12.8 20.2 13.9 19.4 14.4 19C14.9 18.6 15.2 18.5 15.5 18.3C15.8 18.1 16.1 17.9 16.3 17.8C16.5 17.7 16.6 17.7 16.9 17.6C17.1 17.6 17.5 17.5 17.7 17.4C18 17.4 18.2 17.4 18.3 17.4C18.5 17.4 18.7 17.5 18.8 17.5C18.9 17.6 18.9 17.6 19.1 17.6C19.2 17.7 19.6 18 19.7 18.1';
+    var ORBIT = 1700, FLIP = 5200, NIB = [5.2, 20.6];
+    function ease(x) { x = Math.max(0, Math.min(1, x)); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
+    function sm(a, b, x) { return ease((x - a) / (b - a)); }
+    function html() {
+      return '<svg class="oq" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow:visible">' +
+        '<path class="oq-ring" stroke="currentColor" stroke-width=".8" opacity=".25"/>' +
+        '<circle class="oq-d" fill="currentColor"/><circle class="oq-d" fill="currentColor"/><circle class="oq-d" fill="currentColor"/>' +
+        '<g class="oq-q" stroke="currentColor" stroke-width="1.05" opacity="0"><path class="oq-f" pathLength="100" stroke-dasharray="100 100" stroke-dashoffset="100" d="' + F + '"/>' +
+        '<path class="oq-s" pathLength="100" stroke-dasharray="100 100" stroke-dashoffset="100" d="' + S + '"/></g></svg>';
+    }
+    // 翻转节奏：停 → 向右翻半圈 → 停 → 向左翻回来（左右交替，很有规律）
+    function flipAt(t) {
+      var p = (t % FLIP) / FLIP;
+      if (p < .25) return 0; if (p < .5) return 180 * ease((p - .25) / .25);
+      if (p < .75) return 180; return 180 - 180 * ease((p - .75) / .25);
+    }
+    function draw(svg, now) {
+      var t0 = +svg.getAttribute('data-done') || 0, m = t0 ? now - t0 : -1;   // m：收拢开始后过了多少毫秒
+      if (svg.getAttribute('data-still') === '1') m = 99999;
+      var tilt = 64, phi = flipAt(now), r = 7.6, cx = 12, cy = 12, ringOp = .25, dotR = 2.3, speed = 1;
+      var qOp = 0, qf = 100, qs = 100, gOp = 1, sc = 1;
+      var ang = now / ORBIT * Math.PI * 2;
+      if (m >= 0) {
+        // ① 0–900ms：放慢、停止翻转，圆环慢慢转正，变成一个正圆
+        var a = sm(0, 900, m); tilt = 64 * (1 - a); phi = phi * (1 - a);
+        // 转速越来越慢：用积分后的角度，保证不跳
+        var tt = Math.min(m, 1500) / 1000; ang = t0 / ORBIT * Math.PI * 2 + (Math.PI * 2 / (ORBIT / 1000)) * (tt - tt * tt / 3);
+        // ② 700–1500ms：三颗点绕着圈收拢，一边往笔尖的位置挪，最后汇成一滴墨
+        var b = sm(700, 1500, m); r = 7.6 * (1 - b); cx = 12 + (NIB[0] - 12) * b; cy = 12 + (NIB[1] - 12) * b; ringOp = .25 * (1 - sm(500, 1100, m)); dotR = 2.3 - .6 * b;
+        // ③ 1400–2300ms：墨滴里长出羽毛笔（从笔尖往上画），墨滴淡去
+        var c = sm(1400, 2300, m); qOp = Math.min(1, c * 3); qf = 100 * (1 - c); gOp = 1 - sm(1500, 2000, m);
+        // ④ 2200–2900ms：笔下那道墨迹写出去
+        qs = 100 * (1 - sm(2200, 2900, m));
+      }
+      var rx = tilt * Math.PI / 180, ry = (phi - 14 * (1 - (m >= 0 ? sm(0, 900, m) : 0))) * Math.PI / 180;
+      function proj(u) {                // 圆环上角度 u 的点 → 屏幕坐标和深度
+        var x = r * Math.cos(u), y = r * Math.sin(u), z = 0;
+        var y1 = y * Math.cos(rx) - z * Math.sin(rx), z1 = y * Math.sin(rx) + z * Math.cos(rx);
+        var x2 = x * Math.cos(ry) + z1 * Math.sin(ry), z2 = -x * Math.sin(ry) + z1 * Math.cos(ry);
+        var k = 34 / (34 - z2);
+        return [cx + x2 * k, cy + y1 * k, z2];
+      }
+      var d = '', i, P;
+      for (i = 0; i <= 36; i++) { P = proj(i / 36 * Math.PI * 2); d += (i ? 'L' : 'M') + P[0].toFixed(2) + ' ' + P[1].toFixed(2); }
+      var ring = svg.querySelector('.oq-ring'); ring.setAttribute('d', d); ring.setAttribute('opacity', ringOp.toFixed(3));
+      var ds = svg.querySelectorAll('.oq-d');
+      for (i = 0; i < 3; i++) {
+        P = proj(ang + i * Math.PI * 2 / 3);
+        var dep = Math.max(-1, Math.min(1, P[2] / 8));
+        ds[i].setAttribute('cx', P[0].toFixed(2)); ds[i].setAttribute('cy', P[1].toFixed(2));
+        ds[i].setAttribute('r', (dotR * (1 + dep * .22)).toFixed(2));
+        ds[i].setAttribute('opacity', (gOp * (.72 + dep * .28)).toFixed(3));
+      }
+      var q = svg.querySelector('.oq-q'); q.setAttribute('opacity', qOp.toFixed(3));
+      svg.querySelector('.oq-f').setAttribute('stroke-dashoffset', qf.toFixed(1));
+      var sEl = svg.querySelector('.oq-s'); sEl.setAttribute('stroke-dashoffset', qs.toFixed(1)); sEl.setAttribute('opacity', qs > 99 ? '0' : '1');
+    }
+    var raf = 0;
+    function loop() {
+      raf = 0; var now = Date.now(), live = false;
+      Array.prototype.forEach.call(document.querySelectorAll('svg.oq'), function (s) {
+        var r = s.getBoundingClientRect(); if (!r.width || r.bottom < 0 || r.top > innerHeight) return;
+        draw(s, now);
+        var t0 = +s.getAttribute('data-done') || 0;
+        if (s.getAttribute('data-still') !== '1' && (!t0 || now - t0 < 3000)) live = true;
+      });
+      if (live) raf = requestAnimationFrame(loop);
+    }
+    function kick() { if (!raf) raf = requestAnimationFrame(loop); }
+    return { html: html, kick: kick, draw: draw };
+  })();
+  // 4.4.2 思考标记：live=正在想（一直转）；done=刚想完的时刻（收拢成羽毛笔）；都没有=早就想完了（静止的羽毛笔）
+  function orbHtml(live, doneAt) {
+    var h = OrbQ.html();
+    if (live) return h;
+    if (doneAt && Date.now() - doneAt < 3200) return h.replace('<svg ', '<svg data-done="' + doneAt + '" ');
+    return h.replace('<svg ', '<svg data-still="1" ');
+  }
+  // 想完以后那一行：一句话小结（像 Claude App 的「已为…」），后面跟几个小图标说明用了什么
+  function procSummary(reasoning, ms, sources, recall) {
+    var L = recall || [], bits = [], ics = [];
+    var webs = L.filter(function (l) { return l.tool === 'web'; }), ev = L.filter(function (l) { return l.tool === 'event'; }),
+      al = L.filter(function (l) { return l.tool === 'alarm'; }), rm = L.filter(function (l) { return l.tool === 'remind'; }),
+      rc = L.filter(function (l) { return !/^(remind|rlist|rcancel|event|elist|edel|alarm|web)$/.test(l.tool); });
+    if (webs.length) { var wq = webs[0].q.length > 9 ? webs[0].q.slice(0, 8) + '…' : webs[0].q; bits.push('查了“' + wq + '”' + (webs.length > 1 ? '等 ' + webs.length + ' 次' : '') + (sources && sources.length ? '，看了 ' + sources.length + ' 个网页' : '')); ics.push('globe'); }
+    else if (sources && sources.length) { bits.push('搜索了网页，看了 ' + sources.length + ' 个'); ics.push('globe'); }
+    if (rc.length) { bits.push('翻看了以前的对话'); ics.push('history'); }
+    if (ev.length) { bits.push('记进了日程' + (ev[0].q ? '「' + ev[0].q + '」' : '')); ics.push('cal'); }
+    if (al.length) { bits.push('定了 ' + al.length + ' 个闹钟'); ics.push('bell'); }
+    if (rm.length) { bits.push('设了 ' + rm.length + ' 个提醒'); if (ics.indexOf('bell') < 0) ics.push('bell'); }
+    var s = bits.join('，');
+    if (!s && reasoning && asst.showThink) {
+      var ps = String(reasoning).split(/\n+|(?<=[。！？!?])\s*/).map(function (x) { return x.replace(/^[#*\-\d.\s]+/, '').replace(/\*\*/g, '').trim(); }).filter(function (x) { return x.length > 3; });
+      s = ps.length ? ps[ps.length - 1] : '';
+    }
+    if (!s && (reasoning && asst.showThink)) s = '想了 ' + (secsOf(ms) || 1) + ' 秒';
+    if (!s) return null;
+    if (s.length > 26) s = s.slice(0, 25) + '…';
+    return { text: s, icons: ics };
+  }
+  function procDoneRow(key, sm, doneAt, extraCls) {
+    var fresh = doneAt && Date.now() - doneAt < 3200;
+    return '<button type="button" class="proc done' + (fresh ? ' fresh' : '') + (extraCls || '') + '"' + (fresh ? ' style="--fd:' + (1100 - (Date.now() - doneAt)) + 'ms"' : '') + ' data-proc="' + key + '" aria-label="查看思考过程：' + esc(sm.text) + '">' + orbHtml(false, doneAt) +
+      '<span class="pl">' + esc(sm.text) + '</span>' + (sm.icons.length ? '<span class="pi">' + sm.icons.map(function (n) { return icon(n, 15); }).join('') + '</span>' : '') +
+      '<span class="cv">' + icon('chev', 16) + '</span></button>';
+  }
   function procRow(x, key) {
+    var sm = procSummary(x.reasoning, x.thinkMs, x.sources, x.recall);
+    if (sm) {
+      var cv = curConv(), last = cv && key === cv.id + ':' + (cv.msgs.length - 1);
+      return procDoneRow(key, sm, last ? chat.lastDoneAt : 0);
+    }
     var lb = procLabel(x.reasoning, x.thinkMs, x.sources, x.recall);
     if (!lb) return '';
     return '<button type="button" class="proc" data-proc="' + key + '" aria-label="查看' + lb + '">' + orbHtml(false) + '' +
@@ -7046,7 +7166,11 @@
     else if (chat.phase === 'web') { live = true; var lw = chat.recall && chat.recall[chat.recall.length - 1]; lb = '正在搜索“' + (lw ? lw.q : '') + '”…'; }
     else if (chat.phase === 'recall') { live = true; var lg = chat.recall && chat.recall[chat.recall.length - 1]; lb = lg && lg.tool === 'web' ? '读完搜索结果，正在整理…' : lg && lg.tool === 'search' ? '正在回想“' + lg.q + '”…' : lg && /^(remind|rlist|rcancel)$/.test(lg.tool) ? '正在设提醒…' : lg && /^(event|elist|edel|alarm)$/.test(lg.tool) ? '正在记进日程…' : '正在翻看过去的对话…'; }
     else if (!chat.partial && chat.partialThink && asst.showThink) { live = true; lb = thinkLine(chat.partialThink) || '正在思考…'; }
-    else if (chat.partial) lb = procLabel(chat.partialThink, chat.thinkMs, chat.sources, chat.recall);
+    else if (chat.partial) {
+      var sm = procSummary(chat.partialThink, chat.thinkMs, chat.sources, chat.recall);
+      if (sm) { chat.procLine = ''; return procDoneRow('live', sm, chat.lastDoneAt); }
+      lb = procLabel(chat.partialThink, chat.thinkMs, chat.sources, chat.recall);
+    }
 
     if (!lb) return '';
     chat.procLine = live ? lb : '';
@@ -7326,7 +7450,7 @@
       liveRead = voice.auto && voiceReady() ? Speaker.live(conv.id + ':' + conv.msgs.length, function (e) { toast('朗读失败：' + e.msg); }) : null;
       if (chat.open) renderSheet();
       return chatStream(rm.p, rm.id, system, hist, function (t, th) {
-        if (t && !tEnd) { tEnd = Date.now(); if (th) chat.thinkMs = tEnd - chat.t0; }
+        if (t && !tEnd) { tEnd = Date.now(); chat.lastDoneAt = tEnd; if (th) chat.thinkMs = tEnd - chat.t0; }
         var firstThink = th && !chat.partialThink, firstText = t && !chat.partial;
         chat.partial = t; chat.partialThink = th;
         if (liveRead && t) liveRead.feed(stripEmoLive(t));

@@ -209,6 +209,37 @@ public class AmorBridge {
         }
     }
 
+    /* ---------- 4.7 文件：网页分块写入 → 保存到下载 / 分享 / 用其它应用打开 ---------- */
+    @JavascriptInterface
+    public String fileBegin(String name, String mime) {
+        try { return AmorFiles.begin(app, name, mime); } catch (Throwable t) { Store.err(app, "fileBegin", t); return ""; }
+    }
+
+    @JavascriptInterface
+    public void fileAppend(String id, String b64) {
+        try { AmorFiles.append(id, b64); } catch (Throwable t) { Store.err(app, "fileAppend", t); }
+    }
+
+    @JavascriptInterface
+    public String fileEnd(String id) {
+        try { return AmorFiles.end(id); } catch (Throwable t) { Store.err(app, "fileEnd", t); return "{}"; }
+    }
+
+    @JavascriptInterface
+    public boolean fileExport(String path, String name, String mime) {
+        try { AmorFiles.export(app, path, name, mime); return true; } catch (Throwable t) { Store.err(app, "fileExport", t); return false; }
+    }
+
+    @JavascriptInterface
+    public boolean fileShare(String path, String mime) {
+        try { return AmorFiles.send(act, app, path, mime, true); } catch (Throwable t) { Store.err(app, "fileShare", t); return false; }
+    }
+
+    @JavascriptInterface
+    public boolean fileOpen(String path, String mime) {
+        try { return AmorFiles.send(act, app, path, mime, false); } catch (Throwable t) { Store.err(app, "fileOpen", t); return false; }
+    }
+
     private boolean tryStart(Intent i) {
         try {
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

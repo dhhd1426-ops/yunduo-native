@@ -1183,56 +1183,75 @@
   .tabs button span { font-size: 10.5px; }
   @media (min-width: 720px) { .tabs { grid-template-columns: 1fr; } .tab-ind { width: auto; } }
 
-  /* ---------- 此刻：手写时间 + 日行轨迹 + 蝴蝶 ---------- */
-  .moment { position: relative; text-align: left; color: var(--text); }
-  .moment .hr-lbl { font-family: "Cormorant Garamond", Georgia, serif; font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--muted);
-    display: flex; align-items: center; gap: 8px; opacity: 0; transform: translateY(4px); transition: opacity .6s, transform .6s var(--spring, ease); }
-  .moment .hr-lbl i { font-style: normal; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; letter-spacing: .3em; }
-  .moment.on .hr-lbl { opacity: 1; transform: none; }
-  .moment .hr-row { display: flex; align-items: flex-end; gap: 10px; margin-top: 2px; }
-  .moment svg.hr-t { height: 68px; width: auto; overflow: visible; display: block; }
-  .moment svg.hr-t path { fill: currentColor; stroke: currentColor; stroke-width: .8px; vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-linecap: round; }
-  .moment svg.hr-t .d { color: var(--ink); }
-  .moment svg.hr-t .c { color: var(--accent); }
-  .moment svg.hr-t .c { transition: opacity .4s ease; }
-  .moment svg.hr-t .pend { fill-opacity: 0; stroke-opacity: 0; }
-  .moment svg.hr-t .out { transition: opacity .55s ease, filter .55s ease; opacity: 0; filter: blur(3px); }
-  .moment svg.hr-t .nib { fill: var(--accent); opacity: 0; }
-  .moment .hr-ap { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: 18px; color: var(--accent); margin-bottom: 10px; opacity: 0; transition: opacity .6s .1s; }
-  .moment .hr-en { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: 16px; color: var(--muted); margin-top: -2px; min-height: 1.3em; }
-  .moment .hr-en span { display: inline-block; opacity: 0; transform: translateY(6px); transition: opacity .5s, transform .6s var(--spring, ease); }
-  .moment .hr-zh { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 11.5px; letter-spacing: .3em; color: var(--muted); margin-left: 4px; opacity: 0; transition: opacity .6s .15s; }
-  .moment .hr-zh b { font-weight: 400; color: var(--accent); }
-  .moment.on2 .hr-ap, .moment.on2 .hr-zh { opacity: 1; }
-  .moment.on2 .hr-en span { opacity: 1; transform: none; }
-  .moment svg.hr-arc { display: block; width: 100%; height: auto; margin-top: 4px; overflow: visible; }
+  /* ---------- 此刻：手写时间（跟在名字后面）+ 日行轨迹（温度右下）+ 蝴蝶 ---------- */
+  .mo-time { display: inline-flex; align-items: baseline; gap: 3px; margin: 0 .3em 0 .35em; font-style: normal; white-space: nowrap; }
+  .mo-time svg.hr-t { height: 1.7em; width: auto; overflow: visible; display: inline-block; vertical-align: -.5em; align-self: center; margin: -.3em 0; }
+  .mo-time svg.hr-t path { fill: currentColor; stroke: currentColor; stroke-width: .8px; vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-linecap: round; }
+  .mo-time svg.hr-t .d { color: var(--text); }
+  .mo-time svg.hr-t .c { color: var(--accent); transition: opacity .4s ease; }
+  .mo-time svg.hr-t .pend { fill-opacity: 0; stroke-opacity: 0; }
+  .mo-time svg.hr-t .out { transition: opacity .55s ease, filter .55s ease; opacity: 0; filter: blur(3px); }
+  .mo-time svg.hr-t .nib { fill: var(--accent); opacity: 0; }
+  .mo-time .hr-ap { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: .92em; color: var(--accent); opacity: 0; transition: opacity .6s .1s; }
+  .mo-time .hr-zh { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-style: normal; font-size: .76em; letter-spacing: .12em; color: var(--accent); margin-left: 4px; opacity: 0; transition: opacity .6s .15s; }
+  .mo-time .hr-zh b { font-weight: 400; }
+  .mo-time.on2 .hr-ap, .mo-time.on2 .hr-zh { opacity: 1; }
+  .date .mo-time-slot:first-child:empty + .sep { display: none; }
+  .moment { position: relative; text-align: left; color: var(--text); width: 100%; }
+  .moment svg.hr-arc { display: block; width: 100%; height: auto; overflow: visible; }
   .moment .arc-dot { fill: none; stroke: var(--muted); stroke-width: 1.1; stroke-dasharray: 1 6; stroke-linecap: round; opacity: .55; }
-  .moment .arc-run { fill: none; stroke: var(--accent); stroke-width: 1.4; stroke-linecap: round; }
+  .moment .arc-run { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; }
   .moment .arc-sun { fill: var(--accent); }
   .moment .arc-halo { fill: var(--accent); opacity: .16; }
   .moment .arc-moon { fill: var(--surface); stroke: var(--accent); stroke-width: 1.2; }
-  .moment .arc-lb { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 10.5px; letter-spacing: .12em; fill: var(--muted); }
+  .moment .arc-lb { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 18.5px; letter-spacing: .08em; fill: var(--muted); }
   .moment .arc-lb.r { text-anchor: end; }
-  .moment .arc-mid { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: 12.5px; fill: var(--accent); text-anchor: middle; opacity: 0; transition: opacity .6s; }
+  .moment .arc-mid { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: 21px; fill: var(--accent); text-anchor: middle; opacity: 0; transition: opacity .6s; }
   .moment.on3 .arc-mid { opacity: 1; }
-  .moment .arc-base { stroke: var(--line); stroke-width: 1; }
-  .moment .mo-fly { position: absolute; left: -60px; top: -34px; width: calc(100% + 84px); height: calc(100% + 48px); pointer-events: none; overflow: visible; z-index: 2; }
+  .moment .arc-base { stroke: var(--line); stroke-width: 1; opacity: .7; }
+  .moment .mo-fly { position: absolute; pointer-events: none; overflow: visible; z-index: 2; transition: opacity 1s; }
   .moment .mo-fly .b { position: absolute; left: 0; top: 0; overflow: visible; opacity: 0; transition: opacity .8s; }
   .moment .mo-fly .b.in { opacity: 1; }
-  .mo-slot-p:empty { display: none; }
-  @media (min-width: 720px) {
-    .greeting .moment { position: absolute; right: 0; top: -6px; width: min(360px, 40%); }
-    .mo-slot-p { display: none; }
+
+  /* ---------- 4.8 横幅场景：天气动画铺满问候语 + 温度，卡片框拆掉 ---------- */
+  .banner { position: relative; isolation: isolate; display: flex; flex-direction: column; gap: 10px; }
+  .banner > .sky { position: absolute; z-index: -1; top: -8px; bottom: -44px; left: var(--sky-l, -20px); right: var(--sky-r, -20px); pointer-events: none; overflow: hidden;
+    --tint: #8c8a9a; --mix: 14%;
+    background: var(--bg);
+    background: linear-gradient(180deg, var(--bg) 0, color-mix(in srgb, var(--bg), var(--tint) var(--mix)) 56px, color-mix(in srgb, var(--bg), var(--tint) calc(var(--mix) * .8)) 62%, var(--bg) 100%); }
+  .banner > .sky[data-fx="sun"], .banner > .sky[data-fx="partly"] { --tint: #d9906a; }
+  .banner > .sky[data-fx="cloud"] { --tint: #8e8c98; --mix: 12%; }
+  .banner > .sky[data-fx="rain"], .banner > .sky[data-fx="storm"] { --tint: #4f6a86; --mix: 20%; }
+  .banner > .sky[data-fx="snow"] { --tint: #aebbd2; --mix: 16%; }
+  .banner > .sky[data-fx="fog"] { --tint: #9ea3aa; --mix: 16%; }
+  .banner > .sky[data-fx="moon"] { --tint: #0c0e1c; --mix: 45%; }
+  @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .banner > .sky { --mix: 22%; } :root:not([data-theme="dark"]) .banner > .sky[data-fx="moon"] { --tint: #3a4266; --mix: 26%; } }
+  :root[data-theme="light"] .banner > .sky { --mix: 22%; }
+  :root[data-theme="light"] .banner > .sky[data-fx="moon"] { --tint: #3a4266; --mix: 26%; }
+  .banner > .sky canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  @media (prefers-reduced-motion: no-preference) {
+    .banner > .sky canvas { transition: opacity 1.6s ease .4s; }
+    .banner.enter > .sky canvas { opacity: 0; }
+    .banner.enter.fx-on > .sky canvas { opacity: 1; }
   }
-  @media (max-width: 719px) {
-    .mo-slot { display: none; }
-    .moment { margin: 4px 0 12px; }
-    .moment .hr-row { gap: 6px; }
-    .moment svg.hr-t { height: 54px; }
-    .moment .hr-ap { font-size: 15px; margin-bottom: 9px; }
-    .moment .hr-txt { margin-left: 8px; padding-bottom: 6px; min-width: 0; }
-    .moment .hr-en { font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .moment .hr-zh { margin: 2px 0 0; }
+  .banner .hero { background: none; border-radius: 0; padding: 0; box-shadow: none; overflow: visible; min-height: 0; isolation: auto; display: block; }
+  .banner .now { grid-template-columns: auto minmax(0, 1fr); column-gap: 18px; row-gap: 0; align-items: end; }
+  .banner .now-l { display: contents; }
+  .banner .pl-row { grid-column: 1 / -1; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+  .banner .pl-row .place-en { flex: none; max-width: 70%; }
+  .banner .pl-row .place { margin-top: 4px; }
+  .banner .temp { grid-column: 1; grid-row: 2; }
+  .banner .now .label, .banner .cr { grid-column: 1 / -1; }
+  .banner .temp { text-shadow: 0 2px 24px color-mix(in srgb, var(--bg) 60%, transparent); }
+  .banner .cr { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .banner .mo-arc-slot { grid-column: 2; grid-row: 2; align-self: end; justify-self: end; width: 100%; max-width: 380px; padding-bottom: 6px; min-width: 0; }
+  .banner .mo-arc-slot:empty { display: none; }
+  .view.today > .banner ~ * { position: relative; z-index: 1; }   /* 天空往下淡出的那一截垫在后面的卡片下面 */
+  /* 雨、雷雨、雪：蝴蝶躲起来 */
+  .banner.wet .deco .bfly { opacity: 0 !important; transition: opacity 1s; }
+  .banner.wet .mo-fly { opacity: 0; }
+  @media (min-width: 720px) {
+    .banner .mo-arc-slot { justify-self: start; max-width: 340px; margin-left: 12px; }
   }
 
   /* ---------- 方案 C：Amor 的外出建议 + 回信 ---------- */
@@ -2547,7 +2566,7 @@
     return '天气平稳，适合日常出行。';
   }
 
-  /* ---------- 天气特效（画在当前天气卡片的背景里） ---------- */
+  /* ---------- 天气特效（4.8 起画在首页横幅的整片天空里） ---------- */
   var FX = (function () {
     var mq = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
     var canvas = null, ctx = null, hero = null, type = '', w = 0, h = 0, dpr = 1;
@@ -2607,15 +2626,15 @@
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
       if (sizeChanged || nt !== type) { w = cw; h = ch; type = nt; init(); }
-      if (sizeChanged || force) {
-        var ic = hero.querySelector('.big-ic svg');
-        if (ic) {
-          var hr = hero.getBoundingClientRect(), ir = ic.getBoundingClientRect();
-          cx = ir.left - hr.left + ir.width / 2; cy = ir.top - hr.top + ir.height / 2;
-        } else { cx = w - 64; cy = h - 70; }
-      }
+      if (sizeChanged || force) anchor();
     }
-    var cx = 0, cy = 0;
+    // 太阳 / 月亮的光晕跟着日出日落弧线上的那颗点走
+    function anchor() {
+      var ha = document.querySelector('.banner .arc-halo'), hr = hero.getBoundingClientRect(), ir = ha && ha.getBoundingClientRect();
+      if (ir && ir.width) { cx = ir.left - hr.left + ir.width / 2; cy = ir.top - hr.top + ir.height / 2; }
+      else { cx = w * .8; cy = h * .72; }
+    }
+    var cx = 0, cy = 0, anchorT = 0;
 
     function cloud(x, y, s, a) {
       ctx.fillStyle = rgba(col.muted, a);
@@ -2733,6 +2752,7 @@
       if (ctx && hero && !covered) {
         resize(false);
         time += dt;
+        if (time - anchorT > .4) { anchorT = time; anchor(); }
         draw(dt);
       }
       if (!(mq && mq.matches)) requestAnimationFrame(loop);
@@ -2782,9 +2802,9 @@
     var writing = Writer.isWriting(k1) || (en && Writer.isWriting(k2));
     var title = w1 ? w1 + w2 : esc(hello) + (en ? ', Dear ' + esc(en) : '');
     return '<div class="greeting a' + (writing ? ' gw' : '') + (Writer.linesShown(lastKey) ? ' lines' : '') + '" data-gkey="' + esc(lastKey) + '">' +
-      '<span class="deco-slot"></span><span class="mo-slot"></span>' +
+      '<span class="deco-slot"></span>' +
       '<h1 class="two" aria-label="' + esc(hello + (en ? ', Dear ' + en : '')) + '">' + title + '</h1>' +
-      '<p class="date">' + (name && cjk ? '<span class="zh-name">' + esc(name) + '</span>· ' : '') + dateEn + '</p>' + (adv ? '<p class="advice-en">' + adv + '</p>' : '') +
+      '<p class="date">' + (name && cjk ? '<span class="zh-name">' + esc(name) + '</span>' : '') + '<span class="mo-time-slot"></span><span class="sep">· </span>' + dateEn + '</p>' + (adv ? '<p class="advice-en">' + adv + '</p>' : '') +
       flourish + '</div>';
   }
 
@@ -3751,27 +3771,31 @@
     if (!v) return '<section class="view">' + greetingBlock('') + statusView().replace('<section class="view">', '').replace('</section>', '') + '</section>';
     var adv = advise(v), t = v.today, n = v.now;
     var zhDate = (now.getMonth() + 1) + '月' + now.getDate() + '日 ' + DAYS_ZH[now.getDay()];
-    var html = '<section class="view today">' + greetingBlock(adv.en) + '<div class="mo-slot-p"></div>';
+    var html = '<section class="view today">';
     var heroAnim = !!renderAnim;
-
-    if (v.alarms.length) {
-      html += '<div class="alert a" role="alert">' + icon('warn', 20) + '<ul>' +
-        v.alarms.map(function (a) { return '<li>' + esc(a) + '</li>'; }).join('') + '</ul></div>';
-    }
 
     var fxType = /雷/.test(v.curText) ? 'storm' : v.icon;
     var placeKey = 'place|' + state.current + '|' + placeEpoch;
     if (heroAnim) Writer.arm(placeKey);
     var placeSvg = v.m.en ? Writer.markup(placeKey, [{ text: v.m.en, cls: 'acc' }], 30, { total: 1000, delay: 480 }) : '';
-    html += '<div class="cols"><div class="col-a">';
-    html += '<div class="hero' + (heroAnim ? ' enter' : '') + '" data-fx="' + fxType + '"><canvas id="fx" aria-hidden="true"></canvas><div class="now"><div>' +
-      (v.m.en ? '<div class="place-en" aria-label="' + esc(v.m.en) + '">' + (placeSvg || esc(v.m.en)) + '</div>' : '') +
-      '<div class="place">' + v.m.zh + ' <span style="color:var(--muted);font-size:14px;font-weight:400">' + zhDate + '</span></div>' +
+    placeSvg = placeSvg.replace(/width:min\(100%,([\d.]+px)\)/, 'width:$1;max-width:100%');   // 和「北京」排在同一行，宽度要定下来
+    // 4.8 横幅场景：天气动画铺满问候语 + 温度这一整块，卡片框拆掉；日出日落弧线放在温度右下
+    html += '<div class="banner' + (heroAnim ? ' enter' : '') + (/^(rain|storm|snow)$/.test(fxType) ? ' wet' : '') + '" data-fx="' + fxType + '">' +
+      '<div class="sky" data-fx="' + fxType + '" aria-hidden="true"><canvas id="fx"></canvas></div>' + greetingBlock(adv.en);
+    html += '<div class="hero' + (heroAnim ? ' enter' : '') + '"><div class="now"><div class="now-l">' +
+      '<div class="pl-row">' + (v.m.en ? '<div class="place-en" aria-label="' + esc(v.m.en) + '">' + (placeSvg || esc(v.m.en)) + '</div>' : '') +
+      '<div class="place">' + v.m.zh + '</div></div>' +
       '<div class="temp">' + odoHtml(deg(v.temp), 'hero|' + state.current, heroAnim) + '</div>' +
       (n ? '' : '<div class="label">实况暂缺，显示今日最高气温</div>') +
-      '<div class="cond">' + esc(v.curText || '—') + '</div>' +
-      (t ? '<div class="range">最高 ' + deg(t.hi) + '° · 最低 ' + deg(t.lo) + '°</div>' : '') +
-      '</div><div class="big-ic">' + (heroAnim ? iconDraw(v.icon, 64) : icon(v.icon, 64)) + '</div></div></div>';
+      '<div class="cr"><span class="cond">' + esc(v.curText || '—') + '</span>' +
+      (t ? '<span class="range">最高 ' + deg(t.hi) + '° · 最低 ' + deg(t.lo) + '°</span>' : '') + '</div>' +
+      '</div><div class="mo-arc-slot"></div></div></div></div>';
+    if (v.alarms.length) {
+      html += '<div class="alert a" role="alert">' + icon('warn', 20) + '<ul>' +
+        v.alarms.map(function (a) { return '<li>' + esc(a) + '</li>'; }).join('') + '</ul></div>';
+    }
+
+    html += '<div class="cols"><div class="col-a">';
 
     if (n) {
       html += '<div class="stats a">' +
@@ -4748,11 +4772,10 @@
       Array.prototype.forEach.call(vw.querySelectorAll('.a'), function (c, i) { c.style.setProperty('--i', i); });
       vw.classList.add('anim-' + renderAnim);
       setTimeout(function () { if (vw.isConnected) vw.classList.remove('anim-' + renderAnim); }, 1600);
-      var hero = vw.querySelector('.hero.enter');
-      if (hero) {
+      Array.prototype.forEach.call(vw.querySelectorAll('.hero.enter, .banner.enter'), function (hero) {
         requestAnimationFrame(function () { hero.classList.add('fx-on'); });
         setTimeout(function () { if (hero.isConnected) hero.classList.remove('enter', 'fx-on'); }, 2600);
-      }
+      });
     }
     rollOdos();
     Writer.kick();
@@ -4924,31 +4947,23 @@
       else s = MIN[60 - m] + ' to ' + NUM[(h + 1) % 12];
       return s.charAt(0).toUpperCase() + s.slice(1) + ', ' + part;
     }
-    function zh(d) { var i = Math.floor(((d.getHours() + 1) % 24) / 2); return '<b>' + SC[i] + '时</b> · ' + SCW[i]; }
+    function zh(d) { var i = Math.floor(((d.getHours() + 1) % 24) / 2); return '<b>' + SC[i] + '时</b>'; }
     function hm(d) { var h = d.getHours() % 12 || 12, m = d.getMinutes(); return h + ':' + (m < 10 ? '0' : '') + m; }
     var H = G.asc - G.desc;
     function lay(txt) { var x = 0, prev = '', o = []; Array.from(txt).forEach(function (ch) { var g = G.g[ch]; if (!g) return; x += (G.k && G.k[prev + ch]) || 0; o.push({ ch: ch, d: g[0], x: x }); x += g[1]; prev = ch; }); return { gl: o, w: x }; }
     function ease(p) { return p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; }
-    var el = null, svg = null, cur = '', writing = [], started = false, ready = false, raf = 0, where = '';
+    var el = null, tm = null, svg = null, cur = '', writing = [], started = false, ready = false, raf = 0, where = 'p';
 
+    // 4.8：时间跟在名字后面（tm），弧线放到温度右下（el）
     function build() {
       el = document.createElement('div'); el.className = 'moment'; el.setAttribute('aria-hidden', 'true');
-      el.innerHTML = '<div class="hr-lbl">The Hour<i>此刻</i></div>' +
-        '<div class="hr-row"><svg class="hr-t"></svg><div class="hr-ap"></div><div class="hr-txt"></div></div>' +
-        '<div class="hr-en"><span></span></div><div class="hr-zh"></div>' +
-        '<svg class="hr-arc" viewBox="0 0 380 52"><line class="arc-base" x1="6" y1="38" x2="374" y2="38"/><path class="arc-dot" d="M14 38 Q190 -4 366 38"/>' +
-        '<path class="arc-run" d="M14 38 Q190 -4 366 38"/><circle class="arc-halo" r="11" cx="14" cy="38"/><circle class="arc-sun" r="4.2" cx="14" cy="38"/>' +
-        '<text class="arc-lb" x="6" y="51"></text><text class="arc-lb r" x="374" y="51"></text><text class="arc-mid" x="190" y="51"></text></svg>';
-      svg = el.querySelector('svg.hr-t');
+      el.innerHTML = '<svg class="hr-arc" viewBox="0 0 380 86"><line class="arc-base" x1="6" y1="38" x2="374" y2="38"/><path class="arc-dot" d="M14 38 Q190 -4 366 38"/>' +
+        '<path class="arc-run" d="M14 38 Q190 -4 366 38"/><circle class="arc-halo" r="11" cx="14" cy="38"/><circle class="arc-sun" r="4.6" cx="14" cy="38"/>' +
+        '<text class="arc-lb" x="6" y="61"></text><text class="arc-lb r" x="374" y="61"></text><text class="arc-mid" x="190" y="84"></text></svg>';
+      tm = document.createElement('span'); tm.className = 'mo-time'; tm.setAttribute('aria-hidden', 'true');
+      tm.innerHTML = '<svg class="hr-t"></svg><span class="hr-ap"></span><span class="hr-zh"></span>';
+      svg = tm.querySelector('svg.hr-t');
       svg.innerHTML = '<g class="root" transform="translate(0,' + G.asc + ') scale(1,-1)"></g>';
-    }
-    // 宽屏：时辰跟在标签后面；手机：英文和时辰放到时间右边
-    function arrange(wide) {
-      if (where === (wide ? 'w' : 'p')) return; where = wide ? 'w' : 'p';
-      var lbl = el.querySelector('.hr-lbl'), txt = el.querySelector('.hr-txt'), enEl = el.querySelector('.hr-en'), zhEl = el.querySelector('.hr-zh');
-      if (wide) { lbl.appendChild(zhEl); el.insertBefore(enEl, el.querySelector('svg.hr-arc')); }
-      else { txt.appendChild(enEl); txt.appendChild(zhEl); }
-      flyReset();
     }
     // 日行轨迹：白天日出→日落（小太阳），夜里日落→日出（小月亮）
     function arcState(now) {
@@ -4987,7 +5002,7 @@
       if (txt === cur) return;
       var L = lay(txt), pad = 40, old = cur; cur = txt;
       var relayout = !old || old.length !== txt.length;
-      svg.setAttribute('viewBox', (-pad) + ' -40 ' + (L.w + pad * 2) + ' ' + (H + 40));
+      svg.setAttribute('viewBox', '-6 -4 ' + (L.w + 12) + ' ' + (H + 4));
       var g = svg.querySelector('g.root'), olds = Array.prototype.slice.call(g.querySelectorAll('path.gl')), todo = [];
       function fade(o) { o.classList.remove('gl'); o.classList.add('out'); setTimeout(function () { o.remove(); }, 600); }
       L.gl.forEach(function (gl, i) {
@@ -5007,19 +5022,15 @@
         t += dur * .62;
       });
       kick();
-      el.querySelector('.hr-ap').textContent = d.getHours() < 12 ? 'a.m.' : 'p.m.';
-      var enEl = el.querySelector('.hr-en span'), zhEl = el.querySelector('.hr-zh'), s = arcState(d), total = delay + t + 500;
+      tm.querySelector('.hr-ap').textContent = d.getHours() < 12 ? 'a.m.' : 'p.m.';
+      var zhEl = tm.querySelector('.hr-zh'), s = arcState(d), total = delay + t + 500;
       if (first) {
-        enEl.textContent = en(d); zhEl.innerHTML = zh(d); arcLabels(s);
-        setTimeout(function () { el.classList.add('on2'); }, reduce ? 0 : total * .7);
+        zhEl.innerHTML = zh(d); arcLabels(s);
+        setTimeout(function () { el.classList.add('on2'); tm.classList.add('on2'); }, reduce ? 0 : total * .7);
         setTimeout(function () { arcTo(s, true); el.classList.add('on3', 'done'); }, reduce ? 0 : total * .8);
         setTimeout(flyInit, reduce ? 0 : total * .9);
       } else {
-        enEl.style.opacity = '0'; enEl.style.transform = 'translateY(-6px)';
-        setTimeout(function () {
-          enEl.style.transition = 'none'; enEl.style.transform = 'translateY(6px)'; enEl.textContent = en(d); zhEl.innerHTML = zh(d); arcLabels(s);
-          void enEl.offsetWidth; enEl.style.transition = ''; enEl.style.opacity = ''; enEl.style.transform = '';
-        }, 420);
+        setTimeout(function () { zhEl.innerHTML = zh(d); arcLabels(s); }, 420);
         arcTo(s, false);
         var ch = 0; for (var q = 0; q < txt.length; q++) if (old[q] !== txt[q]) { ch = q; break; }
         setTimeout(function () { flyVisit(ch); }, 200);
@@ -5047,6 +5058,13 @@
     var flies = [], flyRaf = 0, flySvg = null, flyT0 = 0, visit = null, flyOn = false;
     var PICK = [3, 4, 10, 5];
     function flyReset() { if (flySvg) { flySvg.remove(); flySvg = null; } flies = []; if (flyOn) setTimeout(flyInit, 60); }
+    // 蝴蝶层挂在弧线元素里（重画页面时跟着走），但铺满整个横幅
+    function flyPlace() {
+      var bn = el && el.closest('.banner'); if (!bn || !flySvg) return;
+      var r = bn.getBoundingClientRect(), e = el.getBoundingClientRect();
+      if (Math.abs(r.width - +flySvg.getAttribute('data-w')) > 4 || Math.abs(r.height - +flySvg.getAttribute('data-h')) > 4) { flyReset(); return; }
+      flySvg.style.left = (r.left - e.left) + 'px'; flySvg.style.top = (r.top - e.top) + 'px'; flySvg.style.width = r.width + 'px'; flySvg.style.height = r.height + 'px';
+    }
     function flyInit() { try { flyInit0(); } catch (e) { window.__flyErr = String(e && e.stack || e); } }
     function flyInit0() {
       window.__flyTried = (window.__flyTried || 0) + 1;
@@ -5054,14 +5072,15 @@
       flyOn = true;
       var tmp = document.createElement('div'); tmp.innerHTML = '<svg>' + A.svg + '</svg>';
       var src = {}; Array.prototype.forEach.call(tmp.querySelectorAll('g.bfly'), function (g) { src[g.getAttribute('data-seq')] = g.firstElementChild; });
-      var r = el.getBoundingClientRect(), W = r.width + 84, Hh = r.height + 48;
+      var bn = el.closest('.banner'); if (!bn) return;
+      var r = bn.getBoundingClientRect(), W = r.width, Hh = r.height;
       if (W < 100) return;
-      // 每只蝴蝶是一个单独的小 svg，用 CSS transform 移动（走合成层，不重画整块）
-      flySvg = document.createElement('div'); flySvg.className = 'mo-fly'; flySvg.setAttribute('data-w', W);
-      el.appendChild(flySvg);
-      var wide = where === 'w';
-      var spots = wide ? [[W * .72, Hh * .38, 32, 16, 36], [W * .93, Hh * .14, 22, 12, 26], [W * .9, Hh * .8, 26, 12, 30], [W * .08, Hh * .18, 18, 10, 20]]
-                       : [[W * .8, Hh * .42, 26, 12, 30], [W * .95, Hh * .15, 16, 10, 22], [W * .88, Hh * .82, 22, 10, 26], [W * .1, Hh * .12, 14, 8, 18]];
+      // 每只蝴蝶是一个单独的小 svg，用 CSS transform 移动（走合成层，不重画整块）；飞的范围是整个横幅
+      flySvg = document.createElement('div'); flySvg.className = 'mo-fly'; flySvg.setAttribute('data-w', W); flySvg.setAttribute('data-h', Hh);
+      el.appendChild(flySvg); flyPlace();
+      var wide = W >= 600;
+      var spots = wide ? [[W * .66, Hh * .5, 32, 16, 36], [W * .95, Hh * .1, 22, 12, 26], [W * .9, Hh * .72, 26, 12, 30], [W * .5, Hh * .06, 18, 10, 20]]
+                       : [[W * .66, Hh * .6, 24, 12, 30], [W * .93, Hh * .08, 16, 10, 22], [W * .9, Hh * .74, 20, 10, 26], [W * .58, Hh * .05, 14, 8, 18]];
       PICK.forEach(function (seq, k) {
         var inner = src[seq]; if (!inner) return;
         var c = inner.cloneNode(true); c.removeAttribute('transform');
@@ -5077,7 +5096,7 @@
       if (reduce) { flyFrame(flyT0 + 5000); return; }
       flyKick();
     }
-    function flyActive() { return !window.__noFly && !!(flySvg && flySvg.isConnected && !document.hidden && !(typeof chat !== 'undefined' && chat.open) && state.tab === 'today'); }
+    function flyActive() { return !window.__noFly && !!(flySvg && flySvg.isConnected && !el.closest('.banner.wet') && !document.hidden && !(typeof chat !== 'undefined' && chat.open) && state.tab === 'today'); }
     function flyKick() { if (!flyRaf && flyActive() && !reduce) { flies.forEach(function (b) { b.lt = 0; }); flyRaf = requestAnimationFrame(flyTick); } }
     // 省电：飞 25 秒后停下来歇着（原地慢慢扇翅膀，每秒几帧），每隔 45 秒再飞一会儿；换分钟时也会飞起来
     var flyLast = 0, awakeUntil = 0, nextWake = 0;
@@ -5125,28 +5144,25 @@
       visit = { k: 0, x: (rb.left + rb.width / 2 - rf.left) * k, y: (rb.top - rf.top) * k, t0: performance.now(), dur: 2400 };
     }
 
-    // 宽屏时整块在问候语右边；如果问候语比它矮，把下面的卡片往下让一点，不叠在一起
-    function fit() {
-      var g = el.closest('.greeting'); if (!g) return;
-      g.style.marginBottom = '';
-      if (where !== 'w') return;
-      var ov = el.getBoundingClientRect().bottom - g.getBoundingClientRect().bottom + 16;
-      if (ov > 0) g.style.marginBottom = Math.ceil(ov) + 'px';
-    }
     function mount() {
       if (state.tab !== 'today' || window.__noMoment) return;
-      var wide = window.matchMedia('(min-width: 720px)').matches;
-      var slot = document.querySelector(wide ? '.greeting .mo-slot' : '.mo-slot-p');
-      if (!slot) return;
+      var tslot = document.querySelector('.mo-time-slot'), aslot = document.querySelector('.mo-arc-slot');
+      if (!tslot || !aslot) return;
       if (!el) build();
-      if (el.parentNode !== slot) slot.appendChild(el);
-      arrange(wide);
+      if (tm.parentNode !== tslot) tslot.appendChild(tm);
+      if (el.parentNode !== aslot) aslot.appendChild(el);
       if (!started) {
         started = true;
-        setTimeout(function () { el.classList.add('on'); ready = true; draw(true); }, document.querySelector('.greeting.gw') ? 2300 : 250);
+        setTimeout(function () { el.classList.add('on'); tm.classList.add('on'); ready = true; draw(true); }, document.querySelector('.greeting.gw') ? 2300 : 250);
       } else if (ready) { arcLabels(arcState(new Date())); arcTo(arcState(new Date()), false); }
-      requestAnimationFrame(fit);
+      requestAnimationFrame(function () { skyFit(); flyPlace(); });
       flyKick();
+    }
+    // 天空铺到屏幕左右两边（主区域的内边距在不同屏宽下不一样）
+    function skyFit() {
+      var bn = document.querySelector('.banner'), m = document.getElementById('main'); if (!bn || !m) return;
+      var r = bn.getBoundingClientRect(), mr = m.getBoundingClientRect(), sb = m.offsetWidth - m.clientWidth;
+      bn.style.setProperty('--sky-l', (mr.left - r.left) + 'px'); bn.style.setProperty('--sky-r', (r.right - mr.right + sb) + 'px');
     }
     setInterval(function () {
       if (!el || !el.isConnected || !ready) return;
@@ -5154,7 +5170,7 @@
       var c = svg.querySelector('path.c:not(.pend)'); if (c && el.classList.contains('done') && !document.hidden) c.style.opacity = (Math.floor(Date.now() / 1000) % 2) ? '.45' : '';   // 冒号随秒轻轻明暗
     }, 1000);
     window.addEventListener('resize', function () { if (el && el.isConnected) mount(); });
-    return { mount: mount };
+    return { mount: mount, skyFit: skyFit };
   })();
 
   // ---------- 日程：日期、农历、节气、节日 ----------

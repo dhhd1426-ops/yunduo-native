@@ -1540,6 +1540,127 @@
   .tl-it .nd .tile svg { stroke-width: 1.85; }
   .tl-it.tstep .bd { padding-top: 3px; }
   .tl-it .th em.fn { display: block; font-style: normal; font-size: 13.5px; color: var(--muted); margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* ---------- 4.6 作品（仿 Claude 的 Artifacts）---------- */
+  .art-card { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; gap: 12px; width: 100%; margin: 12px 0; padding: 10px 12px 10px 10px; text-align: left;
+    border: 1px solid var(--line); border-radius: 16px; background: color-mix(in srgb, var(--surface) 80%, transparent); color: var(--text); font: inherit; font-style: normal;
+    box-shadow: 0 1px 0 color-mix(in srgb, #fff 6%, transparent) inset, 0 8px 22px -18px rgba(0,0,0,.5); transition: transform .3s var(--spring, ease), border-color .3s; }
+  .art-card:active { transform: scale(.98); }
+  .art-ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, var(--tile-bg, var(--surface))); border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent); }
+  .art-tx { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .art-tx b { font-family: -apple-system, "Noto Sans SC", system-ui, sans-serif; font-weight: 600; font-size: 15px; font-style: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .art-tx small { font-family: -apple-system, "Noto Sans SC", system-ui, sans-serif; font-style: normal; font-size: 12.5px; color: var(--muted); }
+  .art-go { display: inline-flex; align-items: center; gap: 2px; font-size: 13px; font-style: normal; color: var(--ink); padding: 6px 8px 6px 12px; border-radius: 14px; background: color-mix(in srgb, var(--ink) 9%, transparent); }
+  .art-card.live { grid-template-rows: auto auto; border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); }
+  .art-card.live .art-ic svg { animation: vpulse 1.2s ease-in-out infinite; }
+  .art-sp { width: 18px; height: 18px; border-radius: 50%; border: 2px solid color-mix(in srgb, var(--accent) 25%, transparent); border-top-color: var(--accent); animation: artSpin .9s linear infinite; }
+  @keyframes artSpin { to { transform: rotate(360deg); } }
+  .art-tail { grid-column: 1 / -1; margin: 2px 0 0; padding: 8px 10px; border-radius: 10px; background: color-mix(in srgb, var(--bg) 60%, transparent); font: 11.5px/1.55 ui-monospace, "SF Mono", "Roboto Mono", Menlo, monospace;
+    color: var(--muted); white-space: pre; overflow: hidden; text-overflow: ellipsis; max-height: 4.8em; -webkit-mask-image: linear-gradient(transparent, #000 40%); mask-image: linear-gradient(transparent, #000 40%); }
+  /* 预览窗：手机上从下面升起、盖住聊天；折叠屏上是右边一栏（聊天还在左边） */
+  .artv { position: fixed; inset: 0; z-index: 60; }
+  .artv-scrim { position: absolute; inset: 0; background: rgba(8, 12, 24, .42); animation: artFade .35s both; }
+  .artv-panel { position: absolute; left: 0; right: 0; bottom: 0; top: calc(10px + env(safe-area-inset-top, 0px)); display: flex; flex-direction: column; background: var(--bg);
+    border-radius: 26px 26px 0 0; overflow: hidden; box-shadow: 0 -18px 50px -20px rgba(0,0,0,.5); }
+  .artv.enter .artv-panel { animation: artUp .6s var(--spring, cubic-bezier(.22,.9,.24,1)) both; }
+  .artv.leave .artv-panel { animation: artDown .34s cubic-bezier(.4,0,.8,.4) both; } .artv.leave .artv-scrim { animation: artFade .34s reverse both; }
+  @keyframes artUp { from { transform: translateY(100%); } } @keyframes artDown { to { transform: translateY(100%); } } @keyframes artFade { from { opacity: 0; } }
+  @media (min-width: 720px) {
+    .artv-scrim { background: transparent; }
+    .artv-panel { left: auto; top: 12px; bottom: 12px; right: 12px; width: min(56vw, 640px); border-radius: 24px; border: 1px solid var(--line); }
+    @keyframes artUp { from { transform: translateX(calc(100% + 16px)); } } @keyframes artDown { to { transform: translateX(calc(100% + 16px)); } }
+  }
+  .artv-head { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; gap: 6px; padding: 10px 12px 8px 8px; }
+  .artv-t { min-width: 0; text-align: center; } .artv-t b { display: block; font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .artv-t small { font-size: 12px; color: var(--muted); }
+  .artv-ver { display: flex; align-items: center; gap: 2px; border: 1px solid var(--line); border-radius: 16px; padding: 2px; }
+  .artv-ver button { width: 28px; height: 28px; border: 0; border-radius: 14px; background: none; color: var(--text); display: grid; place-items: center; }
+  .artv-ver button:disabled { opacity: .3; }
+  .artv-ver span { font: 600 13px/1 ui-monospace, "SF Mono", monospace; min-width: 34px; text-align: center; } .artv-ver i { font-style: normal; color: var(--muted); font-weight: 400; }
+  .artv-seg { position: relative; display: grid; grid-template-columns: 1fr 1fr; margin: 0 16px 10px; padding: 3px; border-radius: 14px; background: color-mix(in srgb, var(--ink) 8%, transparent); }
+  .artv-seg button { position: relative; z-index: 1; border: 0; background: none; padding: 7px 0; font-size: 14px; color: var(--muted); border-radius: 11px; }
+  .artv-seg button[aria-selected="true"] { color: var(--text); font-weight: 600; }
+  .artv-ind { position: absolute; z-index: 0; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); border-radius: 11px; background: var(--surface); box-shadow: 0 1px 4px rgba(0,0,0,.18); transition: transform .45s var(--bouncy, ease); }
+  .artv-ind.r { transform: translateX(100%); }
+  .artv-body { position: relative; flex: 1; min-height: 0; margin: 0 12px; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: var(--surface); }
+  .artv-frame, .artv-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: transparent; }
+  .artv-code { position: absolute; inset: 0; margin: 0; padding: 12px 12px 24px 0; overflow: auto; font: 12.5px/1.65 ui-monospace, "SF Mono", "Roboto Mono", Menlo, Consolas, monospace; color: var(--text); white-space: pre; tab-size: 2; }
+  .artv-code .ln { display: inline-block; width: 3.2em; padding-right: 12px; text-align: right; color: var(--muted); opacity: .5; user-select: none; }
+  .artv-code .hc { color: #7f8aa3; font-style: italic; } .artv-code .hs { color: #d98f9b; } .artv-code .ht { color: #7fa6e0; } .artv-code .hk { color: #b48de0; } .artv-code .hn { color: #d9a45b; }
+  .artv-code i { font-style: normal; }
+  .artv-doc { position: absolute; inset: 0; overflow: auto; padding: 18px 18px 30px; margin: 0; white-space: pre-wrap; }
+  .artv-wait { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: var(--muted); }
+  .artv-wait svg { color: var(--accent); animation: vpulse 1.2s ease-in-out infinite; } .artv-wait p { margin: 6px 0 0; color: var(--text); font-size: 15px; } .artv-wait small { font-size: 12.5px; }
+  .artv-err { display: flex; align-items: center; gap: 8px; margin: 8px 12px 0; padding: 8px 8px 8px 12px; border-radius: 14px; font-size: 13px; color: #e0877d; background: rgba(214, 96, 90, .12); }
+  .artv-err span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .artv-err button { flex: none; border: 0; border-radius: 12px; padding: 6px 10px; background: #d9786f; color: #fff; font-size: 12.5px; }
+  .artv-foot { display: flex; justify-content: space-around; padding: 8px 8px calc(10px + env(safe-area-inset-bottom, 0px)); }
+  .artv-foot button { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 64px; border: 0; background: none; color: var(--text); font-size: 11.5px; padding: 6px 4px; border-radius: 12px; }
+  .artv-foot button:disabled { opacity: .35; } .artv-foot button span { color: var(--muted); }
+  .artv-exit { display: none; }
+  .artv.full .artv-head, .artv.full .artv-seg, .artv.full .artv-foot, .artv.full .artv-err { display: none; }
+  .artv.full .artv-panel { top: 0; border-radius: 0; } .artv.full .artv-body { margin: 0; border: 0; border-radius: 0; }
+  .artv.full .artv-exit { display: grid; place-items: center; position: absolute; z-index: 2; top: calc(12px + env(safe-area-inset-top, 0px)); right: 12px; width: 38px; height: 38px; border-radius: 19px; border: 0;
+    color: var(--text); background: var(--island, rgba(0,0,0,.4)); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); opacity: .8; }
+  @media (min-width: 720px) { .artv.full .artv-panel { top: 12px; bottom: 12px; right: 12px; left: 12px; width: auto; border-radius: 24px; } }
+
+  /* 折叠屏：打开作品时像 Claude 电脑版一样左右分栏——收起聊天记录栏，聊天在左、作品在右 */
+  @media (min-width: 720px) {
+    html.art-split .sheet .side, html.art-split .sheet .side-scrim { display: none !important; }
+    .artv { pointer-events: none; } .artv-panel { pointer-events: auto; }
+    html.art-split .sheet .chat-main { margin-right: calc(min(52vw, 600px) + 12px); transition: margin .5s var(--spring, ease); }
+    .artv-panel { width: min(52vw, 600px); }
+  }
+
+  /* ---------- 4.6 首页常驻回信栏（方案 A）---------- */
+  body.has-dock #main { padding-bottom: 210px; }
+  .dk-fade { position: absolute; left: 0; right: 0; bottom: 0; height: 240px; z-index: 13; pointer-events: none;
+    background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--bg) 86%, transparent) 55%, var(--bg)); transition: opacity .45s ease; }
+  .dk-fade.off { opacity: 0; }
+  .dock { position: absolute; left: 14px; right: 14px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); z-index: 14;
+    transition: transform .55s var(--spring, ease), opacity .35s ease, left .55s var(--spring, ease), width .55s var(--spring, ease); }
+  .dock.off { opacity: 0; transform: translateY(26px) scale(.97); pointer-events: none; }
+  .dk-chips { display: flex; gap: 8px; margin: 0 2px 10px; overflow-x: auto; scrollbar-width: none; transition: opacity .3s ease, transform .45s var(--spring, ease), max-height .45s ease; max-height: 44px; }
+  .dk-chips::-webkit-scrollbar { display: none; }
+  .dk-chip { flex: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 17px; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 13px; color: var(--text);
+    background: var(--island); border: 1px solid color-mix(in srgb, var(--line) 70%, transparent); backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4); }
+  .dk-chip svg { color: var(--accent); }
+  .dk-in { position: relative; display: flex; align-items: center; gap: 10px; width: 100%; padding: 7px 7px 7px 9px; border-radius: 30px; text-align: left; color: var(--text); font: inherit;
+    background: var(--island); border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 14%, transparent), 0 14px 34px -16px rgba(0,0,0,.5);
+    backdrop-filter: blur(24px) saturate(1.5); -webkit-backdrop-filter: blur(24px) saturate(1.5); transition: padding .5s var(--spring, ease), border-radius .5s; }
+  .dk-in .dk-av { width: 36px; height: 36px; border-radius: 18px; flex: none; font-size: 15px; display: grid; place-items: center; color: #fff; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent); position: relative; }
+  .dk-in .dk-av::after { content: ""; position: absolute; right: -1px; bottom: -1px; width: 10px; height: 10px; border-radius: 5px; background: #7cc79a; border: 2px solid var(--surface); }
+  .dk-tx { flex: 1; min-width: 0; line-height: 1.3; }
+  .dk-say { display: flex; align-items: baseline; gap: 5px; min-width: 0; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 14px; }
+  .dk-say i { flex: none; font-family: "Cormorant Garamond", Georgia, serif; color: var(--accent); font-size: 15px; }
+  .dk-line { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dk-say.hot .dk-line { color: var(--accent); } .dk-say.draft .dk-line { font-style: italic; color: var(--muted); }
+  .dk-line.swap { animation: dkSwap .9s cubic-bezier(.2, .8, .2, 1) both; }
+  @keyframes dkSwap { 0% { opacity: 0; filter: blur(4px); transform: translateY(5px); clip-path: inset(0 100% 0 0); } 60% { filter: blur(0); } 100% { opacity: 1; transform: none; clip-path: inset(0 0 0 0); } }
+  .dk-ph { display: block; font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: 14px; color: var(--muted); margin-top: 1px; white-space: nowrap; overflow: hidden; }
+  .dk-ph b { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-style: normal; font-weight: 400; font-size: 12.5px; margin-left: 4px; }
+  .dk-pen { width: 42px; height: 42px; border-radius: 21px; background: var(--ink); color: var(--surface); display: grid; place-items: center; flex: none; box-shadow: 0 8px 18px -8px color-mix(in srgb, var(--ink) 70%, transparent); }
+  .dk-in:active .dk-pen .qf { transform: translate(1px, 1.5px) rotate(4deg); transition: transform .15s; }
+  /* 往下滑：收成右下角一颗羽毛笔小球 */
+  .dock.min { left: calc(100% - 70px); }
+  .dock.min .dk-chips { opacity: 0; transform: translateY(8px); max-height: 0; margin-bottom: 0; pointer-events: none; }
+  .dock.min .dk-in { padding: 6px; border-radius: 28px; }
+  .dock.min .dk-av, .dock.min .dk-tx { display: none; }
+  .dock.min.hot .dk-in::after { content: ""; position: absolute; top: 3px; right: 3px; width: 10px; height: 10px; border-radius: 5px; background: var(--accent); border: 2px solid var(--surface); }
+  /* 折叠屏 / 平板：回信栏收在右栏底下 */
+  @media (min-width: 720px) {
+    .dock { left: auto; right: 28px; width: min(420px, 44%); bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
+    .dock.min { left: auto; width: 56px; }
+    .dk-fade { left: 50%; height: 170px; }
+    body.has-dock #main { padding-bottom: 150px; }
+  }
+  /* 从回信栏打开聊天：聊天窗淡入，输入框自己从回信栏的位置飞过去 */
+  .sheet-wrap.enter.from-dock .sheet { animation: dockSheetIn .5s cubic-bezier(.2, .9, .3, 1) both !important; }
+  .sheet-wrap.enter.from-dock .chat-main > .sheet-foot { animation: none !important; }
+  @keyframes dockSheetIn { from { opacity: 0; transform: translateY(14px) scale(.985); } }
+  @media (prefers-reduced-motion: reduce) { .dock, .dk-chips, .dk-in { transition: none; } }
 </style>
 <script src="fonts/script-glyphs.js"></script>
 <script src="fonts/pinyin.js"></script>
@@ -3492,8 +3613,7 @@
       }).join('') +
       (rest.length ? '<button type="button" class="adv-more" data-advmore="1">还有 ' + rest.length + ' 条：<b>' + rest.map(function (x) { return x.t; }).join(' · ') + '</b> ›</button>' : '') +
       (calui.advAll && tipsAll.length > 2 ? '<button type="button" class="adv-more" data-advmore="0">收起</button>' : '') +
-      '<button type="button" class="adv-reply" data-chat="open"><span class="ph">Write back<b>还想问点什么？回信给她…</b></span><span class="pen">' + quillIcon(20) + '</span></button>' +
-      '<div class="adv-asks">' + QUESTIONS.slice(0, 3).map(function (q) { return '<button type="button" class="adv-ask" data-q="' + q + '">' + q + '</button>'; }).join('') + '</div></div>';
+      '</div>';
 
     if (t) {
       html += '<div class="panel a"><h2>今日昼夜 <em>Day &amp; Night</em></h2><div class="dn">' +
@@ -4461,6 +4581,7 @@
     if (tab === 'plan') calAfterRender();
     if (state.sub === 'assistant') emoAfterRender();
     updateTabs(tab, opts.anim);
+    if (typeof Dock !== 'undefined' && Dock) Dock.update();
     var v = view(state.current);
     $pill.innerHTML = icon('pin', 16) + esc(META[state.current].zh) + (v ? ' ' + deg(v.temp) + '°' : '');
     var rb = document.getElementById('refresh-btn');
@@ -4478,7 +4599,7 @@
     var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var PRESS = '.btn, .chip, .qchip, .asst-bar, .city-main, .entry, .prov-card, .opt, .icon-btn, .city-pill, .round, .send-btn, ' +
       '.tabs button, .mp-row .pick, .hour, .day, .tool, .seg button, .lrow, .plus, .mchip, .act, .proc, .rc, .rc-hit, .mem-chip, ' +
-      '.conv .open, .side-row, .vchip, .vmodel, .flag, .switch, .nt-entry, .pills span';
+      '.conv .open, .side-row, .vchip, .vmodel, .flag, .switch, .nt-entry, .pills span, .dk-in, .dk-chip, .art-card';
     var GLOW_SKIP = '.switch, .icon-btn, .act, .tabs button';
     var glow = null, dot = null, cur = null, rect = null, raf = 0, px = 0, py = 0, sx = 0, sy = 0, sc = 1, moved = false;
     function ensure() {
@@ -5487,7 +5608,7 @@
   if (!asst.emoChar) asst.emoChar = 'ball';
   if (!asst.emoFreq) asst.emoFreq = 'mid';
   function emoId(tok) { tok = String(tok || '').trim(); if (/^\d{2}$/.test(tok)) return tok; return EMO_BY_NAME[tok] || ''; }
-  function stripEmo(t) { return String(t || '').replace(EMO_RE, '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n'); }
+  function stripEmo(t) { return artStrip(t).replace(EMO_RE, '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n'); }
   // 流式输出时：去掉完整的标记，还有末尾正在写的半截标记
   function stripEmoLive(t) { return stripEmo(t).replace(/[\[［]\s*(?:表|表情|e|em|emo)?\s*[:：]?[^\]］\n]{0,6}$/, ''); }
   // 把一条回复拆成「文字 / 表情」段；一次最多两个表情（多了只留前两个）
@@ -5507,8 +5628,227 @@
     });
     return seg;
   }
-  // 一条 Amor 的回复：文字气泡 + 表情（没有气泡）
+  /* ======================= 4.6 作品（仿 Claude 的 Artifacts）=======================
+     Amor 在回复里写 <artifact id=".." type="html" title="..">完整文件</artifact>，聊天里变成一张作品卡片，
+     点开是单独的一层预览窗（不跟着聊天重画，动画不会重载）：预览 / 代码、版本 v1 v2…、复制、重新运行、全屏、出错一键让她修。
+     预览放在 sandbox="allow-scripts" 的 iframe 里（没有 allow-same-origin）：作品读不到 App 的存储，API Key 安全。 */
+  if (asst.art == null) asst.art = true;
+  var ART_RE = /<artifact\b([^>]*)>([\s\S]*?)(<\/artifact\s*>|$)/gi;
+  var ART_TYPES = { html: '交互页面', svg: '矢量图', markdown: '文档', code: '代码' };
+  function artAttrs(s) { var o = {}, m, re = /([\w-]+)\s*=\s*["“]([^"”]*)["”]/g; while ((m = re.exec(s || ''))) o[m[1].toLowerCase()] = m[2]; return o; }
+  function artClean(c) { return String(c || '').replace(/^\s*\n/, '').replace(/^\s*```[\w-]*\s*\n/, '').replace(/\n?```\s*$/, '').replace(/\s+$/, ''); }
+  function artType(t) { t = String(t || 'html').toLowerCase(); return /svg/.test(t) ? 'svg' : /markdown|md|text\/plain/.test(t) ? 'markdown' : /code|python|java|script(?!.*html)/.test(t) && !/html/.test(t) ? 'code' : 'html'; }
+  // 把一段回复里的作品换成占位符；live=true 时最后一个没写完的也算（卡片显示“正在写”）
+  function artPrep(text, key) {
+    var list = [], t = String(text || '');
+    t = t.replace(/<(a(r(t(i(f(a(c(t(\s[^>]*)?)?)?)?)?)?)?)?)?$/i, function (m) { return m.length > 1 || /<$/.test(m) ? '' : m; });
+    t = t.replace(ART_RE, function (m, attrs, body, close) {
+      var a = artAttrs(attrs), i = list.length;
+      list.push({ id: (a.id || a.identifier || 'art' + i).replace(/[^\w-]/g, '').slice(0, 40) || 'art' + i, type: artType(a.type), lang: a.lang || a.language || '',
+        title: (a.title || '作品').slice(0, 30), content: artClean(body), done: !!close, key: key });
+      return '\n' + i + '\n';
+    });
+    return { text: t.replace(/\n{3,}/g, '\n\n'), list: list };
+  }
+  function artIcon(type, size) {
+    var p = { html: '<rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><path d="M3.5 8.5h17M9.5 12.5l-2 2 2 2M14.5 12.5l2 2-2 2"/>',
+      svg: '<circle cx="8.5" cy="9" r="3.2"/><path d="M13 5.5l6 10.5H7z" transform="translate(-1 2)"/>',
+      markdown: '<path d="M6.5 3.5h7.5l4 4v13h-11.5z"/><path d="M14 3.5v4h4M9.5 12h5M9.5 15.5h5"/>',
+      code: '<path d="M8.5 7.5L4 12l4.5 4.5M15.5 7.5L20 12l-4.5 4.5M13.2 5.5l-2.4 13"/>' }[type] || '';
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>';
+  }
+  function artLines(c) { return c ? c.split('\n').length : 0; }
+  function artCard(a, key) {
+    var lbl = ART_TYPES[a.type] + (a.type === 'code' && a.lang ? ' · ' + a.lang : a.type === 'html' ? ' · HTML' : '');
+    if (!a.done) {
+      var tail = a.content.split('\n').slice(-3).join('\n');
+      return '<button type="button" class="art-card live" data-art="' + esc(key + '|' + a.id) + '"><span class="art-ic">' + artIcon(a.type, 22) + '</span>' +
+        '<span class="art-tx"><b>' + esc(a.title) + '</b><small>正在写 · ' + artLines(a.content) + ' 行</small></span><span class="art-sp"></span>' +
+        '<pre class="art-tail">' + esc(tail) + '</pre></button>';
+    }
+    var v = key !== 'live' ? artVersions(key.split(':')[0], a.id) : [], vi = -1;
+    v.forEach(function (x, i) { if (x.k === key) vi = i; });
+    return '<button type="button" class="art-card" data-art="' + esc(key + '|' + a.id) + '"><span class="art-ic">' + artIcon(a.type, 22) + '</span>' +
+      '<span class="art-tx"><b>' + esc(a.title) + '</b><small>' + lbl + (vi > 0 ? ' · v' + (vi + 1) : '') + ' · ' + artLines(a.content) + ' 行</small></span>' +
+      '<span class="art-go">' + (a.type === 'code' ? '查看' : '打开') + icon('chev', 14) + '</span></button>';
+  }
+  function artFill(html, A) {
+    if (!A || !A.list.length) return html;
+    return html.replace(/\n?(\d+)\n?/g, function (m, i) { var a = A.list[+i]; return a ? artCard(a, a.key) : ''; });
+  }
+  // 同一段对话里同一个 id 的所有版本（按出现顺序）；k = 会话:消息 序号
+  function artVersions(convId, id) {
+    var c = chats.filter(function (x) { return x.id === convId; })[0], out = [];
+    if (!c) return out;
+    c.msgs.forEach(function (m, i) {
+      if (m.role !== 'assistant' || !/<artifact/i.test(m.content || '')) return;
+      artPrep(m.content, convId + ':' + i).list.forEach(function (a) { if (a.id === id && a.done) { a.k = convId + ':' + i; out.push(a); } });
+    });
+    return out;
+  }
+  function artStrip(t) { return String(t || '').replace(ART_RE, function (m, attrs) { return '「作品：' + (artAttrs(attrs).title || '作品') + '」'; }).replace(/<artifact\b[\s\S]*$/i, ''); }
+  function artRule() {
+    if (!asst.art) return '';
+    return '\n\n【作品】对方想看动画、演示、可视化、小游戏、互动小工具、图表，或者你要给出一段可以直接运行看效果的前端代码时，不要只贴代码——把它写成一个“作品”：对方手机上会出现一张卡片，点开就能直接运行，还能切换看代码。\n' +
+      '格式（照写，标记本身不用解释）：\n<artifact id="英文短名" type="html" title="简短的中文标题">\n完整文件内容\n</artifact>\n' +
+      'type：html（网页、动画、小游戏、图表，最常用）；svg（一张矢量图，内容是完整的 <svg>）；markdown（较长的文档、清单、计划）；code（只给看、不在手机上运行的代码，比如 Python，再加 lang="python"）。\n' +
+      '写 html 时：一个自包含的完整文件，CSS 和 JS 都写在里面；按手机竖屏（宽约 400px）设计，用 width:100% 和触摸事件，别把悬停当唯一的交互；动画用 requestAnimationFrame，canvas 要按 devicePixelRatio 放大并跟随窗口大小；用 prefers-color-scheme 同时适配深色和浅色；要用库只从 https://cdnjs.cloudflare.com 引用；不要用 alert/confirm、表单提交、打开新窗口，数据只放在内存里。\n' +
+      '改作品：用同一个 id 再输出一份完整的新版本（会变成 v2、v3，对方可以来回切），不要只写改动的片段。\n' +
+      '作品前后用一两句话说明做了什么、怎么看或怎么玩，不要把作品里的代码再贴一遍；一条回复一般只放一个作品；十几行以内、只是解释写法的小片段照常用代码块。收到“作品运行出错”的消息时，找出原因后直接给出修好的完整新版本。';
+  }
+  // 代码高亮（轻量）：注释、字符串、标签、关键字、数字
+  function artHl(src, type) {
+    var re = /(<!--[\s\S]*?-->|\/\*[\s\S]*?\*\/|\/\/[^\n]*|#[^\n]*(?=\n|$))|("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|`(?:\\.|[^`\\])*`)|(<\/?[\w-]+|\/?>)|\b(const|let|var|function|return|if|else|for|while|new|class|this|of|in|import|from|def|async|await|true|false|null|undefined)\b|(\b\d+(?:\.\d+)?\b)/g;
+    var out = '', last = 0, m;
+    src = String(src || '');
+    while ((m = re.exec(src))) {
+      if (m[1] && m[1][0] === '#' && type !== 'code') { continue; }
+      out += esc(src.slice(last, m.index));
+      var cls = m[1] ? 'c' : m[2] ? 's' : m[3] ? 't' : m[4] ? 'k' : 'n';
+      out += '<i class="h' + cls + '">' + esc(m[0]) + '</i>'; last = re.lastIndex;
+    }
+    return out + esc(src.slice(last));
+  }
+  var Art = (function () {
+    var st = null, el = null, frameKey = '', errMsg = '';
+    function darkNow() { var t = document.documentElement.getAttribute('data-theme'); return t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
+    function boot(tok) {
+      return '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><script>(function(){var K="' + tok + '";' +
+        'function s(m){try{parent.postMessage({__art:K,err:String(m).slice(0,300)},"*")}catch(e){}}' +
+        'addEventListener("error",function(e){s((e.message||"脚本出错")+(e.lineno?"（第 "+e.lineno+" 行）":""))});' +
+        'addEventListener("unhandledrejection",function(e){s((e.reason&&e.reason.message)||e.reason||"Promise 出错")});' +
+        'try{var M={},S={getItem:function(k){return k in M?M[k]:null},setItem:function(k,v){M[k]=String(v)},removeItem:function(k){delete M[k]},clear:function(){M={}},key:function(i){return Object.keys(M)[i]},get length(){return Object.keys(M).length}};' +
+        'Object.defineProperty(window,"localStorage",{get:function(){return S}});Object.defineProperty(window,"sessionStorage",{get:function(){return S}})}catch(e){}' +
+        'window.alert=function(m){console.log(m)};window.confirm=function(){return true};window.open=function(){return null};})();<\/script>';
+    }
+    function doc(a, tok) {
+      if (a.type === 'svg') return '<!doctype html><html><head>' + boot(tok) + '<style>html,body{margin:0;height:100%;display:grid;place-items:center;background:transparent}svg{max-width:100%;max-height:100vh;height:auto}</style></head><body>' + a.content + '</body></html>';
+      var c = a.content;
+      if (/<head[^>]*>/i.test(c)) return c.replace(/<head[^>]*>/i, function (h) { return h + boot(tok); });
+      if (/<html[^>]*>/i.test(c)) return c.replace(/<html[^>]*>/i, function (h) { return h + '<head>' + boot(tok) + '</head>'; });
+      return '<!doctype html><html><head>' + boot(tok) + '</head><body>' + c + '</body></html>';
+    }
+    function resolve() {
+      if (!st) return null;
+      if (st.key === 'live') {
+        var A = artPrep(chat.partial || '', 'live'), a = A.list.filter(function (x) { return x.id === st.id; }).pop();
+        if (a) return { a: a, vs: [a], vi: 0, live: !a.done };
+        // 已经写完、存进对话了：跳到最后一版
+        var cv = curConv(); if (cv) { var vs0 = artVersions(cv.id, st.id); if (vs0.length) { st.key = vs0[vs0.length - 1].k; st.vi = vs0.length - 1; } }
+      }
+      var vs = artVersions(st.key.split(':')[0], st.id);
+      if (!vs.length) return null;
+      if (st.vi == null || st.vi >= vs.length) { st.vi = 0; vs.forEach(function (x, i) { if (x.k === st.key) st.vi = i; }); }
+      return { a: vs[st.vi], vs: vs, vi: st.vi, live: false };
+    }
+    function html(r) {
+      var a = r.a, run = a.type === 'html' || a.type === 'svg', tab = run ? st.tab : a.type === 'markdown' ? 'doc' : 'code';
+      var fold = innerWidth >= 720;
+      return '<div class="artv-scrim" data-artx="close"></div><section class="artv-panel" role="dialog" aria-label="作品：' + esc(a.title) + '">' +
+        '<header class="artv-head"><button type="button" class="icon-btn" data-artx="close" aria-label="关闭">' + icon(fold ? 'x' : 'down', 22) + '</button>' +
+          '<div class="artv-t"><b>' + esc(a.title) + '</b><small>' + ART_TYPES[a.type] + (a.lang ? ' · ' + esc(a.lang) : '') + (r.live ? ' · 正在写…' : '') + '</small></div>' +
+          (r.vs.length > 1 ? '<div class="artv-ver"><button type="button" data-artx="prev" aria-label="上一版"' + (r.vi ? '' : ' disabled') + '>' + icon('back', 16) + '</button><span>v' + (r.vi + 1) + '<i>/' + r.vs.length + '</i></span>' +
+            '<button type="button" data-artx="next" aria-label="下一版"' + (r.vi < r.vs.length - 1 ? '' : ' disabled') + '>' + icon('chev', 16) + '</button></div>' : '<span></span>') +
+        '</header>' +
+        (run ? '<div class="artv-seg" role="tablist"><button type="button" role="tab" data-artx="preview" aria-selected="' + (tab === 'preview') + '">预览</button><button type="button" role="tab" data-artx="code" aria-selected="' + (tab === 'code') + '">代码</button><i class="artv-ind' + (tab === 'code' ? ' r' : '') + '"></i></div>' : '') +
+        '<div class="artv-body">' +
+          (tab === 'preview' ? (r.live ? '<div class="artv-wait">' + artIcon(a.type, 30) + '<p>正在写… ' + artLines(a.content) + ' 行</p><small>写完就能运行，先看看代码？</small></div>' : '<div class="artv-frame" id="artv-frame"></div>') :
+           tab === 'doc' ? '<div class="artv-doc msg bot">' + md(a.content) + '</div>' :
+           '<pre class="artv-code" id="artv-code">' + artHl(a.content, a.type).split('\n').map(function (l, i) { return '<span class="ln">' + (i + 1) + '</span>' + l; }).join('\n') + '</pre>') +
+        '</div>' +
+        '<div class="artv-err" id="artv-err"' + (errMsg ? '' : ' hidden') + '>' + icon('warn', 16) + '<span>' + esc(errMsg) + '</span><button type="button" data-artx="fix">让 ' + esc(asst.name || 'Amor') + ' 修复</button></div>' +
+        '<footer class="artv-foot">' +
+          '<button type="button" data-artx="copy">' + icon('copy', 18) + '<span>复制</span></button>' +
+          (run ? '<button type="button" data-artx="replay"' + (r.live ? ' disabled' : '') + '>' + icon('regen', 18) + '<span>重新运行</span></button>' +
+                 '<button type="button" data-artx="full"' + (r.live ? ' disabled' : '') + '>' + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>全屏</span></button>' : '') +
+          '<button type="button" data-artx="ask">' + quillIcon(18) + '<span>让她改</span></button>' +
+        '</footer>' +
+        '<button type="button" class="artv-exit" data-artx="unfull" aria-label="退出全屏">' + icon('x', 20) + '</button>' +
+      '</section>';
+    }
+    function mountFrame(r, force) {
+      var box = document.getElementById('artv-frame'); if (!box) return;
+      var k = r.a.k + '|' + r.a.id + '|' + r.a.content.length;
+      if (!force && frameKey === k && box.firstChild) return;
+      frameKey = k; errMsg = ''; var eb = document.getElementById('artv-err'); if (eb) eb.hidden = true;
+      var f = document.createElement('iframe');
+      f.setAttribute('sandbox', 'allow-scripts allow-pointer-lock');
+      f.setAttribute('title', r.a.title);
+      f.style.colorScheme = darkNow() ? 'dark' : 'light';
+      st.tok = 'a' + Date.now().toString(36);
+      f.srcdoc = doc(r.a, st.tok);
+      box.innerHTML = ''; box.appendChild(f);
+    }
+    function render(anim) {
+      var r = resolve();
+      if (!r) { close(true); return; }
+      if (!el) { el = document.createElement('div'); el.id = 'artv'; document.body.appendChild(el); el.addEventListener('click', onClick); }
+      var keepFrame = document.getElementById('artv-frame'), old = keepFrame && keepFrame.firstChild;
+      el.className = 'artv' + (anim ? ' enter' : '') + (st.full ? ' full' : '');
+      el.innerHTML = html(r);
+      var box = document.getElementById('artv-frame');
+      if (box && old && frameKey === r.a.k + '|' + r.a.id + '|' + r.a.content.length) box.appendChild(old); else if (box) mountFrame(r, true);
+      if (anim) setTimeout(function () { if (el) el.classList.remove('enter'); }, 650);
+      document.documentElement.classList.toggle('art-split', innerWidth >= 720);
+      navSync();
+    }
+    function open(key, id) {
+      var i = key.lastIndexOf('|');
+      st = { key: key.slice(0, i), id: key.slice(i + 1) || id, tab: 'preview', vi: null, full: false };
+      frameKey = ''; errMsg = '';
+      render(true);
+    }
+    function close(now) {
+      if (!el) { st = null; return; }
+      var e = el; st = null; el = null; frameKey = ''; document.documentElement.classList.remove('art-split');
+      if (now || reduceMotion) e.remove(); else { e.classList.add('leave'); setTimeout(function () { e.remove(); }, 380); }
+      navSync();
+    }
+    function onClick(ev) {
+      var b = ev.target.closest('[data-artx]'); if (!b || !st) return;
+      ev.stopPropagation();
+      var x = b.getAttribute('data-artx'), r = resolve();
+      if (x === 'close') { close(); return; }
+      if (x === 'preview' || x === 'code') { st.tab = x; render(); return; }
+      if (x === 'prev' || x === 'next') { st.vi = Math.max(0, Math.min(r.vs.length - 1, r.vi + (x === 'next' ? 1 : -1))); frameKey = ''; render(); return; }
+      if (x === 'copy') { copyText(r.a.content, b); return; }
+      if (x === 'replay') { mountFrame(r, true); return; }
+      if (x === 'full') { st.full = true; el.classList.add('full'); return; }
+      if (x === 'unfull') { st.full = false; el.classList.remove('full'); return; }
+      if (x === 'fix' || x === 'ask') {
+        var q = x === 'fix' ? '作品「' + r.a.title + '」运行出错了：' + errMsg + '。帮我修好它。' : '';
+        close();
+        if (q) { if (chat.open && !chat.busy) sendChat(q); }
+        else { chat.draft = '关于作品「' + r.a.title + '」：'; renderSheet(); setTimeout(function () { var t = document.getElementById('chat-in'); if (t) { t.focus(); t.setSelectionRange(t.value.length, t.value.length); } }, 400); }
+        return;
+      }
+    }
+    addEventListener('message', function (e) {
+      var d = e.data; if (!d || !d.__art || !st || d.__art !== st.tok) return;
+      errMsg = String(d.err || ''); var eb = document.getElementById('artv-err');
+      if (eb) { eb.hidden = false; eb.querySelector('span').textContent = errMsg; }
+    });
+    // 聊天在流式输出时：预览窗开着“正在写”的作品，就跟着刷新代码 / 写完后换成可以运行的预览
+    function tick() {
+      if (!st || !el) return;
+      var r = resolve(); if (!r) return;
+      if (st.key === 'live' && r.live) {
+        var code = document.getElementById('artv-code');
+        if (code && st.tab === 'code') { var nearEnd = code.scrollHeight - code.scrollTop - code.clientHeight < 60; code.innerHTML = artHl(r.a.content, r.a.type).split('\n').map(function (l, i) { return '<span class="ln">' + (i + 1) + '</span>' + l; }).join('\n'); if (nearEnd) code.scrollTop = code.scrollHeight; }
+        else if (st.tab === 'preview') { var w = el.querySelector('.artv-wait p'); if (w) w.textContent = '正在写… ' + artLines(r.a.content) + ' 行'; }
+        return;
+      }
+      if (el.querySelector('.artv-wait') || (el.querySelector('.artv-t small') || {}).textContent && /正在写/.test(el.querySelector('.artv-t small').textContent)) render();
+    }
+    return { open: open, close: close, tick: tick, isOpen: function () { return !!st; }, refresh: function () { if (st) tick(); } };
+  })();
+
+  // 一条 Amor 的回复：文字气泡 + 表情（没有气泡）；4.6 先把作品换成卡片
   function botBodyHtml(content, key, fresh) {
+    var A_ = artPrep(content, key);
+    return artFill(botBodyHtml0(A_.text, key, fresh), A_);
+  }
+  function botBodyHtml0(content, key, fresh) {
     if (!asst.emo) return '<div class="msg bot' + fresh + '">' + md(stripEmo(content)) + '</div>';
     // 4.4：表情和字一样大，像 emoji 一样嵌在句子里（还是会动的 3D 表情）；一条最多两个
     var ids = [], re = new RegExp(EMO_RE.source, 'g');
@@ -5655,6 +5995,99 @@
     if (Fluid) Fluid.tab(idx, pop);
   }
 
+  /* ======================= 4.6 首页常驻回信栏（方案 A）=======================
+     浮岛上方一条毛玻璃回信栏：上排是 Amor 说的一句话（天气建议 / 快到的提醒和日程，会轮换），下排「Write back 回信给她…」；
+     上面一排快捷问题跟着天气和时间变。往下滑收成右下角一颗羽毛笔小球，往回滑又展开。点一下，回信栏本身平滑变成聊天窗的输入框，键盘直接弹出。
+     只在「今天」「预报」显示；打开聊天、子页、日程纸片时收起。 */
+  var Dock = (function () {
+    var el = null, fade = null, lines = [], li = 0, timer = 0, min = false, lastY = 0, shown = false;
+    function short(txt) { var p = String(txt || '').split(/[，。；]/).filter(Boolean); var s = p.slice(0, 2).join('，'); return s.length > 22 ? p[0] : s; }
+    function build() {
+      var out = [], now = Date.now(), v = view(state.current);
+      if ((chat.draft || '').trim()) return [{ t: '接着写：' + chat.draft.trim().replace(/\s+/g, ' ').slice(0, 20), draft: true }];
+      (nt.reminders || []).filter(function (r) { return r.t > now && r.t - now < 12 * 3600e3; }).sort(function (a, b) { return a.t - b.t; }).slice(0, 2)
+        .forEach(function (r) { out.push({ t: hhmmOf(r.t) + ' 记得' + r.title, hot: true }); });
+      try {
+        var tod = ymd(new Date()), hm = hhmmOf(now);
+        eventsOn(tod).filter(function (e) { return e.t && e.t > hm; }).slice(0, 2).forEach(function (e) { out.push({ t: '今天 ' + e.t + ' ' + e.title, hot: true }); });
+      } catch (e) {}
+      if (v) { var tips = advise(v).tips.slice().sort(function (a, b) { return (b.on ? 1 : 0) - (a.on ? 1 : 0); }); tips.slice(0, 3).forEach(function (x) { out.push({ t: short(x.txt) }); }); }
+      if (!out.length) out.push({ t: '想聊点什么都可以' });
+      return out;
+    }
+    function chips() {
+      var v = view(state.current), t = v && v.today, tm = v && v.tomorrow, rain = t && (wet(t.dt) || wet(t.nt)), rainTm = tm && (wet(tm.dt) || wet(tm.nt)), c = [];
+      if (rain) c.push(['umbrella', '要带伞吗']);
+      if (nowH >= 17 || nowH < 4) c.push(rainTm ? ['rain', '明天会下雨吗'] : ['moon', '明天怎么样']);
+      else c.push(['shirt', '今天穿什么']);
+      if (!rain && nowH >= 6 && nowH < 18) c.push(['leaf', '适合出门吗']);
+      if (c.length < 2 && !c.some(function (x) { return /明天/.test(x[1]); })) c.push(['moon', '明天怎么样']);
+      c.push(['heart', '陪我聊聊天']);
+      return c.slice(0, 3);
+    }
+    function visible() { return (state.tab === 'today' || state.tab === 'forecast') && !state.sub && !chat.open && !calui.sheet && !splashHold; }
+    function paintLine(anim) {
+      var ln = el && el.querySelector('.dk-line'); if (!ln || !lines.length) return;
+      var x = lines[li % lines.length];
+      if (anim && !reduceMotion) { ln.classList.remove('swap'); void ln.offsetWidth; ln.classList.add('swap'); }
+      ln.textContent = x.t;
+      el.querySelector('.dk-say').classList.toggle('hot', !!x.hot);
+      el.querySelector('.dk-say').classList.toggle('draft', !!x.draft);
+    }
+    function update() {
+      if (!el) {
+        el = document.createElement('div'); el.className = 'dock off'; el.id = 'dock';
+        fade = document.createElement('div'); fade.className = 'dk-fade off'; fade.setAttribute('aria-hidden', 'true');
+        $tabs.parentElement.insertBefore(fade, $tabs); $tabs.parentElement.insertBefore(el, $tabs);
+        $main.addEventListener('scroll', onScroll, { passive: true });
+        document.addEventListener('visibilitychange', function () { if (!document.hidden) update(); });
+      }
+      lines = build(); if (li >= lines.length) li = 0;
+      el.innerHTML = '<div class="dk-chips">' + chips().map(function (c) { return '<button type="button" class="dk-chip" data-q="' + c[1] + '">' + icon(c[0], 14) + c[1] + '</button>'; }).join('') + '</div>' +
+        '<button type="button" class="dk-in" data-dock="open" aria-label="回信给 ' + esc(asst.name || 'Amor') + '">' + avatarHtml('dk-av') +
+          '<span class="dk-tx"><span class="dk-say"><i>' + esc(asst.name || 'Amor') + '</i><span class="dk-line"></span></span><span class="dk-ph">Write back<b>回信给她…</b></span></span>' +
+          '<span class="dk-pen">' + quillIcon(22) + '</span></button>';
+      paintLine(false);
+      var hot = lines.some(function (x) { return x.hot || x.draft; });
+      el.classList.toggle('hot', hot);
+      sync();
+      clearInterval(timer);
+      timer = setInterval(function () { if (!shown || min || document.hidden || lines.length < 2) return; li = (li + 1) % lines.length; paintLine(true); }, 9000);
+    }
+    function sync() {
+      if (!el) return;
+      var on = visible();
+      if (on !== shown) { shown = on; if (on) { min = false; lastY = $main.scrollTop; } }
+      el.classList.toggle('off', !on); fade.classList.toggle('off', !on || min);
+      el.classList.toggle('min', on && min);
+      document.body.classList.toggle('has-dock', on);
+    }
+    function onScroll() {
+      if (!shown) return;
+      var y = $main.scrollTop, dy = y - lastY;
+      if (dy > 6 && y > 140 && !min) { min = true; sync(); }
+      else if ((dy < -10 || y < 80) && min) { min = false; sync(); }
+      if (Math.abs(dy) > 6) lastY = y;
+    }
+    // 点回信栏：它自己变成聊天窗底部的输入框（共享元素过渡），键盘直接弹出
+    function open() {
+      var src = el && el.querySelector('.dk-in'), r0 = src && src.getBoundingClientRect();
+      if (min) { min = false; sync(); }
+      chat.fromDock = true;
+      openChat();
+      chat.fromDock = false;
+      sync();
+      var comp = $sheet.querySelector('.composer'), ta = document.getElementById('chat-in');
+      if (ta) { try { ta.focus({ preventScroll: true }); var n = ta.value.length; ta.setSelectionRange(n, n); } catch (e) {} }
+      if (comp && r0 && !reduceMotion && comp.animate) {
+        var r1 = comp.getBoundingClientRect();
+        comp.animate([{ transform: 'translate(' + (r0.left - r1.left) + 'px,' + (r0.top - r1.top) + 'px)', borderRadius: '30px', opacity: .6 },
+                      { transform: 'none', opacity: 1 }], { duration: 620, easing: 'cubic-bezier(.2, 1.05, .3, 1)' });
+      }
+    }
+    return { update: update, sync: sync, open: open };
+  })();
+
   var toastTimer;
   function keepScroll() { var y = $main.scrollTop; render(); $main.scrollTop = y; }
   function toast(msg) {
@@ -5743,6 +6176,8 @@
     if (ds.tool) { chat.pop = ds.tool; chat.popSub = ''; chat.popIn = true; chat.mpq = ''; chat.stest = null; renderSheet(); return; }
     if (ds.popclose) { closePop(); return; }
     if (ds.proc) { chat.pop = 'proc'; chat.procKey = ds.proc; chat.popSub = ''; chat.popIn = true; chat.tlOpen = {}; renderSheet(); return; }
+    if (ds.art) { Art.open(ds.art); return; }
+    if (ds.dock) { Dock.open(); return; }
     if (ds.tlx != null) { (chat.tlOpen = chat.tlOpen || {})[ds.tlx] = b.getAttribute('aria-expanded') !== 'true'; keepPopScroll(); return; }
     if (ds.ssw) { srch[ds.ssw] = srch[ds.ssw] === false; saveSearch(); keepPopScroll(); return; }
     if (ds.psub != null) { chat.popAnim = ds.psub ? 'fwd' : 'back'; chat.popSub = ds.psub; renderSheet(); return; }
@@ -6678,7 +7113,7 @@
     }
     function build(conv, useTools) {
       var sys = useTools || !opt.systemNoTools ? system : opt.systemNoTools;
-      var body = anth ? { model: model, max_tokens: 4096, system: sys, messages: conv, stream: !!asst.stream }
+      var body = anth ? { model: model, max_tokens: 8192, system: sys, messages: conv, stream: !!asst.stream }
                       : { model: model, messages: [{ role: 'system', content: sys }].concat(conv), stream: !!asst.stream };
       if (useTools) body.tools = toolDefs();
       if (asst.tempOn) body.temperature = asst.temp;
@@ -6984,6 +7419,7 @@
     chat.city = state.current; chat.err = ''; chat.side = false; chat.q = '';
     chat.open = true;
     renderSheet(true);
+    if (typeof Dock !== 'undefined') Dock.sync();
     if (q) sendChat(q);
     else setTimeout(function () { var el = document.getElementById('chat-in'); if (el && aiReady() && !('ontouchstart' in window)) el.focus(); }, 560);
   }
@@ -6991,9 +7427,9 @@
     setTimeout(notifySync, 400);
     var cc = curConv(); if (cc && !chat.busy) memMaybe(cc, '', true);
     var wrap = $sheet.querySelector('.sheet-wrap');
-    if (!wrap || reduceMotion) { chat.open = false; $sheet.innerHTML = ''; return; }
+    if (!wrap || reduceMotion) { chat.open = false; $sheet.innerHTML = ''; Dock.update(); return; }
     wrap.classList.remove('enter'); wrap.classList.add('leave');
-    setTimeout(function () { chat.open = false; $sheet.innerHTML = ''; }, 290);
+    setTimeout(function () { chat.open = false; $sheet.innerHTML = ''; Dock.update(); }, 290);
   }
   function setSide(open) {
     chat.side = open;
@@ -7147,7 +7583,7 @@
       popHtml() +
       '</div>';
 
-    $sheet.innerHTML = '<div class="sheet-wrap' + (enter ? ' enter' : '') + '">' +
+    $sheet.innerHTML = '<div class="sheet-wrap' + (enter ? ' enter' : '') + (enter && chat.fromDock ? ' from-dock' : '') + '">' +
       '<div class="sheet-backdrop"></div>' +
       '<section class="sheet' + (chat.side ? ' side-open' : '') + '" role="dialog" aria-modal="true" aria-label="' + esc(asst.name) + '" id="sheet">' + side + main + '</section></div>';
     if (enter) setTimeout(function () { var w = $sheet.querySelector('.sheet-wrap'); if (w) w.classList.remove('enter'); }, 700);
@@ -7158,6 +7594,7 @@
     bindGestures();
     if (Fluid) Fluid.ranges();
     Emo.mount();
+    Art.refresh();
     OrbQ.kick();
     chat.popIn = false; chat.popAnim = '';
   }
@@ -7231,18 +7668,24 @@
   function paintPartial() {
     var el = document.getElementById('partial');
     if (!el) return;
-    var s = asst.emo ? stripEmoLive(chat.partial.slice(0, Math.ceil(typer.shown))) : stripEmo(chat.partial.slice(0, Math.ceil(typer.shown)));
+    var A_ = artPrep(chat.partial.slice(0, Math.ceil(typer.shown)), 'live');
+    var s = asst.emo ? stripEmoLive(A_.text) : stripEmo(A_.text);
     var cut = s.lastIndexOf('\n\n');
     if (cut > 0 && (s.slice(0, cut).match(/```/g) || []).length % 2) cut = -1;
     var stable = cut > 0 ? s.slice(0, cut + 2) : '', tail = cut > 0 ? s.slice(cut + 2) : s;
     if (!el._tl || el._st !== stable) {
       el._st = stable;
       el.innerHTML = '<span></span><span></span>';
-      el.firstChild.innerHTML = md(stable);
+      el.firstChild.innerHTML = artFill(md(stable), A_);
       el._tl = el.lastChild;
     }
-    el._tl.innerHTML = md(tidyTail(tail));
-    if (!reduceMotion && typer.shown < chat.partial.length + 1) fadeTail(el._tl, 8);
+    el._tl.innerHTML = artFill(md(tidyTail(tail)), A_);
+    var artLive_ = A_.list.length && !A_.list[A_.list.length - 1].done;
+    if (!reduceMotion && !artLive_ && typer.shown < chat.partial.length + 1) fadeTail(el._tl, 8);
+    Art.tick();
+    // 折叠屏：作品一写完就在右栏自动打开（像 Claude 电脑版）
+    if (innerWidth >= 720 && A_.list.length) { var la_ = A_.list[A_.list.length - 1], ak_ = la_.id + ':' + la_.content.length;
+      if (la_.done && chat.artAuto !== ak_) { chat.artAuto = ak_; if (!Art.isOpen()) Art.open('live|' + la_.id); } }
     var box = document.getElementById('msgs');
     if (box && box.scrollHeight - box.scrollTop - box.clientHeight < 160) box.scrollTop = box.scrollHeight;
   }
@@ -7432,8 +7875,10 @@
     return h.replace('<svg ', '<svg data-still="1" ');
   }
   // 想完以后那一行：一句话小结（像 Claude App 的「已为…」），后面跟几个小图标说明用了什么
-  function procSummary(reasoning, ms, sources, recall) {
+  function procSummary(reasoning, ms, sources, recall, content) {
     var L = recall || [], bits = [], ics = [];
+    var arts_ = content && /<artifact/i.test(content) ? artPrep(content, 'x').list : [];
+    if (arts_.length) { var la_ = arts_[arts_.length - 1]; bits.push((la_.done ? '写了作品' : '正在写作品') + '「' + la_.title + '」'); ics.push('pencil'); }
     var webs = L.filter(function (l) { return l.tool === 'web'; }), ev = L.filter(function (l) { return l.tool === 'event'; }),
       al = L.filter(function (l) { return l.tool === 'alarm'; }), rm = L.filter(function (l) { return l.tool === 'remind'; }),
       rc = L.filter(function (l) { return !/^(remind|rlist|rcancel|event|elist|edel|alarm|web|fetch|gh)$/.test(l.tool); }),
@@ -7466,7 +7911,7 @@
       '<span class="cv">' + icon('chev', 16) + '</span></button>';
   }
   function procRow(x, key) {
-    var sm = procSummary(x.reasoning, x.thinkMs, x.sources, x.recall);
+    var sm = procSummary(x.reasoning, x.thinkMs, x.sources, x.recall, x.content);
     if (sm) {
       var cv = curConv(), last = cv && key === cv.id + ':' + (cv.msgs.length - 1);
       return procDoneRow(key, sm, last ? chat.lastDoneAt : 0);
@@ -7484,7 +7929,7 @@
     else if (chat.phase === 'recall') { live = true; var lg = chat.recall && chat.recall[chat.recall.length - 1]; lb = lg && lg.tool === 'web' ? '读完搜索结果，正在整理…' : lg && lg.tool === 'fetch' ? '读完网页，正在整理…' : lg && lg.tool === 'gh' ? '看完搜索结果，正在整理…' : lg && lg.tool === 'search' ? '正在回想“' + lg.q + '”…' : lg && /^(remind|rlist|rcancel)$/.test(lg.tool) ? '正在设提醒…' : lg && /^(event|elist|edel|alarm)$/.test(lg.tool) ? '正在记进日程…' : '正在翻看过去的对话…'; }
     else if (!chat.partial && chat.partialThink && asst.showThink) { live = true; lb = thinkLine(chat.partialThink) || '正在思考…'; }
     else if (chat.partial) {
-      var sm = procSummary(chat.partialThink, chat.thinkMs, chat.sources, chat.recall);
+      var sm = procSummary(chat.partialThink, chat.thinkMs, chat.sources, chat.recall, chat.partial);
       if (sm) { chat.procLine = ''; return procDoneRow('live', sm, chat.lastDoneAt); }
       lb = procLabel(chat.partialThink, chat.thinkMs, chat.sources, chat.recall);
     }
@@ -7678,7 +8123,9 @@
       inner += '<div class="tool-sec"><p class="sub"><b style="color:var(--text);font-weight:500">打开网页 · GitHub</b> · ' + esc(asst.name) + ' 可以自己打开链接读原文，也能看 GitHub 上的仓库、代码、Issue 和版本更新。不需要 Key。</p>' +
         sw('fetch', fon, '允许打开网页', 'data-ssw') +
         (fon ? '<div class="field"><label for="gh-key">GitHub Token（可选）</label><input id="gh-key" class="txt-in" type="password" value="' + esc(srch.ghToken || '') + '" autocomplete="off" spellcheck="false" placeholder="ghp_…">' +
-          '<small class="hint">不填也能用，但 GitHub 每小时只让看 60 次；填了能到 5000 次，也能看你自己的私有仓库。</small></div>' : '') + '</div>';
+          '<small class="hint">不填也能用，但 GitHub 每小时只让看 60 次；填了能到 5000 次，也能看你自己的私有仓库。</small></div>' : '') + '</div>' +
+        '<div class="tool-sec"><p class="sub"><b style="color:var(--text);font-weight:500">作品 · 动画和演示</b> · 想看动画、演示、小游戏、图表时，' + esc(asst.name) + ' 会写成一个作品，点开就能直接运行，还能看代码、切换版本。</p>' +
+        sw('art', asst.art, '允许写作品', 'data-asw') + '</div>';
       return popShell('联网搜索', X_BTN(), '工具', inner);
     }
     if (chat.pop === 'proc') return popShell('思考过程', X_BTN(), '思考过程', procItems(procData()));
@@ -7764,7 +8211,7 @@
     system += '\n\n现在是北京时间 ' + bjDate(0) + ' ' + new Date(Date.now() + 8 * 3600e3).toISOString().slice(11, 16) + '。';
     system += memText;
     if (conv.notif) system += '\n\n（这段对话是' + (name || '用户') + '点开你推送的一条提醒开始的，提醒内容是：「' + conv.notif + '」。接着这个话题自然地聊，不用再重复提醒。）';
-    system += calPrompt() + emoRule();
+    system += calPrompt() + emoRule() + artRule();
     var systemNoTools = null, useRemind = nativeOk() && nt.on;
     if (useRecall || useRemind) systemNoTools = system + rclFb.text +
       (useRemind ? '\n\n（现在没法设手机提醒，如果被要求提醒，就坦白说这次设不了，请对方稍后再试。）' : '');
@@ -7868,6 +8315,7 @@
   // 安卓的返回手势会先退回网页历史，于是就一级一级往回退，退到首页再返回才离开 App
   function navDepth() {
     var d = 0;
+    if (Art.isOpen()) d += 1;
     if (chat.open) {
       d += 1;
       if (chat.side) d += 1;
@@ -7881,6 +8329,7 @@
     return d;
   }
   function navCloseTop() {
+    if (Art.isOpen()) { Art.close(); return; }
     if (chat.open) {
       if (chat.pop && chat.popSub) { chat.popAnim = 'back'; chat.popSub = ''; renderSheet(); return; }
       if (chat.pop) { closePop(); return; }

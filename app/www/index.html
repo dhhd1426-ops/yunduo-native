@@ -1738,6 +1738,21 @@
   .fv-row { display: flex; align-items: center; gap: 12px; padding: 8px 4px; } .fv-row span { display: flex; flex-direction: column; min-width: 0; } .fv-row b { font-size: 14px; font-weight: 600; } .fv-row small { font-size: 12px; color: var(--muted); }
   .fv-peek { margin: 0 0 8px 56px; padding: 8px 10px; border-radius: 10px; background: color-mix(in srgb, var(--bg) 60%, transparent); font: 11.5px/1.55 ui-monospace, monospace; color: var(--muted); white-space: pre-wrap; max-height: 7.5em; overflow: hidden; }
   .fv-text { white-space: pre-wrap; padding: 14px; }
+
+  /* ---------- 4.7.1 步骤收纳 + 详情页 ---------- */
+  .tl-it.tstep .th .tc { transform: none !important; margin-top: 2px; }
+  .tl-it.tstep button.th:active .tt b { opacity: .7; }
+  .sd { padding: 2px 2px 20px; }
+  .sd h4 { margin: 14px 0 8px; font-size: 14px; font-weight: 500; color: var(--muted); }
+  .sd h4:first-child { margin-top: 4px; }
+  .sd-code { margin: 0; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: color-mix(in srgb, var(--bg) 55%, var(--surface));
+    font: 12.5px/1.6 ui-monospace, "SF Mono", "Roboto Mono", Menlo, Consolas, monospace; color: var(--text); white-space: pre-wrap; word-break: break-word; max-height: 46vh; overflow: auto; }
+  .sd-code.num { white-space: pre; word-break: normal; padding-left: 0; }
+  .sd-code .ln { display: inline-block; width: 3em; padding-right: 12px; text-align: right; color: var(--muted); opacity: .55; user-select: none; }
+  .sd-kv { margin: 12px 0 0; }
+  .sd-kv > div { display: grid; grid-template-columns: 5.5em minmax(0, 1fr); gap: 12px; padding: 11px 2px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .sd-kv b { font-weight: 600; color: var(--text); } .sd-kv span { color: var(--muted); word-break: break-all; }
+  .sd-acts { display: flex; gap: 8px; margin-top: 14px; } .sd-acts .btn { display: inline-flex; align-items: center; gap: 6px; }
 </style>
 <script src="fonts/script-glyphs.js"></script>
 <script src="fonts/pinyin.js"></script>
@@ -1831,6 +1846,7 @@
     regen: '<path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4.5v4h-4"/>',
     up: '<path d="M12 19V5M6 11l6-6 6 6"/>',
     term: '<path d="M6 7l5 5-5 5"/><path d="M13 17.5h5.5"/>',
+    codeb: '<path d="M8.5 7.5 4 12l4.5 4.5M15.5 7.5 20 12l-4.5 4.5"/><path d="M13.2 5.5l-2.4 13"/>',
     read: '<path d="M12 7.2C10.8 6 9.4 5.5 7.6 5.5H4.8a.8.8 0 0 0-.8.8v10.9c0 .5.4.8.8.8h4.9L12 20.2l2.3-2.2h4.9c.4 0 .8-.3.8-.8V6.3a.8.8 0 0 0-.8-.8h-2.8c-1.8 0-3.2.5-4.4 1.7z"/><path d="M12 7.2V20M6.6 12.3h2.1M15.3 9.7h2.1M15.3 12.3h2.1"/>',
     pencil: '<path d="M15.3 5.2a1.4 1.4 0 0 1 2 0l1.5 1.5a1.4 1.4 0 0 1 0 2L9 18.5l-4.3 1 .9-4.3z"/><path d="M13.6 6.9l3.5 3.5"/>',
     web: '<circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2.2 2.3 3.3 5 3.3 8s-1.1 5.7-3.3 8c-2.2-2.3-3.3-5-3.3-8S9.8 6.3 12 4z"/>',
@@ -6805,6 +6821,8 @@
     if (ds.fsave) { var fz_ = Files.fromInline(ds.fsave); if (fz_) Files.save(fz_); return; }
     if (ds.fsavelib) { var fl_ = Files.get(ds.fsavelib); if (fl_) { Files.save(fl_); keepChatScroll(); } return; }
     if (ds.dock) { Dock.open(); return; }
+    if (ds.tstep) { chat.popAnim = 'fwd'; chat.popSub = 'step:' + ds.tstep; renderSheet(); return; }
+    if (ds.sdcopy) { var sgc = thinkSegs((procData() || {}).reasoning || '').filter(function (x) { return x.code != null && x.n === +ds.sdcopy.slice(1); })[0]; if (sgc) copyText(sgc.code, b); return; }
     if (ds.tlx != null) { (chat.tlOpen = chat.tlOpen || {})[ds.tlx] = b.getAttribute('aria-expanded') !== 'true'; keepPopScroll(); return; }
     if (ds.ssw) { srch[ds.ssw] = srch[ds.ssw] === false; saveSearch(); keepPopScroll(); return; }
     if (ds.psub != null) { chat.popAnim = ds.psub ? 'fwd' : 'back'; chat.popSub = ds.psub; renderSheet(); return; }
@@ -7681,7 +7699,7 @@
         return { log: log, content: d.length ? 'GitHub 上“' + q + '”的搜索结果：\n\n' + d.map(function (r, i) { return '[' + (i + 1) + '] ' + r.title + '（' + r.site + '）\n' + r.url + (r.text ? '\n' + r.text : ''); }).join('\n\n') : 'GitHub 上没有搜到“' + q + '”。换个英文关键词试试。' };
       }
       log.kind = d.kind; log.title = d.title; log.n = d.total; log.ms = d.ms; log.gh = d.gh; log.url = d.url;
-      log.out = d.part.replace(/\n{2,}/g, '\n').slice(0, 280);
+      log.out = d.part.replace(/\n{2,}/g, '\n').slice(0, 1500);
       var tail = d.more ? '\n\n（内容还没完：这里是第 ' + (d.start + 1) + '–' + (d.start + d.part.length) + ' 字，共 ' + d.total + ' 字。需要的话用 start=' + (d.start + d.part.length) + ' 接着读。）' : '';
       var lk = !d.start && d.links && d.links.length && d.part.length < FETCH_MAX - 1500 ? '\n\n页面上的链接：\n' + d.links.slice(0, 25).map(function (l) { return '- ' + l.t + ' ' + l.u; }).join('\n') : '';
       return { log: log, content: '网页：' + d.url + (d.title ? '\n标题：' + d.title : '') + '\n\n' + (d.part || '（没有读到正文）') + lk + tail };
@@ -8262,7 +8280,7 @@
       var ln = thinkLine(chat.partialThink);
       if (ln && ln !== chat.procLine) { chat.procLine = ln; pl.textContent = ln; pl.classList.remove('swap'); void pl.offsetWidth; pl.classList.add('swap'); }
     }
-    if (chat.pop === 'proc' && chat.procKey === 'live' && ts - (typer.pt || 0) > 300) {
+    if (chat.pop === 'proc' && chat.procKey === 'live' && !chat.popSub && ts - (typer.pt || 0) > 300) {
       typer.pt = ts;
       var pb = document.getElementById('pop-body');
       if (pb) { var nearEnd = pb.scrollHeight - pb.scrollTop - pb.clientHeight < 80; pb.innerHTML = procItems(procData()); if (nearEnd) pb.scrollTop = pb.scrollHeight; }
@@ -8379,6 +8397,10 @@
   function secsOf(ms) { return ms ? Math.max(1, Math.round(ms / 1000)) : 0; }
   // 思考里“最近写完的一句”，用作一行摘要（正在写的那句不显示，免得每个字都跳）
   function thinkLine(t) {
+    // 正在写代码块时不显示代码行，显示「正在写网页代码…」；已经写完的代码块从摘要里去掉
+    var segs = thinkSegs(t || ''), lastSg = segs[segs.length - 1];
+    if (lastSg && lastSg.code != null && !lastSg.done) return codeTitle(lastSg);
+    t = segs.filter(function (x) { return x.code == null; }).map(function (x) { return x.t; }).join('\n');
     var parts = (t || '').split(/\n+|(?<=[。！？!?])\s*/).map(function (x) { return x.trim(); }).filter(function (x) { return x.length > 1; });
     if (parts.length < 2) return '';
     return parts[parts.length - 2].replace(/^[#*\-\d.\s]+/, '').replace(/\*\*/g, '');
@@ -8535,7 +8557,7 @@
     if (al.length || rm.length) { bits.push((bits.length ? '' : '帮你') + '定了' + (al.length && rm.length ? '闹钟和提醒' : al.length ? (al.length > 1 ? ' ' + al.length + ' 个' : '') + '闹钟' : (rm.length > 1 ? ' ' + rm.length + ' 个' : '') + '提醒')); ics.push(al.length ? 'alarm' : 'bell'); if (al.length && rm.length) ics.push('bell'); }
     var s = bits.join('，');
     if (!s && reasoning && asst.showThink) {
-      var ps = String(reasoning).split(/\n+|(?<=[。！？!?])\s*/).map(function (x) { return x.replace(/^[#*\-\d.\s]+/, '').replace(/\*\*/g, '').trim(); }).filter(function (x) { return x.length > 3; });
+      var ps = thinkSegs(String(reasoning)).filter(function (x) { return x.code == null; }).map(function (x) { return x.t; }).join('\n').split(/\n+|(?<=[。！？!?])\s*/).map(function (x) { return x.replace(/^[#*\-\d.\s]+/, '').replace(/\*\*/g, '').trim(); }).filter(function (x) { return x.length > 3; });
       s = ps.length ? ps[ps.length - 1] : '';
     }
     if (!s && (reasoning && asst.showThink)) s = '想了 ' + (secsOf(ms) || 1) + ' 秒';
@@ -8598,7 +8620,7 @@
       var sz = lg.n ? (lg.n > 9999 ? (lg.n / 10000).toFixed(1) + ' 万字' : lg.n + ' 字') : '';
       var fic = { repo: 'term', dir: 'term', list: 'term', json: 'term' }[lg.kind] || 'read';
       return { ic: fic, title: lg.desc || fetchLabel(lg), detail: shortUrl(lg.q),
-        note: pend ? '' : err || [lg.kind === 'repo' ? '' : lg.title, sz, lg.ms ? (lg.ms / 1000).toFixed(1) + ' 秒' : ''].filter(Boolean).join(' · '),
+        note: pend ? '' : err || [lg.kind === 'repo' ? '' : lg.title, sz, lg.ms >= 100 ? (lg.ms / 1000).toFixed(1) + ' 秒' : ''].filter(Boolean).join(' · '),
         body: pend || lg.err ? '' : '<div class="tl-pv">' + (lg.title ? '<b>' + esc(lg.title) + '</b>' : '') + '<pre>' + esc(lg.out || '') + '</pre></div>' };
     }
     if (t === 'gh') return { ic: 'find', title: lg.desc || (pend ? '正在 GitHub 上搜索' : '在 GitHub 上搜索'), detail: lg.q,
@@ -8622,13 +8644,43 @@
       }).join('') + '</div>' : '' };
   }
   function toolItem(lg, i) {
-    var m = toolMeta(lg), tl = chat.tlOpen || {}, open = !!m.body && (tl[i] != null ? tl[i] : !!m.open);
+    var m = toolMeta(lg);
     var plain = m.plain || !!m.diff || /^(elist|rlist)$/.test(lg.tool);
     var head = '<span class="tt"><b>' + esc(m.title) + '</b>' + (m.detail ? (plain ? '<em class="fn">' + esc(m.detail) + '</em>' : '<code>' + esc(m.detail) + '</code>') : '') +
-      (m.note ? '<small' + (lg.err ? ' class="err"' : '') + '>' + esc(m.note) + '</small>' : '') + '</span>' + (m.body ? '<span class="tc">' + icon('down', 16) + '</span>' : '');
-    return tlItem('tstep' + (lg.pending ? ' live' : '') + (open ? ' open' : ''), '<span class="tile">' + icon(m.ic, 17) + '</span>',
-      (m.body ? '<button type="button" class="th" data-tlx="' + i + '" aria-expanded="' + open + '">' + head + '</button>' : '<div class="th">' + head + '</div>') +
-      (open ? '<div class="tx">' + m.body + '</div>' : '') + (m.diff ? diffCard(m.diff) : ''));
+      (m.note ? '<small' + (lg.err ? ' class="err"' : '') + '>' + esc(m.note) + '</small>' : '') + '</span>' + (lg.pending ? '' : '<span class="tc">' + icon('chev', 16) + '</span>');
+    return tlItem('tstep' + (lg.pending ? ' live' : ''), '<span class="tile">' + icon(m.ic, 17) + '</span>',
+      (lg.pending ? '<div class="th">' + head + '</div>' : '<button type="button" class="th" data-tstep="t' + i + '">' + head + '</button>') + (m.diff ? diffCard(m.diff) : ''));
+  }
+  /* 4.7.1 思考里的代码收进一个步骤（像 Claude 的 >_ 步骤）：图标 + 标题 + 两行预览；点开推到详情页 */
+  var CODE_TITLE = { svg: ['画了一段 SVG', '正在画 SVG'], html: ['草拟网页代码', '正在写网页'], css: ['写了一段样式', '正在写样式'], js: ['写了一段 JavaScript', '正在写 JavaScript'], javascript: ['写了一段 JavaScript', '正在写 JavaScript'],
+    ts: ['写了一段 TypeScript', '正在写 TypeScript'], python: ['写了一段 Python', '正在写 Python'], py: ['写了一段 Python', '正在写 Python'], json: ['整理成 JSON', '正在整理 JSON'], bash: ['准备命令', '正在写命令'], sh: ['准备命令', '正在写命令'],
+    shell: ['准备命令', '正在写命令'], java: ['写了一段 Java', '正在写 Java'], sql: ['写了一条 SQL', '正在写 SQL'], xml: ['写了一段 XML', '正在写 XML'], md: ['草拟文档', '正在草拟文档'], markdown: ['草拟文档', '正在草拟文档'] };
+  function guessLang(c) { return /^\s*<svg|<(path|circle|rect|g|defs|linearGradient)\b/i.test(c) ? 'svg' : /<(html|div|body|head|script|style)\b/i.test(c) ? 'html' : /^\s*[\[{]/.test(c) ? 'json' : /\b(def|import|print)\b.*:?\s*$/m.test(c) && !/[;{}]/.test(c) ? 'python' : /[{};]/.test(c) ? 'js' : ''; }
+  // 把思考拆成「文字段落 / 代码块」，按原来的顺序
+  function thinkSegs(txt) {
+    var out = [], re = /```([\w+#-]*)[^\n]*\n?([\s\S]*?)(```|$)/g, last = 0, m, n = 0;
+    function paras(t, base) {
+      var r2 = /[^\n]+(?:\n(?!\s*\n)[^\n]*)*/g, mm;
+      while ((mm = r2.exec(t))) { var pt = mm[0].trim(); if (!pt) continue;
+        var lines = pt.split('\n'), codey = lines.filter(function (l) { return /^\s*(<\/?[\w-]+|[{}\]);]|(const|let|var|function|def|import|return)\b)|[;{]\s*$/.test(l); }).length;
+        if (lines.length >= 6 && codey / lines.length > .6) out.push({ code: pt, lang: guessLang(pt), done: true, end: base + mm.index + mm[0].length, n: n++ });
+        else out.push({ t: pt, end: base + mm.index + mm[0].length }); }
+    }
+    while ((m = re.exec(txt))) {
+      paras(txt.slice(last, m.index), last);
+      var code = m[2].replace(/\s+$/, '');
+      if (code.trim()) out.push({ code: code, lang: (m[1] || guessLang(code)).toLowerCase(), done: !!m[3], end: m.index + m[0].length, n: n++ });
+      last = m.index + m[0].length; if (!m[0]) re.lastIndex++;
+    }
+    paras(txt.slice(last), last);
+    return out;
+  }
+  function codeTitle(sg) { var t = CODE_TITLE[sg.lang] || ['写了一段代码', '正在写代码']; return sg.done ? t[0] : t[1] + '…'; }
+  function codeItem(sg) {
+    var lines = sg.code.split('\n'), peek = lines.filter(function (l) { return l.trim(); }).slice(0, 2).map(function (l) { return l.trim(); }).join('\n');
+    var head = '<span class="tt"><b>' + esc(codeTitle(sg)) + '</b><code>' + esc(peek) + '</code><small>' + (sg.lang ? sg.lang.toUpperCase() + ' · ' : '') + lines.length + ' 行</small></span><span class="tc">' + icon('chev', 16) + '</span>';
+    return tlItem('tstep' + (sg.done ? '' : ' live'), '<span class="tile">' + icon(sg.lang === 'bash' || sg.lang === 'sh' || sg.lang === 'shell' ? 'term' : 'codeb', 17) + '</span>',
+      '<button type="button" class="th" data-tstep="c' + sg.n + '">' + head + '</button>');
   }
   // 改动卡：+ 新增（绿）/ − 去掉（红），等宽字，像 Claude 里 Edited 下面那块
   function diffCard(rows) {
@@ -8636,21 +8688,51 @@
       return '<div class="' + (r[0] === '-' ? 'del' : 'add') + '"><i>' + (r[0] === '-' ? '−' : '+') + '</i><span>' + esc(r[1]) + '</span></div>';
     }).join('') + '</div>';
   }
+  // 4.7.1 步骤详情页（仿 Claude App：← 返回，Request / 参数 / Response）
+  var TOOL_NAME = { web: ['web_search', '搜索网页'], fetch: ['web_fetch', '打开网页'], gh: ['github_search', 'GitHub 搜索'], search: ['search_past_chats', '搜索过去的对话'], recent: ['recent_chats', '最近的对话'],
+    read: ['read_chat', '读以前的对话'], auto: ['recall', '翻看过去的对话'], event: ['add_event', '记日程'], edel: ['delete_event', '删日程'], elist: ['list_events', '查看日程'], alarm: ['set_alarm', '定闹钟'],
+    remind: ['set_reminder', '设提醒'], rlist: ['list_reminders', '查看提醒'], rcancel: ['cancel_reminder', '取消提醒'] };
+  function codeBox(txt, num) {
+    var ls = String(txt || '').split('\n');
+    return '<pre class="sd-code' + (num ? ' num' : '') + '">' + (num ? ls.map(function (l, i) { return '<span class="ln">' + (i + 1) + '</span>' + esc(l); }).join('\n') : esc(txt)) + '</pre>';
+  }
+  function kvRows(rows) { return '<div class="sd-kv">' + rows.filter(function (r) { return r[1] != null && r[1] !== ''; }).map(function (r) { return '<div><b>' + esc(r[0]) + '</b><span>' + esc(r[1]) + '</span></div>'; }).join('') + '</div>'; }
+  function stepDetail(d, id) {
+    if (!d) return { title: '步骤', body: '<p class="sub">这条回答已经结束了。</p>' };
+    if (id[0] === 'c') {
+      var sg = thinkSegs(d.reasoning || '').filter(function (x) { return x.code != null && x.n === +id.slice(1); })[0];
+      if (!sg) return { title: '代码', body: '<p class="sub">找不到这段代码了。</p>' };
+      return { title: codeTitle(sg), body: '<div class="sd">' + '<h4>内容</h4>' + codeBox(sg.code, true) +
+        kvRows([['语言', (sg.lang || '未标注').toUpperCase()], ['行数', sg.code.split('\n').length + ' 行'], ['字数', sg.code.length + ' 个字符'], ['状态', sg.done ? '写完了' : '还在写']]) +
+        '<div class="sd-acts"><button type="button" class="btn" data-sdcopy="c' + sg.n + '">' + icon('copy', 16) + '复制代码</button></div></div>' };
+    }
+    var lg = (d.recall || [])[+id.slice(1)];
+    if (!lg) return { title: '步骤', body: '<p class="sub">找不到这一步了。</p>' };
+    var m = toolMeta(lg), tn = TOOL_NAME[lg.tool] || [lg.tool, '工具'], req = {};
+    if (lg.tool === 'fetch') { req.url = lg.q; if (lg.desc) req.intent = lg.desc; }
+    else if (/^(web|gh|search|auto)$/.test(lg.tool)) { req.query = lg.q; if (lg.desc) req.intent = lg.desc; }
+    else if (lg.at) { req.title = lg.q; req.at = new Date(lg.at).toLocaleString('zh-CN', { hour12: false }); }
+    else req.q = lg.q;
+    var res = lg.pending ? '（还在进行）' : lg.err ? '出错：' + lg.err :
+      lg.out ? (lg.title ? lg.title + '\n\n' : '') + lg.out :
+      lg.diff ? lg.diff.map(function (r) { return r[0] + ' ' + r[1]; }).join('\n') :
+      lg.lines ? (lg.lines.join('\n') || '（空的）') :
+      (lg.hits || []).length ? lg.hits.map(function (h, i) { return (i + 1) + '. ' + (h.title || '') + (h.site ? '  · ' + h.site : '') + (h.url ? '\n   ' + h.url : ''); }).join('\n') : '（没有结果）';
+    return { title: m.title, body: '<div class="sd"><h4>请求</h4>' + codeBox(JSON.stringify(req, null, 2)) +
+      kvRows([['工具', tn[0] + ' · ' + tn[1]], ['说明', lg.desc || m.title], ['对象', m.detail], ['用时', lg.ms >= 100 ? (lg.ms / 1000).toFixed(1) + ' 秒' : ''], ['大小', lg.n ? lg.n + ' 字' : ''], ['状态', lg.pending ? '进行中' : lg.err ? '失败' : '完成']]) +
+      '<h4>结果</h4>' + codeBox(res) + (/^(search|recent|read|auto)$/.test(lg.tool) && m.body ? '<h4>点开对话</h4>' + m.body : '') + '</div>' };
+  }
   function tlItem(cls, node, inner) { return '<div class="tl-it' + (cls ? ' ' + cls : '') + '"><span class="nd">' + node + '</span><div class="bd">' + inner + '</div></div>'; }
   function procItems(d) {
     if (!d) return '<p class="sub">这条回答已经结束了。</p>';
     var h = '', ring = function (ic) { return '<span class="ring">' + icon(ic, 15) + '</span>'; }, dot = '<span class="dot"></span>';
     // 4.5 工具步骤（仿 Claude App 的 Summary）：方形图标块 + 粗体标题（她自己写的 intent）+ 等宽的参数，点开看结果
     function recallItem(lg) { h += toolItem(lg, (d.recall || []).indexOf(lg)); }
-    var logs = (d.recall || []).slice(), paras = [];
-    if (d.reasoning && asst.showThink) {
-      var re = /[^\n]+(?:\n(?!\s*\n)[^\n]*)*/g, mt;
-      while ((mt = re.exec(d.reasoning))) if (mt[0].trim()) paras.push({ t: mt[0].trim(), end: mt.index + mt[0].length });
-    }
+    var logs = (d.recall || []).slice(), paras = d.reasoning && asst.showThink ? thinkSegs(d.reasoning) : [];
     // 按真实顺序：想到哪一步去查的，就排在那一段后面（没有位置信息的旧数据排最前）
     logs.filter(function (lg) { return lg.tpos == null; }).forEach(recallItem);
     paras.forEach(function (pa) {
-      h += tlItem('', dot, '<p>' + esc(pa.t) + '</p>');
+      h += pa.code != null ? codeItem(pa) : tlItem('', dot, '<p>' + esc(pa.t) + '</p>');
       logs.filter(function (lg) { return lg.tpos != null && !lg._done && lg.tpos <= pa.end + 2; }).forEach(function (lg) { lg._done = 1; recallItem(lg); });
     });
     logs.filter(function (lg) { return lg.tpos != null && !lg._done; }).forEach(recallItem);
@@ -8767,6 +8849,8 @@
         sw('art', asst.art, '允许写作品', 'data-asw') + '</div>';
       return popShell('联网搜索', X_BTN(), '工具', inner);
     }
+    if (chat.pop === 'proc' && /^step:/.test(chat.popSub || '')) { var sd_ = stepDetail(procData(), chat.popSub.slice(5));
+      return popShell(sd_.title, '<button type="button" class="icon-btn" data-psub="" aria-label="返回">' + icon('back', 22) + '</button>', esc(sd_.title), sd_.body); }
     if (chat.pop === 'proc') return popShell('思考过程', X_BTN(), '思考过程', procItems(procData()));
     return '';
   }

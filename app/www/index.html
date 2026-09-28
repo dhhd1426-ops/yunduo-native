@@ -1753,6 +1753,94 @@
   .sd-kv > div { display: grid; grid-template-columns: 5.5em minmax(0, 1fr); gap: 12px; padding: 11px 2px; border-bottom: 1px solid var(--line); font-size: 14px; }
   .sd-kv b { font-weight: 600; color: var(--text); } .sd-kv span { color: var(--muted); word-break: break-all; }
   .sd-acts { display: flex; gap: 8px; margin-top: 14px; } .sd-acts .btn { display: inline-flex; align-items: center; gap: 6px; }
+
+  .tl-it .nd .tile svg.ic-term { stroke-width: 2.2; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tl-it .nd .tile svg.ic-term { color: #fff; } }
+  :root[data-theme="dark"] .tl-it .nd .tile svg.ic-term { color: #fff; }
+
+  /* ---------- 4.7.2 长按消息：浮起菜单 · 编辑重发 · 分支切换 ---------- */
+  .msg.me[data-mi] { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; transition: transform .35s var(--spring, ease), filter .35s; }
+  .msg.me.pressing { transform: scale(.97); filter: brightness(.95); }
+  .msg.me.lifted { visibility: hidden; }
+  .mm-wrap { position: absolute; inset: 0; z-index: 30; }
+  .mm-scrim { position: absolute; inset: 0; border: 0; background: color-mix(in srgb, var(--bg) 45%, transparent); backdrop-filter: blur(10px) saturate(1.2); -webkit-backdrop-filter: blur(10px) saturate(1.2); animation: artFade .3s both; }
+  .mm-float { position: absolute; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; max-width: calc(100% - 32px); }
+  .mm-bubble { margin: 0 !important; transform-origin: 100% 50%; box-shadow: 0 18px 40px -16px rgba(0,0,0,.55); animation: mmLift .45s var(--bouncy, cubic-bezier(.2,1.4,.4,1)) both; }
+  @keyframes mmLift { from { transform: scale(.97); box-shadow: none; } to { transform: scale(1.04); } }
+  .mm-bubble { transform: scale(1.04); }
+  .mm-menu { min-width: 190px; border-radius: 16px; overflow: hidden; background: var(--island, var(--surface)); border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+    backdrop-filter: blur(24px) saturate(1.5); -webkit-backdrop-filter: blur(24px) saturate(1.5); box-shadow: 0 20px 44px -18px rgba(0,0,0,.55); transform-origin: 100% 0; animation: mmPop .38s var(--spring, ease) both; }
+  @keyframes mmPop { from { opacity: 0; transform: scale(.85) translateY(-6px); } }
+  .mm-menu button { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 13px 16px; border: 0; background: none; color: var(--text); font-size: 15px; }
+  .mm-menu button + button { border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent); }
+  .mm-menu button:active { background: color-mix(in srgb, var(--ink) 8%, transparent); }
+  .me-edit { margin: 10px 0 12px auto; max-width: 92%; padding: 10px 10px 8px 14px; border-radius: 20px; background: var(--surface); border: 1.5px solid color-mix(in srgb, var(--accent) 55%, var(--line));
+    box-shadow: 0 10px 28px -16px rgba(0,0,0,.5); animation: meEdit .4s var(--spring, ease) both; }
+  @keyframes meEdit { from { transform: scale(.97); opacity: .6; } }
+  .me-edit textarea { width: 100%; border: 0; outline: 0; resize: none; background: none; color: var(--text); font: inherit; font-size: 15.5px; line-height: 1.6; padding: 2px 0; }
+  .me-edit-bar { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+  .me-edit-hint { display: block; margin-top: 4px; font-size: 11.5px; color: var(--muted); line-height: 1.45; } .me-edit-bar .grow { flex: 1; }
+  .me-edit-bar .btn { height: 34px; padding: 0 14px; font-size: 13.5px; display: inline-flex; align-items: center; gap: 5px; }
+  .me-br { display: flex; justify-content: flex-end; align-items: center; gap: 2px; margin: -4px 2px 10px; color: var(--muted); font: 12px ui-monospace, "SF Mono", monospace; }
+  .me-br button { width: 26px; height: 26px; border: 0; border-radius: 13px; background: none; color: var(--text); display: grid; place-items: center; }
+  .me-br button:disabled { opacity: .3; } .me-br span { min-width: 38px; text-align: center; }
+
+  /* 4.7.2 改成在输入框里编辑（Claude App 新版） */
+  .msg.me.editing { outline: 2px solid color-mix(in srgb, var(--accent) 70%, transparent); outline-offset: 3px; animation: meEdit .4s var(--spring, ease) both; }
+  .edit-strip { display: flex; align-items: center; gap: 10px; margin: 0 6px 6px; padding: 7px 6px 7px 12px; border-radius: 14px; color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, var(--surface)); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); animation: tlxIn .35s var(--spring, ease) both; }
+  .edit-strip span { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+  .edit-strip b { font-size: 13px; font-weight: 600; } .edit-strip small { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .edit-strip .icon-btn { width: 32px; height: 32px; color: var(--muted); }
+  .composer.editing { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)) !important; }
+
+  /* 4.7.2 调整：去掉编辑描边；菜单照 Claude App（时间 + 图标在左）；输入区融进聊天（沉浸式） */
+  .msg.me.editing { outline: 0; animation: none; }
+  .composer.editing { border-color: color-mix(in srgb, var(--text) 9%, transparent) !important; }
+  .mm-menu { min-width: 228px; border-radius: 20px; background: color-mix(in srgb, var(--surface) 88%, var(--text) 6%); }
+  .mm-time { padding: 12px 18px 10px; font-size: 14px; color: var(--muted); border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent); font-variant-numeric: tabular-nums; }
+  .mm-menu button { justify-content: flex-start; gap: 16px; padding: 14px 18px; font-size: 16px; }
+  .mm-menu button + button { border-top: 0; }
+  .mm-menu button svg { flex: none; color: var(--text); opacity: .9; }
+  .sel-text { white-space: pre-wrap; word-break: break-word; font-size: 16px; line-height: 1.75; color: var(--text); padding: 4px 2px 24px; -webkit-user-select: text; user-select: text; }
+  /* 沉浸式输入区：没有分隔线、没有底色块，对话从输入框后面淡出；输入框比背景稍亮，像浮在上面 */
+  .sheet-foot { border-top: 0 !important; position: relative; z-index: 2; margin-top: -30px; padding-top: 22px;
+    background: linear-gradient(to bottom, color-mix(in srgb, var(--surface) 0%, transparent), var(--surface) 34px); }
+  .msgs .chat-col { padding-bottom: 34px; }
+  .composer.cx { background: color-mix(in srgb, var(--surface) 90%, var(--text) 7%); border: 1px solid color-mix(in srgb, var(--text) 9%, transparent);
+    border-radius: 28px; box-shadow: 0 10px 30px -18px rgba(0, 0, 0, .55); }
+  .composer.cx:focus-within { box-shadow: 0 10px 30px -18px rgba(0, 0, 0, .55); border-color: color-mix(in srgb, var(--text) 14%, transparent); }
+  .edit-strip { background: color-mix(in srgb, var(--surface) 88%, var(--text) 6%); border-color: color-mix(in srgb, var(--text) 9%, transparent); color: var(--text); }
+  .edit-strip svg { color: var(--accent); }
+
+  /* ---------- 4.7.2 深色模式换成 Claude App 的中性暖灰（原来偏藏青）---------- */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151514; --surface: #1f1e1d; --line: #302f2c; --text: #f4f3ee; --muted: #9c9a92; --track: #2f2e2b;
+      --ink: #ecebe5; --on-accent: #1f1e1d; --island: rgba(31, 30, 29, .82);
+      --hl: inset 0 1px 0 rgba(255, 255, 255, .04); --lift: 0 1px 2px rgba(0, 0, 0, .3), 0 14px 32px -20px rgba(0, 0, 0, .8);
+      --glow-tint: rgba(255, 255, 255, .04); --bubble: #2f2e2b;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #151514; --surface: #1f1e1d; --line: #302f2c; --text: #f4f3ee; --muted: #9c9a92; --track: #2f2e2b;
+    --ink: #ecebe5; --on-accent: #1f1e1d; --island: rgba(31, 30, 29, .82);
+    --hl: inset 0 1px 0 rgba(255, 255, 255, .04); --lift: 0 1px 2px rgba(0, 0, 0, .3), 0 14px 32px -20px rgba(0, 0, 0, .8);
+    --glow-tint: rgba(255, 255, 255, .04); --bubble: #2f2e2b;
+  }
+  /* 聊天：背景和 Claude 一样是最深的那层，你的气泡是深灰、白字 */
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sheet { background: var(--bg); } :root:not([data-theme="light"]) .msg.me { background: var(--bubble); color: var(--text); } }
+  :root[data-theme="dark"] .sheet { background: var(--bg); } :root[data-theme="dark"] .msg.me { background: var(--bubble); color: var(--text); }
+  /* 点缀色用 Claude 的暖橙（小宇选了 B 版） */
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --accent: #d97757; --glow: rgba(217, 119, 87, .22); } }
+  :root[data-theme="dark"] { --accent: #d97757; --glow: rgba(217, 119, 87, .22); }
+
+  /* 4.7.2 回到最新（Claude 同款圆形 ↓） */
+  .turn-sp { flex: none; pointer-events: none; }
+  .jump-btn { position: absolute; left: 50%; bottom: 128px; z-index: 3; width: 40px; height: 40px; margin-left: -20px; border-radius: 20px; display: grid; place-items: center;
+    border: 1px solid color-mix(in srgb, var(--text) 12%, transparent); background: color-mix(in srgb, var(--surface) 88%, var(--text) 6%); color: var(--text);
+    box-shadow: 0 8px 22px -10px rgba(0, 0, 0, .6); animation: artFade .25s both; }
+  .jump-btn[hidden] { display: none; }
 </style>
 <script src="fonts/script-glyphs.js"></script>
 <script src="fonts/pinyin.js"></script>
@@ -1845,7 +1933,7 @@
     memory: '<path d="M6 4.5h9.5a2.5 2.5 0 0 1 2.5 2.5v12.5H8.5A2.5 2.5 0 0 1 6 17z"/><path d="M6 17a2.5 2.5 0 0 1 2.5-2.5H18"/><path d="M12 7.8c.9-1.3 3-1 3 .6 0 1.4-3 3-3 3s-3-1.6-3-3c0-1.6 2.1-1.9 3-.6z"/>',
     regen: '<path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4.5v4h-4"/>',
     up: '<path d="M12 19V5M6 11l6-6 6 6"/>',
-    term: '<path d="M6 7l5 5-5 5"/><path d="M13 17.5h5.5"/>',
+    term: '<path d="M7 6.6l5.2 5.4-5.2 5.4"/><path d="M12.6 17.4h5.6"/>',
     codeb: '<path d="M8.5 7.5 4 12l4.5 4.5M15.5 7.5 20 12l-4.5 4.5"/><path d="M13.2 5.5l-2.4 13"/>',
     read: '<path d="M12 7.2C10.8 6 9.4 5.5 7.6 5.5H4.8a.8.8 0 0 0-.8.8v10.9c0 .5.4.8.8.8h4.9L12 20.2l2.3-2.2h4.9c.4 0 .8-.3.8-.8V6.3a.8.8 0 0 0-.8-.8h-2.8c-1.8 0-3.2.5-4.4 1.7z"/><path d="M12 7.2V20M6.6 12.3h2.1M15.3 9.7h2.1M15.3 12.3h2.1"/>',
     pencil: '<path d="M15.3 5.2a1.4 1.4 0 0 1 2 0l1.5 1.5a1.4 1.4 0 0 1 0 2L9 18.5l-4.3 1 .9-4.3z"/><path d="M13.6 6.9l3.5 3.5"/>',
@@ -6821,6 +6909,18 @@
     if (ds.fsave) { var fz_ = Files.fromInline(ds.fsave); if (fz_) Files.save(fz_); return; }
     if (ds.fsavelib) { var fl_ = Files.get(ds.fsavelib); if (fl_) { Files.save(fl_); keepChatScroll(); } return; }
     if (ds.dock) { Dock.open(); return; }
+    if (ds.mclose) { chat.mmenu = null; keepChatScroll(); return; }
+    if (ds.mcopy != null) { var cc_ = curConv(), mc_ = cc_ && cc_.msgs[+ds.mcopy]; chat.mmenu = null; keepChatScroll(); if (mc_) copyText(mc_.content, b); toast('已复制'); return; }
+    if (ds.medit != null) {
+      if (ds.medit === 'cancel') { cancelEdit(); return; }
+      var ce_ = curConv(), em_ = ce_ && ce_.msgs[+ds.medit]; if (!em_) return;
+      if (chat.editIdx == null) chat.draftBak = chat.draft;
+      chat.mmenu = null; chat.editIdx = +ds.medit; chat.draft = em_.content; keepChatScroll();
+      var t_ = document.getElementById('chat-in'); if (t_) { try { t_.focus({ preventScroll: true }); t_.setSelectionRange(t_.value.length, t_.value.length); } catch (x) {} fitInput(); }
+      return;
+    }
+    if (ds.msel != null) { chat.mmenu = null; chat.selIdx = +ds.msel; chat.pop = 'seltext'; chat.popSub = ''; chat.popIn = true; renderSheet(); return; }
+    if (ds.brv) { var bp_ = ds.brv.split('|'); switchBranch(+bp_[0], +bp_[1]); return; }
     if (ds.tstep) { chat.popAnim = 'fwd'; chat.popSub = 'step:' + ds.tstep; renderSheet(); return; }
     if (ds.sdcopy) { var sgc = thinkSegs((procData() || {}).reasoning || '').filter(function (x) { return x.code != null && x.n === +ds.sdcopy.slice(1); })[0]; if (sgc) copyText(sgc.code, b); return; }
     if (ds.tlx != null) { (chat.tlOpen = chat.tlOpen || {})[ds.tlx] = b.getAttribute('aria-expanded') !== 'true'; keepPopScroll(); return; }
@@ -6895,7 +6995,8 @@
   });
   document.addEventListener('keydown', function (e) {
     if (e.target.id === 'city-q' && e.key === 'Enter') { var first = document.querySelector('[data-add]'); if (first) first.click(); }
-    if (e.target.id === 'chat-in' && e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(chat.draft); }
+    // 4.7.2 回车 = 换行（和 Claude App 一样，点发送键才发）；外接键盘按 Ctrl/⌘+回车 发送
+    if (e.target.id === 'chat-in' && e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); sendOrEdit(); }
     if (e.target.id === 'p-new' && e.key === 'Enter') { uiAction('addnew'); }
     if (/^mem-add-/.test(e.target.id) && e.key === 'Enter') { e.preventDefault(); var ab = document.querySelector('[data-memadd="' + e.target.id.slice(8) + '"]'); if (ab) ab.click(); }
     if (e.target.id === 'mem-edit' && e.key === 'Enter') { e.preventDefault(); memSaveEdit(); }
@@ -8094,7 +8195,8 @@
       chats = chats.filter(function (x) { return x.id !== c.id; }); saveChats();
       chat.cur = null; chat.city = state.current; renderSheet(); toast('已删除这段对话'); return;
     }
-    if (a === 'send') { sendChat(chat.draft); return; }
+    if (a === 'send') { sendOrEdit(); return; }
+    if (a === 'jump') { var jbx = document.getElementById('msgs'), jsp = document.getElementById('turn-sp'); if (jbx && jsp) { var je = jsp.getBoundingClientRect().top - jbx.getBoundingClientRect().top + jbx.scrollTop; jbx.scrollTo({ top: Math.max(0, je - jbx.clientHeight + 40), behavior: 'smooth' }); } return; }
     if (a === 'stop') { if (chat.busy) { chat.stopped = true; typer.shown = chat.partial.length; if (chat.xhr) try { chat.xhr.abort(); } catch (e) {} if (chat.stopRej) chat.stopRej({ stopped: true, msg: '已停止' }); if (chat.webAbort) chat.webAbort(); } return; }
     if (a === 'regen') {
       var rc = curConv(); if (!rc || chat.busy || rc.msgs.length < 2) return;
@@ -8109,6 +8211,50 @@
     if (a === 'memory') { closeChat(); state.tab = 'settings'; state.sub = 'memory'; save(); render({ top: true }); return; }
   }
 
+  /* 4.7.2 长按自己的消息：浮起 + 菜单（编辑 / 复制），编辑后重新发送，旧版本留作分支（仿 Claude App） */
+  function msgMenuHtml(msgs) {
+    var mm = chat.mmenu; if (!mm || !msgs[mm.i]) return '';
+    var below = mm.top + mm.h + 140 < innerHeight;
+    return '<div class="mm-wrap"><button type="button" class="mm-scrim" data-mclose="1" aria-label="关闭菜单"></button>' +
+      '<div class="mm-float" style="top:' + Math.max(70, below ? mm.top : mm.top - 128) + 'px;right:' + mm.right + 'px">' +
+        (below ? '<div class="msg me mm-bubble" style="max-width:' + mm.w + 'px">' + esc(msgs[mm.i].content) + '</div>' : '') +
+        '<div class="mm-menu" role="menu"><div class="mm-time">' + msgTime(msgs[mm.i].ts) + '</div>' +
+          '<button type="button" role="menuitem" data-mcopy="' + mm.i + '">' + icon('copy', 20) + '<span>复制消息</span></button>' +
+          '<button type="button" role="menuitem" data-msel="' + mm.i + '">' + SEL_ICON + '<span>选择文字</span></button>' +
+          (chat.busy ? '' : '<button type="button" role="menuitem" data-medit="' + mm.i + '">' + icon('pencil', 20) + '<span>编辑</span></button>') +
+        '</div>' + (below ? '' : '<div class="msg me mm-bubble" style="max-width:' + mm.w + 'px">' + esc(msgs[mm.i].content) + '</div>') +
+      '</div></div>';
+  }
+  var SEL_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5h1.5M5 4.5v15M5 19.5h1.5M9.5 8h9M9.5 12h9M9.5 16h6"/></svg>';
+  function msgTime(ts) { if (!ts) return ''; var d = new Date(ts), n = new Date(), hm = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+    return d.toDateString() === n.toDateString() ? hm : (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + hm; }
+  function openMsgMenu(el) {
+    var i = +el.getAttribute('data-mi'), r = el.getBoundingClientRect(), sh = el.closest('.chat-main'), sr = sh ? sh.getBoundingClientRect() : { top: 0, right: innerWidth };
+    chat.mmenu = { i: i, top: r.top - sr.top, right: sr.right - r.right, h: r.height, w: Math.ceil(r.width) + 16 };
+    if (navigator.vibrate) try { navigator.vibrate(8); } catch (e) {}
+    keepChatScroll();
+  }
+  function cancelEdit() { chat.editIdx = null; chat.draft = chat.draftBak || ''; chat.draftBak = ''; keepChatScroll(); }
+  function sendOrEdit() { if (chat.editIdx != null) { var d_ = chat.draft; chat.draft = chat.draftBak || ''; chat.draftBak = ''; editResend(chat.editIdx, d_); } else sendChat(chat.draft); }
+  function editResend(i, text) {
+    var cv = curConv(); text = (text || '').trim(); if (!cv || chat.busy || !text) return;
+    var m = cv.msgs[i]; if (!m || m.role !== 'user') return;
+    var br = m.br || { list: [{ content: m.content, tail: cv.msgs.slice(i + 1) }], cur: 0 };
+    br.list[br.cur] = { content: m.content, tail: cv.msgs.slice(i + 1) };      // 先把现在这一版存好
+    br.list.push({ content: text, tail: [] }); br.cur = br.list.length - 1;
+    cv.msgs = cv.msgs.slice(0, i);
+    chat.editIdx = null; Speaker.stop();
+    sendChat(text, { br: br });
+  }
+  function switchBranch(i, dir) {
+    var cv = curConv(); if (!cv || chat.busy) return;
+    var m = cv.msgs[i]; if (!m || !m.br) return;
+    var k = m.br.cur + dir; if (k < 0 || k >= m.br.list.length) return;
+    m.br.list[m.br.cur] = { content: m.content, tail: cv.msgs.slice(i + 1) };
+    m.content = m.br.list[k].content; m.br.cur = k;
+    cv.msgs = cv.msgs.slice(0, i + 1).concat(m.br.list[k].tail);
+    saveChats(); keepChatScroll();
+  }
   function sideListHtml() {
     var q = chat.q.trim();
     if (chat.filter === 'files') {
@@ -8169,7 +8315,11 @@
     } else {
       body = msgs.map(function (x, i) {
         var nw = i >= msgs.length - chat.fresh ? ' new' : '';
-        if (x.role === 'user') return '<div class="msg me' + nw + '">' + esc(x.content) + '</div>';
+        if (x.role === 'user') {
+          var br_ = x.br && x.br.list.length > 1 ? '<div class="me-br"><button type="button" data-brv="' + i + '|-1" aria-label="上一版"' + (x.br.cur ? '' : ' disabled') + '>' + icon('back', 14) + '</button><span>' + (x.br.cur + 1) + ' / ' + x.br.list.length + '</span>' +
+            '<button type="button" data-brv="' + i + '|1" aria-label="下一版"' + (x.br.cur < x.br.list.length - 1 ? '' : ' disabled') + '>' + icon('chev', 14) + '</button></div>' : '';
+          return '<div class="msg me' + nw + (chat.mmenu && chat.mmenu.i === i ? ' lifted' : '') + (chat.editIdx === i ? ' editing' : '') + '" data-mi="' + i + '">' + esc(x.content) + '</div>' + br_;
+        }
         var sk_ = conv.id + ':' + i, son = Speaker.key() === sk_, last = i === msgs.length - 1;
         return botHead(x.model) + procRow(x, sk_) +
           botBodyHtml(x.content, sk_, nw) +
@@ -8224,10 +8374,13 @@
           '<button type="button" class="icon-btn" data-chat="close" aria-label="收起助理">' + icon('down', 22) + '</button>' +
         '</span></div>' +
       (asst.weather ? '<div class="chat-col" style="flex:none"><div class="ctx">' + icon(v ? v.icon : 'cloud', 16) + '<span>' + esc(ctxText) + '</span></div></div>' : '') +
-      '<div class="msgs" id="msgs"><div class="chat-col">' + body + '</div></div>' +
+      '<div class="msgs" id="msgs"><div class="chat-col">' + body + '<div class="turn-sp" id="turn-sp" aria-hidden="true"></div></div></div>' +
+      '<button type="button" class="jump-btn" id="jump-btn" data-chat="jump" aria-label="回到最新" hidden>' + icon('down', 20) + '</button>' +
       (aiReady() ? '<div class="sheet-foot"><div class="chat-col">' +
-        '<div class="composer cx"><label for="chat-in" style="position:absolute;width:1px;height:1px;overflow:hidden">发消息给 ' + esc(asst.name) + '</label>' +
-          '<textarea id="chat-in" rows="1" maxlength="2000" placeholder="' + (msgs.length ? '继续聊…' : '和 ' + esc(asst.name) + ' 说点什么…') + '" enterkeyhint="send">' + esc(chat.draft) + '</textarea>' +
+        (chat.editIdx != null && msgs[chat.editIdx] ? '<div class="edit-strip">' + icon('pencil', 16) + '<span><b>编辑消息</b><small>' + esc(msgs[chat.editIdx].content.replace(/\s+/g, ' ').slice(0, 40)) + '</small></span>' +
+          '<button type="button" class="icon-btn" data-medit="cancel" aria-label="取消编辑">' + icon('x', 18) + '</button></div>' : '') +
+        '<div class="composer cx' + (chat.editIdx != null ? ' editing' : '') + '"><label for="chat-in" style="position:absolute;width:1px;height:1px;overflow:hidden">发消息给 ' + esc(asst.name) + '</label>' +
+          '<textarea id="chat-in" rows="1" maxlength="2000" placeholder="' + (msgs.length ? '继续聊…' : '和 ' + esc(asst.name) + ' 说点什么…') + '" enterkeyhint="enter">' + esc(chat.draft) + '</textarea>' +
           '<div class="tools">' +
             '<button type="button" class="plus' + (srch.provider !== 'off' ? ' on' : '') + '" data-tool="search" aria-label="工具：联网搜索' + (srch.provider !== 'off' ? '已开启' : '已关闭') + '">' + icon('plus', 20) + '</button>' +
             '<button type="button" class="mchip" data-tool="model" aria-label="选择模型和思考深度：' + esc(rm ? rm.id : '') + '，' + THINK_LABELS[asst.think] + '">' +
@@ -8237,16 +8390,26 @@
             sendBtnHtml() +
           '</div></div>' +
       '</div></div>' : '') +
-      popHtml() +
+      popHtml() + msgMenuHtml(msgs) +
       '</div>';
 
+    var oldBox_ = document.getElementById('msgs'), prevTop_ = oldBox_ && !enter ? oldBox_.scrollTop : null;
     $sheet.innerHTML = '<div class="sheet-wrap' + (enter ? ' enter' : '') + (enter && chat.fromDock ? ' from-dock' : '') + '">' +
       '<div class="sheet-backdrop"></div>' +
       '<section class="sheet' + (chat.side ? ' side-open' : '') + '" role="dialog" aria-modal="true" aria-label="' + esc(asst.name) + '" id="sheet">' + side + main + '</section></div>';
     if (enter) setTimeout(function () { var w = $sheet.querySelector('.sheet-wrap'); if (w) w.classList.remove('enter'); }, 700);
     var box = document.getElementById('msgs');
     paintPartial();
-    if (box) box.scrollTop = box.scrollHeight;
+    fitSpacer();
+    // 4.7.2 滚动照 Claude：刚发出的消息滑到屏幕上方，回答在下面长，屏幕不跟着推；其它时候保持你滑到的位置
+    if (box) {
+      if (chat.anchorSend) { chat.anchorSend = false; chat.anchorAt = Date.now(); if (prevTop_ != null) box.scrollTop = prevTop_; anchorLastMe(box); }
+      else if (chat.anchorAt && Date.now() - chat.anchorAt < 900 && prevTop_ != null) { box.scrollTop = prevTop_; anchorLastMe(box); }
+      else if (prevTop_ == null) box.scrollTop = box.scrollHeight;
+      else box.scrollTop = prevTop_;
+      box.addEventListener('scroll', updJump, { passive: true });
+      updJump();
+    }
     fitInput();
     bindGestures();
     if (Fluid) Fluid.ranges();
@@ -8343,10 +8506,28 @@
     // 折叠屏：作品一写完就在右栏自动打开（像 Claude 电脑版）
     if (innerWidth >= 720 && A_.list.length) { var la_ = A_.list[A_.list.length - 1], ak_ = la_.id + ':' + la_.content.length;
       if (la_.done && chat.artAuto !== ak_) { chat.artAuto = ak_; if (!Art.isOpen()) Art.open('live|' + la_.id); } }
-    var box = document.getElementById('msgs');
-    if (box && box.scrollHeight - box.scrollTop - box.clientHeight < 160) box.scrollTop = box.scrollHeight;
+    fitSpacer(); updJump();
   }
 
+  // 最后一条你的消息下面留足空白，让它能滑到屏幕上方；回答越长空白越少，屏幕位置不变
+  function fitSpacer() {
+    var box = document.getElementById('msgs'), sp = document.getElementById('turn-sp'); if (!box || !sp) return;
+    var mes = box.querySelectorAll('.msg.me'), last = mes[mes.length - 1];
+    if (!last) { sp.style.height = '0px'; return; }
+    var br = box.getBoundingClientRect(), y0 = last.getBoundingClientRect().top - br.top + box.scrollTop, end = sp.getBoundingClientRect().top - br.top + box.scrollTop;
+    sp.style.height = Math.max(0, Math.round(box.clientHeight - (end - y0) - 22)) + 'px';
+  }
+  function anchorLastMe(box) {
+    var mes = box.querySelectorAll('.msg.me'), last = mes[mes.length - 1]; if (!last) return;
+    var y = box.scrollTop + last.getBoundingClientRect().top - box.getBoundingClientRect().top - 14;
+    if (reduceMotion) box.scrollTop = y; else box.scrollTo({ top: y, behavior: 'smooth' });
+  }
+  // 内容（不算末尾空白）还在屏幕下面时，显示「↓ 回到最新」
+  function updJump() {
+    var box = document.getElementById('msgs'), sp = document.getElementById('turn-sp'), jb = document.getElementById('jump-btn'); if (!box || !sp || !jb) return;
+    var end = sp.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop;
+    jb.hidden = end - (box.scrollTop + box.clientHeight) < 60;
+  }
   function fitInput() {
     var ta = document.getElementById('chat-in');
     if (!ta) return;
@@ -8679,7 +8860,7 @@
   function codeItem(sg) {
     var lines = sg.code.split('\n'), peek = lines.filter(function (l) { return l.trim(); }).slice(0, 2).map(function (l) { return l.trim(); }).join('\n');
     var head = '<span class="tt"><b>' + esc(codeTitle(sg)) + '</b><code>' + esc(peek) + '</code><small>' + (sg.lang ? sg.lang.toUpperCase() + ' · ' : '') + lines.length + ' 行</small></span><span class="tc">' + icon('chev', 16) + '</span>';
-    return tlItem('tstep' + (sg.done ? '' : ' live'), '<span class="tile">' + icon(sg.lang === 'bash' || sg.lang === 'sh' || sg.lang === 'shell' ? 'term' : 'codeb', 17) + '</span>',
+    return tlItem('tstep' + (sg.done ? '' : ' live'), '<span class="tile">' + icon('term', 22).replace('<svg ', '<svg class="ic-term" ') + '</span>',
       '<button type="button" class="th" data-tstep="c' + sg.n + '">' + head + '</button>');
   }
   // 改动卡：+ 新增（绿）/ − 去掉（红），等宽字，像 Claude 里 Edited 下面那块
@@ -8852,10 +9033,20 @@
     if (chat.pop === 'proc' && /^step:/.test(chat.popSub || '')) { var sd_ = stepDetail(procData(), chat.popSub.slice(5));
       return popShell(sd_.title, '<button type="button" class="icon-btn" data-psub="" aria-label="返回">' + icon('back', 22) + '</button>', esc(sd_.title), sd_.body); }
     if (chat.pop === 'proc') return popShell('思考过程', X_BTN(), '思考过程', procItems(procData()));
+    if (chat.pop === 'seltext') { var sc_ = curConv(), sm_ = sc_ && sc_.msgs[chat.selIdx]; return popShell('选择文字', X_BTN(), '选择文字', '<div class="sel-text">' + esc(sm_ ? sm_.content : '') + '</div>'); }
     return '';
   }
 
   // 手势：顶部下拉收起；左边缘右滑拉出聊天记录；记录抽屉左滑收起
+  (function () {
+    var lp = null;
+    function start(el, x, y) { cancel(); lp = { el: el, x: x, y: y, t: setTimeout(function () { var e = lp && lp.el; lp = null; if (e && e.isConnected && !chat.mmenu) openMsgMenu(e); }, 460) }; el.classList.add('pressing'); }
+    function cancel() { if (lp) { clearTimeout(lp.t); lp.el.classList.remove('pressing'); lp = null; } }
+    document.addEventListener('touchstart', function (e) { var el = e.target.closest && e.target.closest('#msgs .msg.me[data-mi]'); if (el && e.touches.length === 1) start(el, e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+    document.addEventListener('touchmove', function (e) { if (lp && Math.hypot(e.touches[0].clientX - lp.x, e.touches[0].clientY - lp.y) > 8) cancel(); }, { passive: true });
+    document.addEventListener('touchend', cancel); document.addEventListener('touchcancel', cancel);
+    document.addEventListener('contextmenu', function (e) { var el = e.target.closest && e.target.closest('#msgs .msg.me[data-mi]'); if (!el) return; e.preventDefault(); cancel(); if (!chat.mmenu) openMsgMenu(el); });
+  })();
   function bindGestures() {
     var sheet = document.getElementById('sheet'), top = document.getElementById('chat-top'), side = document.getElementById('side');
     if (!sheet) return;
@@ -8904,7 +9095,7 @@
     });
   }
 
-  function sendChat(text) {
+  function sendChat(text, opt) {
     text = (text || '').trim();
     var rm = resolveModel();
     if (!text || chat.busy || !rm) return;
@@ -8914,7 +9105,8 @@
                created: Date.now(), updated: Date.now(), pinned: false, msgs: [], model: '', pname: '' };
       chats.unshift(conv); chat.cur = conv.id;
     }
-    conv.msgs.push({ role: 'user', content: text, ts: Date.now() });
+    var um_ = { role: 'user', content: text, ts: Date.now() }; if (opt && opt.br) um_.br = opt.br;
+    conv.msgs.push(um_);
     var memText = memPrompt(conv), useRecall = mem.on && mem.recall && chats.some(function (c) { return c.id !== conv.id && c.msgs.length; });
     // 模型不支持工具时的兜底：只有你提到以前的事，才由 App 帮她翻
     var rclFb = useRecall && RECALL_ASK.test(text) ? recallPrompt(conv, text) : { text: '', hits: [] };
@@ -8926,6 +9118,7 @@
     var useWeb = webReady(), preWeb = useWeb && !!rm.p.noTools && WEB_ASK.test(text);
     var useFetch = fetchReady(), preUrl = useFetch && !!rm.p.noTools && (URL_IN.exec(text) || [])[0];
     chat.sources = null; chat.phase = preWeb ? 'search' : ''; chat.pop = ''; chat.recall = null;
+    chat.anchorSend = true;
     renderSheet();
 
     var name = state.name.trim();
@@ -9044,6 +9237,7 @@
       if (chat.side) d += 1;
       if (chat.pop) d += 1;
       if (chat.pop && chat.popSub) d += 1;
+      if (chat.mmenu || chat.editIdx != null) d += 1;
     }
     if (calui.sheet) d += 1;
     var back = document.querySelector('#main .sub-head [data-ui^="back-"]');
@@ -9054,6 +9248,8 @@
   function navCloseTop() {
     if (Art.isOpen()) { Art.close(); return; }
     if (chat.open) {
+      if (chat.mmenu) { chat.mmenu = null; keepChatScroll(); return; }
+      if (chat.editIdx != null) { cancelEdit(); return; }
       if (chat.pop && chat.popSub) { chat.popAnim = 'back'; chat.popSub = ''; renderSheet(); return; }
       if (chat.pop) { closePop(); return; }
       if (chat.side) { setSide(false); return; }

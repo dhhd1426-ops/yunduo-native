@@ -2013,6 +2013,132 @@
   .mm-float .mm-menu { position: relative; z-index: 1; }
   .mm-bubble.clip { transform: scale(1.015); animation-name: mmLiftC; }
   @keyframes mmLiftC { from { transform: scale(.985); box-shadow: none; } to { transform: scale(1.015); } }
+
+  /* ---------- 4.9.2 分类标签 / 分类纸片 ---------- */
+  .g-how { color: var(--hc, var(--muted)); background: color-mix(in srgb, var(--hc, var(--muted)) 15%, transparent); }
+  .g-ctabs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 12px -2px 10px; padding: 2px; touch-action: pan-x; }
+  .g-ctabs::-webkit-scrollbar { display: none; }
+  .g-ct { flex: none; display: inline-flex; align-items: center; gap: 6px; padding: 8px 13px; border-radius: 14px; font: inherit; font-size: 14px; color: var(--muted);
+    background: color-mix(in srgb, var(--surface) 80%, var(--text) 5%); border: 1px solid transparent; transition: background .25s, border-color .25s, color .25s; -webkit-user-select: none; user-select: none; }
+  .g-ct i { width: 7px; height: 7px; border-radius: 4px; background: var(--hc); }
+  .g-ct small { font-size: 11.5px; opacity: .7; }
+  .g-ct.on { color: var(--text); border-color: var(--hc); background: color-mix(in srgb, var(--hc) 14%, var(--surface)); }
+  .g-ct.add { padding: 8px 11px; border: 1px dashed var(--line); background: none; }
+  .g-ct.drag { transform: scale(1.08); box-shadow: 0 10px 24px -8px rgba(0, 0, 0, .55); z-index: 2; position: relative; transition: none; }
+  .g-ctabs.sorting .g-ct:not(.drag) { transition: transform .2s ease; }
+  .g-catbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; font-size: 12.5px; color: var(--muted); line-height: 1.6; margin: 0 2px 4px; }
+  .g-catbar b { font-weight: 600; }
+  .g-catedit { flex: none; display: inline-flex; align-items: center; gap: 4px; border: 0; background: none; color: var(--muted); font: inherit; font-size: 12.5px; padding: 0; }
+  .g-cchips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .g-cchip { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 13px; font: inherit; font-size: 14px; color: var(--muted);
+    background: color-mix(in srgb, var(--surface) 80%, var(--text) 5%); border: 1px solid transparent; }
+  .g-cchip i { width: 7px; height: 7px; border-radius: 4px; background: var(--hc); }
+  .g-cchip[aria-pressed="true"] { color: var(--text); border-color: var(--hc); background: color-mix(in srgb, var(--hc) 14%, var(--surface)); }
+  .g-styles { display: flex; flex-direction: column; gap: 8px; }
+  .g-style { position: relative; text-align: left; border-radius: 14px; padding: 11px 13px; font: inherit; color: var(--text); background: color-mix(in srgb, var(--surface) 80%, var(--text) 5%); border: 1px solid transparent; }
+  .g-style b { display: block; font-weight: 500; font-size: 14.5px; } .g-style small { display: block; font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .g-style pre { margin: 6px 0 0; font: 12px/1.6 ui-monospace, "Roboto Mono", monospace; color: var(--muted); white-space: pre-wrap; }
+  .g-style .ck { position: absolute; right: 12px; top: 11px; color: var(--gb); }
+  .g-style.on { border-color: color-mix(in srgb, var(--gb) 60%, transparent); background: color-mix(in srgb, var(--gb) 8%, var(--surface)); }
+  .g-style:disabled { opacity: .4; }
+  .g-colors { display: flex; gap: 12px; }
+  .g-colors button { width: 28px; height: 28px; border-radius: 14px; border: 0; padding: 0; }
+  .g-colors button[aria-pressed="true"] { outline: 2px solid var(--text); outline-offset: 3px; }
+  .g-sheet.dragging, .ne.dragging { transition: none !important; }
+
+  /* ---------- 4.9.2 笔记 ---------- */
+  .n-view { padding-bottom: 120px; }
+  .n-search { margin: 4px 0 12px; }
+  .n-tags { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -2px 14px; padding: 0 2px; }
+  .n-tags::-webkit-scrollbar { display: none; }
+  .n-tg { flex: none; border: 0; border-radius: 12px; padding: 6px 13px; font: inherit; font-size: 13px; color: var(--muted); background: var(--surface); }
+  .n-tg[aria-pressed="true"] { color: var(--text); background: color-mix(in srgb, var(--surface) 70%, var(--text) 12%); }
+  .n-sec { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 12px; letter-spacing: .3em; color: var(--muted); margin: 4px 4px 8px; }
+  .n-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+  .n-col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .n-card { border-radius: 18px; padding: 13px 14px 11px; background: var(--surface); border: 1px solid color-mix(in srgb, var(--line) 80%, transparent); cursor: pointer; transition: transform .2s var(--spring, ease); }
+  .n-card:active { transform: scale(.98); }
+  .n-card.big { margin-bottom: 14px; padding: 15px 16px 12px; }
+  .n-card h3 { margin: 0 0 6px; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 16px; font-weight: 600; line-height: 1.4; color: var(--text); word-break: break-word; }
+  .n-pv p, .n-pv .n-ck { margin: 0; font-size: 13px; line-height: 1.7; color: var(--muted); word-break: break-word; }
+  .n-pv h4 { margin: 4px 0 0; font-size: 13px; color: var(--text); opacity: .8; }
+  .n-pv .n-gap { height: 4px; } .n-pv .n-more { opacity: .6; } .n-pv hr { border: 0; border-top: 1px dashed var(--line); margin: 6px 0; }
+  .n-card footer { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 9px; font-size: 11.5px; color: var(--muted); opacity: .85; }
+  .n-card footer span { display: inline-flex; align-items: center; gap: 4px; }
+  .n-from { color: var(--gb); } .n-when { margin-left: auto; }
+  .p-warm { --pp: #b98a5a; } .p-blue { --pp: #7f95c4; } .p-rose { --pp: #c47f93; } .p-sage { --pp: #7fa58a; }
+  .n-card.p-warm, .n-card.p-blue, .n-card.p-rose, .n-card.p-sage { background: color-mix(in srgb, var(--pp) 10%, var(--surface)); border-color: color-mix(in srgb, var(--pp) 22%, var(--line)); }
+  .n-ck { display: flex; align-items: flex-start; gap: 7px; width: 100%; border: 0; background: none; padding: 1px 0; text-align: left; font: inherit; color: inherit; }
+  .n-ck i { flex: none; width: 15px; height: 15px; margin-top: 4px; border-radius: 4px; border: 1.5px solid color-mix(in srgb, var(--muted) 80%, transparent); display: flex; align-items: center; justify-content: center; color: var(--on-accent, #fff); }
+  .n-ck.y i { background: var(--accent); border-color: var(--accent); } .n-ck.y span { text-decoration: line-through; opacity: .6; }
+  .n-li { position: relative; padding-left: 12px; } .n-li::before { content: ""; position: absolute; left: 2px; top: .8em; width: 4px; height: 4px; border-radius: 2px; background: currentColor; opacity: .6; }
+  .n-empty { text-align: center; color: var(--muted); padding: 50px 20px; } .n-empty .quill { color: var(--accent); opacity: .8; } .n-empty p { font-size: 14px; line-height: 1.8; margin: 12px 0 0; }
+  .n-empty-s { color: var(--muted); font-size: 14px; text-align: center; padding: 30px 0; }
+  .note-fab { position: fixed; right: 22px; bottom: calc(92px + env(safe-area-inset-bottom, 0px)); z-index: 12; height: 56px; border-radius: 28px; display: flex; align-items: center; gap: 8px; padding: 0 20px 0 13px;
+    border: 1px solid #d9cfbf; background: #f1ece3; color: #2b241d; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 15.5px; font-weight: 600; letter-spacing: .08em;
+    box-shadow: 0 12px 30px -8px rgba(0, 0, 0, .55), inset 0 1px 0 rgba(255, 255, 255, .6); transition: padding .35s var(--spring, ease), width .35s var(--spring, ease), transform .2s; overflow: hidden; }
+  .note-fab .quill .qs { stroke: #b5564a; }
+  .note-fab span { white-space: nowrap; transition: opacity .2s, max-width .35s var(--spring, ease); max-width: 80px; }
+  .note-fab.mini { padding: 0 13px; } .note-fab.mini span { opacity: 0; max-width: 0; }
+  .note-fab:active { transform: scale(.94); }
+  @media (min-width: 720px) { .note-fab { bottom: 32px; right: 32px; } }
+  /* 编辑页：整页纸片，往下拉关闭 */
+  .ne-wrap { position: fixed; inset: 0; z-index: 30; }
+  .ne-scrim { position: absolute; inset: 0; border: 0; padding: 0; background: rgba(0, 0, 0, .4); }
+  .ne { position: absolute; left: 0; right: 0; bottom: 0; top: max(24px, env(safe-area-inset-top, 0px)); margin: 0 auto; max-width: 720px; display: flex; flex-direction: column;
+    background: color-mix(in srgb, var(--bg) 70%, var(--surface)); border-radius: 26px 26px 0 0; box-shadow: 0 -14px 40px rgba(0, 0, 0, .45); }
+  .ne.p-warm, .ne.p-blue, .ne.p-rose, .ne.p-sage { background: color-mix(in srgb, var(--pp) 8%, color-mix(in srgb, var(--bg) 70%, var(--surface))); }
+  @media (prefers-reduced-motion: no-preference) { .ne { animation: popUp .42s var(--spring, cubic-bezier(.22, .9, .24, 1)) both; } }
+  @media (min-width: 720px) { .ne { left: auto; right: 0; width: min(56vw, 640px); top: 0; border-radius: 26px 0 0 26px; } .ne-scrim { background: rgba(0, 0, 0, .15); } }
+  .ne-top { display: flex; align-items: center; justify-content: space-between; padding: 0 12px 2px 20px; flex: none; }
+  .ne-top .r { display: flex; align-items: center; gap: 2px; } .ne-top .icon-btn { color: var(--muted); } .ne-top .icon-btn.on { color: var(--accent); }
+  .ne-hint { font-size: 12px; color: var(--muted); opacity: .7; }
+  .ne-more { margin: 0 14px 6px; padding: 10px; border-radius: 16px; background: var(--surface); display: flex; flex-direction: column; gap: 2px; flex: none; }
+  .ne-more > button { display: flex; align-items: center; gap: 10px; border: 0; background: none; font: inherit; font-size: 14.5px; color: var(--text); padding: 9px 6px; border-radius: 10px; text-align: left; }
+  .ne-more > button.danger { color: #d0645a; }
+  .ne-papers { display: flex; gap: 6px; flex-wrap: wrap; padding: 2px 2px 8px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+  .ne-papers button { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--line); background: none; border-radius: 11px; padding: 5px 9px; font: inherit; font-size: 12.5px; color: var(--muted); }
+  .ne-papers button i { width: 10px; height: 10px; border-radius: 5px; background: var(--pp, var(--muted)); }
+  .ne-papers button[aria-pressed="true"] { color: var(--text); border-color: var(--text); }
+  .ne-scroll { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 0 22px 20px; }
+  .ne-t { width: 100%; border: 0; background: none; outline: none; padding: 6px 0 4px; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 25px; font-weight: 600; color: var(--text); }
+  .ne-t::placeholder { color: color-mix(in srgb, var(--muted) 60%, transparent); }
+  .ne-meta { display: flex; flex-wrap: wrap; gap: 7px; padding: 4px 0 14px; font-size: 12px; color: var(--muted); align-items: center; }
+  .ne-meta > span { padding: 3px 0; }
+  .ne-chip { display: inline-flex; align-items: center; gap: 4px; border: 0; border-radius: 9px; padding: 3px 9px; font: inherit; font-size: 12px; color: var(--muted); background: color-mix(in srgb, var(--surface) 70%, var(--text) 6%); }
+  .ne-chip.l { color: var(--gb); background: color-mix(in srgb, var(--gb) 12%, transparent); }
+  .ne-in { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; margin: -6px 0 12px; }
+  .ne-in input { flex: 1; min-width: 140px; height: 38px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--text); padding: 0 12px; font: inherit; font-size: 14px; color-scheme: inherit; }
+  .ne-body { display: block; width: 100%; min-height: 220px; border: 0; background: none; outline: none; resize: none; padding: 0; font: inherit; font-size: 15.5px; line-height: 1.95; color: var(--text); }
+  .ne-body::placeholder { color: color-mix(in srgb, var(--muted) 60%, transparent); }
+  .ne-body.read p { margin: 0 0 4px; word-break: break-word; } .ne-body.read .n-gap { height: 10px; margin: 0; }
+  .ne-body.read h4 { margin: 14px 0 2px; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 17px; }
+  .ne-body.read .n-ck { font-size: 15.5px; line-height: 1.9; } .ne-body.read .n-ck i { width: 17px; height: 17px; margin-top: 6px; border-radius: 5px; }
+  .ne-body.read hr { border: 0; border-top: 1px dashed var(--line); margin: 14px 0; }
+  .ne-tb { flex: none; display: flex; align-items: center; justify-content: space-around; gap: 4px; padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 85%, transparent); }
+  .ne-tb button { min-width: 40px; height: 38px; border: 0; border-radius: 12px; background: none; color: var(--text); font: inherit; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; }
+  .ne-tb button.h { font-family: serif; font-weight: 700; }
+  .ne-tb button.am { gap: 6px; padding: 0 12px; color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); font-size: 14px; font-weight: 600; }
+  .n-act { display: flex; align-items: center; gap: 12px; width: 100%; border: 0; background: none; padding: 12px 4px; border-bottom: 1px solid var(--line); text-align: left; font: inherit; color: var(--text); }
+  .n-act .ico { flex: none; width: 36px; height: 36px; border-radius: 11px; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--surface) 70%, var(--text) 7%); font-size: 16px; }
+  .n-act b { display: block; font-weight: 500; font-size: 15px; } .n-act small { display: block; font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .n-res { border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line)); border-radius: 16px; padding: 12px 14px; background: color-mix(in srgb, var(--accent) 5%, transparent); }
+  .n-res h5 { display: flex; align-items: center; gap: 6px; margin: 0 0 8px; font-size: 13px; color: var(--accent); font-weight: 600; }
+  .n-out { font-size: 14px; line-height: 1.8; white-space: pre-wrap; color: var(--text); max-height: 46vh; overflow-y: auto; }
+  .n-err { color: var(--muted); font-size: 13.5px; margin: 0; }
+  .n-todo { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 2px 10px; width: 100%; border: 0; background: none; padding: 8px 0; text-align: left; font: inherit; color: var(--text); font-size: 14px; }
+  .n-todo i { grid-row: 1 / 3; width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid var(--accent); background: var(--accent); color: var(--on-accent, #fff); display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .n-todo small { color: var(--muted); font-size: 12px; } .n-todo.off i { background: none; border-color: var(--line); } .n-todo.off span { opacity: .5; }
+  .n-btns { display: flex; gap: 8px; margin-top: 12px; } .n-btns .btn { flex: 1; justify-content: center; }
+  .n-chip { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; margin: 2px 0 10px; padding: 8px 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); font: inherit; font-size: 13px; color: var(--muted); }
+  .n-chip span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .n-chip b { color: var(--text); font-weight: 500; }
+  .n-chip:disabled { opacity: .6; }
+  .mm-float.bot { align-items: flex-start; }
+  .mm-botpv { margin: 0 !important; max-width: 100% !important; background: var(--surface); border-radius: 18px; padding: 12px 16px; transform-origin: 0 0 !important; }
+  #msgs .msg.bot[data-bi] { -webkit-touch-callout: none; }
+  #msgs .msg.bot.lifted { visibility: hidden; }
+  .toast.act { pointer-events: auto; width: max-content; max-width: calc(100vw - 32px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .toast-act { border: 0; background: none; color: var(--accent); font: inherit; font-weight: 600; margin-left: 8px; padding: 2px 4px; }
 </style>
 <script src="fonts/script-glyphs.js"></script>
 <script src="fonts/pinyin.js"></script>
@@ -2108,6 +2234,7 @@
     term: '<path d="M7 6.6l5.2 5.4-5.2 5.4"/><path d="M12.6 17.4h5.6"/>',
     codeb: '<path d="M8.5 7.5 4 12l4.5 4.5M15.5 7.5 20 12l-4.5 4.5"/><path d="M13.2 5.5l-2.4 13"/>',
     read: '<path d="M12 7.2C10.8 6 9.4 5.5 7.6 5.5H4.8a.8.8 0 0 0-.8.8v10.9c0 .5.4.8.8.8h4.9L12 20.2l2.3-2.2h4.9c.4 0 .8-.3.8-.8V6.3a.8.8 0 0 0-.8-.8h-2.8c-1.8 0-3.2.5-4.4 1.7z"/><path d="M12 7.2V20M6.6 12.3h2.1M15.3 9.7h2.1M15.3 12.3h2.1"/>',
+    more: '<circle cx="6" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="18" cy="12" r="1.2"/>',
     pencil: '<path d="M15.3 5.2a1.4 1.4 0 0 1 2 0l1.5 1.5a1.4 1.4 0 0 1 0 2L9 18.5l-4.3 1 .9-4.3z"/><path d="M13.6 6.9l3.5 3.5"/>',
     web: '<circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2.2 2.3 3.3 5 3.3 8s-1.1 5.7-3.3 8c-2.2-2.3-3.3-5-3.3-8S9.8 6.3 12 4z"/>',
     find: '<circle cx="10.8" cy="10.8" r="5.8"/><path d="M15.2 15.2L19.5 19.5"/>',
@@ -4939,6 +5066,8 @@
     if (Moment) Moment.mount();
     if (tab === 'plan') calAfterRender();
     if (state.sub === 'assistant') emoAfterRender();
+    if (typeof gemAfterRender === 'function') gemAfterRender();
+    if (typeof notesAfterRender === 'function') notesAfterRender();
     updateTabs(tab, opts.anim);
     if (typeof Dock !== 'undefined' && Dock) Dock.update();
     var v = view(state.current);
@@ -5383,6 +5512,322 @@
   try { var scal = JSON.parse(localStorage.getItem(CAL_KEY) || 'null'); if (scal) { cal.events = scal.events || []; cal.alarms = scal.alarms || []; } } catch (e) {}
   function saveCal() { try { localStorage.setItem(CAL_KEY, JSON.stringify(cal)); } catch (e) {} alarmSync(); notifySync(); }
   var calui = { seg: 'cal', ym: null, sel: '', sheet: null, alarm: null, tear: '', advAll: false };
+  /* ======================= 4.9.2 笔记：日程页第三栏 · 写笔记 · Amor 帮笔记 · 聊天里存/翻笔记 ======================= */
+  var NOTE_KEY = 'cloud-weather-notes-v1';
+  var notes = [];
+  try { notes = JSON.parse(localStorage.getItem(NOTE_KEY) || '[]') || []; } catch (e) { notes = []; }
+  function saveNotes() { try { localStorage.setItem(NOTE_KEY, JSON.stringify(notes)); } catch (e) { toast('手机存储满了，笔记没存上'); } }
+  var NOTE_PAPERS = [['plain', '素白'], ['warm', '暖纸'], ['blue', '夜蓝'], ['rose', '玫瑰'], ['sage', '青苔']];
+  var noteui = { q: '', tag: '', ed: null, amor: null, more: false, del: false, mini: false, tagIn: false };
+  function noteNewId() { return 'n' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); }
+  function noteById(id) { return notes.filter(function (n) { return n.id === id; })[0] || null; }
+  function noteLines(body) { return String(body || '').split('\n'); }
+  function noteTitleOf(n) { if (n.title && n.title.trim()) return n.title.trim(); var l = noteLines(n.body).map(function (x) { return x.replace(/^(#+\s*|-\s*\[[ xX]\]\s*|[-*•]\s+)/, '').trim(); }).filter(Boolean)[0]; return l ? l.slice(0, 20) : '无标题'; }
+  function noteAllTags() {
+    var c = {}; notes.forEach(function (n) { (n.tags || []).forEach(function (t) { c[t] = (c[t] || 0) + 1; }); });
+    return Object.keys(c).sort(function (a, b) { return c[b] - c[a]; });
+  }
+  function noteDateZh(ts) { var d = new Date(ts), n = new Date(); if (d.toDateString() === n.toDateString()) return '今天'; var y = new Date(n); y.setDate(n.getDate() - 1); if (d.toDateString() === y.toDateString()) return '昨天'; return (d.getMonth() + 1) + '月' + d.getDate() + '日'; }
+  // 笔记正文：纯文字 + 轻量标记（## 小标题、- [ ] 清单、- 列表）
+  function noteLineHtml(l, id, i, cap) {
+    var m;
+    if ((m = l.match(/^\s*-\s*\[([ xX])\]\s*(.*)$/))) { var y = m[1] !== ' ';
+      return '<button type="button" class="n-ck' + (y ? ' y' : '') + '" data-ntick="' + id + ':' + i + '"><i>' + (y ? icon('tick', 12) : '') + '</i><span>' + esc(m[2]) + '</span></button>'; }
+    if ((m = l.match(/^\s*#{1,3}\s+(.*)$/))) return '<h4>' + esc(m[1]) + '</h4>';
+    if ((m = l.match(/^\s*[-*•]\s+(.*)$/))) return '<p class="n-li">' + esc(m[1]) + '</p>';
+    if (/^\s*(---+|———+)\s*$/.test(l)) return '<hr>';
+    return l.trim() ? '<p>' + esc(l) + '</p>' : (cap ? '' : '<p class="n-gap"></p>');
+  }
+  function noteBodyHtml(n, cap) {
+    var ls = noteLines(n.body), out = '', shown = 0;
+    for (var i = 0; i < ls.length; i++) { if (cap && shown >= cap) { out += '<p class="n-more">…</p>'; break; } var h = noteLineHtml(ls[i], n.id, i, cap); if (h) { out += h; shown++; } }
+    return out;
+  }
+  function noteMatch(n) {
+    if (noteui.tag && (n.tags || []).indexOf(noteui.tag) < 0) return false;
+    var q = noteui.q.trim().toLowerCase(); if (!q) return true;
+    return (n.title + '\n' + n.body + '\n' + (n.tags || []).join(' ')).toLowerCase().indexOf(q) >= 0;
+  }
+  function noteCard(n, big) {
+    return '<article class="n-card p-' + (n.paper || 'plain') + (big ? ' big' : '') + '" data-nopen="' + n.id + '"><h3>' + esc(noteTitleOf(n)) + '</h3>' +
+      '<div class="n-pv">' + noteBodyHtml({ id: n.id, body: n.title ? n.body : noteLines(n.body).slice(1).join('\n') }, big ? 4 : 6) + '</div>' +
+      '<footer>' + (n.src === 'chat' ? '<span class="n-from">' + icon('spark', 13) + '来自对话</span>' : '') +
+        ((n.tags || [])[0] ? '<span class="n-tag">#' + esc(n.tags[0]) + '</span>' : '') + (n.date ? '<span class="n-date">' + icon('cal', 13) + dateZh(n.date) + '</span>' : '') +
+        '<span class="n-when">' + noteDateZh(n.updated || n.created) + '</span></footer></article>';
+  }
+  function notesView() {
+    var list = notes.filter(noteMatch).sort(function (a, b) { return (b.updated || 0) - (a.updated || 0); }), pins = list.filter(function (n) { return n.pin; }), rest = list.filter(function (n) { return !n.pin; });
+    var tags = noteAllTags(), cols = [[], []], hgt = [0, 0];
+    rest.forEach(function (n) { var k = hgt[0] <= hgt[1] ? 0 : 1; cols[k].push(n); hgt[k] += 3 + Math.min(6, noteLines(n.body).filter(function (x) { return x.trim(); }).length); });
+    var h = '<div class="n-view">' +
+      '<label class="search n-search" for="note-q">' + icon('search', 18) + '<input id="note-q" type="search" placeholder="搜索笔记" value="' + esc(noteui.q) + '" autocomplete="off"></label>' +
+      (tags.length ? '<div class="n-tags"><button type="button" class="n-tg" data-ntag="" aria-pressed="' + !noteui.tag + '">全部</button>' + tags.map(function (t) { return '<button type="button" class="n-tg" data-ntag="' + esc(t) + '" aria-pressed="' + (noteui.tag === t) + '">' + esc(t) + '</button>'; }).join('') + '</div>' : '');
+    if (!notes.length) h += '<div class="n-empty">' + quillIcon(40) + '<p>还没有笔记。点右下角的羽毛笔写第一篇，<br>或者在聊天里对 ' + esc(asst.name || 'Amor') + ' 说「记一下…」。</p></div>';
+    else if (!list.length) h += '<p class="n-empty-s">没有找到相关的笔记。</p>';
+    if (pins.length) h += '<div class="n-sec">置 顶</div>' + pins.map(function (n) { return noteCard(n, true); }).join('');
+    if (rest.length) h += (pins.length ? '<div class="n-sec">最 近</div>' : '') + '<div class="n-grid"><div class="n-col">' + cols[0].map(function (n) { return noteCard(n); }).join('') + '</div><div class="n-col">' + cols[1].map(function (n) { return noteCard(n); }).join('') + '</div></div>';
+    return h + '</div>';
+  }
+  function noteFab() {
+    return '<button type="button" class="note-fab' + (noteui.mini ? ' mini' : '') + '" data-note="new" aria-label="写笔记">' + quillIcon(28) + '<span>写笔记</span></button>';
+  }
+  // ---------- 编辑页 ----------
+  function noteOpen(id, opt) {
+    opt = opt || {};
+    var n = id ? noteById(id) : null;
+    if (id && !n) return;
+    noteui.ed = n ? { id: n.id, mode: opt.edit ? 'edit' : 'read' } : { id: '', mode: 'edit', fresh: true };
+    noteui.more = false; noteui.del = false; noteui.amor = null; noteui.tagIn = false;
+    if (state.tab !== 'plan') { state.tab = 'plan'; state.sub = ''; }
+    calui.seg = 'notes'; calui.sheet = null; save();
+    render({ top: false });
+    if (!n) setTimeout(function () { var t = document.getElementById('ne-title'); if (t) try { t.focus({ preventScroll: true }); } catch (x) {} }, 380);
+  }
+  function noteCur() { var e = noteui.ed; return e && e.id ? noteById(e.id) : null; }
+  function noteEnsure() {   // 第一次写字时才真正建一篇
+    var n = noteCur(); if (n) return n;
+    n = { id: noteNewId(), title: '', body: '', tags: noteui.tag ? [noteui.tag] : [], pin: false, paper: 'plain', date: '', created: Date.now(), updated: Date.now() };
+    notes.unshift(n); noteui.ed.id = n.id; return n;
+  }
+  var noteSaveT = 0;
+  function noteTouch(n) { n.updated = Date.now(); clearTimeout(noteSaveT); noteSaveT = setTimeout(saveNotes, 350); }
+  function noteClose() {
+    var n = noteCur();
+    if (n && !n.title.trim() && !n.body.trim()) { notes = notes.filter(function (x) { return x !== n; }); if (n.evId) noteUnlinkDate(n); }
+    clearTimeout(noteSaveT); saveNotes();
+    noteui.ed = null; noteui.amor = null; noteui.more = false;
+    keepScroll();
+  }
+  function noteEditor() {
+    var e = noteui.ed; if (!e) return '';
+    var n = noteCur() || { id: '', title: '', body: '', tags: [], pin: false, paper: 'plain', date: '', created: Date.now() };
+    var created = new Date(n.created), wk = '日一二三四五六'.charAt(created.getDay());
+    var h = '<div class="ne-wrap"><button type="button" class="ne-scrim" data-note="close" aria-label="关闭"></button><section class="ne p-' + (n.paper || 'plain') + '" id="ne" role="dialog" aria-label="笔记">' +
+      '<div class="pop-grip"><span></span></div>' +
+      '<div class="ne-top"><span class="ne-hint">' + (e.mode === 'read' ? '点正文就能改' : '自动保存') + '</span><span class="r">' +
+        '<button type="button" class="icon-btn' + (n.pin ? ' on' : '') + '" data-note="pin" aria-label="' + (n.pin ? '取消置顶' : '置顶') + '">' + icon('tack', 20) + '</button>' +
+        '<button type="button" class="icon-btn" data-note="more" aria-label="更多">' + icon('more', 20) + '</button>' +
+        '<button type="button" class="g-save" data-note="close">完成</button></span></div>' +
+      (noteui.more ? '<div class="ne-more"><div class="ne-papers">' + NOTE_PAPERS.map(function (p) { return '<button type="button" class="p-' + p[0] + '" data-npaper="' + p[0] + '" aria-pressed="' + ((n.paper || 'plain') === p[0]) + '"><i></i>' + p[1] + '</button>'; }).join('') + '</div>' +
+        '<button type="button" data-note="copy">' + icon('copy', 18) + '复制全文</button>' +
+        (e.id ? '<button type="button" class="danger" data-note="del">' + icon('trash', 18) + (noteui.del ? '再点一次删除，删了就找不回来了' : '删除这篇笔记') + '</button>' : '') + '</div>' : '') +
+      '<div class="ne-scroll">' +
+        '<input id="ne-title" class="ne-t" type="text" maxlength="40" placeholder="标题" value="' + esc(n.title) + '" autocomplete="off">' +
+        '<div class="ne-meta"><span>' + (created.getMonth() + 1) + '月' + created.getDate() + '日 周' + wk + ' 写</span>' +
+          (n.tags || []).map(function (t) { return '<button type="button" class="ne-chip" data-nuntag="' + esc(t) + '">#' + esc(t) + ' ' + icon('x', 11) + '</button>'; }).join('') +
+          (n.date ? '<button type="button" class="ne-chip l" data-note="date">' + icon('cal', 13) + dateZh(n.date) + ' · 已关联日程</button>' : '') + '</div>' +
+        (noteui.tagIn ? '<div class="ne-in"><input id="ne-tag" type="text" maxlength="8" placeholder="标签，按回车添加" enterkeyhint="done" autocomplete="off">' +
+          (noteAllTags().filter(function (t) { return (n.tags || []).indexOf(t) < 0; }).slice(0, 6).map(function (t) { return '<button type="button" class="chip" data-naddtag="' + esc(t) + '">' + esc(t) + '</button>'; }).join('')) + '</div>' : '') +
+        (noteui.dateIn ? '<div class="ne-in"><input id="ne-date" type="date" value="' + esc(n.date || ymd(new Date())) + '"><button type="button" class="chip" data-note="date-ok">关联</button>' + (n.date ? '<button type="button" class="chip" data-note="date-off">取消关联</button>' : '') + '</div>' : '') +
+        (e.mode === 'read' && n.body.trim() ? '<div class="ne-body read" data-note="edit">' + noteBodyHtml(n) + '</div>'
+          : '<textarea id="ne-body" class="ne-body" placeholder="写点什么…">' + esc(n.body) + '</textarea>') +
+      '</div>' +
+      '<div class="ne-tb" role="toolbar" aria-label="格式">' +
+        '<button type="button" data-nins="check" aria-label="清单">☑</button><button type="button" data-nins="h" aria-label="小标题" class="h">H</button>' +
+        '<button type="button" data-nins="li" aria-label="列表">•</button><button type="button" data-note="tag" aria-label="标签">#</button>' +
+        '<button type="button" data-note="date" aria-label="关联日期">' + icon('cal', 20) + '</button>' +
+        '<button type="button" class="am" data-note="amor">' + icon('spark', 16) + esc(asst.name || 'Amor') + '</button></div>' +
+      '</section>' + noteAmorSheet() + '</div>';
+    return h;
+  }
+  function noteSetBody(n, body) { n.body = body; noteTouch(n); var ta = document.getElementById('ne-body'); if (ta && ta.value !== body) ta.value = body; }
+  function noteInsert(kind) {
+    var n = noteEnsure(); noteui.ed.mode = 'edit';
+    var pre = { check: '- [ ] ', h: '## ', li: '- ' }[kind];
+    var ta = document.getElementById('ne-body'), pos = ta ? ta.selectionStart : n.body.length, b = n.body;
+    if (!ta) pos = b.length;
+    var ls = b.lastIndexOf('\n', pos - 1) + 1, line = b.slice(ls, (b.indexOf('\n', pos) + 1 || b.length + 1) - 1);
+    var nb, np;
+    if (line.trim() === '' ) { nb = b.slice(0, ls) + pre + b.slice(ls + line.length); np = ls + pre.length; }
+    else if (line.indexOf(pre) === 0) { nb = b.slice(0, ls) + line.slice(pre.length) + b.slice(ls + line.length); np = Math.max(ls, pos - pre.length); }
+    else { var le = ls + line.length; nb = b.slice(0, le) + '\n' + pre + b.slice(le); np = le + 1 + pre.length; }
+    n.body = nb; noteTouch(n); keepScroll();
+    setTimeout(function () { var t = document.getElementById('ne-body'); if (t) { try { t.focus({ preventScroll: true }); t.setSelectionRange(np, np); } catch (x) {} } }, 30);
+  }
+  function noteToggleTick(id, i) {
+    var n = noteById(id); if (!n) return; var ls = noteLines(n.body), l = ls[+i]; if (l == null) return;
+    ls[+i] = l.replace(/\[([ xX])\]/, function (m, c) { return c === ' ' ? '[x]' : '[ ]'; }); n.body = ls.join('\n'); noteTouch(n); saveNotes();
+    if (noteui.ed) keepScroll(); else keepScroll();
+  }
+  // 关联日期 = 在日程里建一条同名的日程（笔记改标题时跟着改）
+  function noteLinkDate(n, ds) {
+    noteUnlinkDate(n);
+    var ev = { id: calNewId(), d: ds, t: '', title: noteTitleOf(n).slice(0, 24), rem: ['am'], rep: 'none', at: Date.now(), src: 'note', note: n.id };
+    cal.events.push(ev); n.date = ds; n.evId = ev.id; saveCal(); noteTouch(n);
+  }
+  function noteUnlinkDate(n) { if (n.evId) { cal.events = cal.events.filter(function (e) { return e.id !== n.evId; }); saveCal(); } n.date = ''; n.evId = ''; }
+  // ---------- 让 Amor 帮这篇笔记 ----------
+  var NOTE_ACTS = [
+    ['tidy', '≡', '整理成要点', '乱写的也能理顺，原文留在下面'],
+    ['cont', '✎', '接着写', '照你的语气往下写一段'],
+    ['todo', 'cal', '找出待办，记进日程', '有日期的事排进日历，你确认了才记'],
+    ['chat', 'spark', '带着这篇去聊天', esc(asst.name || 'Amor') + ' 读过笔记再和你聊']
+  ];
+  function noteAmorSheet() {
+    var a = noteui.amor; if (!a) return '';
+    var h = '<div class="g-sheet-wrap ne-amor"><button type="button" class="g-scrim" data-note="amor-close" aria-label="关闭"></button><section class="g-sheet" role="dialog" aria-label="让 Amor 帮这篇笔记">' +
+      '<div class="pop-grip"><span></span></div><div class="g-sh"><span></span><h3>让 ' + esc(asst.name || 'Amor') + ' 帮这篇笔记</h3><span></span></div>';
+    if (!a.act) {
+      h += NOTE_ACTS.map(function (x) { return '<button type="button" class="n-act" data-namor="' + x[0] + '"><span class="ico">' + (x[1].length > 2 ? icon(x[1], 18) : x[1]) + '</span><span><b>' + x[2] + '</b><small>' + x[3] + '</small></span></button>'; }).join('');
+    } else {
+      var t = NOTE_ACTS.filter(function (x) { return x[0] === a.act; })[0];
+      h += '<div class="n-res"><h5>' + icon('spark', 15) + (a.busy ? '正在' + t[2].replace(/，.*/, '') + '…' : a.err ? '没成功' : t[2]) + '</h5>';
+      if (a.err) h += '<p class="n-err">' + esc(a.err) + '</p>';
+      else if (a.act === 'todo') {
+        if (a.items) h += a.items.length ? a.items.map(function (it, i) { return '<button type="button" class="n-todo' + (it.off ? ' off' : '') + '" data-ntodo="' + i + '"><i>' + (it.off ? '' : icon('tick', 14)) + '</i><span>' + esc((it.date ? dateZh(it.date) + (it.time ? ' ' + it.time : '') + ' · ' : '') + it.title) + '</span><small>' + (it.date ? (it.time ? '提前 1 小时提醒' : '当天早上提醒') : '没写日期，记在今天') + '</small></button>'; }).join('')
+          : '<p class="n-err">没找到要做的事。</p>';
+        else h += '<p class="g-wait">正在读笔记…<span class="g-caret"></span></p>';
+      } else h += '<div class="n-out">' + esc(a.out || '') + (a.busy ? '<span class="g-caret"></span>' : '') + '</div>';
+      h += '</div>';
+      if (!a.busy) h += '<div class="n-btns"><button type="button" class="btn" data-note="amor-back">' + (a.err ? '返回' : '再想想') + '</button>' +
+        (a.err ? '' : a.act === 'todo' ? (a.items && a.items.some(function (x) { return !x.off; }) ? '<button type="button" class="btn primary" data-note="amor-apply">记进日程</button>' : '')
+          : '<button type="button" class="btn primary" data-note="amor-apply">' + (a.act === 'tidy' ? '换成整理后的' : '接在后面') + '</button>') + '</div>';
+    }
+    return h + '</section></div>';
+  }
+  function noteAmorRun(act) {
+    var n = noteCur(), rm = resolveModel();
+    if (act === 'chat') { noteui.amor = null; var nn = n; noteClose(); openChat(''); chat.noteCtx = nn ? nn.id : ''; chat.draft = nn ? '关于我的笔记「' + noteTitleOf(nn) + '」：' : ''; renderSheet(); return; }
+    if (!n || !(n.title + n.body).trim()) { toast('笔记还是空的'); return; }
+    if (!rm) { toast('还没有可用的模型'); return; }
+    var a = noteui.amor = { act: act, busy: true, out: '', err: '' };
+    var txt = '标题：' + (n.title || '（无）') + '\n\n' + n.body;
+    var sys = '你是 ' + (asst.name || 'Amor') + '，在帮' + (state.name.trim() || '用户') + '整理 TA 自己的笔记。只输出要求的内容，不要开场白，不要解释。';
+    var ask = act === 'tidy' ? '把下面这篇笔记整理成清楚的要点：用「## 小标题」分组，每条用「- 」开头，要做的事用「- [ ] 」。保留所有信息，不要加新内容。\n\n' + txt
+      : act === 'cont' ? '照下面这篇笔记的语气和内容，接着往下写一段（100–200 字），只输出新写的部分。\n\n' + txt
+      : '今天是 ' + bjDate(0) + '。找出下面这篇笔记里要做的事，只输出 JSON 数组，例如 [{"title":"去颐和园","date":"2026-10-01","time":"08:00"}]。title 12 个字以内；date 用 YYYY-MM-DD，推不出来就留空字符串；time 用 HH:MM，没有就留空。没有要做的事就输出 []。\n\n' + txt;
+    keepScroll();
+    chatStream(rm.p, rm.id, sys, [{ role: 'user', content: ask }], function (t) { if (noteui.amor !== a) return; a.out = t; var o = document.querySelector('.n-out'); if (o) o.innerHTML = esc(t) + '<span class="g-caret"></span>'; },
+      { think: 0, xhrSink: function (x) { a.xhr = x; } }).then(function (r) {
+      if (noteui.amor !== a) return;
+      a.busy = false; a.out = (r.text || '').trim();
+      if (act === 'todo') {
+        var m_ = a.out.match(/\[[\s\S]*\]/), arr = []; try { arr = JSON.parse(m_ ? m_[0] : '[]'); } catch (e) { arr = []; }
+        a.items = (Array.isArray(arr) ? arr : []).filter(function (x) { return x && x.title; }).slice(0, 12).map(function (x) {
+          var d = pymd(String(x.date || '').trim()); return { title: String(x.title).slice(0, 24), date: d ? ymd(d) : '', time: /^\d{1,2}:\d{2}$/.test(String(x.time || '').trim()) ? String(x.time).trim().padStart(5, '0') : '' }; });
+      }
+      if (!a.out && act !== 'todo') a.err = '没有收到内容';
+      if (state.tab === 'plan') keepScroll();
+    }, function (e) { if (noteui.amor !== a) return; a.busy = false; a.err = e.msg || '出错了'; keepScroll(); });
+  }
+  function noteAmorApply() {
+    var a = noteui.amor, n = noteCur(); if (!a || !n) return;
+    if (a.act === 'tidy') { noteSetBody(n, a.out + '\n\n---\n原文：\n' + n.body); toast('已整理，原文在最下面'); }
+    else if (a.act === 'cont') { noteSetBody(n, n.body.replace(/\s*$/, '') + '\n\n' + a.out); toast('已接在后面'); }
+    else if (a.act === 'todo') {
+      var k = 0; (a.items || []).forEach(function (it) { if (it.off) return; runCalTool('add_event', { title: it.title, date: it.date || ymd(new Date()), time: it.time }); k++; });
+      toast('已记进日程 ' + k + ' 件事');
+    }
+    saveNotes(); noteui.amor = null; noteui.ed.mode = 'read'; keepScroll();
+  }
+  // ---------- 聊天：存为笔记、Amor 的笔记工具 ----------
+  function noteFromChat(text, title, tags) {
+    var body = stripEmo(String(text || '')).trim();
+    var n = { id: noteNewId(), title: String(title || '').trim().slice(0, 40), body: body, tags: (tags || []).slice(0, 4), pin: false, paper: 'plain', date: '', src: 'chat', created: Date.now(), updated: Date.now() };
+    if (!n.title) { var h1 = body.match(/^\s*#{1,3}\s+(.+)$/m) || body.match(/【姓名】\s*(\S+)/); n.title = h1 ? h1[1].slice(0, 20) : noteTitleOf({ title: '', body: body }); }
+    notes.unshift(n); saveNotes(); return n;
+  }
+  var NOTE_TOOLS = [
+    { name: 'save_note', description: '把内容存进用户的笔记。用户说“记一下/存成笔记/帮我记下这个配方”之类、要长期留着查的内容时使用（有日期要提醒的事用 add_event）。',
+      params: { type: 'object', properties: { title: { type: 'string', description: '标题，20 个字以内' }, body: { type: 'string', description: '正文，可以用「## 小标题」「- 列表」「- [ ] 待办」' },
+        tags: { type: 'array', items: { type: 'string' }, description: '0–3 个标签，比如 面点、灵感、角色' }, note_id: { type: 'string', description: '要追加到已有笔记时填它的 id（来自 search_notes），否则留空' } }, required: ['title', 'body'] } },
+    { name: 'search_notes', description: '在用户的笔记里搜索。用户问“我记过的…/上次存的配方/笔记里…”时使用。', params: { type: 'object', properties: { query: { type: 'string', description: '关键词' } }, required: ['query'] } },
+    { name: 'read_note', description: '读一篇笔记的全文。', params: { type: 'object', properties: { id: { type: 'string', description: '笔记 id（来自 search_notes）' } }, required: ['id'] } }
+  ];
+  function noteRule() {
+    return '\n\n【笔记】用户在 App 里有自己的笔记（' + notes.length + ' 篇）。用户让你“记一下/存下来”、而且是要留着以后查的内容（配方、设定、清单、灵感）时，用 save_note 存进笔记，存好后简短告诉 TA 存了；有具体日期要提醒的事仍然用 add_event。用户问起以前记过的东西时，先用 search_notes 找，再用 read_note 读全文，以笔记为准，不要编。';
+  }
+  function noteSearch(q) {
+    q = String(q || '').trim().toLowerCase(); if (!q) return [];
+    var grams = []; for (var i = 0; i < q.length - 1; i++) grams.push(q.slice(i, i + 2)); if (!grams.length) grams = [q];
+    return notes.map(function (n) {
+      var t = (n.title + '\n' + (n.tags || []).join(' ') + '\n' + n.body).toLowerCase(), sc = 0;
+      grams.forEach(function (g) { if (t.indexOf(g) >= 0) sc += n.title.toLowerCase().indexOf(g) >= 0 ? 3 : 1; });
+      if (t.indexOf(q) >= 0) sc += 6;
+      return { n: n, sc: sc };
+    }).filter(function (x) { return x.sc > 0; }).sort(function (a, b) { return b.sc - a.sc; }).slice(0, 6).map(function (x) { return x.n; });
+  }
+  function runNoteTool(name, a) {
+    if (name === 'save_note') {
+      var old = a.note_id ? noteById(String(a.note_id)) : null;
+      if (old) { old.body = old.body.replace(/\s*$/, '') + '\n\n' + String(a.body || ''); old.updated = Date.now(); saveNotes();
+        return { log: { tool: 'note', q: noteTitleOf(old), id: old.id, tags: old.tags || [], hits: [], diff: [['+', String(a.body || '').split('\n')[0].slice(0, 40)]] }, content: '已追加到笔记「' + noteTitleOf(old) + '」。' }; }
+      var tags = Array.isArray(a.tags) ? a.tags.map(function (t) { return String(t).replace(/^#/, '').trim().slice(0, 8); }).filter(Boolean) : [];
+      var n = noteFromChat(String(a.body || ''), a.title, tags);
+      if (state.tab === 'plan' && !chat.open) keepScroll();
+      return { log: { tool: 'note', q: noteTitleOf(n), id: n.id, tags: n.tags, hits: [], diff: [['+', noteTitleOf(n)]].concat(noteLines(n.body).filter(function (l) { return l.trim(); }).slice(0, 3).map(function (l) { return ['+', '  ' + l.slice(0, 40)]; })) },
+        content: '已存进笔记「' + noteTitleOf(n) + '」（id=' + n.id + '）。' };
+    }
+    if (name === 'search_notes') {
+      var hs = noteSearch(a.query);
+      return { log: { tool: 'nsearch', q: String(a.query || ''), hits: hs.map(function (n) { return { title: noteTitleOf(n), site: (n.tags || []).join(' '), id: n.id }; }) },
+        content: hs.length ? '找到 ' + hs.length + ' 篇：\n' + hs.map(function (n) { return 'id=' + n.id + ' 「' + noteTitleOf(n) + '」 ' + noteLines(n.body).join(' ').slice(0, 80); }).join('\n') : '没有找到相关的笔记。' };
+    }
+    if (name === 'read_note') {
+      var r = noteById(String(a.id || ''));
+      if (!r) return { content: '没有这篇笔记。' };
+      return { log: { tool: 'nread', q: noteTitleOf(r), id: r.id, hits: [] }, content: '「' + noteTitleOf(r) + '」\n' + r.body.slice(0, 6000) };
+    }
+    return null;
+  }
+  function notesAfterRender() {
+    var ne = document.getElementById('ne'); if (ne) sheetDrag(ne, function () { noteClose(); });
+    var am = document.querySelector('#main .ne-amor .g-sheet'); if (am) sheetDrag(am, function () { noteui.amor = null; keepScroll(); });
+    if (noteui.ed && noteui.ed.mode === 'edit') { var ta = document.getElementById('ne-body'); if (ta) noteGrow(ta); }
+  }
+  function noteGrow(ta) { ta.style.height = 'auto'; ta.style.height = Math.max(220, ta.scrollHeight + 4) + 'px'; }
+  // 笔记列表往下滑时，「写笔记」收成小圆；往回滑展开
+  (function () {
+    var last = 0;
+    function onScroll() {
+      if (state.tab !== 'plan' || calui.seg !== 'notes') return;
+      var m = document.getElementById('main'), y = m ? m.scrollTop : 0, f = document.querySelector('.note-fab');
+      if (y > last + 6 && y > 120) noteui.mini = true; else if (y < last - 10 || y < 40) noteui.mini = false;
+      last = y; if (f) f.classList.toggle('mini', noteui.mini);
+    }
+    document.addEventListener('scroll', onScroll, true);
+  })();
+
+  // 卡片、阅读中的正文不是 <button>，单独接点击
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('button, a, input, textarea')) return;
+    var c = e.target.closest('[data-nopen]'); if (c) { noteOpen(c.getAttribute('data-nopen')); return; }
+    var rd = e.target.closest('.ne-body.read'); if (rd && noteui.ed) {
+      noteui.ed.mode = 'edit'; keepScroll();
+      setTimeout(function () { var t = document.getElementById('ne-body'); if (t) { try { t.focus({ preventScroll: true }); t.setSelectionRange(t.value.length, t.value.length); } catch (x) {} } }, 30);
+    }
+  });
+  function noteClick(b, ds) {
+    if (ds.ntick) { var tp = ds.ntick.split(':'); noteToggleTick(tp[0], tp[1]); return true; }
+    if (ds.ntag != null) { noteui.tag = ds.ntag; keepScroll(); return true; }
+    if (ds.npaper) { var n0 = noteEnsure(); n0.paper = ds.npaper; noteTouch(n0); keepScroll(); return true; }
+    if (ds.nuntag) { var n1 = noteCur(); if (n1) { n1.tags = (n1.tags || []).filter(function (t) { return t !== ds.nuntag; }); noteTouch(n1); keepScroll(); } return true; }
+    if (ds.naddtag) { var n2 = noteEnsure(); if ((n2.tags || []).indexOf(ds.naddtag) < 0) (n2.tags = n2.tags || []).push(ds.naddtag); noteTouch(n2); noteui.tagIn = false; keepScroll(); return true; }
+    if (ds.nins) { noteInsert(ds.nins); return true; }
+    if (ds.namor) { noteAmorRun(ds.namor); return true; }
+    if (ds.ntodo != null) { var it = noteui.amor && noteui.amor.items && noteui.amor.items[+ds.ntodo]; if (it) { it.off = !it.off; keepScroll(); } return true; }
+    if (ds.nopenchip) { closeChat(); setTimeout(function () { noteOpen(ds.nopenchip); }, 250); return true; }
+    var a = ds.note; if (!a) return false;
+    var n = noteCur();
+    if (a === 'new') { noteOpen(''); return true; }
+    if (a === 'close') { noteClose(); return true; }
+    if (a === 'edit') { if (noteui.ed) { noteui.ed.mode = 'edit'; keepScroll(); } return true; }
+    if (a === 'pin') { var np = noteEnsure(); np.pin = !np.pin; noteTouch(np); keepScroll(); toast(np.pin ? '已置顶' : '已取消置顶'); return true; }
+    if (a === 'more') { noteui.more = !noteui.more; noteui.del = false; keepScroll(); return true; }
+    if (a === 'copy') { if (n) copyText((n.title ? n.title + '\n\n' : '') + n.body, b); noteui.more = false; keepScroll(); return true; }
+    if (a === 'del') { if (!n) return true; if (!noteui.del) { noteui.del = true; keepScroll(); return true; }
+      notes = notes.filter(function (x) { return x !== n; }); if (n.evId) noteUnlinkDate(n); saveNotes(); noteui.ed = null; noteui.more = false; noteui.del = false; keepScroll(); toast('已删除笔记'); return true; }
+    if (a === 'tag') { noteui.tagIn = !noteui.tagIn; noteui.dateIn = false; keepScroll(); if (noteui.tagIn) setTimeout(function () { var t = document.getElementById('ne-tag'); if (t) try { t.focus({ preventScroll: true }); } catch (x) {} }, 40); return true; }
+    if (a === 'date') { noteui.dateIn = !noteui.dateIn; noteui.tagIn = false; keepScroll(); return true; }
+    if (a === 'date-ok') { var di = document.getElementById('ne-date'), nd = noteEnsure(); if (di && pymd(di.value)) { noteLinkDate(nd, ymd(pymd(di.value))); toast('已关联到 ' + dateZh(nd.date) + '，日程里也记上了'); } noteui.dateIn = false; keepScroll(); return true; }
+    if (a === 'date-off') { if (n) { noteUnlinkDate(n); noteTouch(n); } noteui.dateIn = false; keepScroll(); return true; }
+    if (a === 'amor') { var ta = document.getElementById('ne-body'); if (ta) ta.blur(); noteui.amor = { act: '' }; keepScroll(); return true; }
+    if (a === 'amor-close') { if (noteui.amor && noteui.amor.xhr) try { noteui.amor.xhr.abort(); } catch (x) {} noteui.amor = null; keepScroll(); return true; }
+    if (a === 'amor-back') { if (noteui.amor && noteui.amor.xhr) try { noteui.amor.xhr.abort(); } catch (x) {} noteui.amor = { act: '' }; keepScroll(); return true; }
+    if (a === 'amor-apply') { noteAmorApply(); return true; }
+    return false;
+  }
+
   window.__calTest = { parseEntry: function (s) { return parseEntry(s); } };
   function calNewId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 5); }
   // 某一天有哪些日程（含每周/每月/每年重复的）
@@ -5601,11 +6046,13 @@
     if (!calui.sel) calui.sel = ymd(now);
     var y = calui.ym[0], mo = calui.ym[1];
     var html = '<section class="view plan">' +
-      '<div class="pl-top"><div class="pl-ttl">' + (calui.seg === 'cal' ? MONTHS_EN[mo] + '<small>' + y + ' · ' + (mo + 1) + ' 月</small>' : 'Alarms<small>闹钟</small>') + '</div>' +
-      '<div class="seg2" role="group" aria-label="日历或闹钟"><button type="button" data-cal="seg" data-arg="cal" aria-pressed="' + (calui.seg === 'cal') + '">日历</button>' +
-      '<button type="button" data-cal="seg" data-arg="alarm" aria-pressed="' + (calui.seg === 'alarm') + '">闹钟</button></div></div>';
-    html += calui.seg === 'cal' ? calMonth(y, mo) : alarmList();
-    html += '<button type="button" class="pl-fab" data-cal="' + (calui.seg === 'cal' ? 'new' : 'alarm-new') + '" aria-label="' + (calui.seg === 'cal' ? '记一件事' : '新闹钟') + '">' + icon('plus', 24) + '</button>';
+      '<div class="pl-top"><div class="pl-ttl">' + (calui.seg === 'cal' ? MONTHS_EN[mo] + '<small>' + y + ' · ' + (mo + 1) + ' 月</small>' : calui.seg === 'notes' ? 'Notes<small>' + notes.length + ' 篇</small>' : 'Alarms<small>闹钟</small>') + '</div>' +
+      '<div class="seg2" role="group" aria-label="日历、闹钟或笔记"><button type="button" data-cal="seg" data-arg="cal" aria-pressed="' + (calui.seg === 'cal') + '">日历</button>' +
+      '<button type="button" data-cal="seg" data-arg="alarm" aria-pressed="' + (calui.seg === 'alarm') + '">闹钟</button>' +
+      '<button type="button" data-cal="seg" data-arg="notes" aria-pressed="' + (calui.seg === 'notes') + '">笔记</button></div></div>';
+    html += calui.seg === 'cal' ? calMonth(y, mo) : calui.seg === 'notes' ? notesView() : alarmList();
+    html += calui.seg === 'notes' ? noteFab() : '<button type="button" class="pl-fab" data-cal="' + (calui.seg === 'cal' ? 'new' : 'alarm-new') + '" aria-label="' + (calui.seg === 'cal' ? '记一件事' : '新闹钟') + '">' + icon('plus', 24) + '</button>';
+    if (calui.seg === 'notes') html += noteEditor();
     html += calui.sheet ? entrySheet() : '';
     return html + '</section>';
   }
@@ -5797,12 +6244,13 @@
       if (state.tab !== 'plan' || calui.sheet || !e.touches || e.touches.length !== 1) return null;
       var tg = e.target, x = e.touches[0].clientX;
       if (x < 22 || x > innerWidth - 22) return null;                 // 屏幕边缘留给系统返回手势
-      if (tg.closest('input, textarea, select, .wheel, .cal-sheet, .seg2, .tabs, .pop, .sheet-wrap')) return null;
+      if (tg.closest('input, textarea, select, .wheel, .cal-sheet, .seg2, .tabs, .pop, .sheet-wrap, .ne-wrap, .n-tags, .g-sheet-wrap')) return null;
+      if (noteui.ed) return null;
       if (state.sub === 'tear') { var tr = document.getElementById('tear'); return tr && document.getElementById('main').contains(tg) && !tg.closest('.sub-head, .tear-nav') ? { k: 'tear', els: [tr] } : null; }
       if (state.sub) return null;
       var v = document.querySelector('#main .view.plan'); if (!v || !document.getElementById('main').contains(tg)) return null;
       if (calui.seg === 'cal' && tg.closest('.cal-card')) return { k: 'month', els: [].slice.call(v.querySelectorAll('.cal-grid, .cal-mh .m')) };
-      return { k: 'seg', els: [].slice.call(v.children).filter(function (c) { return !c.matches('.pl-top, .pl-fab, .cal-sheet, .sheet-back'); }) };
+      return { k: 'seg', els: [].slice.call(v.children).filter(function (c) { return !c.matches('.pl-top, .pl-fab, .note-fab, .ne-wrap, .cal-sheet, .sheet-back'); }) };
     }
     function paint(dx, tr) {
       s.els.forEach(function (el) {
@@ -5812,7 +6260,7 @@
       });
     }
     function can(dir) {   // dir = 1 往左滑（下一个），-1 往右滑
-      if (s.k === 'seg') return dir > 0 ? calui.seg === 'cal' : calui.seg === 'alarm';
+      if (s.k === 'seg') return dir > 0 ? calui.seg !== 'notes' : calui.seg !== 'cal';
       return true;
     }
     document.addEventListener('touchstart', function (e) {
@@ -5842,7 +6290,7 @@
       paint(-dir * innerWidth * .6, true); s = null;
       setTimeout(function () {
         if (z.k === 'month') calAction(dir > 0 ? 'next' : 'prev');
-        else if (z.k === 'seg') calAction('seg', dir > 0 ? 'alarm' : 'cal');
+        else if (z.k === 'seg') { var SG = ['cal', 'alarm', 'notes']; calAction('seg', SG[Math.max(0, Math.min(2, SG.indexOf(calui.seg) + dir))]); }
         else { calui.tearDir = ''; calui.tear = ymd(addDays(pymd(calui.tear), dir)); calui.sel = calui.tear; calui.swDir = dir; keepScroll(); }
       }, 160);
     }
@@ -5856,7 +6304,7 @@
   }
   function calAction(a, arg) {
     var s = calui.sheet;
-    if (a === 'seg') { calui.seg = arg; render({ anim: arg === 'alarm' ? 'fwd' : 'back' }); return; }
+    if (a === 'seg') { var SEGS = ['cal', 'alarm', 'notes'], fwd = SEGS.indexOf(arg) > SEGS.indexOf(calui.seg); calui.seg = arg; noteui.ed = null; noteui.mini = false; render({ anim: fwd ? 'fwd' : 'back' }); return; }
     if (a === 'prev' || a === 'next') { var ym = calui.ym, d = new Date(ym[0], ym[1] + (a === 'next' ? 1 : -1), 1); calui.ym = [d.getFullYear(), d.getMonth()]; render({ anim: a === 'next' ? 'fwd' : 'back' }); return; }
     if (a === 'day') {
       if (calui.sel === arg) { calui.tear = arg; calui.tearDir = ''; state.sub = 'tear'; render({ top: true, anim: 'fwd' }); return; }
@@ -6990,12 +7438,23 @@
   function keepScroll() { var y = $main.scrollTop; render(); $main.scrollTop = y; }
   function toast(msg) {
     var t = document.getElementById('toast');
-    t.textContent = msg; t.hidden = false;
+    t.textContent = msg; t.hidden = false; t.classList.remove('act');
     requestAnimationFrame(function () { t.classList.add('show'); });
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { t.classList.remove('show'); setTimeout(function () { if (!t.classList.contains('show')) t.hidden = true; }, 400); }, 1900);
   }
 
+  // 带一个按钮的提示（比如「已存进笔记 · 打开」），多停留一会儿
+  function toastAct(msg, label, fn) {
+    var t = document.getElementById('toast');
+    t.innerHTML = ''; t.appendChild(document.createTextNode(msg + ' '));
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'toast-act'; b.textContent = label;
+    b.addEventListener('click', function (e) { e.stopPropagation(); t.classList.remove('show'); t.hidden = true; fn(); });
+    t.appendChild(b); t.hidden = false; t.classList.add('act');
+    requestAnimationFrame(function () { t.classList.add('show'); });
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove('show'); setTimeout(function () { if (!t.classList.contains('show')) { t.hidden = true; t.classList.remove('act'); } }, 400); }, 3600);
+  }
   /* ---------- 交互 ---------- */
   document.addEventListener('click', function (e) {
     var b = e.target.closest('button');
@@ -7042,6 +7501,7 @@
       if (memAdd(mk_, mt_, 'manual')) { mui.draft[mk_] = ''; toast('记住了'); } else toast(memSafe(mt_) ? '这条已经记过了' : '这条不能记（太长或像是密钥、密码）'); keepScroll(); return; }
     if (ds.memdel) { var dd_ = mem.items.filter(function (x) { return x.id === ds.memdel; })[0]; mem.items = mem.items.filter(function (x) { return x.id !== ds.memdel; }); saveMem(); keepScroll(); if (dd_) toast('已忘掉：' + dd_.text.slice(0, 16)); return; }
     if (ds.memedit) { mui.edit = ds.memedit; var y_ = $main.scrollTop; render({ focus: 'mem-edit' }); $main.scrollTop = y_; return; }
+    if (noteClick(b, ds)) return;
     if (ds.memsave) { memSaveEdit(); return; }
     if (ds.openconv) { var oc = chats.filter(function (c) { return c.id === ds.openconv; })[0]; if (!oc) return;
       state.tab = 'today'; state.sub = ''; save(); render({ top: true }); openChat('', oc.id); chat.city = oc.city; return; }
@@ -7074,9 +7534,25 @@
     if (ds.gpk != null) { if (!ds.gpk) chat.gemPick = []; else { var gp_ = (chat.gemPick = chat.gemPick || []), gi_ = gp_.indexOf(ds.gpk); if (gi_ >= 0) gp_.splice(gi_, 1); else gp_.push(ds.gpk); } keepPopScroll(); return; }
     if (ds.gunpick) { chat.gemPick = (chat.gemPick || []).filter(function (x) { return x !== ds.gunpick; }); keepChatScroll(); return; }
     if (ds.gedit) { var ce0 = ds.gedit === '+' ? null : (asst.gem.cards || []).filter(function (c) { return c.id === ds.gedit; })[0];
-      gemui.del = ''; gemui.edit = ce0 ? { id: ce0.id, title: ce0.title, how: ce0.how, body: ce0.body, when: ce0.when || 'auto', on: ce0.on !== false, list: ce0.list !== false } : { id: '', title: '', how: 'chk', body: '', when: 'auto', on: true, list: true };
+      gemui.del = ''; gemui.edit = gemui.drafts[ds.gedit] || (ce0 ? { id: ce0.id, title: ce0.title, how: ce0.how, body: ce0.body, when: ce0.when || 'auto', on: ce0.on !== false, list: ce0.list !== false } : { id: '', title: '', how: gemui.cat || 'chk', body: '', when: 'auto', on: true, list: true });
       keepScroll(); if (!ce0) setTimeout(function () { var ti = document.getElementById('ge-title'); if (ti) try { ti.focus({ preventScroll: true }); } catch (x) {} }, 350); return; }
-    if (ds.geclose) { gemui.edit = null; keepScroll(); return; }
+    if (ds.geclose) { gemCloseSheet('card'); return; }
+    if (ds.gcatclose) { gemCloseSheet('cat'); return; }
+    if (ds.gcat) { gemui.cat = ds.gcat; gemui.del = ''; keepScroll(); return; }
+    if (ds.gcatedit) { var cc0 = ds.gcatedit === '+' ? null : gemCats().filter(function (c) { return c.id === ds.gcatedit; })[0];
+      gemui.catEdit = gemui.drafts['cat:' + ds.gcatedit] || (cc0 ? { id: cc0.id, name: cc0.name, desc: cc0.desc, style: cc0.style, color: cc0.color, builtin: !!cc0.builtin, del: false }
+        : { id: '', name: '', desc: '', style: 'points', color: GEM_COLORS[(gemCats().length) % GEM_COLORS.length], builtin: false, del: false });
+      keepScroll(); if (!cc0) setTimeout(function () { var ni = document.getElementById('gc-name'); if (ni) try { ni.focus({ preventScroll: true }); } catch (x) {} }, 350); return; }
+    if (ds.gcstyle) { if (gemui.catEdit && !gemui.catEdit.builtin) { gemui.catEdit.style = ds.gcstyle; keepScroll(); } return; }
+    if (ds.gccolor) { if (gemui.catEdit) { gemui.catEdit.color = ds.gccolor; keepScroll(); } return; }
+    if (ds.gcsave) { var ce1 = gemui.catEdit; if (!ce1 || !ce1.name.trim() || !ce1.desc.trim()) return;
+      if (ce1.id) { var co = gemCats().filter(function (c) { return c.id === ce1.id; })[0]; if (co) { if (!co.builtin) { co.name = ce1.name.trim().slice(0, 6); co.style = ce1.style; } co.desc = ce1.desc.trim().slice(0, 120); co.color = ce1.color; } }
+      else { var nc = { id: 'k' + Date.now().toString(36), name: ce1.name.trim().slice(0, 6), desc: ce1.desc.trim().slice(0, 120), style: ce1.style, color: ce1.color }; asst.gem.cats.push(nc); gemui.cat = nc.id; }
+      delete gemui.drafts['cat:' + (ce1.id || '+')]; gemui.catEdit = null; saveAsst(); keepScroll(); toast(ce1.id ? '已保存' : '已加上分类「' + ce1.name.trim() + '」'); return; }
+    if (ds.gcdel) { var ce2 = gemui.catEdit; if (!ce2 || !ce2.id || ce2.builtin) return;
+      if (!ce2.del) { ce2.del = true; keepScroll(); return; }
+      asst.gem.cats = asst.gem.cats.filter(function (c) { return c.id !== ce2.id; }); asst.gem.cards = asst.gem.cards.filter(function (c) { return c.how !== ce2.id; });
+      gemui.catEdit = null; gemui.cat = gemCats()[0].id; saveAsst(); keepScroll(); toast('已删除分类「' + ce2.name + '」'); return; }
     if (ds.ghow) { if (gemui.edit) { gemui.edit.how = ds.ghow; keepScroll(); } return; }
     if (ds.gwhen) { if (gemui.edit) { gemui.edit.when = ds.gwhen; keepScroll(); } return; }
     if (ds.gesw) { if (gemui.edit) { gemui.edit[ds.gesw] = gemui.edit[ds.gesw] === false; keepScroll(); } return; }
@@ -7087,7 +7563,7 @@
       var card_ = { title: ed.title.trim().slice(0, 16), how: ed.how, body: ed.body.trim().slice(0, 400), when: ed.when, on: ed.on !== false, list: ed.list !== false };
       if (ed.id) { var old_ = asst.gem.cards.filter(function (c) { return c.id === ed.id; })[0]; if (old_) for (var kk in card_) old_[kk] = card_[kk]; }
       else { card_.id = 'c' + Date.now().toString(36); card_.custom = true; asst.gem.cards.push(card_); }
-      gemui.edit = null; saveAsst(); keepScroll(); toast(ed.id ? '已保存' : '已加上「' + card_.title + '」'); return; }
+      delete gemui.drafts[ed.id || '+']; gemui.edit = null; gemui.cat = card_.how; saveAsst(); keepScroll(); toast(ed.id ? '已保存' : '已加上「' + card_.title + '」'); return; }
     if (ds.gdel != null) { if (ds.gfromsheet) gemui.edit = null; gemui.del = ds.gdel; keepScroll(); return; }
     if (ds.gdelok) { var dc_ = asst.gem.cards.filter(function (c) { return c.id === ds.gdelok; })[0]; asst.gem.cards = asst.gem.cards.filter(function (c) { return c.id !== ds.gdelok; }); gemui.del = ''; saveAsst(); keepScroll(); if (dc_) toast('已删除「' + dc_.title + '」'); return; }
     if (ds.greset) { if (!gemui.reset) { gemui.reset = true; keepScroll(); setTimeout(function () { if (gemui.reset) { gemui.reset = false; if (state.sub === 'gemini') keepScroll(); } }, 4000); return; }
@@ -7118,6 +7594,7 @@
       var t_ = document.getElementById('chat-in'); if (t_) { try { t_.focus({ preventScroll: true }); t_.setSelectionRange(t_.value.length, t_.value.length); } catch (x) {} fitInput(); }
       return;
     }
+    if (ds.mnote != null) { var cn_ = curConv(), mn_ = cn_ && cn_.msgs[+ds.mnote]; chat.mmenu = null; keepChatScroll(); if (mn_) { var nt_ = noteFromChat(artStrip ? artStrip(mn_.content) : mn_.content, '', []); toastAct('已存进笔记「' + (noteTitleOf(nt_).length > 10 ? noteTitleOf(nt_).slice(0, 9) + '…' : noteTitleOf(nt_)) + '」', '打开', function () { closeChat(); setTimeout(function () { noteOpen(nt_.id); }, 250); }); } return; }
     if (ds.msel != null) { chat.mmenu = null; chat.selIdx = +ds.msel; chat.pop = 'seltext'; chat.popSub = ''; chat.popIn = true; renderSheet(); return; }
     if (ds.brv) { var bp_ = ds.brv.split('|'); switchBranch(+bp_[0], +bp_[1]); return; }
     if (ds.tstep) { chat.popAnim = 'fwd'; chat.popSub = 'step:' + ds.tstep; renderSheet(); return; }
@@ -7156,7 +7633,25 @@
     if (ds.add) { state.cities.push(ds.add); state.query = ''; save(); render(); toast('已添加' + META[ds.add].zh); refreshOne(ds.add); return; }
     if (ds.set) { state[ds.set] = ds.val; if (ds.set === 'theme') applyTheme(); save(); render(); return; }
   });
+  document.addEventListener('keydown', function (e) {
+    if (e.target && e.target.id === 'ne-tag' && e.key === 'Enter') {
+      e.preventDefault(); var v = e.target.value.replace(/^#/, '').trim().slice(0, 8); if (!v) return;
+      var n = noteEnsure(); if ((n.tags || []).indexOf(v) < 0) (n.tags = n.tags || []).push(v); noteTouch(n); noteui.tagIn = false; keepScroll();
+    }
+  });
   document.addEventListener('input', function (e) {
+    if (e.target.id === 'note-q') { noteui.q = e.target.value; var y1 = $main.scrollTop; render({ focus: 'note-q' }); $main.scrollTop = y1; return; }
+    if ((e.target.id === 'ne-title' || e.target.id === 'ne-body') && noteui.ed) {
+      var nn = noteEnsure(); nn[e.target.id === 'ne-title' ? 'title' : 'body'] = e.target.value; noteTouch(nn);
+      if (e.target.id === 'ne-body') noteGrow(e.target);
+      if (e.target.id === 'ne-title' && nn.evId) { var ev_ = cal.events.filter(function (x) { return x.id === nn.evId; })[0]; if (ev_) { ev_.title = noteTitleOf(nn).slice(0, 24); clearTimeout(noteSaveT); noteSaveT = setTimeout(function () { saveNotes(); saveCal(); }, 600); } }
+      return;
+    }
+    if ((e.target.id === 'gc-name' || e.target.id === 'gc-desc') && gemui.catEdit) {
+      gemui.catEdit[e.target.id === 'gc-name' ? 'name' : 'desc'] = e.target.value;
+      var sv2 = document.getElementById('gc-save'); if (sv2) sv2.disabled = !(gemui.catEdit.name.trim() && gemui.catEdit.desc.trim());
+      return;
+    }
     if ((e.target.id === 'ge-title' || e.target.id === 'ge-body') && gemui.edit) {
       gemui.edit[e.target.id === 'ge-title' ? 'title' : 'body'] = e.target.value;
       var c1 = document.getElementById(e.target.id === 'ge-title' ? 'ge-tc' : 'ge-bc'); if (c1) c1.textContent = e.target.value.length + (e.target.id === 'ge-title' ? '/16' : '/400');
@@ -8247,7 +8742,7 @@
     if (a === 'font') { state.sub = 'font'; render({ top: true, anim: 'fwd' }); return; }
     if (a === 'notify') { state.sub = 'notify'; ntui.test = ''; render({ top: true, anim: 'fwd' }); notifySync(true); setTimeout(function () { if (state.sub === 'notify') keepScroll(); }, 900); return; }
     if (a === 'memory') { state.sub = 'memory'; mui.edit = ''; mui.clear = false; render({ top: true, anim: 'fwd' }); return; }
-    if (a === 'gemini') { state.sub = 'gemini'; gemui.pick = false; gemui.edit = null; gemui.del = ''; render({ top: true, anim: 'fwd' }); return; }
+    if (a === 'gemini') { state.sub = 'gemini'; gemui.pick = false; gemui.edit = null; gemui.catEdit = null; gemui.del = ''; render({ top: true, anim: 'fwd' }); return; }
     if (a === 'gpick') { gemui.pick = !gemui.pick; keepScroll(); return; }
     if (a === 'voiceapi') { state.sub = 'voiceapi'; vui.status = null; vui.pickModel = !vconf().model; vui.mq = ''; render({ top: true, anim: 'fwd' }); return; }
     if (a === 'voice' || a === 'back-voice') { state.sub = 'voice'; vui.pickModel = false; vui.status = null; render({ top: true, anim: a === 'voice' ? 'fwd' : 'back' });
@@ -8426,20 +8921,22 @@
     var top = Math.min(Math.max(mm.top, 64), H - (pv + 12 + menuH) - 16); top = Math.max(top, 12);
     var clip = mm.h > pv + 2;
     return '<div class="mm-wrap"><button type="button" class="mm-scrim" data-mclose="1" aria-label="关闭菜单"></button>' +
-      '<div class="mm-float" style="top:' + top + 'px;right:' + mm.right + 'px">' +
-        '<div class="msg me mm-bubble' + (clip ? ' clip' : '') + '" style="max-width:' + mm.w + 'px' + (clip ? ';max-height:' + pv + 'px' : '') + '">' + esc(msgs[mm.i].content) + '</div>' +
+      '<div class="mm-float' + (mm.bot ? ' bot' : '') + '" style="top:' + top + 'px;' + (mm.bot ? 'left:' + Math.max(8, mm.left) + 'px;right:' + mm.right + 'px' : 'right:' + mm.right + 'px') + '">' +
+        (mm.bot ? '<div class="msg bot mm-bubble mm-botpv' + (clip ? ' clip' : '') + '" style="' + (clip ? 'max-height:' + pv + 'px' : '') + '">' + md(stripEmo(artStrip ? artStrip(msgs[mm.i].content) : msgs[mm.i].content)) + '</div>'
+          : '<div class="msg me mm-bubble' + (clip ? ' clip' : '') + '" style="max-width:' + mm.w + 'px' + (clip ? ';max-height:' + pv + 'px' : '') + '">' + esc(msgs[mm.i].content) + '</div>') +
         '<div class="mm-menu" role="menu"><div class="mm-time">' + msgTime(msgs[mm.i].ts) + '</div>' +
           '<button type="button" role="menuitem" data-mcopy="' + mm.i + '">' + icon('copy', 20) + '<span>复制消息</span></button>' +
+          (mm.bot ? '<button type="button" role="menuitem" data-mnote="' + mm.i + '">' + icon('pen', 20) + '<span>存为笔记</span></button>' : '') +
           '<button type="button" role="menuitem" data-msel="' + mm.i + '">' + SEL_ICON + '<span>选择文字</span></button>' +
-          (chat.busy ? '' : '<button type="button" role="menuitem" data-medit="' + mm.i + '">' + icon('pencil', 20) + '<span>编辑</span></button>') +
+          (chat.busy || mm.bot ? '' : '<button type="button" role="menuitem" data-medit="' + mm.i + '">' + icon('pencil', 20) + '<span>编辑</span></button>') +
         '</div></div></div>';
   }
   var SEL_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5h1.5M5 4.5v15M5 19.5h1.5M9.5 8h9M9.5 12h9M9.5 16h6"/></svg>';
   function msgTime(ts) { if (!ts) return ''; var d = new Date(ts), n = new Date(), hm = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
     return d.toDateString() === n.toDateString() ? hm : (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + hm; }
   function openMsgMenu(el) {
-    var i = +el.getAttribute('data-mi'), r = el.getBoundingClientRect(), sh = el.closest('.chat-main'), sr = sh ? sh.getBoundingClientRect() : { top: 0, right: innerWidth };
-    chat.mmenu = { i: i, top: r.top - sr.top, right: sr.right - r.right, h: r.height, w: Math.ceil(r.width) + 16, H: sh ? sr.height : innerHeight };
+    var bot = el.hasAttribute('data-bi'), i = +el.getAttribute(bot ? 'data-bi' : 'data-mi'), r = el.getBoundingClientRect(), sh = el.closest('.chat-main'), sr = sh ? sh.getBoundingClientRect() : { top: 0, right: innerWidth };
+    chat.mmenu = { i: i, bot: bot, top: r.top - sr.top, right: sr.right - r.right, h: r.height, w: Math.ceil(r.width) + 16, H: sh ? sr.height : innerHeight, left: bot ? r.left - (sh ? sr.left : 0) : 0 };
     if (navigator.vibrate) try { navigator.vibrate(8); } catch (e) {}
     keepChatScroll();
   }
@@ -8531,7 +9028,7 @@
         }
         var sk_ = conv.id + ':' + i, son = Speaker.key() === sk_, last = i === msgs.length - 1;
         return botHead(x.model) + procRow(x, sk_) +
-          botBodyHtml(x.content, sk_, nw) +
+          botBodyHtml(x.content, sk_, nw).replace('<div class="msg bot', '<div data-bi="' + i + '" class="msg bot') +
           '<div class="acts-row">' +
             '<button type="button" class="act" data-copy="' + sk_ + '" aria-label="复制">' + icon('copy', 18) + '</button>' +
             (voice.btn && voiceReady() ? '<button type="button" class="act' + (son ? ' on' : '') + '" data-speak="' + sk_ + '" aria-label="' + (son ? '停止朗读' : '朗读这条回答') + '">' + icon(son ? 'stop' : 'speaker', 18) + '</button>' : '') +
@@ -8541,6 +9038,10 @@
             var live = (nt.reminders || []).some(function (r) { return r.id === l.id; }), past = l.at <= Date.now();
             return '<div class="rm-chip' + (live && !past ? '' : ' done') + '">' + icon('bell', 15) + '<span><b>' + (past ? '已提醒' : live ? '已设提醒' : '已取消') + '</b>' + esc(remindLabel(l.at) + ' · ' + l.q) + '</span>' +
               (live && !past ? '<button type="button" data-rmcancel="' + l.id + '">取消</button>' : '') + '</div>';
+          }).join('') +
+          (x.recall || []).filter(function (l) { return l.tool === 'note' && l.id; }).map(function (l) {
+            var ok_ = !!noteById(l.id);
+            return '<button type="button" class="n-chip"' + (ok_ ? ' data-nopenchip="' + esc(l.id) + '"' : ' disabled') + '>' + icon('pen', 15) + '<span>' + (ok_ ? '已存进笔记 ' : '笔记已删除 ') + '<b>' + esc(l.q) + '</b>' + ((l.tags || [])[0] ? ' · #' + esc(l.tags[0]) : '') + '</span>' + (ok_ ? icon('chev', 14) : '') + '</button>';
           }).join('') +
           (x.gem && gemMisses(x.gem).length ? '<div class="gem-chip">' + icon('pencil', 15) + '<span><b>还漏了</b>' + esc(gemMisses(x.gem).map(function (z) { return z.k; }).join('、')) + '</span>' +
             (last && !chat.busy ? '<button type="button" data-gemfix="' + sk_ + '">补写</button>' : '') + '</div>' : '') +
@@ -8936,7 +9437,8 @@
     if (arts_.length) { var la_ = arts_[arts_.length - 1]; bits.push((la_.done ? '写了作品' : '正在写作品') + '「' + la_.title + '」'); ics.push('pencil'); }
     var webs = L.filter(function (l) { return l.tool === 'web'; }), ev = L.filter(function (l) { return l.tool === 'event'; }),
       al = L.filter(function (l) { return l.tool === 'alarm'; }), rm = L.filter(function (l) { return l.tool === 'remind'; }),
-      rc = L.filter(function (l) { return !/^(remind|rlist|rcancel|event|elist|edel|alarm|web|fetch|gh)$/.test(l.tool); }),
+      rc = L.filter(function (l) { return !/^(remind|rlist|rcancel|event|elist|edel|alarm|web|fetch|gh|note|nsearch|nread)$/.test(l.tool); }),
+      nsv = L.filter(function (l) { return l.tool === 'note'; }), nrd = L.filter(function (l) { return l.tool === 'nsearch' || l.tool === 'nread'; }),
       fe = L.filter(function (l) { return l.tool === 'fetch' && !l.err && !l.pending; }), gs = L.filter(function (l) { return l.tool === 'gh'; });
     if (webs.length) { var wq = webs[0].q.length > 9 ? webs[0].q.slice(0, 8) + '…' : webs[0].q; bits.push('查了“' + wq + '”' + (webs.length > 1 ? '等 ' + webs.length + ' 次' : '') + (sources && sources.length ? '，看了 ' + sources.length + ' 个网页' : '')); ics.push('globe'); }
     else if (sources && sources.length) { bits.push('搜索了网页，看了 ' + sources.length + ' 个'); ics.push('globe'); }
@@ -8946,6 +9448,8 @@
       bits.push('读了' + (fe.length > 1 ? ' ' + nm + ' 等 ' + fe.length + ' 个网页' : '「' + nm + '」')); ics.push(fe.some(function (l) { return l.gh; }) || gs.length ? 'branch' : 'page');
     }
     if (rc.length) { bits.push('翻看了以前的对话'); ics.push('history'); }
+    if (nrd.length) { bits.push('翻了笔记'); ics.push('find'); }
+    if (nsv.length) { bits.push('记进了笔记「' + (nsv[0].q.length > 10 ? nsv[0].q.slice(0, 9) + '…' : nsv[0].q) + '」'); ics.push('pen'); }
     var ed = L.filter(function (l) { return l.tool === 'edel'; });
     if (ev.length || ed.length) { bits.push(ed.length ? '改了日程' : '记进了日程' + (ev[0].q && !al.length && !rm.length ? '「' + ev[0].q + '」' : '')); ics.push(ev.length ? 'pen' : 'trash'); }
     if (al.length || rm.length) { bits.push((bits.length ? '' : '帮你') + '定了' + (al.length && rm.length ? '闹钟和提醒' : al.length ? (al.length > 1 ? ' ' + al.length + ' 个' : '') + '闹钟' : (rm.length > 1 ? ' ' + rm.length + ' 个' : '') + '提醒')); ics.push(al.length ? 'alarm' : 'bell'); if (al.length && rm.length) ics.push('bell'); }
@@ -8987,7 +9491,7 @@
     if (chat.phase === 'search') { live = true; lb = '正在搜索网页…'; }
     else if (chat.phase === 'web') { live = true; var lw = chat.recall && chat.recall[chat.recall.length - 1]; lb = lw && lw.desc ? lw.desc + '…' : '正在搜索“' + (lw ? lw.q : '') + '”…'; }
     else if (chat.phase === 'fetch' || chat.phase === 'gh') { live = true; var lf = chat.recall && chat.recall[chat.recall.length - 1]; lb = lf ? (lf.desc ? lf.desc + '…' : chat.phase === 'gh' ? '正在 GitHub 上搜索“' + lf.q + '”…' : '正在打开 ' + shortUrl(lf.q).slice(0, 28) + '…') : '正在打开网页…'; }
-    else if (chat.phase === 'recall') { live = true; var lg = chat.recall && chat.recall[chat.recall.length - 1]; lb = lg && lg.tool === 'web' ? '读完搜索结果，正在整理…' : lg && lg.tool === 'fetch' ? '读完网页，正在整理…' : lg && lg.tool === 'gh' ? '看完搜索结果，正在整理…' : lg && lg.tool === 'search' ? '正在回想“' + lg.q + '”…' : lg && /^(remind|rlist|rcancel)$/.test(lg.tool) ? '正在设提醒…' : lg && /^(event|elist|edel|alarm)$/.test(lg.tool) ? '正在记进日程…' : '正在翻看过去的对话…'; }
+    else if (chat.phase === 'recall') { live = true; var lg = chat.recall && chat.recall[chat.recall.length - 1]; lb = lg && lg.tool === 'web' ? '读完搜索结果，正在整理…' : lg && lg.tool === 'fetch' ? '读完网页，正在整理…' : lg && lg.tool === 'gh' ? '看完搜索结果，正在整理…' : lg && lg.tool === 'search' ? '正在回想“' + lg.q + '”…' : lg && /^(remind|rlist|rcancel)$/.test(lg.tool) ? '正在设提醒…' : lg && /^(event|elist|edel|alarm)$/.test(lg.tool) ? '正在记进日程…' : lg && lg.tool === 'note' ? '正在记进笔记…' : lg && /^(nsearch|nread)$/.test(lg.tool) ? '正在翻笔记…' : '正在翻看过去的对话…'; }
     else if (!chat.partial && chat.partialThink && asst.showThink) { live = true; lb = thinkLine(G ? gemHide(chat.partialThink) : chat.partialThink) || '正在思考…'; }
     else if (chat.partial) {
       var sm = procSummary(G ? gemHide(chat.partialThink) : chat.partialThink, chat.thinkMs, chat.sources, chat.recall, chat.partial);
@@ -9027,6 +9531,9 @@
     if (t === 'gh') return { ic: 'find', title: lg.desc || (pend ? '正在 GitHub 上搜索' : '在 GitHub 上搜索'), detail: lg.q,
       note: pend ? '' : err || (lg.hits.length ? lg.hits.length + ' 个结果' : '没有结果'), body: lg.hits.length ? hitList(lg.hits, 'gh') : '' };
     var lines = lg.lines ? '<ol class="tl-lines">' + (lg.lines.length ? lg.lines.map(function (l) { return '<li>' + esc(l) + '</li>'; }).join('') : '<li class="none">（空的）</li>') + '</ol>' : '';
+    if (t === 'note') return { ic: 'pencil', title: '记进笔记', detail: '笔记 › ' + lg.q, diff: lg.diff || [['+', lg.q]] };
+    if (t === 'nsearch') return { ic: 'find', title: '搜索笔记', detail: lg.q, note: (lg.hits || []).length ? lg.hits.length + ' 篇' : '没有找到', body: (lg.hits || []).length ? hitList(lg.hits) : '' };
+    if (t === 'nread') return { ic: 'read', title: '读笔记', detail: '笔记 › ' + lg.q, plain: true };
     if (t === 'event') return { ic: 'pencil', title: '编辑日程', detail: '日程 › ' + (lg.file || lg.q), diff: lg.diff };
     if (t === 'edel') return { ic: 'pencil', title: '删除日程', detail: '日程 › ' + (lg.file || lg.q), diff: lg.diff };
     if (t === 'elist') return { ic: 'read', title: '查看日程', detail: lg.q, body: lines };
@@ -9092,7 +9599,8 @@
   // 4.7.1 步骤详情页（仿 Claude App：← 返回，Request / 参数 / Response）
   var TOOL_NAME = { web: ['web_search', '搜索网页'], fetch: ['web_fetch', '打开网页'], gh: ['github_search', 'GitHub 搜索'], search: ['search_past_chats', '搜索过去的对话'], recent: ['recent_chats', '最近的对话'],
     read: ['read_chat', '读以前的对话'], auto: ['recall', '翻看过去的对话'], event: ['add_event', '记日程'], edel: ['delete_event', '删日程'], elist: ['list_events', '查看日程'], alarm: ['set_alarm', '定闹钟'],
-    remind: ['set_reminder', '设提醒'], rlist: ['list_reminders', '查看提醒'], rcancel: ['cancel_reminder', '取消提醒'] };
+    remind: ['set_reminder', '设提醒'], rlist: ['list_reminders', '查看提醒'], rcancel: ['cancel_reminder', '取消提醒'],
+    note: ['save_note', '记进笔记'], nsearch: ['search_notes', '搜索笔记'], nread: ['read_note', '读笔记'] };
   function codeBox(txt, num) {
     var ls = String(txt || '').split('\n');
     return '<pre class="sd-code' + (num ? ' num' : '') + '">' + (num ? ls.map(function (l, i) { return '<span class="ln">' + (i + 1) + '</span>' + esc(l); }).join('\n') : esc(txt)) + '</pre>';
@@ -9258,7 +9766,7 @@
         '<p class="sub">可以多选。点了的卡片这次一定会用；不点就由 ' + GEM_NAME + ' 自己判断。「每次」都用的卡片不用点。</p><div class="row-list">' +
         '<button type="button" class="lrow" data-gpk="" aria-pressed="' + !pk_.length + '"><span><b>' + GEM_NAME + ' 自己判断</b><small>默认，按每张卡片的「什么时候用」</small></span><span class="ck">' + (!pk_.length ? icon('tick', 22) : '') + '</span></button>' +
         cs_.map(function (c) { var on = pk_.indexOf(c.id) >= 0;
-          return '<button type="button" class="lrow" data-gpk="' + esc(c.id) + '" aria-pressed="' + on + '"><span><b>' + esc(c.title) + '<span class="g-how h-' + c.how + '">' + GEM_HOW[c.how][0] + '</span></b><small>' + esc((c.how === 'form' ? (c.body.match(/【[^】]+】/g) || []).join('') : c.body).slice(0, 40)) + '</small></span><span class="ck">' + (on ? icon('tick', 22) : '') + '</span></button>'; }).join('') +
+          return '<button type="button" class="lrow" data-gpk="' + esc(c.id) + '" aria-pressed="' + on + '"><span><b>' + esc(c.title) + gemBadge(c.how) + '</b><small>' + esc((gemStyle(c.how) === 'fields' ? (c.body.match(/【[^】]+】/g) || []).join('') : c.body).slice(0, 40)) + '</small></span><span class="ck">' + (on ? icon('tick', 22) : '') + '</span></button>'; }).join('') +
         '</div><div class="ds-actions"><button type="button" class="btn" data-popclose="1">好了</button></div>');
     }
     if (chat.pop === 'proc' && /^step:/.test(chat.popSub || '')) { var sd_ = stepDetail(procData(), chat.popSub.slice(5));
@@ -9273,10 +9781,11 @@
     var lp = null;
     function start(el, x, y) { cancel(); lp = { el: el, x: x, y: y, t: setTimeout(function () { var e = lp && lp.el; lp = null; if (e && e.isConnected && !chat.mmenu) openMsgMenu(e); }, 460) }; el.classList.add('pressing'); }
     function cancel() { if (lp) { clearTimeout(lp.t); lp.el.classList.remove('pressing'); lp = null; } }
-    document.addEventListener('touchstart', function (e) { var el = e.target.closest && e.target.closest('#msgs .msg.me[data-mi]'); if (el && e.touches.length === 1) start(el, e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+    function lpEl(t) { if (!t.closest) return null; if (t.closest('a, button, .art-card, .fcard, .emo, pre, code, .tbl-wrap')) return null; return t.closest('#msgs .msg.me[data-mi], #msgs .msg.bot[data-bi]'); }
+    document.addEventListener('touchstart', function (e) { var el = lpEl(e.target); if (el && e.touches.length === 1) start(el, e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
     document.addEventListener('touchmove', function (e) { if (lp && Math.hypot(e.touches[0].clientX - lp.x, e.touches[0].clientY - lp.y) > 8) cancel(); }, { passive: true });
     document.addEventListener('touchend', cancel); document.addEventListener('touchcancel', cancel);
-    document.addEventListener('contextmenu', function (e) { var el = e.target.closest && e.target.closest('#msgs .msg.me[data-mi]'); if (!el) return; e.preventDefault(); cancel(); if (!chat.mmenu) openMsgMenu(el); });
+    document.addEventListener('contextmenu', function (e) { var el = lpEl(e.target); if (!el) return; e.preventDefault(); cancel(); if (!chat.mmenu) openMsgMenu(el); });
   })();
   function bindGestures() {
     var sheet = document.getElementById('sheet'), top = document.getElementById('chat-top'), side = document.getElementById('side');
@@ -9328,7 +9837,18 @@
 
   /* ======================= 4.9 双子星：Amor 先想 → Amara 按卡片帮忙 → Amor 写正文（+ 终检） ======================= */
   // 4.9.1 Amara 的卡片：每张 = 标题 + 怎么帮（查漏 / 出主意 / 按框架补全）+ 内容 + 什么时候用
-  var GEM_HOW = { chk: ['查漏', '逐项检查做到没有：✓ 有了 · ! 偏少 · ✕ 漏了'], idea: ['出主意', '给两到四个能让回答更好的点子'], form: ['按框架补全', '按你写的【栏目】逐项补全细节，交给 Amor 照着写'] };
+  // 4.9.2 分类：默认三类（查漏 / 出主意 / 完善信息）+ 小宇自己加的；每类有「写成什么样」：清单 / 要点 / 按栏目
+  var GEM_STYLES = { check: ['清单', '逐项打勾，适合检查', '✓ 外貌｜写到了\n✕ 环境｜没写雨'], points: ['一条条要点', '适合建议、吐槽、点子', '- “泪水模糊了双眼”太俗，换成她数错零钱'], fields: ['按栏目填写', '适合角色卡、世界观这类框架', '【姓名】苏晚\n【外貌】齐肩短发…'] };
+  var GEM_COLORS = ['#7fb48a', '#d9a857', '#8fa8d8', '#d07a9a', '#b58ad9', '#9c9a92'];
+  var GEM_CATS0 = [
+    { id: 'chk', name: '查漏', desc: '逐项检查做到没有：✓ 有了 · ! 偏少 · ✕ 漏了', style: 'check', color: '#7fb48a', builtin: true },
+    { id: 'idea', name: '出主意', desc: '给两到四个能让回答更好的点子，要具体、拿来就能用', style: 'points', color: '#d9a857', builtin: true },
+    { id: 'form', name: '完善信息', desc: '按你写的【栏目】逐项补全细节，交给 Amor 照着写', style: 'fields', color: '#8fa8d8', builtin: true }
+  ];
+  function gemCats() { return asst.gem.cats || GEM_CATS0; }
+  function gemCat(id) { var cs = gemCats(); return cs.filter(function (c) { return c.id === id; })[0] || cs[0]; }
+  function gemStyle(id) { return gemCat(id).style; }
+  function gemBadge(id) { var c = gemCat(id); return '<span class="g-how" style="--hc:' + c.color + '">' + esc(c.name) + '</span>'; }
   var GEM_WHEN = { always: ['每次', '每次都用'], auto: ['自己判断', 'Amara 看了问题，觉得用得上才用'], manual: ['我点了才用', '只有你在输入框点了它才用'] };
   var GEM_DEFAULT = [
     { id: 'need', title: '要求有没有漏', how: 'chk', when: 'always', body: '把要求逐项列成清单，对照她的思路打勾，特别留意注意力偏科：有的要素想了很多，有的被忽略' },
@@ -9352,13 +9872,14 @@
     if (g.model == null) g.model = '';
     if (g.think == null) g.think = 2;
     if (g.check == null) g.check = true;
+    if (!g.cats) g.cats = GEM_CATS0.map(function (c) { var o = {}; for (var k in c) o[k] = c[k]; return o; });
     if (!g.cards) {   // 4.9 的审查维度 → 卡片，开关状态照搬
       g.cards = gemDefaults();
       if (g.dims) g.cards.forEach(function (c) { if (g.dims[c.id] != null) c.on = !!g.dims[c.id]; });
     }
   })(asst.gem);
   var GEM_NAME = 'Amara';
-  var gemui = { pick: false, edit: null, del: '', reset: false };
+  var gemui = { pick: false, edit: null, del: '', reset: false, cat: 'chk', catEdit: null, drafts: {} };
   // Amara 用哪个模型：设置里选的（任何一家供应商），没选或那家停用了 → 和 Amor 用同一个
   function resolveGem() {
     var m = asst.gem.model || '', i = m.indexOf('::');
@@ -9390,12 +9911,16 @@
       '先看' + name + '这次要什么，再从下面的卡片里挑用得上的。标「必须用」的一定要用；标「你来判断」的，只有明显有帮助才用；用不上的就跳过，不要硬凑。\n' +
       cards.map(function (c) {
         var tag = pk.indexOf(c.id) >= 0 ? '必须用，' + name + '点名要的' : c.when === 'always' ? '必须用' : '你来判断';
-        return (++n) + '. 【' + c.title + '】（' + GEM_HOW[c.how || 'chk'][0] + ' · ' + tag + '）' + (c.how === 'form' ? '框架：\n' + c.body : c.body);
+        var ct = gemCat(c.how);
+        return (++n) + '. 【' + c.title + '】（' + ct.name + ' · ' + tag + '）' + (ct.style === 'fields' ? '框架：\n' + c.body : c.body);
       }).join('\n') + '\n\n' +
-      '每张用到的卡片写一段，格式：\n【卡片：标题】\n' +
-      '- 查漏：每行一项，「✓ 要素｜一句话说明」「! 要素｜缺在哪」「✕ 要素｜缺在哪」；发现的问题也可以写成「- 问题」。\n' +
-      '- 出主意：每行一个「- 点子」，2–4 个，要具体、拿来就能用。\n' +
-      '- 按框架补全：照卡片里的【栏目】逐项写「【栏目】内容」，内容具体、有细节，和' + name + '给的设定一致，一个栏目都不要漏。\n' +
+      '分类说明：\n' + gemCats().filter(function (ct) { return cards.some(function (c) { return gemCat(c.how) === ct; }); }).map(function (ct) {
+        return '「' + ct.name + '」' + ct.desc + '（写法：' + { check: '清单', points: '一条条要点', fields: '按栏目填写' }[ct.style] + '）';
+      }).join('\n') + '\n\n' +
+      '每张用到的卡片写一段，格式：\n【卡片：标题】\n然后按它所属分类的写法：\n' +
+      '- 清单：每行一项，「✓ 要素｜一句话说明」「! 要素｜缺在哪」「✕ 要素｜缺在哪」；发现的问题也可以写成「- 问题」。\n' +
+      '- 一条条要点：每行一个「- 」开头，2–4 条，要具体、拿来就能用；语气照分类说明。\n' +
+      '- 按栏目填写：照卡片里的【栏目】逐项写「【栏目】内容」，内容具体、有细节，和' + name + '给的设定一致，一个栏目都不要漏。\n' +
       '最后写：\n【给' + nmA + '】一句话，她写正文时最该注意的事。\n\n不要开场白，不要写别的。查漏每条说明不超过 20 个字。';
   }
   function gemCut(s, n) { s = String(s || ''); return s.length > n ? s.slice(0, Math.floor(n * .3)) + '\n……（中间省略）……\n' + s.slice(-Math.floor(n * .7)) : s; }
@@ -9427,7 +9952,7 @@
       if (hb) { inBrief = true; out.brief = hb[1].trim(); sec = null; return; }
       if (inBrief) { out.brief += (out.brief ? ' ' : '') + s; return; }
       var hf = s.match(/^【([^】]{1,14})】\s*(.*)$/);
-      if (hf && (!hf[2] || /^(清单|要求清单|逻辑|角度|其他角度)$/.test(hf[1])) && !(sec && gemCardOf(sec.title) && gemCardOf(sec.title).how === 'form')) {
+      if (hf && (!hf[2] || /^(清单|要求清单|逻辑|角度|其他角度)$/.test(hf[1])) && !(sec && gemCardOf(sec.title) && gemStyle(gemCardOf(sec.title).how) === 'fields')) {
         newSec({ 清单: '要求清单', 要求清单: '要求清单', 角度: '其他角度' }[hf[1]] || hf[1]); return;
       }
       if (!sec) newSec('');
@@ -9464,7 +9989,7 @@
     h += '正文由你来写，用你自己的口吻；不要提到 ' + GEM_NAME + '、参谋、初稿这些内部过程，也不要说“根据补充”。\n\n你的' + (G.a1.draft ? '初稿' : '初稿思路') + '：\n' + (gemCut(G.a1.think, 5000) || '（空）');
     if (!G.solo) {
       h += '\n\n' + GEM_NAME + ' 的补充：\n' + (G.b.raw || '').trim();
-      var forms = gemParse(G.b.raw).secs.filter(function (x) { return x.how === 'form'; });
+      var forms = gemParse(G.b.raw).secs.filter(function (x) { return gemStyle(x.how) === 'fields'; });
       forms.forEach(function (x) {
         h += x.list ? '\n\n（「' + x.title + '」：正文里按这些【栏目】逐栏写出来，栏目名照用，每栏写具体。）'
                     : '\n\n（「' + x.title + '」：只当素材，把这些设定自然地写进正文，不要列栏目。）';
@@ -9589,7 +10114,7 @@
     }
     var h = '';
     rv.secs.forEach(function (x) {
-      h += '<div class="g-rv"><h5>' + esc(x.title || '补充') + '<span class="g-how h-' + x.how + '">' + GEM_HOW[x.how][0] + '</span></h5>';
+      h += '<div class="g-rv"><h5>' + esc(x.title || '补充') + gemBadge(x.how) + '</h5>';
       if (x.fields.length) h += '<div class="g-kv">' + x.fields.map(function (f) { return '<span>' + esc(f.k) + '</span><span>' + esc(f.v) + '</span>'; }).join('') + '</div>';
       if (x.items.length) h += '<div class="g-chk">' + x.items.map(function (it) {
         return '<span class="k"><i class="s-' + it.s + '">' + SI[it.s] + '</i>' + esc(it.k) + '</span><span class="n' + (it.s === 'miss' ? ' x' : '') + '">' + esc(it.n || (it.s === 'ok' ? '有了' : '')) + '</span>';
@@ -9669,8 +10194,8 @@
   }
   function gemCardHtml(c) {
     var del = gemui.del === c.id, off = c.on === false;
-    var peek = c.how === 'form' ? (c.body.match(/【[^】]+】/g) || []).join('') || c.body : c.body;
-    return '<div class="g-card' + (off ? ' off' : '') + (del ? ' del' : '') + '"><div class="tx"><b>' + esc(c.title) + '<span class="g-how h-' + c.how + '">' + GEM_HOW[c.how][0] + '</span>' +
+    var peek = gemStyle(c.how) === 'fields' ? (c.body.match(/【[^】]+】/g) || []).join('') || c.body : c.body;
+    return '<div class="g-card' + (off ? ' off' : '') + (del ? ' del' : '') + '"><div class="tx"><b>' + esc(c.title) + gemBadge(c.how) +
       (off ? '<span class="g-tag">已停用</span>' : '') + (c.custom ? '<span class="g-tag mine">自己加的</span>' : '') + '</b>' +
       '<p>' + esc(del ? '再点一次删除，删了就找不回来了' : peek) + '</p>' + (del ? '' : '<small>什么时候用：<i>' + GEM_WHEN[c.when || 'auto'][0] + '</i></small>') + '</div>' +
       '<div class="acts">' + (del ? '<button type="button" class="g-cancel" data-gdel="">取消</button><button type="button" class="g-delok" data-gdelok="' + esc(c.id) + '">' + icon('trash', 16) + '删除</button>'
@@ -9681,17 +10206,18 @@
     var segB = function (key, opts, cur) { return '<div class="seg" role="group">' + opts.map(function (o) { return '<button type="button" data-' + key + '="' + o[0] + '" aria-pressed="' + (cur === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div>'; };
     var ok = !!(e.title || '').trim() && !!(e.body || '').trim();
     return '<div class="g-sheet-wrap"><button type="button" class="g-scrim" data-geclose="1" aria-label="关闭"></button><section class="g-sheet" role="dialog" aria-label="' + (e.id ? '编辑卡片' : '新增卡片') + '">' +
-      '<div class="pop-grip"><span></span></div><div class="g-sh"><button type="button" class="icon-btn" data-geclose="1" aria-label="关闭">' + icon('x', 22) + '</button><h3>' + (e.id ? '编辑卡片' : '新增卡片') + '</h3>' +
+      '<div class="pop-grip"><span></span></div><div class="g-sh"><span></span><h3>' + (e.id ? '编辑卡片' : '新增卡片') + '</h3>' +
       '<button type="button" class="g-save" id="ge-save" data-gesave="1"' + (ok ? '' : ' disabled') + '>保存</button></div>' +
       '<div class="field"><label for="ge-title">标题</label><input id="ge-title" class="txt-in" type="text" maxlength="16" value="' + esc(e.title || '') + '" placeholder="例如：环境描写" autocomplete="off"><small class="g-cnt" id="ge-tc">' + (e.title || '').length + '/16</small></div>' +
-      '<div class="field"><span class="lbl">怎么帮</span>' + segB('ghow', [['chk', '查漏'], ['idea', '出主意'], ['form', '按框架补全']], e.how) + '<p class="hint">' + GEM_HOW[e.how][1] + '。</p></div>' +
-      '<div class="field"><label for="ge-body">' + (e.how === 'form' ? '内容 · 框架（每行一个【栏目】，后面可以写要求）' : '内容 · 告诉 Amara 查什么、怎么判断') + '</label>' +
-        '<textarea id="ge-body" class="txt-area g-body' + (e.how === 'form' ? ' mono' : '') + '" maxlength="400" placeholder="' + (e.how === 'form' ? '【姓名】\n【外貌】要具体到颜色和质地\n【性格】' : e.how === 'idea' ? '例如：给 2–3 个能让画面更具体的细节' : '例如：写景的段落有没有写到光线、声音、气味和天气；只写了人物、没写场景就打 ✕') + '">' + esc(e.body || '') + '</textarea>' +
+      '<div class="field"><span class="lbl">分类</span><div class="g-cchips">' + gemCats().map(function (ct) { return '<button type="button" class="g-cchip" data-ghow="' + esc(ct.id) + '" aria-pressed="' + (gemCat(e.how) === ct) + '" style="--hc:' + ct.color + '"><i></i>' + esc(ct.name) + '</button>'; }).join('') + '</div>' +
+        '<p class="hint">换分类，' + GEM_NAME + ' 写这张卡时就换成那一类的写法。</p></div>' +
+      '<div class="field"><label for="ge-body">' + (gemStyle(e.how) === 'fields' ? '内容 · 框架（每行一个【栏目】，后面可以写要求）' : '内容 · 告诉 Amara 查什么、怎么判断') + '</label>' +
+        '<textarea id="ge-body" class="txt-area g-body' + (gemStyle(e.how) === 'fields' ? ' mono' : '') + '" maxlength="400" placeholder="' + (gemStyle(e.how) === 'fields' ? '【姓名】\n【外貌】要具体到颜色和质地\n【性格】' : e.how === 'idea' ? '例如：给 2–3 个能让画面更具体的细节' : '例如：写景的段落有没有写到光线、声音、气味和天气；只写了人物、没写场景就打 ✕') + '">' + esc(e.body || '') + '</textarea>' +
         '<small class="g-cnt" id="ge-bc">' + (e.body || '').length + '/400</small>' +
-        (e.how === 'form' ? '<button type="button" class="chip g-addf" data-gaddf="1">＋ 加一个【栏目】</button>' : '') + '</div>' +
+        (gemStyle(e.how) === 'fields' ? '<button type="button" class="chip g-addf" data-gaddf="1">＋ 加一个【栏目】</button>' : '') + '</div>' +
       (!e.id ? '<div class="g-eg">' + GEM_EG.map(function (x, i) { return '<button type="button" class="chip" data-geg="' + i + '">' + x[0] + '</button>'; }).join('') + '</div>' : '') +
       '<div class="field"><span class="lbl">什么时候用</span>' + segB('gwhen', [['always', '每次'], ['auto', '自己判断'], ['manual', '我点了才用']], e.when) + '<p class="hint">' + GEM_WHEN[e.when][1] + '。</p></div>' +
-      (e.how === 'form' ? sw('list', e.list !== false, '正文里按框架逐栏写出来', 'data-gesw') + '<p class="hint" style="margin:-4px 0 10px">关掉：' + esc(asst.name || 'Amor') + ' 只拿框架当素材，写成连贯的文字。</p>' : '') +
+      (gemStyle(e.how) === 'fields' ? sw('list', e.list !== false, '正文里按框架逐栏写出来', 'data-gesw') + '<p class="hint" style="margin:-4px 0 10px">关掉：' + esc(asst.name || 'Amor') + ' 只拿框架当素材，写成连贯的文字。</p>' : '') +
       sw('on', e.on !== false, '启用这张卡片', 'data-gesw') +
       (e.id ? '<button type="button" class="g-delrow" data-gdel="' + esc(e.id) + '" data-gfromsheet="1">' + icon('trash', 18) + '删除这张卡片</button>' : '') +
       '</section></div>';
@@ -9721,13 +10247,133 @@
           '<button type="button" class="btn" data-ui="providers" style="align-self:flex-start">管理模型供应商</button></div>' : '') +
         '<div class="field"><span class="lbl">' + GEM_NAME + ' 的思考深度</span>' + segB('gthink', THINK_LABELS.map(function (t, i) { return [i, t]; }), g.think) + '</div>' +
       '</div>' +
-      '<div class="panel"><div class="g-ph"><h2>' + GEM_NAME + ' 怎么帮忙 <em>Cards</em></h2><button type="button" class="icon-btn g-add" data-gedit="+" aria-label="新增卡片">' + icon('plus', 20) + '</button></div>' +
-        '<div class="g-cards">' + (g.cards.length ? g.cards.map(gemCardHtml).join('') : '<p class="empty">还没有卡片。点右上角 ＋ 加一张。</p>') + '</div>' +
-        '<p class="hint">每次 ' + GEM_NAME + ' 先看一眼你的问题，从这些卡片里挑用得上的。点 ✎ 改标题和内容，＋ 加一张自己的；在聊天输入框点双星按钮，可以指定这次用哪张。</p>' +
+      '<div class="panel"><div class="g-ph"><h2>' + GEM_NAME + ' 怎么帮忙 <em>Cards</em></h2><button type="button" class="icon-btn g-add" data-gedit="+" aria-label="在这一类里新增卡片">' + icon('plus', 20) + '</button></div>' +
+        gemTabsHtml() +
+        (function () { var ct = gemCat(gemui.cat), list = g.cards.filter(function (c) { return gemCat(c.how) === ct; });
+          return '<div class="g-catbar"><span><b style="color:' + ct.color + '">' + esc(ct.name) + '</b> · ' + esc(ct.desc) + '</span><button type="button" class="g-catedit" data-gcatedit="' + esc(ct.id) + '">' + icon('pencil', 15) + '编辑分类</button></div>' +
+            '<div class="g-cards">' + (list.length ? list.map(gemCardHtml).join('') : '<p class="empty">这一类还没有卡片。点右上角 ＋ 加一张。</p>') + '</div>'; })() +
+        '<p class="hint">点标签切换分类，长按标签可以左右拖动排序。每次 ' + GEM_NAME + ' 先看一眼你的问题，从卡片里挑用得上的；在聊天输入框点双星按钮，可以指定这次用哪张。</p>' +
         '<button type="button" class="g-reset" data-greset="1">' + (gemui.reset ? '再点一次，恢复默认卡片（自己加的会删掉）' : '恢复默认') + '</button>' +
         sw('check', g.check, '写完再终检', 'data-gsw') +
         '<p class="hint" style="margin:-4px 0 10px">正文写完后，' + GEM_NAME + ' 很快对照「查漏」卡片的清单看一遍；漏了会在回答下面提示「补写」，点了才补。</p>' +
-      '</div></section>' + gemSheet();
+      '</div></section>' + gemSheet() + gemCatSheet();
+  }
+  // 关纸片：写了一半的留作草稿，下次再打开还在
+  function gemCloseSheet(which) {
+    if (which === 'cat') { var c = gemui.catEdit; if (c && (c.name || c.desc) && !c.builtin) gemui.drafts['cat:' + (c.id || '+')] = c; else if (c && c.id) gemui.drafts['cat:' + c.id] = c; gemui.catEdit = null; }
+    else { var e = gemui.edit; if (e && (e.title || e.body)) gemui.drafts[e.id || '+'] = e; gemui.edit = null; }
+    keepScroll();
+  }
+  // 长按分类标签 → 左右拖动排序
+  function gemBindTabs() {
+    var box = document.getElementById('g-ctabs'); if (!box || box._b) return; box._b = 1;
+    var on_ = box.querySelector('.g-ct.on'); if (on_) { var bl = on_.offsetLeft - box.offsetLeft, br = bl + on_.offsetWidth; if (br > box.scrollLeft + box.clientWidth - 40) box.scrollLeft = br - box.clientWidth + 48; else if (bl < box.scrollLeft) box.scrollLeft = Math.max(0, bl - 8); }
+    var st = null;
+    function tabs() { return [].slice.call(box.querySelectorAll('.g-ct[data-gcat]')); }
+    box.addEventListener('pointerdown', function (e) {
+      var t = e.target.closest('.g-ct[data-gcat]'); if (!t) return;
+      st = { t: t, id: t.getAttribute('data-gcat'), x: e.clientX, y: e.clientY, on: false, pid: e.pointerId };
+      st.timer = setTimeout(function () {
+        if (!st) return; st.on = true; st.t.classList.add('drag'); box.classList.add('sorting');
+        st.base = st.t.getBoundingClientRect().left + st.t.offsetWidth / 2 - st.x;
+        if (navigator.vibrate) try { navigator.vibrate(10); } catch (x) {}
+      }, 420);
+    });
+    box.addEventListener('pointermove', function (e) {
+      if (!st) return;
+      if (!st.on) { if (Math.abs(e.clientX - st.x) > 8 || Math.abs(e.clientY - st.y) > 8) { clearTimeout(st.timer); st = null; } return; }
+      e.preventDefault();
+      var cx = e.clientX + st.base, ts = tabs(), i = ts.indexOf(st.t);
+      st.t.style.transform = 'translateX(' + (e.clientX - st.x) + 'px) scale(1.08)';
+      var cats = asst.gem.cats, j = -1;
+      ts.forEach(function (o, k) { if (o === st.t) return; var r = o.getBoundingClientRect(), mid = r.left + r.width / 2; if ((k > i && cx > mid) || (k < i && cx < mid)) j = k; });
+      if (j >= 0) {
+        var ci = cats.findIndex(function (c) { return c.id === st.id; }), cj = cats.findIndex(function (c) { return c.id === ts[j].getAttribute('data-gcat'); });
+        var mv = cats.splice(ci, 1)[0]; cats.splice(cj, 0, mv);
+        var ref = j > i ? ts[j].nextSibling : ts[j]; box.insertBefore(st.t, ref);
+        var r2 = st.t.getBoundingClientRect(); st.x = e.clientX; st.base = r2.left + r2.width / 2 - e.clientX; st.t.style.transform = 'scale(1.08)';
+      }
+    });
+    function end() {
+      if (!st) return; clearTimeout(st.timer); var was = st.on, t = st.t; st = null;
+      if (!was) return;
+      t.classList.remove('drag'); t.style.transform = ''; box.classList.remove('sorting'); box._swallow = Date.now();
+      saveAsst(); setTimeout(keepScroll, 120);
+    }
+    box.addEventListener('pointerup', end); box.addEventListener('pointercancel', end);
+    box.addEventListener('touchmove', function (e) { if (st && st.on) e.preventDefault(); }, { passive: false });   // 拖的时候别让标签栏横着滚
+    box.addEventListener('click', function (e) { if (box._swallow && Date.now() - box._swallow < 400) { e.stopPropagation(); e.preventDefault(); } }, true);
+    box.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  }
+  // 底部纸片往下拉就关（没有 ×）：按住顶上那一截或内容滚到顶时往下拉；键盘开着时先收键盘
+  function sheetDrag(el, close) {
+    if (!el || el._sd) return; el._sd = 1;
+    var y0 = null, t0 = 0, dy = 0, on = false, scrim = el.parentNode && el.parentNode.querySelector('.g-scrim, .ne-scrim');
+    el.addEventListener('touchstart', function (e) {
+      if (e.touches.length !== 1) return;
+      var t = e.target, head = t.closest('.pop-grip, .g-sh, .ne-top');
+      var ta = t.closest('textarea');
+      if (!head && (el.scrollTop > 2 || (ta && ta.scrollTop > 2) || (el.querySelector('.ne-scroll') && el.querySelector('.ne-scroll').scrollTop > 2 && !head))) return;
+      y0 = e.touches[0].clientY; t0 = Date.now(); dy = 0; on = false;
+    }, { passive: true });
+    el.addEventListener('touchmove', function (e) {
+      if (y0 == null) return;
+      var d = e.touches[0].clientY - y0;
+      if (!on) {
+        if (Math.abs(d) < 8) return;
+        if (d < 0) { y0 = null; return; }
+        var ae = document.activeElement;
+        if (ae && /^(INPUT|TEXTAREA)$/.test(ae.tagName) && el.contains(ae) && innerHeight < (screen.height || innerHeight) * .8) { ae.blur(); y0 = null; return; }
+        on = true; el.classList.add('dragging');
+      }
+      dy = Math.max(0, d); el.style.transform = 'translateY(' + dy + 'px)';
+      if (scrim) scrim.style.opacity = String(Math.max(0, 1 - dy / (el.offsetHeight || 400)));
+    }, { passive: true });
+    function end() {
+      if (y0 == null) return; var was = on; y0 = null; on = false; if (!was) return;
+      el.classList.remove('dragging');
+      var v = dy / Math.max(1, Date.now() - t0);
+      if (dy > (el.offsetHeight || 400) * .25 || (v > .5 && dy > 40)) {
+        el.style.transition = 'transform .26s cubic-bezier(.3, .7, .4, 1)'; el.style.transform = 'translateY(105%)';
+        if (scrim) { scrim.style.transition = 'opacity .26s'; scrim.style.opacity = '0'; }
+        setTimeout(close, 240);
+      } else {
+        el.style.transition = 'transform .45s cubic-bezier(.2, 1.45, .35, 1)'; el.style.transform = '';
+        if (scrim) { scrim.style.transition = 'opacity .3s'; scrim.style.opacity = ''; }
+        setTimeout(function () { el.style.transition = ''; }, 460);
+      }
+    }
+    el.addEventListener('touchend', end, { passive: true }); el.addEventListener('touchcancel', end, { passive: true });
+  }
+  function gemAfterRender() {
+    if (state.sub !== 'gemini' || typeof gemui === 'undefined') return;
+    gemBindTabs();
+    var sh = document.querySelector('#main .g-sheet'); if (sh) sheetDrag(sh, function () { gemCloseSheet(gemui.catEdit ? 'cat' : 'card'); });
+  }
+  function gemTabsHtml() {
+    var g = asst.gem;
+    if (!gemCats().some(function (c) { return c.id === gemui.cat; })) gemui.cat = gemCats()[0].id;
+    return '<div class="g-ctabs" id="g-ctabs">' + gemCats().map(function (ct) {
+      var n = g.cards.filter(function (c) { return gemCat(c.how) === ct; }).length;
+      return '<button type="button" class="g-ct' + (ct.id === gemui.cat ? ' on' : '') + '" data-gcat="' + esc(ct.id) + '" style="--hc:' + ct.color + '"><i></i>' + esc(ct.name) + '<small>' + n + '</small></button>';
+    }).join('') + '<button type="button" class="g-ct add" data-gcatedit="+" aria-label="新增分类">' + icon('plus', 16) + '</button></div>';
+  }
+  function gemCatSheet() {
+    var e = gemui.catEdit; if (!e) return '';
+    var n = e.id ? asst.gem.cards.filter(function (c) { return c.how === e.id; }).length : 0, ok = !!(e.name || '').trim() && !!(e.desc || '').trim();
+    return '<div class="g-sheet-wrap"><button type="button" class="g-scrim" data-gcatclose="1" aria-label="关闭"></button><section class="g-sheet" role="dialog" aria-label="' + (e.id ? '编辑分类' : '新增分类') + '">' +
+      '<div class="pop-grip"><span></span></div><div class="g-sh"><span></span><h3>' + (e.id ? '编辑分类' : '新增分类') + '</h3>' +
+      '<button type="button" class="g-save" id="gc-save" data-gcsave="1"' + (ok ? '' : ' disabled') + '>保存</button></div>' +
+      '<div class="field"><label for="gc-name">名称</label><input id="gc-name" class="txt-in" type="text" maxlength="6" value="' + esc(e.name || '') + '" placeholder="例如：吐槽" autocomplete="off"' + (e.builtin ? ' disabled' : '') + '>' +
+        (e.builtin ? '<small class="hint">默认的分类不能改名，只能改说明和颜色。</small>' : '') + '</div>' +
+      '<div class="field"><label for="gc-desc">这一类怎么帮 · 告诉 ' + GEM_NAME + ' 用什么态度、怎么说</label><textarea id="gc-desc" class="txt-area" maxlength="120" style="min-height:90px" placeholder="例如：用毒舌但善意的口吻挑毛病，每条一句话，说完给一个改法。">' + esc(e.desc || '') + '</textarea></div>' +
+      '<div class="field"><span class="lbl">' + GEM_NAME + ' 写成什么样</span><div class="g-styles">' + Object.keys(GEM_STYLES).map(function (k) {
+        var on = e.style === k, dis = e.builtin && !on;
+        return '<button type="button" class="g-style' + (on ? ' on' : '') + '" data-gcstyle="' + k + '"' + (dis ? ' disabled' : '') + '><b>' + GEM_STYLES[k][0] + '</b><small>' + GEM_STYLES[k][1] + '</small><pre>' + esc(GEM_STYLES[k][2]) + '</pre>' + (on ? '<span class="ck">' + icon('tick', 20) + '</span>' : '') + '</button>';
+      }).join('') + '</div></div>' +
+      '<div class="field"><span class="lbl">颜色</span><div class="g-colors">' + GEM_COLORS.map(function (c) { return '<button type="button" data-gccolor="' + c + '" aria-pressed="' + (e.color === c) + '" style="background:' + c + '" aria-label="颜色"></button>'; }).join('') + '</div></div>' +
+      (e.id && !e.builtin ? '<button type="button" class="g-delrow" data-gcdel="1">' + icon('trash', 18) + (e.del ? '再点一次删除' + (n ? '（里面 ' + n + ' 张卡片一起删）' : '') : '删除这个分类') + '</button>' : '') +
+      '</section></div>';
   }
   function sendChat(text, opt) {
     text = (text || '').trim();
@@ -9771,7 +10417,9 @@
     if (useRecall) system += recallRule();
     if (useRemind) system += remindRule();
     if (!systemNoTools) systemNoTools = system;
-    system += calRule();
+    system += calRule() + noteRule();
+    if (chat.noteCtx) { var nc_ = noteById(chat.noteCtx); chat.noteCtx = '';
+      if (nc_) { var ntx_ = '\n\n（' + (name || '用户') + '想聊的是 TA 的这篇笔记，已经替你打开了）\n「' + noteTitleOf(nc_) + '」\n' + nc_.body.slice(0, 5000); system += ntx_; if (systemNoTools) systemNoTools += ntx_; } }
     if (useWeb) system += webRule();
     if (useFetch) system += fetchRule();
     if (asst.weather && v) system += '\n下面是' + v.m.zh + '的中国气象局天气数据，聊到天气、穿衣、出行时参考，不要编造数据里没有的数字：\n' + weatherContext(v);
@@ -9816,8 +10464,8 @@
       if (gemOn) G = chat.gem = { stage: 1, t0: Date.now(), a1: { think: '', ms: 0 }, b: { raw: '', ms: 0 }, rmB: resolveGem(), pick: gemPick };
       if (chat.open) renderSheet();
       function mkOpt(stage, sysNT) { return {
-        tools: (useRecall ? RECALL_TOOLS : []).concat(useRemind ? REMIND_TOOLS : []).concat(CAL_TOOLS).concat(useWeb ? WEB_TOOLS : []).concat(useFetch ? FETCH_TOOLS : []),
-        runTool: function (n, a) { return runWebTool(n, a) || runFetchTool(n, a) || runCalTool(n, a) || runRemindTool(n, a, conv) || runRecallTool(n, a, conv.id); },
+        tools: (useRecall ? RECALL_TOOLS : []).concat(useRemind ? REMIND_TOOLS : []).concat(CAL_TOOLS).concat(NOTE_TOOLS).concat(useWeb ? WEB_TOOLS : []).concat(useFetch ? FETCH_TOOLS : []),
+        runTool: function (n, a) { return runWebTool(n, a) || runFetchTool(n, a) || runCalTool(n, a) || runNoteTool(n, a) || runRemindTool(n, a, conv) || runRecallTool(n, a, conv.id); },
         onTool: function (log) { if (log.pushed) { chat.phase = 'recall'; if (chat.open) renderSheet(); return; } if (stage) log.st = stage; log.tpos = (chat.partialThink || '').length; (chat.recall = chat.recall || []).push(log); chat.phase = 'recall'; if (chat.open) renderSheet(); },
         onNoTools: stage === 3 ? function () {} : function () { var pre_ = (chat.recall || []).filter(function (l) { return l.tool === 'fetch'; }); chat.recall = pre_.concat(rclFb.hits.length ? [{ tool: 'auto', q: text, hits: rclFb.hits }] : []); if (!chat.recall.length) chat.recall = null; },
         systemNoTools: sysNT || systemNoTools,
@@ -9889,7 +10537,8 @@
       if (chat.mmenu || chat.editIdx != null) d += 1;
     }
     if (calui.sheet) d += 1;
-    if (state.sub === 'gemini' && gemui.edit) d += 1;
+    if (state.sub === 'gemini' && (gemui.edit || gemui.catEdit)) d += 1;
+    if (state.tab === 'plan' && noteui.ed) d += noteui.amor ? 2 : 1;
     var back = document.querySelector('#main .sub-head [data-ui^="back-"]');
     if (back) d += /^back-(providers|voice)$/.test(back.getAttribute('data-ui')) ? 2 : 1;
     if (state.tab !== 'today') d += 1;
@@ -9906,7 +10555,8 @@
       closeChat(); return;
     }
     if (calui.sheet) { calui.sheet = null; keepScroll(); return; }
-    if (state.sub === 'gemini' && gemui.edit) { gemui.edit = null; keepScroll(); return; }
+    if (state.sub === 'gemini' && (gemui.edit || gemui.catEdit)) { gemCloseSheet(gemui.catEdit ? 'cat' : 'card'); return; }
+    if (state.tab === 'plan' && noteui.ed) { if (noteui.amor) { noteui.amor = null; keepScroll(); } else noteClose(); return; }
     var back = document.querySelector('#main .sub-head [data-ui^="back-"]');
     if (back) { back.click(); return; }
     if (state.tab !== 'today') { var t = document.querySelector('[data-tab="today"]'); if (t) t.click(); }

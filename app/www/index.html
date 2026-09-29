@@ -1960,6 +1960,53 @@
   .g-row svg { color: var(--muted); flex: none; }
   .g-dims { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
   .g-dims .chip[aria-pressed="true"], .model-pick .chip[data-gmodel][aria-pressed="true"] { border-style: solid; border-color: color-mix(in srgb, var(--gb) 60%, transparent); color: var(--text); background: color-mix(in srgb, var(--gb) 12%, transparent); }
+
+  /* ---------- 4.9.1 Amara 的卡片 ---------- */
+  .cx .gbtn { width: 40px; height: 40px; border-radius: 20px; border: 1px solid var(--line); background: transparent; display: flex; align-items: center; justify-content: center; flex: none; padding: 0; }
+  .cx .gbtn.on { border-color: color-mix(in srgb, var(--gb) 55%, var(--line)); background: color-mix(in srgb, var(--gb) 13%, transparent); }
+  .gpicks { display: flex; flex-wrap: wrap; gap: 6px; padding: 2px 2px 6px; }
+  .gpk { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: var(--gb); background: color-mix(in srgb, var(--gb) 12%, transparent); border: 1px solid color-mix(in srgb, var(--gb) 40%, transparent); border-radius: 14px; padding: 3px 4px 3px 8px; }
+  .gpk .gstars { width: 15px; height: 15px; }
+  .gpk button { border: 0; background: none; color: inherit; padding: 2px; display: flex; }
+  .g-how { display: inline-block; font-size: 11px; font-weight: 500; padding: 0 7px; border-radius: 7px; margin-left: 7px; vertical-align: 2px; line-height: 1.6; }
+  .g-how.h-chk { color: #6fa57b; background: rgba(127, 180, 138, .14); } .g-how.h-idea { color: #c9953f; background: rgba(217, 168, 87, .14); } .g-how.h-form { color: var(--gb); background: color-mix(in srgb, var(--gb) 15%, transparent); }
+  .g-ph { display: flex; align-items: center; justify-content: space-between; }
+  .g-ph h2 { margin-bottom: 0 !important; }
+  .g-add { background: color-mix(in srgb, var(--surface) 70%, var(--text) 8%); border-radius: 18px; }
+  .g-cards { display: flex; flex-direction: column; gap: 9px; margin: 12px 0 4px; }
+  .g-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px; align-items: center; border-radius: 16px; padding: 12px 6px 12px 14px; background: color-mix(in srgb, var(--surface) 80%, var(--text) 5%); transition: background .25s; }
+  .g-card b { display: block; font-size: 15px; font-weight: 500; color: var(--text); }
+  .g-card p { margin: 3px 0 0; font-size: 12.5px; line-height: 1.55; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; white-space: normal; }
+  .g-card small { display: block; font-size: 11.5px; color: var(--muted); margin-top: 5px; } .g-card small i { font-style: normal; color: var(--text); opacity: .75; }
+  .g-card.off .tx { opacity: .45; }
+  .g-card .acts { display: flex; align-items: center; gap: 2px; }
+  .g-card .acts .icon-btn { color: var(--muted); }
+  .g-tag { display: inline-block; font-size: 11px; font-weight: 400; padding: 0 6px; border-radius: 6px; border: 1px solid var(--line); color: var(--muted); margin-left: 6px; vertical-align: 2px; line-height: 1.6; }
+  .g-tag.mine { color: var(--gb); border-color: color-mix(in srgb, var(--gb) 40%, transparent); }
+  .g-card.del { background: color-mix(in srgb, #d0645a 13%, var(--surface)); }
+  .g-cancel { border: 0; background: none; color: var(--muted); font: inherit; font-size: 14px; padding: 8px 8px; }
+  .g-delok { border: 0; border-radius: 12px; background: #d0645a; color: #fff; font: inherit; font-size: 13.5px; padding: 8px 12px; display: inline-flex; align-items: center; gap: 4px; }
+  .g-reset { border: 0; background: none; padding: 4px 2px 10px; font: inherit; font-size: 13px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+  .g-sheet-wrap { position: fixed; inset: 0; z-index: 30; }
+  .g-scrim { position: absolute; inset: 0; border: 0; background: rgba(0, 0, 0, .45); padding: 0; }
+  .g-sheet { position: absolute; left: 0; right: 0; bottom: 0; margin: 0 auto; max-width: 640px; max-height: 90%; overflow-y: auto; overscroll-behavior: contain; background: var(--surface);
+    border-radius: 26px 26px 0 0; padding: 4px 18px calc(22px + env(safe-area-inset-bottom, 0px)); box-shadow: 0 -14px 40px rgba(0, 0, 0, .45); }
+  @media (prefers-reduced-motion: no-preference) { .g-sheet { animation: popUp .42s var(--spring, cubic-bezier(.22, .9, .24, 1)) both; } }
+  .g-sh { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; margin: 0 -6px 8px; }
+  .g-sh h3 { margin: 0; text-align: center; font-size: 17px; font-weight: 600; }
+  .g-save { border: 0; border-radius: 14px; background: var(--accent); color: var(--on-accent, #fff); font: inherit; font-size: 14px; font-weight: 600; padding: 7px 15px; }
+  .g-save:disabled { opacity: .35; }
+  .g-cnt { display: block; text-align: right; font-size: 11.5px; color: var(--muted); margin-top: 4px; }
+  .g-body { min-height: 150px; }
+  .g-body.mono { font-size: 14px; line-height: 1.8; }
+  .g-addf { margin-top: 6px; align-self: flex-start; }
+  .g-eg { display: flex; flex-wrap: wrap; gap: 7px; margin: -4px 0 12px; }
+  .g-eg .chip { border-style: dashed; }
+  .g-delrow { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 12px; padding: 11px; border: 0; border-radius: 14px; font: inherit; font-size: 14.5px;
+    color: #d0645a; background: color-mix(in srgb, #d0645a 10%, transparent); }
+  .g-kv { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 5px 12px; font-size: 13px; line-height: 1.6; }
+  .g-kv span:nth-child(odd) { color: var(--muted); white-space: nowrap; } .g-kv span:nth-child(even) { color: var(--text); }
+  .g-rv h5 .g-how { margin-left: 6px; letter-spacing: 0; }
 </style>
 <script src="fonts/script-glyphs.js"></script>
 <script src="fonts/pinyin.js"></script>
@@ -7016,9 +7063,29 @@
     if (ds.gmode) { asst.gem.mode = ds.gmode; saveAsst(); if (chat.open) keepPopScroll(); else keepScroll(); return; }
     if (ds.gmodel != null) { asst.gem.model = ds.gmodel; gemui.pick = false; saveAsst(); keepScroll(); toast(GEM_NAME + (ds.gmodel ? ' 改用 ' + ds.gmodel.split('::')[1] : ' 和 ' + asst.name + ' 用同一个模型')); return; }
     if (ds.gthink != null) { asst.gem.think = +ds.gthink; saveAsst(); keepScroll(); return; }
-    if (ds.gdim) { asst.gem.dims[ds.gdim] = !asst.gem.dims[ds.gdim]; saveAsst(); keepScroll(); return; }
     if (ds.gsw) { asst.gem[ds.gsw] = !asst.gem[ds.gsw]; saveAsst(); keepScroll(); return; }
     if (ds.gtab) { var gt0 = ['all', 'a', 'b'].indexOf(chat.gemTab || 'all'), gt1 = ['all', 'a', 'b'].indexOf(ds.gtab); chat.gemTab = ds.gtab; chat.popAnim = gt1 > gt0 ? 'fwd' : gt1 < gt0 ? 'back' : ''; keepPopScroll(); return; }
+    if (ds.gpk != null) { if (!ds.gpk) chat.gemPick = []; else { var gp_ = (chat.gemPick = chat.gemPick || []), gi_ = gp_.indexOf(ds.gpk); if (gi_ >= 0) gp_.splice(gi_, 1); else gp_.push(ds.gpk); } keepPopScroll(); return; }
+    if (ds.gunpick) { chat.gemPick = (chat.gemPick || []).filter(function (x) { return x !== ds.gunpick; }); keepChatScroll(); return; }
+    if (ds.gedit) { var ce0 = ds.gedit === '+' ? null : (asst.gem.cards || []).filter(function (c) { return c.id === ds.gedit; })[0];
+      gemui.del = ''; gemui.edit = ce0 ? { id: ce0.id, title: ce0.title, how: ce0.how, body: ce0.body, when: ce0.when || 'auto', on: ce0.on !== false, list: ce0.list !== false } : { id: '', title: '', how: 'chk', body: '', when: 'auto', on: true, list: true };
+      keepScroll(); if (!ce0) setTimeout(function () { var ti = document.getElementById('ge-title'); if (ti) try { ti.focus({ preventScroll: true }); } catch (x) {} }, 350); return; }
+    if (ds.geclose) { gemui.edit = null; keepScroll(); return; }
+    if (ds.ghow) { if (gemui.edit) { gemui.edit.how = ds.ghow; keepScroll(); } return; }
+    if (ds.gwhen) { if (gemui.edit) { gemui.edit.when = ds.gwhen; keepScroll(); } return; }
+    if (ds.gesw) { if (gemui.edit) { gemui.edit[ds.gesw] = gemui.edit[ds.gesw] === false; keepScroll(); } return; }
+    if (ds.geg != null) { var eg_ = GEM_EG[+ds.geg]; if (eg_ && gemui.edit) { gemui.edit.title = eg_[0]; gemui.edit.how = eg_[1]; gemui.edit.body = eg_[2]; keepScroll(); } return; }
+    if (ds.gaddf) { if (gemui.edit) { gemui.edit.body = (gemui.edit.body || '').replace(/\s*$/, '') + ((gemui.edit.body || '').trim() ? '\n' : '') + '【】'; keepScroll();
+      setTimeout(function () { var tb = document.getElementById('ge-body'); if (tb) { var p_ = tb.value.length - 1; try { tb.focus({ preventScroll: true }); tb.setSelectionRange(p_, p_); } catch (x) {} } }, 60); } return; }
+    if (ds.gesave) { var ed = gemui.edit; if (!ed || !ed.title.trim() || !ed.body.trim()) return;
+      var card_ = { title: ed.title.trim().slice(0, 16), how: ed.how, body: ed.body.trim().slice(0, 400), when: ed.when, on: ed.on !== false, list: ed.list !== false };
+      if (ed.id) { var old_ = asst.gem.cards.filter(function (c) { return c.id === ed.id; })[0]; if (old_) for (var kk in card_) old_[kk] = card_[kk]; }
+      else { card_.id = 'c' + Date.now().toString(36); card_.custom = true; asst.gem.cards.push(card_); }
+      gemui.edit = null; saveAsst(); keepScroll(); toast(ed.id ? '已保存' : '已加上「' + card_.title + '」'); return; }
+    if (ds.gdel != null) { if (ds.gfromsheet) gemui.edit = null; gemui.del = ds.gdel; keepScroll(); return; }
+    if (ds.gdelok) { var dc_ = asst.gem.cards.filter(function (c) { return c.id === ds.gdelok; })[0]; asst.gem.cards = asst.gem.cards.filter(function (c) { return c.id !== ds.gdelok; }); gemui.del = ''; saveAsst(); keepScroll(); if (dc_) toast('已删除「' + dc_.title + '」'); return; }
+    if (ds.greset) { if (!gemui.reset) { gemui.reset = true; keepScroll(); setTimeout(function () { if (gemui.reset) { gemui.reset = false; if (state.sub === 'gemini') keepScroll(); } }, 4000); return; }
+      gemui.reset = false; asst.gem.cards = gemDefaults(); saveAsst(); keepScroll(); toast('已恢复默认卡片'); return; }
     if (ds.gemfix) { var gf_ = ds.gemfix.split(':'), gcv = chats.filter(function (c) { return c.id === gf_[0]; })[0], gm_ = gcv && gcv.msgs[+gf_[1]]; if (!gm_ || chat.busy) return;
       sendChat('刚才漏了：' + gemMisses(gm_.gem).map(function (z) { return z.k + (z.n ? '（' + z.n + '）' : ''); }).join('、') + '。帮我补上，已经写好的部分保持不变。'); return; }
     if (ds.fkind) { asst.font.kind = ds.fkind; saveAsst(); applyReplyFont(); keepScroll(); return; }
@@ -7084,6 +7151,12 @@
     if (ds.set) { state[ds.set] = ds.val; if (ds.set === 'theme') applyTheme(); save(); render(); return; }
   });
   document.addEventListener('input', function (e) {
+    if ((e.target.id === 'ge-title' || e.target.id === 'ge-body') && gemui.edit) {
+      gemui.edit[e.target.id === 'ge-title' ? 'title' : 'body'] = e.target.value;
+      var c1 = document.getElementById(e.target.id === 'ge-title' ? 'ge-tc' : 'ge-bc'); if (c1) c1.textContent = e.target.value.length + (e.target.id === 'ge-title' ? '/16' : '/400');
+      var sv = document.getElementById('ge-save'); if (sv) sv.disabled = !(gemui.edit.title.trim() && gemui.edit.body.trim());
+      return;
+    }
     if (e.target.id === 'city-q') { state.query = e.target.value; render({ focus: 'city-q' }); }
     if (e.target.id === 'name-in') { state.name = e.target.value; save(); render({ focus: 'name-in' }); }
     if (e.target.id === 'name-en') { state.nameEn = e.target.value; save(); return; }
@@ -8168,7 +8241,7 @@
     if (a === 'font') { state.sub = 'font'; render({ top: true, anim: 'fwd' }); return; }
     if (a === 'notify') { state.sub = 'notify'; ntui.test = ''; render({ top: true, anim: 'fwd' }); notifySync(true); setTimeout(function () { if (state.sub === 'notify') keepScroll(); }, 900); return; }
     if (a === 'memory') { state.sub = 'memory'; mui.edit = ''; mui.clear = false; render({ top: true, anim: 'fwd' }); return; }
-    if (a === 'gemini') { state.sub = 'gemini'; gemui.pick = false; render({ top: true, anim: 'fwd' }); return; }
+    if (a === 'gemini') { state.sub = 'gemini'; gemui.pick = false; gemui.edit = null; gemui.del = ''; render({ top: true, anim: 'fwd' }); return; }
     if (a === 'gpick') { gemui.pick = !gemui.pick; keepScroll(); return; }
     if (a === 'voiceapi') { state.sub = 'voiceapi'; vui.status = null; vui.pickModel = !vconf().model; vui.mq = ''; render({ top: true, anim: 'fwd' }); return; }
     if (a === 'voice' || a === 'back-voice') { state.sub = 'voice'; vui.pickModel = false; vui.status = null; render({ top: true, anim: a === 'voice' ? 'fwd' : 'back' });
@@ -8461,8 +8534,8 @@
             return '<div class="rm-chip' + (live && !past ? '' : ' done') + '">' + icon('bell', 15) + '<span><b>' + (past ? '已提醒' : live ? '已设提醒' : '已取消') + '</b>' + esc(remindLabel(l.at) + ' · ' + l.q) + '</span>' +
               (live && !past ? '<button type="button" data-rmcancel="' + l.id + '">取消</button>' : '') + '</div>';
           }).join('') +
-          (x.gem && gemMisses(x.gem).length ? '<div class="gem-chip">' + gemStars(false) + '<span><b>' + GEM_NAME + ' 终检</b>漏了 ' + esc(gemMisses(x.gem).map(function (z) { return z.k; }).join('、')) + '</span>' +
-            (last && !chat.busy ? '<button type="button" data-gemfix="' + sk_ + '">补写</button>' : '') + '</div>' : x.gem && last && gemChk.key === sk_ ? '<div class="gem-chip wait">' + gemStars(true) + '<span>' + GEM_NAME + ' 正在终检…</span></div>' : '') +
+          (x.gem && gemMisses(x.gem).length ? '<div class="gem-chip">' + icon('pencil', 15) + '<span><b>还漏了</b>' + esc(gemMisses(x.gem).map(function (z) { return z.k; }).join('、')) + '</span>' +
+            (last && !chat.busy ? '<button type="button" data-gemfix="' + sk_ + '">补写</button>' : '') + '</div>' : '') +
           (x.memNote && x.memNote.length ? '<button type="button" class="mem-chip' + (x.memFresh ? ' fresh' : '') + '" data-chat="memory" aria-label="记忆已更新，查看记忆">' + icon('memory', 15) +
             '<span><b>记忆已更新</b>' + esc(x.memNote.slice(0, 2).join('；') + (x.memNote.length > 2 ? ' 等 ' + x.memNote.length + ' 条' : '')) + '</span>' + icon('chev', 14) + '</button>' : '');
       }).join('');
@@ -8510,9 +8583,11 @@
         (chat.editIdx != null && msgs[chat.editIdx] ? '<div class="edit-strip">' + icon('pencil', 16) + '<span><b>编辑消息</b><small>' + esc(msgs[chat.editIdx].content.replace(/\s+/g, ' ').slice(0, 40)) + '</small></span>' +
           '<button type="button" class="icon-btn" data-medit="cancel" aria-label="取消编辑">' + icon('x', 18) + '</button></div>' : '') +
         '<div class="composer cx' + (chat.editIdx != null ? ' editing' : '') + '"><label for="chat-in" style="position:absolute;width:1px;height:1px;overflow:hidden">发消息给 ' + esc(asst.name) + '</label>' +
+          ((chat.gemPick || []).length ? '<div class="gpicks">' + chat.gemPick.map(function (id) { var c = (asst.gem.cards || []).filter(function (x) { return x.id === id; })[0]; return c ? '<span class="gpk">' + gemStars(false) + esc(c.title) + '<button type="button" data-gunpick="' + esc(id) + '" aria-label="不用 ' + esc(c.title) + '">' + icon('x', 13) + '</button></span>' : ''; }).join('') + '</div>' : '') +
           '<textarea id="chat-in" rows="1" maxlength="2000" placeholder="' + (msgs.length ? '继续聊…' : '和 ' + esc(asst.name) + ' 说点什么…') + '" enterkeyhint="enter">' + esc(chat.draft) + '</textarea>' +
           '<div class="tools">' +
             '<button type="button" class="plus' + (srch.provider !== 'off' ? ' on' : '') + '" data-tool="search" aria-label="工具：联网搜索' + (srch.provider !== 'off' ? '已开启' : '已关闭') + '">' + icon('plus', 20) + '</button>' +
+            (resolveGem() ? '<button type="button" class="gbtn' + ((chat.gemPick || []).length ? ' on' : '') + '" data-tool="gempick" aria-label="这次让 ' + GEM_NAME + ' 用哪张卡片">' + gemStars(false) + '</button>' : '') +
             '<button type="button" class="mchip" data-tool="model" aria-label="选择模型和思考深度：' + esc(rm ? rm.id : '') + '，' + THINK_LABELS[asst.think] + '">' +
               '<span class="mn">' + esc(rm ? rm.id : '选择模型') + '</span><span class="ef">' + THINK_LABELS[asst.think] + '</span></button>' +
             (srch.provider !== 'off' ? '<button type="button" class="flag" data-tool="search" aria-label="联网搜索已开启">' + icon('globe', 16) + '联网</button>' : '') +
@@ -8570,7 +8645,7 @@
     }
     var pl = document.getElementById('proc-line');
     if (pl && !chat.partial && !/^(search|web|fetch|gh)$/.test(chat.phase) && !(chat.gem && chat.gem.stage === 2)) {
-      var ln = thinkLine(chat.partialThink);
+      var ln = thinkLine(chat.gem ? gemHide(chat.partialThink) : chat.partialThink);
       if (ln && ln !== chat.procLine) { chat.procLine = ln; pl.textContent = ln; pl.classList.remove('swap'); void pl.offsetWidth; pl.classList.add('swap'); }
     }
     if (chat.pop === 'proc' && chat.procKey === 'live' && !chat.popSub && ts - (typer.pt || 0) > 300) {
@@ -8882,12 +8957,10 @@
       '<span class="pl">' + esc(sm.text) + '</span>' + (tag || '') + (sm.icons.length ? '<span class="pi">' + sm.icons.map(function (n) { return icon(n, 15); }).join('') + '</span>' : '') +
       '<span class="cv">' + icon('chev', 16) + '</span></button>';
   }
+  // 双子星：聊天里只让 Amor 出面，小结跳过提到 Amara 的句子
+  function gemHide(t) { return String(t || '').replace(new RegExp('[^。！？!?\\n]*' + GEM_NAME + '[^。！？!?\\n]*[。！？!?]?', 'g'), ''); }
   function procRow(x, key) {
-    var sm = procSummary(x.reasoning, x.thinkMs, x.sources, x.recall, x.content);
-    if (x.gem) {
-      var cv_ = curConv(), last_ = cv_ && key === cv_.id + ':' + (cv_.msgs.length - 1);
-      return procDoneRow(key, { text: gemSummary(x.gem), icons: sm ? sm.icons : [] }, last_ ? chat.lastDoneAt : 0, ' gem', gemTag(x.gem));
-    }
+    var sm = procSummary(x.gem ? gemHide(x.reasoning) : x.reasoning, x.thinkMs, x.sources, x.recall, x.content);
     if (sm) {
       var cv = curConv(), last = cv && key === cv.id + ':' + (cv.msgs.length - 1);
       return procDoneRow(key, sm, last ? chat.lastDoneAt : 0);
@@ -8900,21 +8973,16 @@
   function liveProcRow() {
     var live = false, lb = '', G = chat.gem;
     if (G && G.stage === 2) {
-      var n2 = gemParse(G.b.raw).items.length;
       return '<button type="button" class="proc live gem" data-proc="live" aria-label="查看思考过程">' + gemStars(true) +
-        '<span class="pl" id="proc-line">' + GEM_NAME + ' 正在审稿' + (n2 ? '：已对照 ' + n2 + ' 项要求…' : '…') + '</span>' + gemPill(2) + '<span class="cv">' + icon('chev', 16) + '</span></button>';
-    }
-    if (G && chat.partial) {
-      var smg = procSummary(chat.partialThink, chat.thinkMs, chat.sources, chat.recall, chat.partial);
-      chat.procLine = ''; return procDoneRow('live', { text: gemSummary(G), icons: smg ? smg.icons : [] }, chat.lastDoneAt, ' gem', gemTag(G));
+        '<span class="pl" id="proc-line">' + GEM_NAME + ' 正在帮忙…</span>' + gemPill(2) + '<span class="cv">' + icon('chev', 16) + '</span></button>';
     }
     if (chat.phase === 'search') { live = true; lb = '正在搜索网页…'; }
     else if (chat.phase === 'web') { live = true; var lw = chat.recall && chat.recall[chat.recall.length - 1]; lb = lw && lw.desc ? lw.desc + '…' : '正在搜索“' + (lw ? lw.q : '') + '”…'; }
     else if (chat.phase === 'fetch' || chat.phase === 'gh') { live = true; var lf = chat.recall && chat.recall[chat.recall.length - 1]; lb = lf ? (lf.desc ? lf.desc + '…' : chat.phase === 'gh' ? '正在 GitHub 上搜索“' + lf.q + '”…' : '正在打开 ' + shortUrl(lf.q).slice(0, 28) + '…') : '正在打开网页…'; }
     else if (chat.phase === 'recall') { live = true; var lg = chat.recall && chat.recall[chat.recall.length - 1]; lb = lg && lg.tool === 'web' ? '读完搜索结果，正在整理…' : lg && lg.tool === 'fetch' ? '读完网页，正在整理…' : lg && lg.tool === 'gh' ? '看完搜索结果，正在整理…' : lg && lg.tool === 'search' ? '正在回想“' + lg.q + '”…' : lg && /^(remind|rlist|rcancel)$/.test(lg.tool) ? '正在设提醒…' : lg && /^(event|elist|edel|alarm)$/.test(lg.tool) ? '正在记进日程…' : '正在翻看过去的对话…'; }
-    else if (!chat.partial && chat.partialThink && asst.showThink) { live = true; lb = thinkLine(chat.partialThink) || '正在思考…'; }
+    else if (!chat.partial && chat.partialThink && asst.showThink) { live = true; lb = thinkLine(G ? gemHide(chat.partialThink) : chat.partialThink) || '正在思考…'; }
     else if (chat.partial) {
-      var sm = procSummary(chat.partialThink, chat.thinkMs, chat.sources, chat.recall, chat.partial);
+      var sm = procSummary(G ? gemHide(chat.partialThink) : chat.partialThink, chat.thinkMs, chat.sources, chat.recall, chat.partial);
       if (sm) { chat.procLine = ''; return procDoneRow('live', sm, chat.lastDoneAt); }
       lb = procLabel(chat.partialThink, chat.thinkMs, chat.sources, chat.recall);
     }
@@ -9172,9 +9240,18 @@
           '<small class="hint">不填也能用，但 GitHub 每小时只让看 60 次；填了能到 5000 次，也能看你自己的私有仓库。</small></div>' : '') + '</div>' +
         '<div class="tool-sec"><p class="sub"><b style="color:var(--text);font-weight:500">作品 · 动画和演示</b> · 想看动画、演示、小游戏、图表时，' + esc(asst.name) + ' 会写成一个作品，点开就能直接运行，还能看代码、切换版本。</p>' +
         sw('art', asst.art, '允许写作品', 'data-asw') + '</div>' +
-        '<div class="tool-sec"><p class="sub"><b style="color:var(--text);font-weight:500">双子星 · ' + GEM_NAME + '</b> · ' + esc(asst.name) + ' 先想，' + GEM_NAME + ' 审稿挑漏，再定稿写出来。更完整，也更慢一点。模型和审查内容在 设置 › 双子星。</p>' +
+        '<div class="tool-sec"><p class="sub"><b style="color:var(--text);font-weight:500">双子星 · ' + GEM_NAME + '</b> · ' + esc(asst.name) + ' 先想，' + GEM_NAME + ' 帮她查漏、出主意、按框架补全，再由 ' + esc(asst.name) + ' 写正文。更完整，也更慢一点。卡片在 设置 › 双子星。</p>' +
         '<div class="seg" role="group">' + [['off', '关闭'], ['auto', '自动'], ['on', '总是']].map(function (o) { return '<button type="button" data-gmode="' + o[0] + '" aria-pressed="' + (asst.gem.mode === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div></div>';
       return popShell('联网搜索', X_BTN(), '工具', inner);
+    }
+    if (chat.pop === 'gempick') {
+      var pk_ = chat.gemPick || [], cs_ = (asst.gem.cards || []).filter(function (c) { return c.when !== 'always' && (c.on !== false || c.when === 'manual'); });
+      return popShell('这次让 ' + GEM_NAME + ' 帮什么', X_BTN(), '这次让 ' + GEM_NAME + ' 帮什么',
+        '<p class="sub">可以多选。点了的卡片这次一定会用；不点就由 ' + GEM_NAME + ' 自己判断。「每次」都用的卡片不用点。</p><div class="row-list">' +
+        '<button type="button" class="lrow" data-gpk="" aria-pressed="' + !pk_.length + '"><span><b>' + GEM_NAME + ' 自己判断</b><small>默认，按每张卡片的「什么时候用」</small></span><span class="ck">' + (!pk_.length ? icon('tick', 22) : '') + '</span></button>' +
+        cs_.map(function (c) { var on = pk_.indexOf(c.id) >= 0;
+          return '<button type="button" class="lrow" data-gpk="' + esc(c.id) + '" aria-pressed="' + on + '"><span><b>' + esc(c.title) + '<span class="g-how h-' + c.how + '">' + GEM_HOW[c.how][0] + '</span></b><small>' + esc((c.how === 'form' ? (c.body.match(/【[^】]+】/g) || []).join('') : c.body).slice(0, 40)) + '</small></span><span class="ck">' + (on ? icon('tick', 22) : '') + '</span></button>'; }).join('') +
+        '</div><div class="ds-actions"><button type="button" class="btn" data-popclose="1">好了</button></div>');
     }
     if (chat.pop === 'proc' && /^step:/.test(chat.popSub || '')) { var sd_ = stepDetail(procData(), chat.popSub.slice(5));
       return popShell(sd_.title, '<button type="button" class="icon-btn" data-psub="" aria-label="返回">' + icon('back', 22) + '</button>', esc(sd_.title), sd_.body); }
@@ -9241,25 +9318,39 @@
     });
   }
 
-  /* ======================= 4.9 双子星：Amor 先想 → Amara 审稿 → Amor 定稿（+ Amara 终检） ======================= */
-  var GEM_DIMS = [
-    ['need', '要求有没有漏', '把要求逐项列成清单，对照她的思路打勾，特别留意注意力偏科：有的要素想了很多，有的被忽略'],
-    ['logic', '逻辑矛盾', '前后矛盾、事实或常识错误、推理跳步、和对话里已知信息冲突'],
-    ['angle', '其他角度', '她没想到但值得考虑的角度、更好的切入点、对方可能真正在意的东西'],
-    ['full', '够不够全面', '还缺什么会让回答更完整、更有用'],
-    ['fact', '事实核对', '数字、日期、人名、专有名词有没有可能写错'],
-    ['tone', '语气和人设', '语气、称呼、人设和对方的偏好是否一致']
+  /* ======================= 4.9 双子星：Amor 先想 → Amara 按卡片帮忙 → Amor 写正文（+ 终检） ======================= */
+  // 4.9.1 Amara 的卡片：每张 = 标题 + 怎么帮（查漏 / 出主意 / 按框架补全）+ 内容 + 什么时候用
+  var GEM_HOW = { chk: ['查漏', '逐项检查做到没有：✓ 有了 · ! 偏少 · ✕ 漏了'], idea: ['出主意', '给两到四个能让回答更好的点子'], form: ['按框架补全', '按你写的【栏目】逐项补全细节，交给 Amor 照着写'] };
+  var GEM_WHEN = { always: ['每次', '每次都用'], auto: ['自己判断', 'Amara 看了问题，觉得用得上才用'], manual: ['我点了才用', '只有你在输入框点了它才用'] };
+  var GEM_DEFAULT = [
+    { id: 'need', title: '要求有没有漏', how: 'chk', when: 'always', body: '把要求逐项列成清单，对照她的思路打勾，特别留意注意力偏科：有的要素想了很多，有的被忽略' },
+    { id: 'logic', title: '逻辑矛盾', how: 'chk', when: 'always', body: '前后矛盾、事实或常识错误、推理跳步、和对话里已知信息冲突' },
+    { id: 'angle', title: '其他角度', how: 'idea', when: 'auto', body: '她没想到但值得考虑的角度、更好的切入点、对方可能真正在意的东西' },
+    { id: 'full', title: '够不够全面', how: 'chk', when: 'always', body: '还缺什么会让回答更完整、更有用' },
+    { id: 'fact', title: '事实核对', how: 'chk', when: 'auto', on: false, body: '数字、日期、人名、专有名词有没有可能写错' },
+    { id: 'tone', title: '语气和人设', how: 'chk', when: 'auto', on: false, body: '语气、称呼、人设和对方的偏好是否一致' },
+    { id: 'role', title: '角色卡', how: 'form', when: 'auto', list: true, body: '【姓名】\n【年龄】\n【外貌】五官、发型、穿着，要具体到颜色和质地\n【身材】身高、体型、站姿\n【性格】三个关键词，各配一个小事例\n【口癖】两三句常说的话\n【背景】\n【和主角的关系】' }
   ];
+  var GEM_EG = [
+    ['环境描写', 'chk', '写景的段落有没有写到光线、声音、气味和天气；只写了人物、没写场景就打 ✕'],
+    ['字数够不够', 'chk', '对照要求的字数，差得多就打 ✕'],
+    ['世界观', 'form', '【时代】\n【地点】\n【势力】\n【规则】\n【禁忌】'],
+    ['更有画面感', 'idea', '给 2–3 个能让画面更具体的细节：光线、声音、气味、小动作']
+  ];
+  function gemDefaults() { return GEM_DEFAULT.map(function (c) { var o = {}; for (var k in c) o[k] = c[k]; if (o.on == null) o.on = true; return o; }); }
   if (!asst.gem) asst.gem = {};
   (function (g) {
     if (!g.mode) g.mode = 'auto';
     if (g.model == null) g.model = '';
     if (g.think == null) g.think = 2;
     if (g.check == null) g.check = true;
-    if (!g.dims) g.dims = { need: true, logic: true, angle: true, full: true, fact: false, tone: false };
+    if (!g.cards) {   // 4.9 的审查维度 → 卡片，开关状态照搬
+      g.cards = gemDefaults();
+      if (g.dims) g.cards.forEach(function (c) { if (g.dims[c.id] != null) c.on = !!g.dims[c.id]; });
+    }
   })(asst.gem);
   var GEM_NAME = 'Amara';
-  var gemui = { pick: false };
+  var gemui = { pick: false, edit: null, del: '', reset: false };
   // Amara 用哪个模型：设置里选的（任何一家供应商），没选或那家停用了 → 和 Amor 用同一个
   function resolveGem() {
     var m = asst.gem.model || '', i = m.indexOf('::');
@@ -9281,15 +9372,23 @@
     return GEM_ASK.test(t) && t.length >= 12;
   }
   var GEM_PLAN_RULE = '\n\n【这一步只想，不回答】先别写正式回答。用 5–12 行要点写下你打算怎么回答：要覆盖哪些内容、按什么顺序、用什么语气、有哪些细节要写到。只写思路要点，不要写正文。';
-  function gemSysB() {
-    var name = state.name.trim() || '用户', d = asst.gem.dims || {}, n = 0;
-    var dims = GEM_DIMS.filter(function (x) { return d[x[0]]; });
-    if (!dims.length) dims = GEM_DIMS.slice(0, 1);
-    return '你是 ' + GEM_NAME + '，' + (asst.name || 'Amor') + ' 的双子星搭档。' + (asst.name || 'Amor') + ' 负责回答' + name + '，你负责在她动笔前做内部审稿：看她的思路，挑出问题，让最后的回答更完整、更准确。你写的东西不会给' + name + '看，只交给 ' + (asst.name || 'Amor') + '。\n\n' +
-      '这次要审查：\n' + dims.map(function (x) { return (++n) + '. ' + x[1] + '：' + x[2] + '。'; }).join('\n') + '\n\n' +
-      '要求清单的写法：把' + name + '这次（以及对话里仍然有效的）所有明确要求逐项列出来——内容要素（例如人物外貌、身材、对白、剧情、环境、细节）、字数、格式、语气、人称、不能写的东西等。每一项对照她的思路判断：✓ 已经考虑到；! 考虑了但偏少、偏弱；✕ 漏了。没有明确要求的简单问题，就列出回答必须做到的两三点。\n\n' +
-      '严格按下面的格式写，不要开场白，不要写别的：\n【清单】\n✓ 要素｜一句话说明\n! 要素｜缺在哪\n✕ 要素｜缺在哪\n【逻辑】\n- 问题（没有就写：无）\n【角度】\n- 建议（没有就写：无）\n【给' + (asst.name || 'Amor') + '】一句话，定稿时最该做的改动（没有问题就写：思路没问题，照写）\n\n' +
-      '每条说明不超过 20 个字。只挑真正的问题，不要为了挑而挑。';
+  function gemCardOf(title) { title = String(title || '').trim(); return (asst.gem.cards || []).filter(function (c) { return c.title === title; })[0] || null; }
+  function gemSysB(pick) {
+    var name = state.name.trim() || '用户', nmA = asst.name || 'Amor', pk = pick || [];
+    var cards = (asst.gem.cards || []).filter(function (c) { return pk.indexOf(c.id) >= 0 || (c.on !== false && c.when !== 'manual'); });
+    if (!cards.length) cards = [gemDefaults()[0]];
+    var n = 0;
+    return '你是 ' + GEM_NAME + '，' + nmA + ' 的双子星搭档。' + nmA + ' 负责回答' + name + '；你在她动笔前帮她把回答想得更好——可以查漏，可以出主意，也可以按框架把细节补全。你写的东西只交给 ' + nmA + '，' + name + '看不到。\n\n' +
+      '先看' + name + '这次要什么，再从下面的卡片里挑用得上的。标「必须用」的一定要用；标「你来判断」的，只有明显有帮助才用；用不上的就跳过，不要硬凑。\n' +
+      cards.map(function (c) {
+        var tag = pk.indexOf(c.id) >= 0 ? '必须用，' + name + '点名要的' : c.when === 'always' ? '必须用' : '你来判断';
+        return (++n) + '. 【' + c.title + '】（' + GEM_HOW[c.how || 'chk'][0] + ' · ' + tag + '）' + (c.how === 'form' ? '框架：\n' + c.body : c.body);
+      }).join('\n') + '\n\n' +
+      '每张用到的卡片写一段，格式：\n【卡片：标题】\n' +
+      '- 查漏：每行一项，「✓ 要素｜一句话说明」「! 要素｜缺在哪」「✕ 要素｜缺在哪」；发现的问题也可以写成「- 问题」。\n' +
+      '- 出主意：每行一个「- 点子」，2–4 个，要具体、拿来就能用。\n' +
+      '- 按框架补全：照卡片里的【栏目】逐项写「【栏目】内容」，内容具体、有细节，和' + name + '给的设定一致，一个栏目都不要漏。\n' +
+      '最后写：\n【给' + nmA + '】一句话，她写正文时最该注意的事。\n\n不要开场白，不要写别的。查漏每条说明不超过 20 个字。';
   }
   function gemCut(s, n) { s = String(s || ''); return s.length > n ? s.slice(0, Math.floor(n * .3)) + '\n……（中间省略）……\n' + s.slice(-Math.floor(n * .7)) : s; }
   function gemPacket(conv, text, G, logs) {
@@ -9303,57 +9402,71 @@
       return '- ' + (TOOL_NAME[l.tool] ? TOOL_NAME[l.tool][1] : l.tool) + '：' + (l.desc || l.q || '') + (l.title ? '（' + l.title + '）' : '') + (l.out ? '\n  ' + String(l.out).slice(0, 500).replace(/\n+/g, ' ') : '') +
         ((l.hits || []).length ? '\n  ' + l.hits.slice(0, 4).map(function (x) { return x.title; }).join('；') : '');
     }).join('\n') + '\n';
-    return h + '\n按格式写出你的审稿意见。';
+    return h + '\n按格式写出你的补充。';
   }
   // 解析 Amara 的意见（流式时也能解析一半）
+  // 解析 Amara 的补充（流式时也能解析一半）：按卡片分段，每段里有 清单 / 点子 / 栏目
+  // 也认 4.9 的旧格式（【清单】【逻辑】【角度】）
   function gemParse(raw) {
-    var out = { items: [], logic: [], angle: [], brief: '' }, sec = '';
+    var out = { secs: [], brief: '', items: [] }, sec = null, inBrief = false, lastField = null;
+    function newSec(t) { sec = { title: String(t || '').trim(), items: [], bullets: [], fields: [] }; out.secs.push(sec); lastField = null; inBrief = false; }
     String(raw || '').split('\n').forEach(function (ln) {
       var s = ln.trim(); if (!s) return;
-      var hm = s.match(/^【([^】]+)】\s*(.*)$/);
-      if (hm) {
-        var k = hm[1];
-        sec = /清单|要求/.test(k) ? 'items' : /逻辑/.test(k) ? 'logic' : /角度/.test(k) ? 'angle' : /给/.test(k) ? 'brief' : /全面|事实|语气/.test(k) ? 'logic' : '';
-        if (sec === 'brief' && hm[2]) out.brief = hm[2].trim();
-        return;
+      s = s.replace(/^\*\*(.+)\*\*$/, '$1');
+      var hc = s.match(/^【\s*卡片\s*[:：]\s*([^】]+)】\s*$/);
+      if (hc) { newSec(hc[1]); return; }
+      var hb = s.match(/^【\s*给[^】]*】\s*(.*)$/);
+      if (hb) { inBrief = true; out.brief = hb[1].trim(); sec = null; return; }
+      if (inBrief) { out.brief += (out.brief ? ' ' : '') + s; return; }
+      var hf = s.match(/^【([^】]{1,14})】\s*(.*)$/);
+      if (hf && (!hf[2] || /^(清单|要求清单|逻辑|角度|其他角度)$/.test(hf[1])) && !(sec && gemCardOf(sec.title) && gemCardOf(sec.title).how === 'form')) {
+        newSec({ 清单: '要求清单', 要求清单: '要求清单', 角度: '其他角度' }[hf[1]] || hf[1]); return;
       }
-      s = s.replace(/^\*\*|\*\*$/g, '');
-      if (sec === 'items') {
-        var im = s.match(/^[-*\s]*(✓|✔|√|☑|!|！|⚠️?|✕|✗|✘|×|❌|x|X)\s*(.+)$/);
-        if (!im) return;
+      if (!sec) newSec('');
+      if (hf) { lastField = { k: hf[1], v: hf[2].trim() }; sec.fields.push(lastField); return; }
+      var im = s.match(/^[-*\s]*(✓|✔|√|☑|!|！|⚠️?|✕|✗|✘|×|❌)\s*(.+)$/);
+      if (im) {
         var st = /[✓✔√☑]/.test(im[1]) ? 'ok' : /[!！⚠]/.test(im[1]) ? 'weak' : 'miss';
         var pr = im[2].split(/\s*[｜|]\s*|：|:\s/), key = (pr.shift() || '').trim(), note = pr.join('，').trim();
-        if (key) out.items.push({ k: key.slice(0, 16), s: st, n: note });
-      } else if (sec === 'logic' || sec === 'angle') {
-        var t = s.replace(/^[-*•·\d.、)\s]+/, '').trim();
-        if (t && !/^(无|没有|暂无|无。|—|-)$/.test(t)) out[sec].push(t);
-      } else if (sec === 'brief') out.brief += (out.brief ? '' : '') + s;
+        if (key) { var it = { k: key.slice(0, 16), s: st, n: note }; sec.items.push(it); out.items.push(it); }
+        lastField = null; return;
+      }
+      var t = s.replace(/^[-*•·\d.、)\s]+/, '').trim();
+      if (!t || /^(无|没有|暂无|无。|—|-)$/.test(t)) return;
+      if (lastField && !/^[-*•·]/.test(s)) { lastField.v += (lastField.v ? ' ' : '') + t; return; }
+      sec.bullets.push(t);
     });
-    if (/^(思路没问题|没问题|无)/.test(out.brief)) out.ok = true;
+    out.secs = out.secs.filter(function (x) { return x.items.length || x.bullets.length || x.fields.length; });
+    out.secs.forEach(function (x) { var c = gemCardOf(x.title); x.how = c ? c.how : x.fields.length ? 'form' : x.items.length ? 'chk' : /逻辑/.test(x.title) ? 'chk' : 'idea'; x.list = c ? c.list !== false : true; });
     return out;
   }
   function gemFixes(rv) { return rv ? rv.items.filter(function (x) { return x.s !== 'ok'; }) : []; }
-  function gemSummary(g) {
+  function gemSummary(g) {   // 只在思考过程面板里用
     if (!g) return '';
-    if (g.solo) return GEM_NAME + ' 没回应，' + (asst.name || 'Amor') + ' 直接写了';
-    var rv = gemParse(g.b.raw), fx = gemFixes(rv), n = fx.length + rv.logic.length;
-    if (!n) return GEM_NAME + ' 看过了，没有补充';
-    var names = fx.map(function (x) { return x.k; }); if (rv.logic.length) names.push('逻辑');
-    return GEM_NAME + ' 补了 ' + n + ' 处：' + names.slice(0, 3).join('、') + (names.length > 3 ? '…' : '');
+    if (g.solo) return GEM_NAME + ' 这次没回应';
+    var rv = gemParse(g.b.raw);
+    return rv.secs.length ? GEM_NAME + ' 补充了 ' + rv.secs.length + ' 段' : GEM_NAME + ' 看过了，没有补充';
   }
-  // 给 Amor 定稿用的内部说明
+  // 给 Amor 写正文用的内部说明
   function gemNote(G) {
-    var nm = asst.name || 'Amor', name = state.name.trim() || '对方';
-    var h = '\n\n【内部审稿 · 只有你看得到】\n你刚才已经想过一遍，下面是你的' + (G.a1.draft ? '初稿' : '初稿思路') + '。';
+    var nmA = asst.name || 'Amor', name = state.name.trim() || '对方';
+    var h = '\n\n【内部参谋 · 只有你看得到】\n你刚才已经想过一遍，下面是你的' + (G.a1.draft ? '初稿' : '初稿思路') + '。';
     if (G.solo) h += '你的搭档 ' + GEM_NAME + ' 这次没有回应，就按你自己的思路，把回答写完整：对照' + name + '的每一条要求，一项都不要漏。';
-    else h += '你的双子星搭档 ' + GEM_NAME + ' 已经审过了，意见在后面。现在定稿：吸收她指出的缺漏和问题（她说得不对的可以不采纳），' + name + '提的每一项要求都要写到，然后直接写给' + name + '的正式回答。';
-    h += '正文里不要提到 ' + GEM_NAME + '、审稿、初稿这些内部过程，也不要说“根据意见”。\n\n你的' + (G.a1.draft ? '初稿' : '初稿思路') + '：\n' + (gemCut(G.a1.think, 5000) || '（空）');
-    if (!G.solo) h += '\n\n' + GEM_NAME + ' 的意见：\n' + (G.b.raw || '').trim();
+    else h += '你的双子星搭档 ' + GEM_NAME + ' 帮你补充了下面这些（查漏、点子、按框架补全的细节）。吸收她的补充（不合适的可以不用），' + name + '提的每一项要求都要写到，然后直接写给' + name + '的正式回答。';
+    h += '正文由你来写，用你自己的口吻；不要提到 ' + GEM_NAME + '、参谋、初稿这些内部过程，也不要说“根据补充”。\n\n你的' + (G.a1.draft ? '初稿' : '初稿思路') + '：\n' + (gemCut(G.a1.think, 5000) || '（空）');
+    if (!G.solo) {
+      h += '\n\n' + GEM_NAME + ' 的补充：\n' + (G.b.raw || '').trim();
+      var forms = gemParse(G.b.raw).secs.filter(function (x) { return x.how === 'form'; });
+      forms.forEach(function (x) {
+        h += x.list ? '\n\n（「' + x.title + '」：正文里按这些【栏目】逐栏写出来，栏目名照用，每栏写具体。）'
+                    : '\n\n（「' + x.title + '」：只当素材，把这些设定自然地写进正文，不要列栏目。）';
+      });
+    }
     return h;
   }
   function gemPack(G) {
     return { a1: { think: G.a1.think, ms: G.a1.ms, plan: !!G.a1.plan, draft: !!G.a1.draft, model: G.a1.model },
-             b: { raw: G.b.raw, ms: G.b.ms, model: G.b.model, pname: G.b.pname, err: G.b.err || '' }, solo: !!G.solo, a2ms: G.a2ms || 0, t: Date.now() - G.t0 };
+             b: { raw: G.b.raw, ms: G.b.ms, model: G.b.model, pname: G.b.pname, err: G.b.err || '' }, solo: !!G.solo, pick: G.pick && G.pick.length ? G.pick : undefined, a2ms: G.a2ms || 0, t: Date.now() - G.t0 };
   }
   // 第一步：Amor 想。想完（开始写正文）就截停，只留下思考；不会深度思考的模型改成“只写思路要点”
   function gemStage1(G, rm, system, systemNoTools, hist, mkOpt) {
@@ -9397,26 +9510,25 @@
     return new Promise(function (resolve, reject) {
       t1 = setTimeout(function () { if (!got && chat.busy && G.stage === 2) { G.b.err = '25 秒没有回应'; try { chat.xhr.abort(); } catch (e) {} } }, 25000);
       t2 = setTimeout(function () { if (chat.busy && G.stage === 2) { G.b.cut = true; try { chat.xhr.abort(); } catch (e) {} } }, 100000);
-      chatStream(rb.p, rb.id, gemSysB(), [{ role: 'user', content: gemPacket(conv, text, G, chat.recall) }], function (t, th) {
+      chatStream(rb.p, rb.id, gemSysB(G.pick), [{ role: 'user', content: gemPacket(conv, text, G, chat.recall) }], function (t, th) {
         got = true; G.b.raw = t || ''; G.b.think = th || '';
         gemLiveLabel(); typerKick();
       }, { think: asst.gem.think }).then(resolve, reject);
     }).then(function (r) { G.b.raw = (r.text || '').trim() || G.b.raw; }, function (e) {
       if (chat.stopped) throw e;
-      if (G.b.cut && gemParse(G.b.raw).items.length) return;
+      if (G.b.cut && gemParse(G.b.raw).secs.length) return;
       G.b.err = G.b.err || e.msg || '出错了'; G.solo = true;
     }).then(function () {
       clearTimeout(t1); clearTimeout(t2);
       G.b.ms = Date.now() - G.t2;
-      if (!G.solo && !String(G.b.raw || '').trim()) { G.solo = true; G.b.err = G.b.err || '没有写出意见'; }
+      if (!G.solo && !String(G.b.raw || '').trim()) { G.solo = true; G.b.err = G.b.err || '没有写出补充'; }
     });
   }
   function gemLiveLabel() {
     var pl = document.getElementById('proc-line'), G = chat.gem; if (!pl || !G || G.stage !== 2) return;
-    var n = gemParse(G.b.raw).items.length, lb = GEM_NAME + ' 正在审稿' + (n ? '：已对照 ' + n + ' 项要求…' : '…');
+    var lb = GEM_NAME + ' 正在帮忙…';
     if (lb !== pl.textContent) pl.textContent = lb;
   }
-  // 第四步（可选）：正文写完后 Amara 对照清单快速终检；漏了就在回答下面提示，点了才补写
   var gemChk = { key: '' };
   function gemCheck(conv, idx) {
     var m = conv.msgs[idx]; if (!m || !m.gem || m.gem.solo || !asst.gem.check) return;
@@ -9453,7 +9565,7 @@
     var c = function (i, who) { return '<i class="' + (stage > i ? 'p' + who + ' gdn' : stage === i ? 'p' + who : '') + '">' + (who === 'a' ? 'A' : 'B') + '</i>'; };
     return '<span class="gstg" aria-label="双子星第 ' + stage + ' 步">' + c(1, 'a') + '<s></s>' + c(2, 'b') + '<s></s>' + c(3, 'a') + '</span>';
   }
-  function gemTag(g) { return g && g.solo ? '<span class="gtag solo">单人</span>' : '<span class="gtag">双子星</span>'; }
+  function gemTag() { return ''; }
   function gemTile(who) { return '<span class="gtile t' + who + '">' + (who === 'a' ? 'A' : 'B') + '</span>'; }
   function gemParas(txt, dim) {
     return thinkSegs(String(txt || '')).map(function (pa) {
@@ -9461,21 +9573,25 @@
     }).join('');
   }
   function gemReview(g, live) {
-    if (g.b.err && g.solo) return '<div class="g-rv err"><h5>没有审成</h5><p>' + esc(g.b.err) + '，' + esc(asst.name || 'Amor') + ' 按自己的思路直接写了。</p></div>';
+    if (g.b.err && g.solo) return '<div class="g-rv err"><h5>没有帮上</h5><p>' + esc(g.b.err) + '，' + esc(asst.name || 'Amor') + ' 按自己的思路直接写了。</p></div>';
     var rv = gemParse(g.b.raw), SI = { ok: '✓', weak: '!', miss: '✕' };
-    if (!rv.items.length && !rv.logic.length && !rv.angle.length && !rv.brief) {
-      return live ? '<div class="g-rv"><h5>要求清单</h5><p class="g-wait">' + (g.b.think ? '正在想…' : '正在看 ' + esc(asst.name || 'Amor') + ' 的思路…') + '<span class="g-caret"></span></p></div>'
-        : '<div class="g-rv"><h5>意见</h5><p>' + esc(g.b.raw || '（空）') + '</p></div>';
+    if (!rv.secs.length && !rv.brief) {
+      return live ? '<div class="g-rv"><p class="g-wait">' + (g.b.think ? '正在想…' : '正在看 ' + esc(asst.name || 'Amor') + ' 的思路…') + '<span class="g-caret"></span></p></div>'
+        : '<div class="g-rv"><p>' + esc(g.b.raw || '（空）') + '</p></div>';
     }
-    var h = '<div class="g-rv">';
-    if (rv.items.length) h += '<h5>要求清单</h5><div class="g-chk">' + rv.items.map(function (x) {
-      return '<span class="k"><i class="s-' + x.s + '">' + SI[x.s] + '</i>' + esc(x.k) + '</span><span class="n' + (x.s === 'miss' ? ' x' : '') + '">' + esc(x.n || (x.s === 'ok' ? '有了' : '')) + '</span>';
-    }).join('') + '</div>';
-    if (rv.logic.length) h += '<div class="sec"><h5>逻辑</h5><ul>' + rv.logic.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>';
-    if (rv.angle.length) h += '<div class="sec"><h5>其他角度</h5><ul>' + rv.angle.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>';
+    var h = '';
+    rv.secs.forEach(function (x) {
+      h += '<div class="g-rv"><h5>' + esc(x.title || '补充') + '<span class="g-how h-' + x.how + '">' + GEM_HOW[x.how][0] + '</span></h5>';
+      if (x.fields.length) h += '<div class="g-kv">' + x.fields.map(function (f) { return '<span>' + esc(f.k) + '</span><span>' + esc(f.v) + '</span>'; }).join('') + '</div>';
+      if (x.items.length) h += '<div class="g-chk">' + x.items.map(function (it) {
+        return '<span class="k"><i class="s-' + it.s + '">' + SI[it.s] + '</i>' + esc(it.k) + '</span><span class="n' + (it.s === 'miss' ? ' x' : '') + '">' + esc(it.n || (it.s === 'ok' ? '有了' : '')) + '</span>';
+      }).join('') + '</div>';
+      if (x.bullets.length) h += '<ul' + (x.items.length || x.fields.length ? ' style="margin-top:8px"' : '') + '>' + x.bullets.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') + '</ul>';
+      h += '</div>';
+    });
     if (rv.brief) h += '<div class="g-brief"><b>给 ' + esc(asst.name || 'Amor') + '：</b>' + esc(rv.brief) + '</div>';
     if (live) h += '<span class="g-caret"></span>';
-    return h + '</div>';
+    return h;
   }
   function gemCheckHtml(g, pending) {
     if (pending) return '<div class="g-rv"><h5>终检</h5><p class="g-wait">正在对照清单看正文…<span class="g-caret"></span></p></div>';
@@ -9494,13 +9610,12 @@
     var a1 = '<div class="g-blk"><div class="t"><b>初稿思路</b>' + (g.a1.plan ? '<em>要点</em>' : g.a1.draft ? '<em>初稿</em>' : '') + (st > 1 ? '<span>' + gemSecs(g.a1.ms) + '</span>' : '<span class="lv">正在想…</span>') + '</div>' +
       (st === 1 ? '' : '') + '<div class="tl g-tl">' + toolsOf(1) + '</div>' + gemParas(g.a1.think, st > 1) + '</div>';
     var a2txt = d.reasoning && asst.showThink ? d.reasoning : '';
-    var a2 = st < 3 ? '<div class="g-wait-box">等 ' + GEM_NAME + ' 审完再定稿</div>' :
+    var a2 = st < 3 ? '<div class="g-wait-box">等 ' + GEM_NAME + ' 帮完再定稿</div>' :
       '<div class="g-blk"><div class="t"><b>定稿</b><span' + (st === 3 ? ' class="lv"' : '') + '>' + (st === 3 ? (d.answering ? '正在写正文…' : '正在想…') : gemSecs(g.a2ms || d.ms)) + '</span></div>' +
       '<div class="tl g-tl">' + toolsOf(3) + '</div>' + (a2txt ? gemParas(a2txt) : '<p class="dim">' + (st === 3 ? '' : '直接写了正文。') + '</p>') + '</div>';
     var bHead = '<small>' + esc(g.b.model || (g.rmB ? g.rmB.id : '')) + ' · ' + (st === 2 ? '正在看' : g.b.ms ? gemSecs(g.b.ms) : '等待') + '</small>';
     var bRev = st < 2 ? '<div class="g-wait-box">等 ' + nmA + ' 想完</div>' : gemReview(g, st === 2);
     var chk = gemCheckHtml(g, pend);
-    var rv0 = gemParse(g.b.raw), fx = gemFixes(rv0).length + rv0.logic.length;
     var sub = '双子星 · ' + (live ? '第 ' + Math.min(st, 3) + ' 步 / 3' : '3 步 · ' + gemSecs(g.t)) + (g.check ? ' · 要求 ' + g.check.items.filter(function (x) { return x.s === 'ok'; }).length + '/' + g.check.items.length : '');
     var fin = live ? '' : '<div class="g-fin"><span class="ring">' + icon('tick', 15) + '</span><div><b>完成</b><small>' + (g.solo ? nmA + ' 独自写完了正文' : nmA + ' 定稿并写出正文') + '</small></div>' +
       (g.check ? '<span class="cov">终检 ' + g.check.items.map(function (x) { return '<i class="' + (x.s === 'ok' ? '' : 'mi') + '"></i>'; }).join('') + '</span>' : pend ? '<span class="cov">正在终检…</span>' : '') + '</div>';
@@ -9509,14 +9624,14 @@
       return '<p class="g-sub">' + sub + '</p><div class="g-lanes">' +
         '<div class="g-lane"><div class="g-lh">' + gemTile('a') + '<div><b>' + nmA + ' · 思考</b><small>' + esc(g.a1.model || '') + '</small></div></div>' + a1 +
           (st > 1 ? '<div class="g-hand"><em>交给 ' + GEM_NAME + '</em><span class="ln"></span>›</div>' : '') +
-          (st > 2 ? '<div class="g-hand back">‹<span class="ln"></span><em>' + (g.solo ? GEM_NAME + ' 没回应' : GEM_NAME + ' 的意见') + '</em></div>' : '') + a2 + '</div>' +
+          (st > 2 ? '<div class="g-hand back">‹<span class="ln"></span><em>' + (g.solo ? GEM_NAME + ' 没回应' : GEM_NAME + ' 的补充') + '</em></div>' : '') + a2 + '</div>' +
         '<div class="g-div"></div>' +
-        '<div class="g-lane"><div class="g-lh">' + gemTile('b') + '<div><b>' + GEM_NAME + ' · 审稿</b>' + bHead + '</div></div>' + bRev + (chk ? '<div class="g-hand"><em>正文写完</em><span class="ln b"></span></div>' + chk : '') + '</div>' +
+        '<div class="g-lane"><div class="g-lh">' + gemTile('b') + '<div><b>' + GEM_NAME + ' · 帮忙</b>' + bHead + '</div></div>' + bRev + (chk ? '<div class="g-hand"><em>正文写完</em><span class="ln b"></span></div>' + chk : '') + '</div>' +
       '</div>' + fin;
     }
     var tab = chat.gemTab || 'all', h = '';
     var itA1 = '<div class="g-it">' + gemTile('a') + '<div class="bd"><b>初稿思路</b><small>' + esc(g.a1.model || '') + (st > 1 ? ' · ' + gemSecs(g.a1.ms) : ' · 正在想…') + '</small>' + a1.replace(/<div class="t">[\s\S]*?<\/div>/, '') + '</div></div>';
-    var itB = '<div class="g-it">' + gemTile('b') + '<div class="bd"><b>审稿' + (st > 2 && !g.solo ? (fx ? ' · 挑出 ' + fx + ' 处' : ' · 没有补充') : '') + '</b>' + bHead + bRev + '</div></div>';
+    var itB = '<div class="g-it">' + gemTile('b') + '<div class="bd"><b>' + GEM_NAME + ' 的补充</b>' + bHead + bRev + '</div></div>';
     var itA2 = '<div class="g-it">' + gemTile('a') + '<div class="bd"><b>定稿</b><small>' + (st === 3 ? '正在写…' : gemSecs(g.a2ms || d.ms)) + '</small>' + a2.replace(/<div class="t">[\s\S]*?<\/div>/, '') + '</div></div>';
     var itC = chk ? '<div class="g-it">' + gemTile('b') + '<div class="bd"><b>终检</b>' + chk + '</div></div>' : '';
     if (tab === 'all') h = itA1 + (st >= 2 ? itB : '') + (st >= 3 ? itA2 : '') + itC;
@@ -9526,7 +9641,7 @@
       [['all', '全程'], ['a', 'A · ' + nmA], ['b', 'B · ' + GEM_NAME]].map(function (x) { return '<button type="button" class="sg-' + x[0] + '" data-gtab="' + x[0] + '" aria-pressed="' + (tab === x[0]) + '">' + x[1] + '</button>'; }).join('') +
       '</div><div class="g-list" data-gswipe="1">' + h + '</div>' + fin;
   }
-  function procBody(d) { return d && d.gem ? gemPanel(d) : procItems(d); }
+  function procBody(d) { if (d && d.gem) { try { return gemPanel(d); } catch (e) { if (window.console) console.error('gemPanel', e); } } return procItems(d); }
   // 手机面板里左右滑切换 全程 / Amor / Amara
   (function () {
     var s = null, TABS = ['all', 'a', 'b'];
@@ -9544,39 +9659,68 @@
     return '<button type="button" class="entry" data-ui="gemini" style="border-top:1px solid var(--line)"><span class="ds-logo g-logo">' + gemStars(false) + '</span>' +
       '<span><span class="t">双子星 · ' + GEM_NAME + '</span><span class="d">' + md + (asst.gem.mode !== 'off' && rb ? ' · ' + GEM_NAME + ' 用 ' + esc(rb.own ? rb.p.name + ' · ' + rb.id : '和 ' + (asst.name || 'Amor') + ' 同一个模型') : '') + '</span></span>' + icon('chev', 20) + '</button>';
   }
+  function gemCardHtml(c) {
+    var del = gemui.del === c.id, off = c.on === false;
+    var peek = c.how === 'form' ? (c.body.match(/【[^】]+】/g) || []).join('') || c.body : c.body;
+    return '<div class="g-card' + (off ? ' off' : '') + (del ? ' del' : '') + '"><div class="tx"><b>' + esc(c.title) + '<span class="g-how h-' + c.how + '">' + GEM_HOW[c.how][0] + '</span>' +
+      (off ? '<span class="g-tag">已停用</span>' : '') + (c.custom ? '<span class="g-tag mine">自己加的</span>' : '') + '</b>' +
+      '<p>' + esc(del ? '再点一次删除，删了就找不回来了' : peek) + '</p>' + (del ? '' : '<small>什么时候用：<i>' + GEM_WHEN[c.when || 'auto'][0] + '</i></small>') + '</div>' +
+      '<div class="acts">' + (del ? '<button type="button" class="g-cancel" data-gdel="">取消</button><button type="button" class="g-delok" data-gdelok="' + esc(c.id) + '">' + icon('trash', 16) + '删除</button>'
+        : '<button type="button" class="icon-btn" data-gedit="' + esc(c.id) + '" aria-label="编辑 ' + esc(c.title) + '">' + icon('pencil', 20) + '</button><button type="button" class="icon-btn" data-gdel="' + esc(c.id) + '" aria-label="删除 ' + esc(c.title) + '">' + icon('trash', 20) + '</button>') + '</div></div>';
+  }
+  function gemSheet() {
+    var e = gemui.edit; if (!e) return '';
+    var segB = function (key, opts, cur) { return '<div class="seg" role="group">' + opts.map(function (o) { return '<button type="button" data-' + key + '="' + o[0] + '" aria-pressed="' + (cur === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div>'; };
+    var ok = !!(e.title || '').trim() && !!(e.body || '').trim();
+    return '<div class="g-sheet-wrap"><button type="button" class="g-scrim" data-geclose="1" aria-label="关闭"></button><section class="g-sheet" role="dialog" aria-label="' + (e.id ? '编辑卡片' : '新增卡片') + '">' +
+      '<div class="pop-grip"><span></span></div><div class="g-sh"><button type="button" class="icon-btn" data-geclose="1" aria-label="关闭">' + icon('x', 22) + '</button><h3>' + (e.id ? '编辑卡片' : '新增卡片') + '</h3>' +
+      '<button type="button" class="g-save" id="ge-save" data-gesave="1"' + (ok ? '' : ' disabled') + '>保存</button></div>' +
+      '<div class="field"><label for="ge-title">标题</label><input id="ge-title" class="txt-in" type="text" maxlength="16" value="' + esc(e.title || '') + '" placeholder="例如：环境描写" autocomplete="off"><small class="g-cnt" id="ge-tc">' + (e.title || '').length + '/16</small></div>' +
+      '<div class="field"><span class="lbl">怎么帮</span>' + segB('ghow', [['chk', '查漏'], ['idea', '出主意'], ['form', '按框架补全']], e.how) + '<p class="hint">' + GEM_HOW[e.how][1] + '。</p></div>' +
+      '<div class="field"><label for="ge-body">' + (e.how === 'form' ? '内容 · 框架（每行一个【栏目】，后面可以写要求）' : '内容 · 告诉 Amara 查什么、怎么判断') + '</label>' +
+        '<textarea id="ge-body" class="txt-area g-body' + (e.how === 'form' ? ' mono' : '') + '" maxlength="400" placeholder="' + (e.how === 'form' ? '【姓名】\n【外貌】要具体到颜色和质地\n【性格】' : e.how === 'idea' ? '例如：给 2–3 个能让画面更具体的细节' : '例如：写景的段落有没有写到光线、声音、气味和天气；只写了人物、没写场景就打 ✕') + '">' + esc(e.body || '') + '</textarea>' +
+        '<small class="g-cnt" id="ge-bc">' + (e.body || '').length + '/400</small>' +
+        (e.how === 'form' ? '<button type="button" class="chip g-addf" data-gaddf="1">＋ 加一个【栏目】</button>' : '') + '</div>' +
+      (!e.id ? '<div class="g-eg">' + GEM_EG.map(function (x, i) { return '<button type="button" class="chip" data-geg="' + i + '">' + x[0] + '</button>'; }).join('') + '</div>' : '') +
+      '<div class="field"><span class="lbl">什么时候用</span>' + segB('gwhen', [['always', '每次'], ['auto', '自己判断'], ['manual', '我点了才用']], e.when) + '<p class="hint">' + GEM_WHEN[e.when][1] + '。</p></div>' +
+      (e.how === 'form' ? sw('list', e.list !== false, '正文里按框架逐栏写出来', 'data-gesw') + '<p class="hint" style="margin:-4px 0 10px">关掉：' + esc(asst.name || 'Amor') + ' 只拿框架当素材，写成连贯的文字。</p>' : '') +
+      sw('on', e.on !== false, '启用这张卡片', 'data-gesw') +
+      (e.id ? '<button type="button" class="g-delrow" data-gdel="' + esc(e.id) + '" data-gfromsheet="1">' + icon('trash', 18) + '删除这张卡片</button>' : '') +
+      '</section></div>';
+  }
   function gemPage() {
     var g = asst.gem, rb = resolveGem(), ra = resolveModel(), nmA = esc(asst.name || 'Amor');
     var usable = providers.filter(function (x) { return x.enabled && x.key && x.models.length; });
     var segB = function (key, opts, cur) { return '<div class="seg" role="group">' + opts.map(function (o) { return '<button type="button" data-' + key + '="' + o[0] + '" aria-pressed="' + (String(cur) === String(o[0])) + '">' + o[1] + '</button>'; }).join('') + '</div>'; };
     return '<section class="view">' + subHead('back-settings', '双子星') +
-      '<div class="g-hero">' + gemStars(false) + '<p>两个助理一起想：<b class="ga">' + nmA + '</b> 先想，<b class="gb">' + GEM_NAME + '</b> 审稿挑漏，' + nmA + ' 再定稿写出来。适合写作、方案、分析这类要求多的问题；每次多一到两次请求，会慢一点。</p></div>' +
+      '<div class="g-hero">' + gemStars(false) + '<p>两个助理一起想：<b class="ga">' + nmA + '</b> 先想，<b class="gb">' + GEM_NAME + '</b> 帮她查漏、出主意、按框架补全细节，最后由 ' + nmA + ' 写正文。每次多一到两次请求，会慢一点。</p></div>' +
       '<div class="panel"><h2>模式 <em>Mode</em></h2>' +
         '<div class="field">' + segB('gmode', [['off', '关闭'], ['auto', '自动'], ['on', '总是']], g.mode) +
-        '<p class="hint">' + (g.mode === 'auto' ? '自动：问候、闲聊直接回答；要求多、写作、方案、分析才叫上 ' + GEM_NAME + '。' : g.mode === 'on' ? '总是：每句话都先让 ' + GEM_NAME + ' 审一遍，最稳也最慢。' : '关闭：只有 ' + nmA + ' 自己回答。') + '</p></div>' +
+        '<p class="hint">' + (g.mode === 'auto' ? '自动：问候、闲聊直接回答；要求多、写作、方案、分析才叫上 ' + GEM_NAME + '。在输入框点了卡片也会叫上她。' : g.mode === 'on' ? '总是：每句话都先让 ' + GEM_NAME + ' 帮一遍，最稳也最慢。' : '关闭：只有 ' + nmA + ' 自己回答（在输入框点了卡片时例外）。') + '</p></div>' +
       '</div>' +
       '<div class="panel"><h2>两位助理 <em>Twins</em></h2>' +
-        '<div class="g-row">' + gemTile('a') + '<span><b>' + nmA + ' · 主笔</b><small>跟随聊天的模型：' + esc(ra ? ra.p.name + ' · ' + ra.id : '还没有可用的模型') + '</small></span></div>' +
-        '<button type="button" class="g-row btnrow" data-ui="gpick">' + gemTile('b') + '<span><b>' + GEM_NAME + ' · 审稿</b><small>' + esc(rb ? (rb.own ? rb.p.name + ' · ' + rb.id : '和 ' + (asst.name || 'Amor') + ' 用同一个模型') : '还没有可用的模型') + '</small></span>' + icon(gemui.pick ? 'down' : 'chev', 20) + '</button>' +
+        '<div class="g-row">' + gemTile('a') + '<span><b>' + nmA + ' · 写正文</b><small>跟随聊天的模型：' + esc(ra ? ra.p.name + ' · ' + ra.id : '还没有可用的模型') + '</small></span></div>' +
+        '<button type="button" class="g-row btnrow" data-ui="gpick">' + gemTile('b') + '<span><b>' + GEM_NAME + ' · 帮忙</b><small>' + esc(rb ? (rb.own ? rb.p.name + ' · ' + rb.id : '和 ' + (asst.name || 'Amor') + ' 用同一个模型') : '还没有可用的模型') + '</small></span>' + icon(gemui.pick ? 'down' : 'chev', 20) + '</button>' +
         (gemui.pick ? '<div class="model-pick">' +
           '<div class="chips"><button type="button" class="chip" data-gmodel="" aria-pressed="' + !g.model + '">和 ' + nmA + ' 同一个</button></div>' +
           (usable.length ? usable.map(function (x) {
-            return '<span class="grp">' + esc(x.name) + '</span><div class="chips">' + x.models.map(function (m) {
-              var key = x.id + '::' + m, on = g.model === key;
-              return '<button type="button" class="chip" data-gmodel="' + esc(key) + '" aria-pressed="' + on + '">' + esc(m) + '</button>';
+            return '<span class="grp">' + esc(x.name) + '</span><div class="chips">' + x.models.map(function (mm) {
+              var key = x.id + '::' + mm, on = g.model === key;
+              return '<button type="button" class="chip" data-gmodel="' + esc(key) + '" aria-pressed="' + on + '">' + esc(mm) + '</button>';
             }).join('') + '</div>';
           }).join('') : '') +
-          '<p class="hint">建议选另一家的模型，看问题的角度更不一样。想接别的供应商（包括自定义接口），先到模型供应商里添加、填好 Key。</p>' +
+          '<p class="hint">建议选另一家的模型，想法更不一样。想接别的供应商（包括自定义接口），先到模型供应商里添加、填好 Key。</p>' +
           '<button type="button" class="btn" data-ui="providers" style="align-self:flex-start">管理模型供应商</button></div>' : '') +
         '<div class="field"><span class="lbl">' + GEM_NAME + ' 的思考深度</span>' + segB('gthink', THINK_LABELS.map(function (t, i) { return [i, t]; }), g.think) + '</div>' +
       '</div>' +
-      '<div class="panel"><h2>' + GEM_NAME + ' 审查什么 <em>Review</em></h2><div class="g-dims">' + GEM_DIMS.map(function (x) {
-        return '<button type="button" class="chip" data-gdim="' + x[0] + '" aria-pressed="' + !!g.dims[x[0]] + '">' + x[1] + '</button>';
-      }).join('') + '</div><p class="hint">“要求有没有漏”专门治注意力偏科：比如要写外貌、身材、对白、剧情、环境、细节，她会逐项打勾，漏了哪项就让 ' + nmA + ' 补上。</p>' +
+      '<div class="panel"><div class="g-ph"><h2>' + GEM_NAME + ' 怎么帮忙 <em>Cards</em></h2><button type="button" class="icon-btn g-add" data-gedit="+" aria-label="新增卡片">' + icon('plus', 20) + '</button></div>' +
+        '<div class="g-cards">' + (g.cards.length ? g.cards.map(gemCardHtml).join('') : '<p class="empty">还没有卡片。点右上角 ＋ 加一张。</p>') + '</div>' +
+        '<p class="hint">每次 ' + GEM_NAME + ' 先看一眼你的问题，从这些卡片里挑用得上的。点 ✎ 改标题和内容，＋ 加一张自己的；在聊天输入框点双星按钮，可以指定这次用哪张。</p>' +
+        '<button type="button" class="g-reset" data-greset="1">' + (gemui.reset ? '再点一次，恢复默认卡片（自己加的会删掉）' : '恢复默认') + '</button>' +
         sw('check', g.check, '写完再终检', 'data-gsw') +
-        '<p class="hint" style="margin:-4px 0 10px">正文写完后，' + GEM_NAME + ' 很快对照清单看一遍；漏了会在回答下面提示「补写」，点了才补。</p>' +
-      '</div></section>';
+        '<p class="hint" style="margin:-4px 0 10px">正文写完后，' + GEM_NAME + ' 很快对照「查漏」卡片的清单看一遍；漏了会在回答下面提示「补写」，点了才补。</p>' +
+      '</div></section>' + gemSheet();
   }
-
   function sendChat(text, opt) {
     text = (text || '').trim();
     var rm = resolveModel();
@@ -9601,7 +9745,9 @@
     var useFetch = fetchReady(), preUrl = useFetch && !!rm.p.noTools && (URL_IN.exec(text) || [])[0];
     chat.sources = null; chat.phase = preWeb ? 'search' : ''; chat.pop = ''; chat.recall = null;
     chat.anchorSend = true;
-    var gemOn = gemWant(text); chat.gem = null;
+    var gemPick = (chat.gemPick || []).filter(function (id) { return (asst.gem.cards || []).some(function (c) { return c.id === id; }); });
+    chat.gemPick = [];
+    var gemOn = gemPick.length ? !!resolveGem() : gemWant(text); chat.gem = null;
     renderSheet();
 
     var name = state.name.trim();
@@ -9659,7 +9805,7 @@
       liveRead = voice.auto && voiceReady() ? Speaker.live(conv.id + ':' + conv.msgs.length, function (e) { toast('朗读失败：' + e.msg); }) : null;
       // 4.9 双子星：先让 Amor 想、Amara 审，最后这一次请求才是正文
       var G = null, bntCache = '';
-      if (gemOn) G = chat.gem = { stage: 1, t0: Date.now(), a1: { think: '', ms: 0 }, b: { raw: '', ms: 0 }, rmB: resolveGem() };
+      if (gemOn) G = chat.gem = { stage: 1, t0: Date.now(), a1: { think: '', ms: 0 }, b: { raw: '', ms: 0 }, rmB: resolveGem(), pick: gemPick };
       if (chat.open) renderSheet();
       function mkOpt(stage, sysNT) { return {
         tools: (useRecall ? RECALL_TOOLS : []).concat(useRemind ? REMIND_TOOLS : []).concat(CAL_TOOLS).concat(useWeb ? WEB_TOOLS : []).concat(useFetch ? FETCH_TOOLS : []),
@@ -9735,6 +9881,7 @@
       if (chat.mmenu || chat.editIdx != null) d += 1;
     }
     if (calui.sheet) d += 1;
+    if (state.sub === 'gemini' && gemui.edit) d += 1;
     var back = document.querySelector('#main .sub-head [data-ui^="back-"]');
     if (back) d += /^back-(providers|voice)$/.test(back.getAttribute('data-ui')) ? 2 : 1;
     if (state.tab !== 'today') d += 1;
@@ -9751,6 +9898,7 @@
       closeChat(); return;
     }
     if (calui.sheet) { calui.sheet = null; keepScroll(); return; }
+    if (state.sub === 'gemini' && gemui.edit) { gemui.edit = null; keepScroll(); return; }
     var back = document.querySelector('#main .sub-head [data-ui^="back-"]');
     if (back) { back.click(); return; }
     if (state.tab !== 'today') { var t = document.querySelector('[data-tab="today"]'); if (t) t.click(); }

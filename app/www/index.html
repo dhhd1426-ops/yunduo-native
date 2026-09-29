@@ -2007,6 +2007,12 @@
   .g-kv { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 5px 12px; font-size: 13px; line-height: 1.6; }
   .g-kv span:nth-child(odd) { color: var(--muted); white-space: nowrap; } .g-kv span:nth-child(even) { color: var(--text); }
   .g-rv h5 .g-how { margin-left: 6px; letter-spacing: 0; }
+
+  /* 4.9.2 长按长消息：气泡只浮起前一截，末尾淡出；从顶部放大，不往上顶菜单 */
+  .mm-bubble.clip { overflow: hidden; transform-origin: 100% 0; -webkit-mask-image: linear-gradient(#000 calc(100% - 64px), transparent); mask-image: linear-gradient(#000 calc(100% - 64px), transparent); }
+  .mm-float .mm-menu { position: relative; z-index: 1; }
+  .mm-bubble.clip { transform: scale(1.015); animation-name: mmLiftC; }
+  @keyframes mmLiftC { from { transform: scale(.985); box-shadow: none; } to { transform: scale(1.015); } }
 </style>
 <script src="fonts/script-glyphs.js"></script>
 <script src="fonts/pinyin.js"></script>
@@ -8415,23 +8421,25 @@
   /* 4.7.2 长按自己的消息：浮起 + 菜单（编辑 / 复制），编辑后重新发送，旧版本留作分支（仿 Claude App） */
   function msgMenuHtml(msgs) {
     var mm = chat.mmenu; if (!mm || !msgs[mm.i]) return '';
-    var below = mm.top + mm.h + 140 < innerHeight;
+    // 4.9.2：长消息只浮起前一截（最多四成屏高，末尾淡出），菜单永远在气泡下面，两者一起放进屏幕，不会互相压住
+    var H = mm.H || innerHeight, menuH = chat.busy ? 160 : 214, pv = Math.min(mm.h, Math.max(120, Math.round(H * 0.4)));
+    var top = Math.min(Math.max(mm.top, 64), H - (pv + 12 + menuH) - 16); top = Math.max(top, 12);
+    var clip = mm.h > pv + 2;
     return '<div class="mm-wrap"><button type="button" class="mm-scrim" data-mclose="1" aria-label="关闭菜单"></button>' +
-      '<div class="mm-float" style="top:' + Math.max(70, below ? mm.top : mm.top - 128) + 'px;right:' + mm.right + 'px">' +
-        (below ? '<div class="msg me mm-bubble" style="max-width:' + mm.w + 'px">' + esc(msgs[mm.i].content) + '</div>' : '') +
+      '<div class="mm-float" style="top:' + top + 'px;right:' + mm.right + 'px">' +
+        '<div class="msg me mm-bubble' + (clip ? ' clip' : '') + '" style="max-width:' + mm.w + 'px' + (clip ? ';max-height:' + pv + 'px' : '') + '">' + esc(msgs[mm.i].content) + '</div>' +
         '<div class="mm-menu" role="menu"><div class="mm-time">' + msgTime(msgs[mm.i].ts) + '</div>' +
           '<button type="button" role="menuitem" data-mcopy="' + mm.i + '">' + icon('copy', 20) + '<span>复制消息</span></button>' +
           '<button type="button" role="menuitem" data-msel="' + mm.i + '">' + SEL_ICON + '<span>选择文字</span></button>' +
           (chat.busy ? '' : '<button type="button" role="menuitem" data-medit="' + mm.i + '">' + icon('pencil', 20) + '<span>编辑</span></button>') +
-        '</div>' + (below ? '' : '<div class="msg me mm-bubble" style="max-width:' + mm.w + 'px">' + esc(msgs[mm.i].content) + '</div>') +
-      '</div></div>';
+        '</div></div></div>';
   }
   var SEL_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5h1.5M5 4.5v15M5 19.5h1.5M9.5 8h9M9.5 12h9M9.5 16h6"/></svg>';
   function msgTime(ts) { if (!ts) return ''; var d = new Date(ts), n = new Date(), hm = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
     return d.toDateString() === n.toDateString() ? hm : (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + hm; }
   function openMsgMenu(el) {
     var i = +el.getAttribute('data-mi'), r = el.getBoundingClientRect(), sh = el.closest('.chat-main'), sr = sh ? sh.getBoundingClientRect() : { top: 0, right: innerWidth };
-    chat.mmenu = { i: i, top: r.top - sr.top, right: sr.right - r.right, h: r.height, w: Math.ceil(r.width) + 16 };
+    chat.mmenu = { i: i, top: r.top - sr.top, right: sr.right - r.right, h: r.height, w: Math.ceil(r.width) + 16, H: sh ? sr.height : innerHeight };
     if (navigator.vibrate) try { navigator.vibrate(8); } catch (e) {}
     keepChatScroll();
   }

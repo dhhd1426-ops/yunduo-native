@@ -24,6 +24,13 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- 5.8：连接器（Notion、Linear…）登录授权后浏览器跳回 App -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="com.cloudweather.xiaoyu" android:host="oauth" />
+            </intent-filter>
             <!-- 5.0：在文件管理、微信里把 .mpkg 壁纸「用云朵天气打开」 -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

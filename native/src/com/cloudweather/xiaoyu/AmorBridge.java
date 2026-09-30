@@ -209,6 +209,29 @@ public class AmorBridge {
         }
     }
 
+    /** 5.8：用手机浏览器打开网址（连接器登录授权、回答里的链接） */
+    @JavascriptInterface
+    public boolean openUrl(String url) {
+        try {
+            if (url == null || !(url.startsWith("https://") || url.startsWith("http://"))) return false;
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            i.addCategory(Intent.CATEGORY_BROWSABLE);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            return tryStart(i);
+        } catch (Throwable t) {
+            Store.err(app, "openUrl", t);
+            return false;
+        }
+    }
+
+    /** 5.8：登录授权后浏览器跳回来的地址（com.cloudweather.xiaoyu://oauth?code=…），取一次就清掉 */
+    @JavascriptInterface
+    public String takeOauth() {
+        String u = MainActivity.oauthUrl;
+        MainActivity.oauthUrl = null;
+        return u == null ? "" : u;
+    }
+
     /* ---------- 4.7 文件：网页分块写入 → 保存到下载 / 分享 / 用其它应用打开 ---------- */
     @JavascriptInterface
     public String fileBegin(String name, String mime) {

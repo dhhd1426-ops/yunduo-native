@@ -28,6 +28,7 @@ import org.json.JSONObject;
  */
 public class MainActivity extends Activity {
     private static final int WV_ID = 0x0100;
+    static volatile String oauthUrl;   // 5.8：连接器登录授权的回调
     static final int REQ_FILE = 41, REQ_WALL = 42, REQ_LOC = 43, REQ_WMIC = 46, REQ_CAM = 48;
     private WebView web;
     private ValueCallback<Uri[]> fileCb;
@@ -168,6 +169,13 @@ public class MainActivity extends Activity {
         if (it == null) return;
         Uri u = null;
         String a = it.getAction();
+        Uri d0 = it.getData();
+        if (Intent.ACTION_VIEW.equals(a) && d0 != null && "com.cloudweather.xiaoyu".equals(d0.getScheme())) {
+            oauthUrl = d0.toString();
+            it.setAction(null);
+            js("window.__oauthCb&&window.__oauthCb()");
+            return;
+        }
         if (Intent.ACTION_VIEW.equals(a)) u = it.getData();
         else if (Intent.ACTION_SEND.equals(a)) u = it.getParcelableExtra(Intent.EXTRA_STREAM);
         if (u == null) return;

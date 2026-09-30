@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- 5.0：找离你最近的气象站（只要大概位置） -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 5.4：回信栏的麦克风听写和语音模式 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <application android:label="云朵天气" android:icon="@mipmap/ic_launcher" android:allowBackup="true">
         <!-- 折叠/展开屏幕、转屏时不重建页面（和 3.7 一样） -->
         <activity android:name=".MainActivity" android:label="云朵天气" android:exported="true"

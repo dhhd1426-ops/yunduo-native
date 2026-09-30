@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
     private ValueCallback<Uri[]> fileCb;
     private GeolocationPermissions.Callback geoCb;
     private String geoOrigin;
+    Voice voice;                 // 5.4：麦克风听写 / 语音模式 / 系统朗读兜底
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class MainActivity extends Activity {
         } catch (Throwable t) {
             Store.err(this, "bridge", t);
         }
+        voice = new Voice(this);
         Store.saveLaunch(this, getIntent());
         takeShared(getIntent());
         web.loadUrl("file:///android_asset/index.html");
@@ -136,6 +138,8 @@ public class MainActivity extends Activity {
         if (req == REQ_FILE) {
             if (fileCb != null) fileCb.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(res, data));
             fileCb = null;
+        } else if (req == Voice.REQ_STT) {
+            if (voice != null) voice.onActivityResult(res, data);
         } else if (req == REQ_WALL) {
             Uri u = res == RESULT_OK && data != null ? data.getData() : null;
             if (u == null) { wallDone(errJson("cancel")); return; }
@@ -146,6 +150,10 @@ public class MainActivity extends Activity {
 
     @Override
     public void onRequestPermissionsResult(int req, String[] p, int[] g) {
+        if (req == Voice.REQ_MIC) {
+            if (voice != null) voice.onPermission(g.length > 0 && g[0] == PackageManager.PERMISSION_GRANTED);
+            return;
+        }
         if (req == REQ_LOC && geoCb != null) {
             boolean ok = g.length > 0 && g[0] == PackageManager.PERMISSION_GRANTED;
             geoCb.invoke(geoOrigin, ok, false);
@@ -179,6 +187,13 @@ public class MainActivity extends Activity {
     protected void onPause() {
         super.onPause();
         js("window.__amorPause&&window.__amorPause()");      // 5.0：动态壁纸在后台停帧
+        if (voice != null) voice.onPause();                    // 切到后台就别再听了
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (voice != null) voice.destroy();
+        super.onDestroy();
     }
 
     void js(String code) {

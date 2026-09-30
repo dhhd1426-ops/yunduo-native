@@ -275,4 +275,41 @@ public class AmorBridge {
             return false;
         }
     }
+
+    // ---------- 5.4 语音 ----------
+    private void ui(final Runnable r) { act.runOnUiThread(new Runnable() { @Override public void run() { try { r.run(); } catch (Throwable t) { Store.err(app, "voice", t); } } }); }
+    private Voice v() { return act instanceof MainActivity ? ((MainActivity) act).voice : null; }
+
+    /** {rec:有后台识别服务, mic:已有麦克风权限, dlg:有系统语音输入弹窗} */
+    @JavascriptInterface
+    public String sttInfo() {
+        try {
+            Voice v = v();
+            android.content.Intent i = new android.content.Intent(android.speech.RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            return new JSONObject().put("rec", v != null && v.available()).put("mic", v != null && v.hasMic())
+                .put("dlg", i.resolveActivity(app.getPackageManager()) != null).toString();
+        } catch (Throwable t) { Store.err(app, "sttInfo", t); return "{}"; }
+    }
+
+    @JavascriptInterface
+    public void sttStart(final String lang) { ui(new Runnable() { public void run() { Voice v = v(); if (v != null) v.start(lang); } }); }
+
+    @JavascriptInterface
+    public void sttDialog(final String lang) { ui(new Runnable() { public void run() { Voice v = v(); if (v != null) v.startIntent(lang); } }); }
+
+    @JavascriptInterface
+    public void sttStop() { ui(new Runnable() { public void run() { Voice v = v(); if (v != null) v.stop(); } }); }
+
+    @JavascriptInterface
+    public void sttCancel() { ui(new Runnable() { public void run() { Voice v = v(); if (v != null) v.cancel(); } }); }
+
+    /** 系统朗读（火山朗读不可用时的兜底）；进度通过 __stt({t:'tts',e,id}) 回来 */
+    @JavascriptInterface
+    public void ttsSpeak(final String text, final float rate, final String id) { ui(new Runnable() { public void run() { Voice v = v(); if (v != null) v.speak(text, rate, id); } }); }
+
+    @JavascriptInterface
+    public void ttsStop() { ui(new Runnable() { public void run() { Voice v = v(); if (v != null) v.ttsStop(); } }); }
+
+    @JavascriptInterface
+    public void ttsWarm() { ui(new Runnable() { public void run() { Voice v = v(); if (v != null) v.ttsInit(); } }); }
 }

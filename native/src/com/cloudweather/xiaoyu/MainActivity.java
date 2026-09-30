@@ -32,6 +32,7 @@ public class MainActivity extends Activity {
     private String geoOrigin;
     private PermissionRequest micReq;   // 5.5：网页要麦克风（语音模式自己录音、云端识别）
     Voice voice;                 // 5.4：麦克风听写 / 语音模式 / 系统朗读兜底
+    Mic mic;                     // 5.5.2：语音对话的原生录音（通话模式，带回声消除）
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +98,7 @@ public class MainActivity extends Activity {
             Store.err(this, "bridge", t);
         }
         voice = new Voice(this);
+        mic = new Mic(this);
         Store.saveLaunch(this, getIntent());
         takeShared(getIntent());
         web.loadUrl("file:///android_asset/index.html");
@@ -179,6 +181,10 @@ public class MainActivity extends Activity {
             }
             return;
         }
+        if (req == Mic.REQ_NMIC) {
+            if (mic != null) mic.onPermission(g.length > 0 && g[0] == PackageManager.PERMISSION_GRANTED);
+            return;
+        }
         if (req == Voice.REQ_MIC) {
             if (voice != null) voice.onPermission(g.length > 0 && g[0] == PackageManager.PERMISSION_GRANTED);
             return;
@@ -217,11 +223,13 @@ public class MainActivity extends Activity {
         super.onPause();
         js("window.__amorPause&&window.__amorPause()");      // 5.0：动态壁纸在后台停帧
         if (voice != null) voice.onPause();                    // 切到后台就别再听了
+        if (mic != null) mic.stop(true);
     }
 
     @Override
     protected void onDestroy() {
         if (voice != null) voice.destroy();
+        if (mic != null) mic.stop(false);
         super.onDestroy();
     }
 

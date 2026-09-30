@@ -292,6 +292,18 @@ public class AmorBridge {
         } catch (Throwable t) { Store.err(app, "sttInfo", t); return "{}"; }
     }
 
+    // 5.5.2：原生录音（语音对话的云端识别用），数据从 window.__mic 回来
+    private Mic mic() { return act instanceof MainActivity ? ((MainActivity) act).mic : null; }
+    @JavascriptInterface
+    public String micInfo() {
+        try { Voice v = v(); Mic m = mic(); return new JSONObject().put("ok", m != null).put("mic", v != null && v.hasMic()).put("aec", m != null && m.aecAvailable()).toString(); }
+        catch (Throwable t) { return "{}"; }
+    }
+    @JavascriptInterface
+    public void micStart() { ui(new Runnable() { public void run() { Mic m = mic(); if (m != null) m.start(); } }); }
+    @JavascriptInterface
+    public void micStop() { ui(new Runnable() { public void run() { Mic m = mic(); if (m != null) m.stop(true); } }); }
+
     @JavascriptInterface
     public void sttStart(final String lang) { ui(new Runnable() { public void run() { Voice v = v(); if (v != null) v.start(lang); } }); }
 

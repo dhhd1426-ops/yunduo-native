@@ -1,20 +1,34 @@
 package com.cloudweather.xiaoyu;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Window;
+import android.webkit.GeolocationPermissions;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import org.json.JSONObject;
+
 /**
  * 整个 App：一个全屏 WebView 加载 assets/index.html。
- * 3.8 起从手写 DEX 改为 Java 编译；行为和 3.7 完全一致，另外挂上 AmorNative（通知模块）。
+ * 3.8 起从手写 DEX 改为 Java 编译；另外挂上 AmorNative（通知模块）。
+ * 5.0：网页的文件选择框、导入壁纸（也能从别的 App「用云朵天气打开」.mpkg）、网页定位（只要大概位置，用来找最近的气象站）。
  */
 public class MainActivity extends Activity {
     private static final int WV_ID = 0x0100;
+    static final int REQ_FILE = 41, REQ_WALL = 42, REQ_LOC = 43;
     private WebView web;
+    private ValueCallback<Uri[]> fileCb;
+    private GeolocationPermissions.Callback geoCb;
+    private String geoOrigin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +44,113 @@ public class MainActivity extends Activity {
         s.setAllowUniversalAccessFromFileURLs(true);
         s.setMediaPlaybackRequiresUserGesture(false); // Amor 的回复可以自动朗读
         s.setTextZoom(100);                            // 系统字体放大时页面不跟着放大
+        s.setGeolocationEnabled(true);
         web.setWebViewClient(new WebViewClient());
+        web.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onShowFileChooser(WebView v, ValueCallback<Uri[]> cb, FileChooserParams p) {
+                if (fileCb != null) fileCb.onReceiveValue(null);
+                fileCb = cb;
+                try {
+                    Intent i = p.createIntent();
+                    i.addCategory(Intent.CATEGORY_OPENABLE);
+                    startActivityForResult(i, REQ_FILE);
+                } catch (Throwable t) {
+                    fileCb = null;
+                    Store.err(MainActivity.this, "chooser", t);
+                    return false;
+                }
+                return true;
+            }
+
+            @Override
+            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback cb) {
+                if (hasLoc()) { cb.invoke(origin, true, false); return; }
+                geoCb = cb; geoOrigin = origin;
+                if (Build.VERSION.SDK_INT >= 23) requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQ_LOC);
+                else cb.invoke(origin, true, false);
+            }
+        });
         try {
             web.addJavascriptInterface(new AmorBridge(this), "AmorNative");
         } catch (Throwable t) {
             Store.err(this, "bridge", t);
         }
         Store.saveLaunch(this, getIntent());
+        takeShared(getIntent());
         web.loadUrl("file:///android_asset/index.html");
         setContentView(web);
+    }
+
+    boolean hasLoc() {
+        return Build.VERSION.SDK_INT < 23 || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            || checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    /** 网页点「导入壁纸」 */
+    void pickWall() {
+        try {
+            Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            i.addCategory(Intent.CATEGORY_OPENABLE);
+            i.setType("*/*");
+            startActivityForResult(i, REQ_WALL);
+        } catch (Throwable t) {
+            Store.err(this, "pickWall", t);
+            wallDone(errJson("打不开文件选择器"));
+        }
+    }
+
+    private static String errJson(String m) { try { return new JSONObject().put("err", m).toString(); } catch (Throwable t) { return "{}"; } }
+
+    private void wallDone(String json) {
+        Store.put(this, "wallin", json);
+        js("window.__wallIn&&window.__wallIn()");
+    }
+
+    private void copyWall(final Uri u) {
+        final android.content.Context app = getApplicationContext();
+        js("window.__wallBusy&&window.__wallBusy(1)");
+        new Thread(new Runnable() {
+            @Override public void run() {
+                final String r = Walls.copy(app, u).toString();
+                runOnUiThread(new Runnable() { @Override public void run() { wallDone(r); } });
+            }
+        }).start();
+    }
+
+    /** 从别的 App 分享 / 用云朵天气打开 */
+    private void takeShared(Intent it) {
+        if (it == null) return;
+        Uri u = null;
+        String a = it.getAction();
+        if (Intent.ACTION_VIEW.equals(a)) u = it.getData();
+        else if (Intent.ACTION_SEND.equals(a)) u = it.getParcelableExtra(Intent.EXTRA_STREAM);
+        if (u == null) return;
+        it.setAction(null);            // 转屏重建时不再导入一次
+        copyWall(u);
+    }
+
+    @Override
+    protected void onActivityResult(int req, int res, Intent data) {
+        super.onActivityResult(req, res, data);
+        if (req == REQ_FILE) {
+            if (fileCb != null) fileCb.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(res, data));
+            fileCb = null;
+        } else if (req == REQ_WALL) {
+            Uri u = res == RESULT_OK && data != null ? data.getData() : null;
+            if (u == null) { wallDone(errJson("cancel")); return; }
+            try { getContentResolver().takePersistableUriPermission(u, Intent.FLAG_GRANT_READ_URI_PERMISSION); } catch (Throwable ignore) { }
+            copyWall(u);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int req, String[] p, int[] g) {
+        if (req == REQ_LOC && geoCb != null) {
+            boolean ok = g.length > 0 && g[0] == PackageManager.PERMISSION_GRANTED;
+            geoCb.invoke(geoOrigin, ok, false);
+            geoCb = null;
+        }
     }
 
     @Override
@@ -47,6 +159,7 @@ public class MainActivity extends Activity {
         setIntent(intent);
         // 点通知回到已经开着的 App：记下是哪条提醒，让网页接着聊
         if (Store.saveLaunch(this, intent)) js("window.__amorLaunch&&window.__amorLaunch()");
+        takeShared(intent);
     }
 
     @Override
@@ -62,7 +175,13 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void js(String code) {
+    @Override
+    protected void onPause() {
+        super.onPause();
+        js("window.__amorPause&&window.__amorPause()");      // 5.0：动态壁纸在后台停帧
+    }
+
+    void js(String code) {
         try {
             if (web != null) web.evaluateJavascript(code, null);
         } catch (Throwable t) {

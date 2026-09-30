@@ -240,6 +240,32 @@ public class AmorBridge {
         try { return AmorFiles.send(act, app, path, mime, false); } catch (Throwable t) { Store.err(app, "fileOpen", t); return false; }
     }
 
+    /* ---------- 5.0 壁纸 ---------- */
+    /** 打开系统的文件选择器选壁纸；选完后原生复制进 files/amor/walls/，再调 window.__wallIn() */
+    @JavascriptInterface
+    public void wallPick() {
+        act.runOnUiThread(new Runnable() { @Override public void run() { if (act instanceof MainActivity) ((MainActivity) act).pickWall(); } });
+    }
+
+    /** 刚导入（或从别的 App 打开）的壁纸：{path,name,size,kind} / {err}；取一次就清掉 */
+    @JavascriptInterface
+    public String takeWall() {
+        String s = Store.get(app, "wallin", "");
+        if (s.length() > 0) Store.remove(app, "wallin");
+        return s;
+    }
+
+    @JavascriptInterface
+    public boolean wallDelete(String path) {
+        return Walls.delete(app, path);
+    }
+
+    /** 定位权限：granted / denied（没问过也算 denied，网页调 geolocation 时系统会弹框） */
+    @JavascriptInterface
+    public String locState() {
+        return act instanceof MainActivity && ((MainActivity) act).hasLoc() ? "granted" : "denied";
+    }
+
     private boolean tryStart(Intent i) {
         try {
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

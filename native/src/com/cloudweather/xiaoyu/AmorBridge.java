@@ -286,7 +286,8 @@ public class AmorBridge {
         try {
             Voice v = v();
             android.content.Intent i = new android.content.Intent(android.speech.RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            return new JSONObject().put("rec", v != null && v.available()).put("mic", v != null && v.hasMic())
+            JSONObject o = v != null ? v.info() : new JSONObject();
+            return o.put("rec", v != null && v.available()).put("mic", v != null && v.hasMic())
                 .put("dlg", i.resolveActivity(app.getPackageManager()) != null).toString();
         } catch (Throwable t) { Store.err(app, "sttInfo", t); return "{}"; }
     }

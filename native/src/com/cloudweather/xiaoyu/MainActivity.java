@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Window;
 import android.webkit.GeolocationPermissions;
+import android.webkit.PermissionRequest;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -24,11 +25,12 @@ import org.json.JSONObject;
  */
 public class MainActivity extends Activity {
     private static final int WV_ID = 0x0100;
-    static final int REQ_FILE = 41, REQ_WALL = 42, REQ_LOC = 43;
+    static final int REQ_FILE = 41, REQ_WALL = 42, REQ_LOC = 43, REQ_WMIC = 46;
     private WebView web;
     private ValueCallback<Uri[]> fileCb;
     private GeolocationPermissions.Callback geoCb;
     private String geoOrigin;
+    private PermissionRequest micReq;   // 5.5：网页要麦克风（语音模式自己录音、云端识别）
     Voice voice;                 // 5.4：麦克风听写 / 语音模式 / 系统朗读兜底
 
     @Override
@@ -70,6 +72,23 @@ public class MainActivity extends Activity {
                 geoCb = cb; geoOrigin = origin;
                 if (Build.VERSION.SDK_INT >= 23) requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQ_LOC);
                 else cb.invoke(origin, true, false);
+            }
+
+            // 5.5：网页 getUserMedia 录音。只给麦克风（不给摄像头），系统权限没给就先要
+            @Override
+            public void onPermissionRequest(final PermissionRequest r) {
+                boolean wantMic = false;
+                for (String res : r.getResources()) if (PermissionRequest.RESOURCE_AUDIO_CAPTURE.equals(res)) wantMic = true;
+                if (!wantMic) { r.deny(); return; }
+                if (voice != null && voice.hasMic()) { r.grant(new String[]{PermissionRequest.RESOURCE_AUDIO_CAPTURE}); return; }
+                if (micReq != null) { try { micReq.deny(); } catch (Throwable ignore) { } }
+                micReq = r;
+                requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, REQ_WMIC);
+            }
+
+            @Override
+            public void onPermissionRequestCanceled(PermissionRequest r) {
+                if (micReq == r) micReq = null;
             }
         });
         try {
@@ -150,6 +169,16 @@ public class MainActivity extends Activity {
 
     @Override
     public void onRequestPermissionsResult(int req, String[] p, int[] g) {
+        if (req == REQ_WMIC) {
+            PermissionRequest r = micReq; micReq = null;
+            if (r != null) {
+                try {
+                    if (g.length > 0 && g[0] == PackageManager.PERMISSION_GRANTED) r.grant(new String[]{PermissionRequest.RESOURCE_AUDIO_CAPTURE});
+                    else r.deny();
+                } catch (Throwable t) { Store.err(this, "wmic", t); }
+            }
+            return;
+        }
         if (req == Voice.REQ_MIC) {
             if (voice != null) voice.onPermission(g.length > 0 && g[0] == PackageManager.PERMISSION_GRANTED);
             return;

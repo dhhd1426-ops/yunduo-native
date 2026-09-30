@@ -1178,8 +1178,8 @@
   :root[data-theme="dark"] { --paper: #1c2438; --paper-line: #2e3752; --sepia: #a9a08f; --paper-ink: #e6e1d6; }
 
   /* 底部浮岛现在是 5 格 */
-  .tabs { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-  .tab-ind { width: calc((100% - 12px) / 5); }
+  .tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .tab-ind { width: calc((100% - 12px) / 4); }
   .tabs button span { font-size: 10.5px; }
   @media (min-width: 720px) { .tabs { grid-template-columns: 1fr; } .tab-ind { width: auto; } }
 
@@ -2139,11 +2139,222 @@
   #msgs .msg.bot.lifted { visibility: hidden; }
   .toast.act { pointer-events: auto; width: max-content; max-width: calc(100vw - 32px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .toast-act { border: 0; background: none; color: var(--accent); font: inherit; font-weight: 600; margin-left: 8px; padding: 2px 4px; }
+
+  /* ======================= 5.0 动态壁纸 · 沉浸式首页 ======================= */
+  html:has(body.walled), body.walled { background: #0b0f12; }
+  #wall { position: fixed; inset: 0; z-index: 0; display: none; overflow: hidden; background: #0b0f12; --wp: 0; }
+  #wall.on { display: block; }
+  body.walled .app { position: relative; z-index: 1; background: transparent; }
+  #wall .wl-c, #wall .wl-media { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity .9s ease, filter .6s ease, transform .6s ease; }
+  #wall.ready .wl-c, #wall.ready .wl-media { opacity: 1; }
+  #wall .wl-media img, #wall .wl-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  #wall-back { z-index: 0; } #wall-front { z-index: 2; }
+  #wall-mid { position: absolute; left: 0; right: 0; top: 0; z-index: 1; pointer-events: none; will-change: transform, opacity;
+    opacity: calc(1 - var(--wp) * 1.8); --ink: #f6f3ec; --text: #f6f3ec; --accent: #e08a6a; filter: drop-shadow(0 2px 14px rgba(0,0,0,.35)); }
+  #wall.flat #wall-mid { z-index: 3; }
+  #wall.media #wall-mid { z-index: 3; }
+  .wl-scrim { position: absolute; inset: 0; z-index: 3; pointer-events: none;
+    background: linear-gradient(rgba(5,14,17,.46), rgba(5,14,17,0) 24%, rgba(5,14,17,0) 52%, rgba(6,12,14,.5) 76%, rgba(6,12,14,.82)); }
+  /* 往上滑：壁纸跟着虚化、变暗，放大一点点 */
+  body.wall-home #wall .wl-c, body.wall-home #wall .wl-media { transition: opacity .9s ease; filter: blur(calc(var(--wp) * 26px)) brightness(calc(1 - var(--wp) * .42)) saturate(calc(1 + var(--wp) * .25)); transform: scale(calc(1 + var(--wp) * .08)); }
+  #wall.dim .wl-c, #wall.dim .wl-media { filter: blur(26px) brightness(.56) saturate(1.25); transform: scale(1.1); }
+  #wall.dim #wall-mid { opacity: 0; }
+  #wall.dim .wl-scrim { background: rgba(6,12,14,.18); }
+  /* 手写时间（夹在两块画布中间） */
+  .wm-time { display: flex; justify-content: center; padding: 0 22px; }
+  #wall-mid[data-align="l"] .wm-time { justify-content: flex-start; } #wall-mid[data-align="r"] .wm-time { justify-content: flex-end; }
+  #wall-mid .mo-time { margin: 0; align-items: flex-end; gap: 6px; }
+  #wall-mid .mo-time svg.hr-t { height: 112px; margin: 0; vertical-align: 0; }
+  #wall-mid .mo-time svg.hr-t path { stroke-width: 1.1px; }
+  #wall-mid .mo-time svg.hr-t .c { color: var(--accent); }
+  #wall-mid .mo-time .hr-ap { font-size: 16px; color: rgba(246,243,236,.85); margin-bottom: 18px; }
+  #wall-mid .mo-time .hr-zh { display: none; }
+
+  /* 壁纸时：主区域、浮岛、回信栏换成透出壁纸颜色的深色玻璃 */
+  body.walled #main, body.walled .tabs, body.walled .dock, body.walled .top {
+    --text: #f6f3ec; --ink: #f6f3ec; --muted: rgba(246,243,236,.7); --line: rgba(255,255,255,.14); --bg: transparent; --sepia: rgba(246,243,236,.66);
+    --surface: color-mix(in srgb, var(--wtint, #0e2a30) 24%, rgba(14,22,26,.36)); --island: color-mix(in srgb, var(--wtint, #0e2a30) 26%, rgba(12,18,22,.46)); --on-accent: #1d1b19; color: var(--text); }
+  body.walled #main .panel, body.walled #main .stat, body.walled #main .alert, body.walled #main .entry, body.walled #main .city-row, body.walled #main .day-wrap {
+    -webkit-backdrop-filter: blur(22px) saturate(1.5); backdrop-filter: blur(22px) saturate(1.5); border-color: rgba(255,255,255,.14); }
+  body.walled #main .panel, body.walled #main .stat { background: var(--surface); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 10px 30px -14px rgba(0,0,0,.5); }
+  body.walled .tabs { background: var(--island); box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 18px 40px -16px rgba(0,0,0,.55); }
+  body.walled .tab-ind { background: color-mix(in srgb, var(--accent) 30%, rgba(255,255,255,.08)); box-shadow: inset 0 0 0 1px rgba(255,255,255,.18); }
+  body.walled .dk-fade { display: none; }
+  body.wall-home .dk-chips { display: none; }
+  body.walled .dk-in .dk-av::after { border-color: #1c2a2e; }
+  body.walled .dk-pen { background: rgba(246,243,236,.94); color: #1d1b19; }
+  body.wall-home .top { display: none; }
+  body.walled .top .city-pill { border-color: rgba(255,255,255,.2); }
+
+  /* 首页第一屏 */
+  .view.wallv { padding: 0 !important; max-width: none; }
+  .w-first { position: relative; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; align-items: stretch;
+    padding: calc(env(safe-area-inset-top, 0px) + 22px) 22px calc(env(safe-area-inset-bottom, 0px) + 176px); box-sizing: border-box; }
+  .w-first > * { transition: opacity .45s ease, transform .5s var(--spring, ease); }
+  .w-date { margin: 0; text-align: center; font-family: "Cormorant Garamond", Georgia, serif; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: rgba(246,243,236,.86);
+    text-shadow: 0 1px 2px rgba(0,0,0,.3), 0 2px 12px rgba(0,0,0,.35); }
+  .w-time-space { height: 132px; flex: none; }
+  .w-now { align-self: center; display: inline-flex; align-items: baseline; gap: 8px; margin-top: 4px; padding: 4px 18px; border: 0; border-radius: 30px; color: #f6f3ec; font-size: 14.5px;
+    background: radial-gradient(closest-side, rgba(6,16,20,.5), rgba(6,16,20,0)); text-shadow: 0 1px 2px rgba(0,0,0,.3), 0 2px 12px rgba(0,0,0,.4); }
+  .w-now svg { align-self: center; }
+  .w-now b { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: 26px; line-height: 1; }
+  .w-now i { font-style: normal; color: rgba(246,243,236,.84); }
+  .w-alert { align-self: center; display: inline-flex; align-items: center; gap: 7px; margin-top: 8px; height: 28px; padding: 0 14px 0 12px; border-radius: 14px; font-size: 12.5px; color: #f6f3ec;
+    background: color-mix(in srgb, var(--wtint, #0e2a30) 26%, rgba(12,18,22,.4)); border: 1px solid rgba(255,255,255,.16); -webkit-backdrop-filter: blur(20px) saturate(1.5); backdrop-filter: blur(20px) saturate(1.5); }
+  .w-alert i { width: 7px; height: 7px; border-radius: 50%; background: var(--ac); box-shadow: 0 0 8px var(--ac); }
+  .w-alert-full { align-self: center; max-width: 360px; margin-top: 8px; padding: 10px 14px; border-radius: 16px; font-size: 13px; line-height: 1.6; color: #f6f3ec;
+    background: color-mix(in srgb, var(--wtint, #0e2a30) 26%, rgba(12,18,22,.5)); border: 1px solid rgba(255,255,255,.14); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); animation: wFade .35s ease both; }
+  .w-alert-full p { margin: 0; } .w-alert-full p + p { margin-top: 6px; }
+  @keyframes wFade { from { opacity: 0; transform: translateY(-4px); } }
+  .w-gap { flex: 1; min-height: 40px; }
+  .w-greet { margin: 0 0 0 -2px; filter: drop-shadow(0 2px 10px rgba(0,0,0,.45)); }
+  .w-greet h1 { margin: 0; }
+  .w-line { margin: 4px 2px 0; font-size: 12.5px; letter-spacing: .02em; color: rgba(246,243,236,.74); text-shadow: 0 1px 2px rgba(0,0,0,.35), 0 2px 10px rgba(0,0,0,.4); }
+  .w-hint { position: absolute; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 156px); transform: translateX(-50%); color: rgba(246,243,236,.5); animation: wHint 2.6s ease-in-out infinite; }
+  @keyframes wHint { 0%, 100% { transform: translate(-50%, 0); opacity: .35; } 50% { transform: translate(-50%, -5px); opacity: .7; } }
+  .w-more { padding: 6px 16px 20px; max-width: 760px; margin: 0 auto; }
+  .w-more .cols { display: block; }
+  .w-arc .mo-arc-slot { padding: 4px 2px 0; }
+  .w-arc .moment { opacity: 1 !important; }
+  .wallv .mo-fly { display: none !important; }
+  /* 轻点空白处：只看壁纸 */
+  body.wall-bare .w-first > *, body.wall-bare .w-more, body.wall-bare .tabs, body.wall-bare .dock { opacity: 0 !important; pointer-events: none !important; }
+  body.wall-bare .w-first > * { transform: translateY(6px); }
+  body.wall-bare #wall-mid { opacity: 0; transition: opacity .45s ease; }
+  body.wall-bare #wall .wl-scrim { opacity: .35; transition: opacity .6s ease; }
+  body.wall-home .tabs, body.wall-home .dock { transition: opacity .45s ease, transform .55s var(--spring, ease), left .55s var(--spring, ease), width .55s var(--spring, ease); }
+  /* 调整画面 */
+  body.wall-adjust .app { opacity: 0; pointer-events: none; }
+  body.wall-adjust #wall-mid { opacity: .5; }
+  .wl-adj { position: absolute; inset: 0; z-index: 9; touch-action: none; cursor: grab; }
+  .wl-adj[hidden] { display: none; }
+  .wl-adj-bar { position: absolute; left: 14px; right: 14px; top: calc(env(safe-area-inset-top, 0px) + 14px); display: flex; align-items: center; gap: 8px; padding: 8px 8px 8px 16px; border-radius: 26px;
+    color: #f6f3ec; font-size: 13.5px; background: rgba(12,18,22,.5); border: 1px solid rgba(255,255,255,.16); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); }
+  .wl-adj-bar span { flex: 1; }
+  .wl-adj-bar button { height: 34px; padding: 0 14px; border-radius: 17px; border: 1px solid rgba(255,255,255,.2); background: transparent; color: #f6f3ec; }
+  .wl-adj-bar button.ok { background: #f6f3ec; color: #1d1b19; border-color: transparent; }
+  /* 设置 › 首页与壁纸 */
+  .wl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin: 2px 0 14px; }
+  .wl-card { min-width: 0; }
+  .wl-th { position: relative; display: block; width: 100%; aspect-ratio: 3 / 4; border-radius: 18px; border: 1px solid var(--line); background: var(--surface) center / cover no-repeat; padding: 0; overflow: hidden; }
+  .wl-card.on .wl-th { box-shadow: 0 0 0 2px var(--accent); border-color: transparent; }
+  .wl-badge { position: absolute; left: 8px; top: 8px; padding: 2px 8px; border-radius: 10px; font-size: 11px; background: var(--accent); color: var(--on-accent, #fff); }
+  .wl-kind { position: absolute; right: 8px; bottom: 8px; padding: 2px 8px; border-radius: 10px; font-size: 11px; color: #fff; background: rgba(0,0,0,.45); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+  .wl-nm { display: flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 13.5px; }
+  .wl-nm span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wl-nm .icon-btn { width: 30px; height: 30px; }
+  .wl-tags { font-size: 11.5px; color: var(--muted); }
+  .wl-add { width: 100%; justify-content: center; gap: 8px; }
+  .spin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: spin 0.8s linear infinite; display: inline-block; }
+  .wl-edit .row2 { display: flex; gap: 10px; } .wl-edit .row2 .btn { flex: 1; justify-content: center; gap: 6px; }
+  @media (min-width: 720px) {
+    .w-first { padding-left: 40px; padding-right: 40px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 120px); }
+    .w-hint { bottom: 96px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .w-hint { animation: none; } }
+
+  /* ======================= 5.0 「天气」模块 ======================= */
+  .smcap { font-family: "Cormorant Garamond", Georgia, serif; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+  .view.weather { position: relative; }
+  .wx-top { position: relative; margin: 0 -20px 6px; padding: 6px 20px 12px; }
+  #wxfx { position: absolute; left: 0; top: -60px; width: 100%; height: calc(100% + 60px); pointer-events: none; z-index: 0; }
+  #wxfx, #wxfx2 { -webkit-mask-image: linear-gradient(#000 72%, transparent); mask-image: linear-gradient(#000 72%, transparent); }
+  body.tab-wx .top { display: none; }
+  body.tab-wx .view.weather { padding-top: calc(env(safe-area-inset-top, 0px) + 18px); }
+  .wx-top > :not(canvas):not(.wx-sky) { position: relative; z-index: 1; }
+  .wx-head { display: flex; align-items: baseline; gap: 10px; width: 100%; padding: 4px 2px; border: 0; background: none; color: var(--text); text-align: left; }
+  .wx-head svg { margin-left: auto; align-self: center; color: var(--muted); }
+  .wx-name { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-weight: 500; font-size: 34px; line-height: 1.1; }
+  .wx-path { font-size: 13px; color: var(--muted); }
+  .wx-now { display: flex; align-items: flex-end; gap: 14px; margin: 10px 2px 2px; }
+  .wx-temp { font-family: "Noto Serif CJK SC", serif; font-weight: 200; font-size: 80px; line-height: .9; letter-spacing: -3px; }
+  .wx-cond { padding-bottom: 6px; display: flex; flex-direction: column; gap: 3px; }
+  .wx-cond b { font-weight: 400; font-size: 16px; }
+  .wx-cond span { font-size: 12.5px; color: var(--muted); }
+  .wx-via { font-style: normal; font-size: 11.5px; color: #d9a86a; }
+  .wx-chips { display: flex; gap: 8px; margin: 16px -20px 0; padding: 2px 20px; overflow-x: auto; scrollbar-width: none; }
+  .wx-chips::-webkit-scrollbar { display: none; }
+  .wx-chip { flex: none; display: inline-flex; align-items: center; gap: 4px; height: 34px; padding: 0 14px; border-radius: 17px; font-size: 13.5px; color: var(--muted);
+    background: color-mix(in srgb, var(--text) 6%, transparent); border: 1px solid var(--line); }
+  .wx-chip svg { color: #7fb0ff; }
+  .wx-chip.on { color: var(--text); background: color-mix(in srgb, var(--accent) 24%, color-mix(in srgb, var(--text) 6%, transparent)); border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); }
+  .wx-chip.add { width: 34px; padding: 0; justify-content: center; }
+  .wx-hr { display: flex; justify-content: space-between; text-align: center; gap: 4px; }
+  .wx-hr > div { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); }
+  .wx-hr b { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: 20px; color: var(--text); }
+  .wx-hr small { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .wx-hr svg { color: var(--text); }
+  .wx-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .wx-grid .panel { margin: 0; }
+  .wx-card { display: flex; flex-direction: column; gap: 4px; min-height: 104px; }
+  .wx-card .k { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); letter-spacing: .06em; }
+  .wx-card .v { font-family: "Cormorant Garamond", "Noto Serif CJK SC", serif; font-weight: 400; font-size: 30px; line-height: 1.1; }
+  .wx-card .d { font-size: 12px; color: var(--muted); }
+  @media (min-width: 720px) { .wx-grid { grid-template-columns: repeat(3, 1fr); } }
+  /* 换地点：内容从滑动方向进来 */
+  .view.weather.wx-slide-l > * { animation: wxInL .42s var(--spring, ease) both; } .view.weather.wx-slide-r > * { animation: wxInR .42s var(--spring, ease) both; }
+  @keyframes wxInL { from { opacity: 0; transform: translateX(26px); } } @keyframes wxInR { from { opacity: 0; transform: translateX(-26px); } }
+  /* 我的地方 / 搜索：底部纸片 */
+  .wx-scrim { position: fixed; inset: 0; z-index: 38; background: rgba(4,8,12,.38); animation: wFade .3s ease both; }
+  .wx-scrim.out { opacity: 0; transition: opacity .25s ease; }
+  .wx-sheet { position: fixed; left: 8px; right: 8px; bottom: 0; top: max(10vh, calc(env(safe-area-inset-top, 0px) + 40px)); z-index: 40; overflow-y: auto; overscroll-behavior: contain;
+    padding: 8px 16px calc(env(safe-area-inset-bottom, 0px) + 24px); border-radius: 28px 28px 0 0; color: var(--text);
+    background: color-mix(in srgb, var(--surface) 92%, transparent); border: 1px solid var(--line); border-bottom: 0;
+    -webkit-backdrop-filter: blur(28px) saturate(1.5); backdrop-filter: blur(28px) saturate(1.5); box-shadow: 0 -20px 50px -20px rgba(0,0,0,.45);
+    animation: wxUp .45s cubic-bezier(.2, .9, .3, 1) both; }
+  .wx-sheet.out { transform: translateY(100%); transition: transform .26s ease-in; }
+  @keyframes wxUp { from { transform: translateY(100%); } }
+  body.walled .wx-sheet { background: color-mix(in srgb, var(--wtint, #0e2a30) 22%, rgba(12,18,22,.84)); --text: #f6f3ec; --muted: rgba(246,243,236,.7); --line: rgba(255,255,255,.14); }
+  @media (min-width: 720px) { .wx-sheet { left: auto; right: 16px; width: min(460px, 46vw); top: 16px; bottom: 16px; border-radius: 28px; border-bottom: 1px solid var(--line); } }
+  .wx-grip { width: 38px; height: 5px; border-radius: 3px; background: var(--line); margin: 2px auto 10px; }
+  .wx-sh-head { display: flex; align-items: center; gap: 10px; margin: 0 2px 12px; }
+  .wx-sh-head h2 { flex: 1; margin: 0; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-weight: 500; font-size: 21px; }
+  .wx-sh-head h2 em { font-family: "Cormorant Garamond", Georgia, serif; font-size: 14px; color: var(--muted); margin-left: 4px; }
+  .wx-txt { border: 0; background: none; color: var(--accent); font-size: 14px; padding: 6px 4px; }
+  .wx-q { flex: 1; margin: 0; }
+  .wx-fake { width: 100%; display: flex; align-items: center; gap: 8px; color: var(--muted); text-align: left; }
+  .wx-loc { display: flex; align-items: center; gap: 8px; width: 100%; margin: 10px 0 12px; padding: 6px 4px; border: 0; background: none; color: #7fb0ff; font-size: 14px; text-align: left; }
+  .wx-loc em { margin-left: auto; font-style: normal; font-size: 12px; color: var(--muted); }
+  .wx-err { margin: -6px 4px 10px; font-size: 12.5px; color: #e8a27c; }
+  .wx-list { display: flex; flex-direction: column; gap: 8px; }
+  .wx-row { position: relative; display: flex; align-items: center; gap: 8px; padding: 10px 8px 10px 14px; border-radius: 18px; border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--text) 5%, transparent); transition: transform .25s ease, box-shadow .25s ease; }
+  .wx-row.cur { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); }
+  .wx-row.lift { z-index: 2; transition: none; box-shadow: 0 16px 30px -12px rgba(0,0,0,.5); background: var(--surface); }
+  .wx-pick { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; border: 0; background: none; color: var(--text); text-align: left; padding: 0; }
+  .wx-rn { display: flex; align-items: baseline; gap: 6px; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 18px; }
+  .wx-rn svg { color: #7fb0ff; align-self: center; } .wx-rn small { font-family: inherit; font-size: 12px; color: var(--muted); }
+  .wx-rs { font-size: 12px; color: var(--muted); } .wx-rs i { display: block; font-style: normal; color: #d9a86a; margin-top: 2px; }
+  .wx-rt { font-family: "Cormorant Garamond", Georgia, serif; font-size: 30px; font-weight: 400; }
+  .wx-drag { padding: 8px 4px 8px 6px; color: var(--muted); touch-action: none; cursor: grab; }
+  .wx-del { width: 26px; height: 26px; border-radius: 13px; border: 0; background: #d9584a; color: #fff; display: grid; place-items: center; flex: none; }
+  .wx-hint { margin: 14px 4px 0; font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .wx-cap { margin: 4px 4px 6px; }
+  .wx-res { display: flex; align-items: center; gap: 8px; width: 100%; padding: 12px 6px; border: 0; border-bottom: 1px solid var(--line); background: none; color: var(--text); text-align: left; }
+  .wx-res b { font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-weight: 500; font-size: 16.5px; } .wx-res b u { text-decoration: none; color: var(--accent); }
+  .wx-res span { flex: 1; min-width: 0; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wx-res i { width: 28px; height: 28px; border-radius: 14px; display: grid; place-items: center; background: color-mix(in srgb, var(--text) 10%, transparent); }
+  .wx-res em { font-style: normal; font-size: 12px; color: var(--muted); }
+  .wx-res:disabled { opacity: 1; }
+
+  /* 5.0 天气场景动效 */
+  .wx-sky { position: absolute; left: 0; right: 0; top: -60px; height: calc(100% + 150px); z-index: 0; pointer-events: none; background: linear-gradient(var(--s0), var(--s1)); opacity: .85;
+    -webkit-mask-image: linear-gradient(#000 45%, transparent); mask-image: linear-gradient(#000 45%, transparent); transition: opacity .6s ease; }
+  :root[data-theme="light"] .wx-sky { opacity: .5; }
+  @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .wx-sky { opacity: .5; } }
+  body.walled .wx-sky { opacity: .62; }
+  #wxfx2 { position: absolute; left: 0; top: -60px; width: 100%; height: calc(100% + 60px); pointer-events: none; z-index: 2; }
+  .wx-bl { display: inline-block; width: 0; height: 0; vertical-align: baseline; }
+  .wx-top[data-scene] .wx-name, .wx-top[data-scene] .wx-temp { text-shadow: 0 2px 14px rgba(0,0,0,.28); }
+  .wx-top[data-scene] .wx-cond span, .wx-top[data-scene] .wx-path { text-shadow: 0 1px 2px rgba(0,0,0,.25), 0 1px 10px rgba(0,0,0,.35); }
+  .w-fx { position: absolute; left: 0; top: 0; width: 100%; height: 100vh; height: 100svh; pointer-events: none; z-index: 3; }
 </style>
 <script src="fonts/script-glyphs.js"></script>
 <script src="fonts/pinyin.js"></script>
 <script src="fonts/deco-arc.js"></script>
 <script src="fonts/splash-art.js"></script>
+<script src="fonts/wall.js"></script>
+<script src="fonts/wxfx.js"></script>
 </head>
 <body>
 <div id="splash" aria-hidden="true"></div>
@@ -2168,7 +2379,7 @@
     <div class="brand">Cloud · 云朵天气</div>
     <div class="top-actions">
       <button class="icon-btn" type="button" id="refresh-btn" data-refresh="1" aria-label="刷新天气"></button>
-      <button class="city-pill" type="button" data-tab="cities" id="city-pill" aria-label="切换城市"></button>
+      <button class="city-pill" type="button" data-wxsheet="places" id="city-pill" aria-label="我的地方"></button>
     </div>
   </header>
   <main id="main" tabindex="-1"></main>
@@ -2234,6 +2445,11 @@
     term: '<path d="M7 6.6l5.2 5.4-5.2 5.4"/><path d="M12.6 17.4h5.6"/>',
     codeb: '<path d="M8.5 7.5 4 12l4.5 4.5M15.5 7.5 20 12l-4.5 4.5"/><path d="M13.2 5.5l-2.4 13"/>',
     read: '<path d="M12 7.2C10.8 6 9.4 5.5 7.6 5.5H4.8a.8.8 0 0 0-.8.8v10.9c0 .5.4.8.8.8h4.9L12 20.2l2.3-2.2h4.9c.4 0 .8-.3.8-.8V6.3a.8.8 0 0 0-.8-.8h-2.8c-1.8 0-3.2.5-4.4 1.7z"/><path d="M12 7.2V20M6.6 12.3h2.1M15.3 9.7h2.1M15.3 12.3h2.1"/>',
+    therm: '<path d="M10 13.5V5a2 2 0 0 1 4 0v8.5a4 4 0 1 1-4 0Z"/><path d="M12 9v6"/>',
+    drop: '<path d="M12 3.5s6 6.3 6 10.5a6 6 0 0 1-12 0c0-4.2 6-10.5 6-10.5Z"/>',
+    wind: '<path d="M3 9h11a3 3 0 1 0-3-3M3 14h15a3 3 0 1 1-3 3M3 11.5h8"/>',
+    gauge: '<path d="M4.5 17a8.5 8.5 0 1 1 15 0"/><path d="m12 13 3.5-4"/><circle cx="12" cy="13" r="1.3"/>',
+    move: '<path d="M12 3v18M3 12h18M12 3l-2.5 2.5M12 3l2.5 2.5M12 21l-2.5-2.5M12 21l2.5-2.5M3 12l2.5-2.5M3 12l2.5 2.5M21 12l-2.5-2.5M21 12l-2.5 2.5"/>',
     more: '<circle cx="6" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="18" cy="12" r="1.2"/>',
     pencil: '<path d="M15.3 5.2a1.4 1.4 0 0 1 2 0l1.5 1.5a1.4 1.4 0 0 1 0 2L9 18.5l-4.3 1 .9-4.3z"/><path d="M13.6 6.9l3.5 3.5"/>',
     web: '<circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2.2 2.3 3.3 5 3.3 8s-1.1 5.7-3.3 8c-2.2-2.3-3.3-5-3.3-8S9.8 6.3 12 4z"/>',
@@ -2727,7 +2943,7 @@
   try {
     var saved = JSON.parse(localStorage.getItem(KEY) || 'null');
     if (saved) {
-      ['cities', 'current', 'name', 'nameEn', 'unit', 'theme', 'custom', 'splashMode'].forEach(function (k) { if (saved[k] != null) state[k] = saved[k]; });
+      ['cities', 'current', 'name', 'nameEn', 'unit', 'theme', 'custom', 'splashMode', 'locAt'].forEach(function (k) { if (saved[k] != null) state[k] = saved[k]; });
       Object.keys(state.custom || {}).forEach(function (k) { META[k] = state.custom[k]; });
       state.cities = state.cities.filter(function (k) { return META[k]; });
       if (!state.cities.length) state.cities = ['hz'];
@@ -2735,7 +2951,7 @@
     }
   } catch (e) {}
   function save() {
-    try { localStorage.setItem(KEY, JSON.stringify({ cities: state.cities, current: state.current, name: state.name, nameEn: state.nameEn || '', splashMode: state.splashMode || 'always', unit: state.unit, theme: state.theme, tab: state.tab, custom: state.custom })); } catch (e) {}
+    try { localStorage.setItem(KEY, JSON.stringify({ cities: state.cities, current: state.current, name: state.name, nameEn: state.nameEn || '', splashMode: state.splashMode || 'always', unit: state.unit, theme: state.theme, tab: state.tab, custom: state.custom, locAt: state.locAt || 0 })); } catch (e) {}
   }
 
   /* ---------- 时间与换算 ---------- */
@@ -3057,7 +3273,7 @@
   var $main = document.getElementById('main');
   var $tabs = document.getElementById('tabs');
   var $pill = document.getElementById('city-pill');
-  var TABS = [['today', '今天', 'home'], ['forecast', '预报', 'cal'], ['plan', '日程', 'book'], ['cities', '城市', 'pin'], ['settings', '设置', 'gear']];
+  var TABS = [['today', '今天', 'home'], ['forecast', '天气', 'partly'], ['plan', '日程', 'book'], ['settings', '设置', 'gear']];   // 5.0：城市并进「天气」
   var flourish = '<svg class="flourish" width="110" height="10" viewBox="0 0 180 16" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true"><path d="M2 8 C 30 8, 50 2, 72 8 S 108 14, 130 8 C 142 4, 152 4, 158 8 C 152 12, 142 12, 130 8"/><circle class="fl-dot" cx="168" cy="8" r="1.6" fill="currentColor"/></svg>';
 
   function statusView() {
@@ -4048,6 +4264,7 @@
 
   function viewToday() {
     var v = view(state.current);
+    if (v && wallPick()) return viewTodayWall(v);
     if (!v) return '<section class="view">' + greetingBlock('') + statusView().replace('<section class="view">', '').replace('</section>', '') + '</section>';
     var adv = advise(v), t = v.today, n = v.now;
     var zhDate = (now.getMonth() + 1) + '月' + now.getDate() + '日 ' + DAYS_ZH[now.getDay()];
@@ -4075,7 +4292,14 @@
         v.alarms.map(function (a) { return '<li>' + esc(a) + '</li>'; }).join('') + '</ul></div>';
     }
 
+    html += todayBody(v, adv);
+    return html + '</section>';
+  }
+  // 首页下半段（外出建议、今日昼夜、指标、数据来源）：博物画首页和 5.0 壁纸首页共用
+  function todayBody(v, adv, wall) {
+    var t = v.today, n = v.now, html = '';
     html += '<div class="cols"><div class="col-a">';
+    if (wall) html += '<div class="panel a w-arc"><h2>日出日落 <em>Sun &amp; Moon</em></h2><div class="mo-arc-slot"></div></div>';
 
     if (n) {
       html += '<div class="stats a">' +
@@ -4113,7 +4337,7 @@
       (n ? '实况 ' + hhmm(n.u) + ' 观测 · ' : '') + '更新于 ' + fmtAgo(new Date(v.doc.fetchedAt)) + '</span></div>';
     if (v.outdated) html += '<p class="note">预报里没有今天的数据，可能是更新暂停了，显示的是最近一次的预报。</p>';
     html += '</div></div>';
-    return html + '</section>';
+    return html;
   }
 
   function viewForecast() {
@@ -4224,6 +4448,7 @@
     if (state.sub === 'memory') return memoryPage();
     if (state.sub === 'notify') return notifyPage();
     if (state.sub === 'gemini') return gemPage();
+    if (state.sub === 'wall') return wallPage();
     var latest = null;
     Object.keys(DATA).forEach(function (k) { var d = new Date(DATA[k].fetchedAt); if (!isNaN(d) && (!latest || d > latest)) latest = d; });
     return '<section class="view">' +
@@ -4239,6 +4464,10 @@
         '<div class="field"><span class="lbl">外观</span>' + seg('theme', [['system', '跟随系统'], ['light', '浅色'], ['dark', '深色']]) + '</div>' +
         '<div class="field"><span class="lbl">开屏动画</span>' + seg('splashMode', [['always', '每次打开'], ['daily', '每天第一次'], ['off', '关闭']]) +
           '<p class="hint">信封展开、画一枝玫瑰、写下祝福，再进入主页。播放时轻点屏幕可以跳过。</p></div>' +
+      '</div>' +
+      '<div class="panel"><h2>首页 <em>Home</em></h2>' +
+        '<button type="button" class="entry" data-ui="wall"><span class="ds-logo">' + icon('spark', 20) + '</span>' +
+        '<span><span class="t">首页与壁纸</span><span class="d">' + esc(wallSummary()) + '</span></span>' + icon('chev', 20) + '</button>' +
       '</div>' +
       '<div class="panel"><h2>数据来源 <em>Source</em></h2>' +
         '<div class="field"><span class="lbl">中国气象局 · weather.cma.cn</span>' +
@@ -4703,7 +4932,15 @@
     openChat('', conv.id);
   }
   window.__amorLaunch = function () { setTimeout(notifyLaunch, 50); };
-  window.__amorResume = function () { notifySync(); setTimeout(notifyLaunch, 50); alarmEvents(); };
+  window.__amorResume = function () { notifySync(); setTimeout(notifyLaunch, 50); alarmEvents(); if (typeof Wall !== 'undefined') Wall.resume(); if (window.__wallIn) window.__wallIn(); };
+  setTimeout(function () { if (window.__wallIn) window.__wallIn(); }, 1800);    // 5.0：App 没开时从别的 App 打开的 .mpkg
+  // 5.0：列表里有「当前位置」、而且已经给过定位权限：打开 App 时悄悄重新定位（至少隔半小时）
+  setTimeout(function () {
+    if (!state.cities.some(function (c) { return META[c] && META[c].loc; }) || Date.now() - (state.locAt || 0) < 30 * 60e3) return;
+    var ok = function () { locate(true); };
+    try { if (window.AmorNative && AmorNative.locState) { if (AmorNative.locState() === 'granted') ok(); return; } } catch (e) {}
+    if (navigator.permissions && navigator.permissions.query) navigator.permissions.query({ name: 'geolocation' }).then(function (r) { if (r.state === 'granted') ok(); }).catch(function () {});
+  }, 2500);
   // 和 Amor 聊天时告诉原生层“正在前台聊”，这时不推送普通提醒
   setInterval(function () { if (chat.open && !document.hidden && nativeOk()) try { AmorNative.fg(); } catch (e) {} }, 30000);
   /* ---------- 通知：页面 ---------- */
@@ -5046,7 +5283,9 @@
     // 天气第一次出现时（例如刚装好还没有缓存），也播放一次入场
     if (tab === 'today' && !heroEverShown && view(state.current)) { renderAnim = renderAnim || 'up'; }
     if (renderAnim && tab === 'today') placeEpoch++;
-    $main.innerHTML = tab === 'forecast' ? viewForecast() : tab === 'plan' ? viewPlan() : tab === 'cities' ? viewCities() : tab === 'settings' ? viewSettings() : viewToday();
+    if (tab === 'cities') { tab = state.tab = 'forecast'; wxui.sheet = 'places'; }
+    $main.innerHTML = tab === 'forecast' ? viewWeather() : tab === 'plan' ? viewPlan() : tab === 'settings' ? viewSettings() : viewToday();
+    if (tab === 'forecast' && wxui.sheet) setTimeout(bindWxSheet, 0);
     if (tab === 'today' && view(state.current)) heroEverShown = true;
     var vw = $main.querySelector('.view');
     if (vw && renderAnim) {
@@ -5070,6 +5309,9 @@
     if (typeof notesAfterRender === 'function') notesAfterRender();
     updateTabs(tab, opts.anim);
     if (typeof Dock !== 'undefined' && Dock) Dock.update();
+    if (typeof Wall !== 'undefined') Wall.sync();
+    document.body.classList.toggle('tab-wx', tab === 'forecast');
+    if (typeof WxLive !== 'undefined') WxLive.sync();
     var v = view(state.current);
     $pill.innerHTML = icon('pin', 16) + esc(META[state.current].zh) + (v ? ' ' + deg(v.temp) + '°' : '');
     var rb = document.getElementById('refresh-btn');
@@ -5456,6 +5698,810 @@
     window.addEventListener('resize', function () { if (el && el.isConnected) mount(); });
     return { mount: mount, skyFit: skyFit };
   })();
+
+  /* ======================= 5.0 动态壁纸 · 沉浸式首页 ======================= */
+  // 壁纸是用户自己导入的文件（Wallpaper Engine 的 .mpkg / scene.pkg、图片、视频），存在 App 目录 files/amor/walls/；
+  // 这里只记列表和设置。没有壁纸时首页还是 4.8 的博物画横幅。
+  var WALL_KEY = 'cloud-weather-walls-v1';
+  var walls = (function () { var w = null; try { w = JSON.parse(localStorage.getItem(WALL_KEY) || 'null'); } catch (e) {} return w; })() ||
+    { list: [], cur: '', on: true, dyn: true, fps: 30, depth: true };
+  function saveWalls() { try { localStorage.setItem(WALL_KEY, JSON.stringify(walls)); } catch (e) {} }
+  var wallui = { busy: false, del: '', edit: '', alert: false };
+  var WALL_MEM = {};                     // 没有原生层时（浏览器测试）导入的文件只在内存里
+  var W_TAGS = [['sun', '晴'], ['cloud', '多云 · 阴'], ['rain', '雨'], ['snow', '雪'], ['fog', '雾 · 霾'], ['night', '夜里']];
+  function wallById(id) { return walls.list.filter(function (w) { return w.id === id; })[0] || null; }
+  // 现在该用哪张：先看有没有标了当前天气的，再用默认那张
+  function wallPick() {
+    if (!walls.on || !walls.list.length) return null;
+    var v = view(state.current), ic = v ? v.icon : '', night = nowH >= 19 || nowH < 6;
+    var tag = ic === 'storm' ? 'rain' : ic === 'partly' ? 'cloud' : ic === 'moon' ? 'sun' : ic;
+    var hit = walls.list.filter(function (w) { return (w.tags || []).indexOf(night ? 'night' : '_') >= 0; })[0] ||
+      walls.list.filter(function (w) { return (w.tags || []).indexOf(tag) >= 0; })[0];
+    return hit || wallById(walls.cur) || null;
+  }
+
+  var Wall = (function () {
+    var root = null, back = null, front = null, mid = null, R = [], curId = '', raf = 0, last = 0, t0 = performance.now(), paused = false, media = null;
+    var loadTok = 0, fitT = 0, scrollP = 0, reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function dom() {
+      if (root) return;
+      root = document.createElement('div'); root.id = 'wall'; root.setAttribute('aria-hidden', 'true');
+      root.innerHTML = '<div class="wl-media"></div><canvas class="wl-c" id="wall-back"></canvas><div id="wall-mid"></div><canvas class="wl-c" id="wall-front"></canvas><div class="wl-scrim"></div><div class="wl-adj" hidden></div>';
+      document.body.insertBefore(root, document.body.firstChild);
+      back = root.querySelector('#wall-back'); front = root.querySelector('#wall-front'); mid = root.querySelector('#wall-mid');
+      bindAdjust();
+    }
+    function bytes(w) {
+      if (WALL_MEM[w.id]) return Promise.resolve(WALL_MEM[w.id]);
+      return new Promise(function (ok, no) {
+        var x = new XMLHttpRequest(); x.open('GET', w.path, true); x.responseType = 'arraybuffer';
+        x.onload = function () { if (x.response && x.response.byteLength) ok(x.response); else no(new Error('读不到壁纸文件')); };
+        x.onerror = function () { no(new Error('读不到壁纸文件')); }; x.send();
+      });
+    }
+    function sizeC(c) { var d = Math.min(2, window.devicePixelRatio || 1); c.width = Math.round(innerWidth * d); c.height = Math.round(innerHeight * d); }
+    function clear() {
+      R.forEach(function (r) { try { r.destroy(); } catch (e) {} }); R = [];
+      // WebGL 上下文丢了以后画布不能再用：换两块新的
+      [back, front].forEach(function (c) { var n = document.createElement('canvas'); n.className = 'wl-c'; n.id = c.id; c.parentNode.replaceChild(n, c); });
+      back = root.querySelector('#wall-back'); front = root.querySelector('#wall-front');
+      root.querySelector('.wl-media').innerHTML = ''; media = null;
+    }
+    function load(w) {
+      var tok = ++loadTok; curId = w.id; clear(); root.classList.remove('ready');
+      document.body.style.setProperty('--wtint', w.tint || '#0e2a30');
+      return bytes(w).then(function (buf) {
+        if (tok !== loadTok) return;
+        if (w.kind === 'image' || w.kind === 'video') return showMedia(w, new Blob([buf], { type: w.mime || '' }));
+        var pkg = WallScene.unpack(buf), proj = (function () { var f = pkg.files['project.json']; try { return JSON.parse(new TextDecoder().decode(f)); } catch (e) { return {}; } })();
+        if (proj.type && /video/i.test(proj.type) && pkg.files[proj.file]) return showMedia(w, new Blob([pkg.files[proj.file]], { type: 'video/mp4' }), true);
+        var sc = new WallScene.Scene(pkg), L = sc.layers(), k = WallScene.splitIndex(L, sc.size());
+        sizeC(back); sizeC(front);
+        var opt = { focus: w.focus || [.5, .5], zoom: w.zoom || 1 };
+        R = [new WallScene.Renderer(back, sc, L.slice(0, k), Object.assign({ clear: true }, opt)), new WallScene.Renderer(front, sc, L.slice(k), opt)];
+        return Promise.all(R.map(function (r) { return r.load(); })).then(function () {
+          if (tok !== loadTok) return;
+          var warn = R[0].warn.concat(R[1].warn); if (warn.length) window.__wallWarn = warn;
+          root.classList.add('ready', 'gl'); draw(); kick();
+          setTimeout(function () { if (tok === loadTok && document.body.classList.contains('wall-home')) autoAlign(w); }, 400);
+        });
+      }).catch(function (e) { if (tok === loadTok) { window.__wallErr = String(e && e.message || e); root.classList.add('ready', 'failed'); } });
+    }
+    function showMedia(w, blob, isVid) {
+      var u = URL.createObjectURL(blob), box = root.querySelector('.wl-media');
+      if (w.kind === 'video' || isVid) { box.innerHTML = '<video muted loop playsinline autoplay></video>'; media = box.firstChild; media.src = u; }
+      else { box.innerHTML = '<img alt="">'; media = box.firstChild; media.src = u; }
+      media.style.objectPosition = ((w.focus || [.5])[0] * 100) + '% ' + ((w.focus || [.5, .5])[1] * 100) + '%';
+      media.style.transform = 'scale(' + (w.zoom || 1) + ')';
+      root.classList.add('ready', 'media'); root.classList.remove('gl');
+    }
+    function draw() { var t = (performance.now() - t0) / 1000; R.forEach(function (r) { r.draw(t); }); }
+    // 第一次导入时自动构图：在「画面左右位置 × 时间左/中/右」里挑前景（人物、气球…）只挡住时间一小角的组合，
+    // 大约挡 15% 景深感最好；同时尽量不偏离画面中心。之后用户手动调过就不再动。
+    function autoAlign(w) {
+      try {
+        var sp = document.querySelector('.w-time-space'), r1 = R[1]; if (!sp || !r1 || !r1.layers.length || w.fitted) return;
+        var gl = r1.gl, c = r1.canvas, k = c.width / innerWidth, top = sp.getBoundingClientRect().top, hh = 112;
+        var svg = mid.querySelector('svg.hr-t'), tw = svg && svg.getBoundingClientRect().width > 40 ? svg.getBoundingClientRect().width + 50 : 250;
+        var y0 = Math.max(0, Math.round(c.height - (top + hh) * k)), H = Math.round(hh * k), px = new Uint8Array(c.width * H * 4);
+        var pos = (function () { var sr = sp.getBoundingClientRect(), L0 = sr.left, R0 = sr.right; return { l: [L0, L0 + tw], c: [(L0 + R0 - tw) / 2, (L0 + R0 + tw) / 2], r: [R0 - tw, R0] }; })();
+        var f0 = (w.focus || [.5, .5])[0], best = null, cand = [], full = new Uint8Array(c.width * c.height * 4), maxVis = 0;
+        [0, -.05, .05, -.1, .1, -.15, .15, -.2, .2].forEach(function (d) {
+          var fx = Math.max(0, Math.min(1, f0 + d));
+          r1.focus = [fx, (w.focus || [.5, .5])[1]]; r1.draw((performance.now() - t0) / 1000);
+          gl.readPixels(0, 0, c.width, c.height, gl.RGBA, gl.UNSIGNED_BYTE, full);
+          var vis = 0; for (var q = 3; q < full.length; q += 4 * 9) if (full[q] > 60) vis++;    // 前景（人物等）在屏幕里露出多少
+          if (vis > maxVis) maxVis = vis;
+          cand.push({ d: d, fx: fx, vis: vis, band: full.slice(y0 * c.width * 4, (y0 + H) * c.width * 4) });
+        });
+        cand.forEach(function (cd) {
+          var d = cd.d, fx = cd.fx; px = cd.band;
+          var lost = 1 - cd.vis / Math.max(1, maxVis);
+          Object.keys(pos).forEach(function (key) {
+            var a = Math.max(0, Math.round(pos[key][0] * k)), b = Math.min(c.width, Math.round(pos[key][1] * k)), hit = 0, n = 0;
+            for (var y = 0; y < H; y += 3) for (var x = a; x < b; x += 3) { if (px[(y * c.width + x) * 4 + 3] > 60) hit++; n++; }
+            var cov = hit / Math.max(1, n), score = Math.abs(cov - .15) + Math.abs(d) * .9 + lost * 2.5 + (key === 'c' ? 0 : .03);
+            if (!best || score < best.s) best = { s: score, fx: fx, key: key, cov: cov, lost: lost };
+          });
+        });
+        w.focus = [best.fx, (w.focus || [.5, .5])[1]]; w.alignAuto = best.key; w.fitted = 1; saveWalls();
+        R.forEach(function (r) { r.focus = w.focus; }); draw(); placeMid();
+        window.__wallFit = best;
+      } catch (e) { window.__wallFitErr = String(e); }
+    }
+    function running() { return R.length && !paused && !document.hidden && walls.dyn && !reduce && root.classList.contains('live') && !(typeof chat !== 'undefined' && chat.open); }
+    function frame(now) {
+      raf = 0; if (!running()) return;
+      var gap = 1000 / (scrollP > .02 ? 20 : walls.fps || 30);
+      if (now - last >= gap - 2) { last = now; draw(); }
+      raf = requestAnimationFrame(frame);
+    }
+    function kick() { if (!raf && running()) raf = requestAnimationFrame(frame); if (media && media.play) { if (running() || (!R.length && walls.dyn && root.classList.contains('live'))) media.play().catch(function () {}); else media.pause(); } }
+    // 每次 render 之后：决定显示 / 虚化 / 隐藏，以及要不要换一张
+    function sync() {
+      var w = wallPick(); dom();
+      var on = !!w;
+      document.body.classList.toggle('walled', on);
+      var home = on && state.tab === 'today' && !state.sub;
+      document.body.classList.toggle('wall-home', home);
+      if (!home) { document.body.classList.remove('wall-bare'); if (mid.firstChild) mid.innerHTML = ''; }
+      root.classList.toggle('on', on);
+      root.classList.toggle('live', home);
+      root.classList.toggle('dim', on && !home);
+      root.classList.toggle('flat', !walls.depth);
+      if (on && w.id !== curId) load(w);
+      if (!on && curId) { curId = ''; clear(); }
+      if (home) { placeMid(); onScroll(); if (Moment && !mid.querySelector('.mo-time')) Moment.mount();
+        var fw = wallById(curId); if (fw && !fw.fitted && R.length && root.classList.contains('ready') && !fitT) fitT = setTimeout(function () { fitT = 0; if (document.body.classList.contains('wall-home')) autoAlign(fw); }, 500); }
+      else { scrollP = 1; if (R.length && !raf) draw(); }
+      kick();
+    }
+    // 手写时间：夹在两块画布之间，位置跟着页面里的占位走
+    function placeMid() {
+      var sp = document.querySelector('.w-time-space');
+      if (!sp) return;
+      if (!mid.querySelector('.mo-time-slot')) mid.innerHTML = '<div class="wm-time"><span class="mo-time-slot"></span></div>';
+      var w = wallById(curId) || {};
+      mid.setAttribute('data-align', !w.align || w.align === 'auto' ? (w.alignAuto || 'c') : w.align);
+      var r = sp.getBoundingClientRect();
+      mid.style.left = Math.round(r.left - 22) + 'px'; mid.style.width = Math.round(r.width + 44) + 'px'; mid.style.right = 'auto';   // 折叠屏：只在首页那一栏里排
+      mid.style.transform = 'translate3d(0,' + Math.round(r.top) + 'px,0)';
+    }
+    function onScroll() {
+      if (!document.body.classList.contains('wall-home')) return;
+      var y = $main.scrollTop, h = innerHeight * .55;
+      scrollP = Math.max(0, Math.min(1, y / h));
+      root.style.setProperty('--wp', scrollP.toFixed(3));
+      placeMid();
+    }
+    $main.addEventListener('scroll', function () { if (document.body.classList.contains('wall-home')) requestAnimationFrame(onScroll); }, { passive: true });
+    window.addEventListener('resize', function () { if (!root || !R.length) return; sizeC(back); sizeC(front); R.forEach(function (r) { r.canvas = r === R[0] ? back : front; }); draw(); });
+    document.addEventListener('visibilitychange', kick);
+    window.__amorPause = function () { paused = true; };
+    window.__amorResume0 = function () { paused = false; kick(); };
+
+    // 调整画面：直接在首页上拖（左右 / 上下），双指缩放
+    var adj = null;
+    function bindAdjust() {
+      var pad = root.querySelector('.wl-adj'), pts = {}, start = null;
+      pad.innerHTML = '<div class="wl-adj-bar"><span>拖动调整画面 · 双指缩放</span><button type="button" data-walladj="reset">还原</button><button type="button" class="ok" data-walladj="done">完成</button></div>';
+      pad.addEventListener('pointerdown', function (e) {
+        if (e.target.closest('button')) return;
+        pts[e.pointerId] = [e.clientX, e.clientY]; pad.setPointerCapture(e.pointerId);
+        var w = wallById(curId); if (!w) return;
+        var ks = Object.keys(pts); start = { f: (w.focus || [.5, .5]).slice(), z: w.zoom || 1, p: ks.map(function (k) { return pts[k].slice(); }) };
+      });
+      pad.addEventListener('pointermove', function (e) {
+        if (!pts[e.pointerId] || !start) return; pts[e.pointerId] = [e.clientX, e.clientY];
+        var w = wallById(curId); if (!w) return;
+        var ks = Object.keys(pts);
+        if (ks.length >= 2 && start.p.length >= 2) {
+          var d0 = Math.hypot(start.p[0][0] - start.p[1][0], start.p[0][1] - start.p[1][1]), a = pts[ks[0]], b = pts[ks[1]], d1 = Math.hypot(a[0] - b[0], a[1] - b[1]);
+          w.zoom = Math.max(1, Math.min(2.5, start.z * d1 / Math.max(20, d0)));
+        } else {
+          var dx = e.clientX - start.p[0][0], dy = e.clientY - start.p[0][1], z = w.zoom || 1;
+          w.focus = [Math.max(0, Math.min(1, start.f[0] - dx / innerWidth * .6 / z)), Math.max(0, Math.min(1, start.f[1] - dy / innerHeight * .6 / z))];
+        }
+        apply(w);
+      });
+      function up(e) { delete pts[e.pointerId]; start = null; }
+      pad.addEventListener('pointerup', up); pad.addEventListener('pointercancel', up);
+    }
+    function apply(w) {
+      R.forEach(function (r) { r.focus = w.focus || [.5, .5]; r.zoom = w.zoom || 1; });
+      if (media) { media.style.objectPosition = (w.focus[0] * 100) + '% ' + (w.focus[1] * 100) + '%'; media.style.transform = 'scale(' + (w.zoom || 1) + ')'; }
+      draw();
+    }
+    function adjust(on) {
+      dom(); var pad = root.querySelector('.wl-adj');
+      document.body.classList.toggle('wall-adjust', !!on); pad.hidden = !on; root.classList.toggle('live', !!on || document.body.classList.contains('wall-home'));
+      if (!on) { var w = wallById(curId); if (w) w.fitted = 1; saveWalls(); }
+      kick();
+    }
+    function reset() { var w = wallById(curId); if (!w) return; w.focus = [.5, .5]; w.zoom = 1; apply(w); }
+    return { sync: sync, onScroll: onScroll, adjust: adjust, reset: reset, reload: function () { curId = ''; sync(); }, resume: function () { paused = false; kick(); },
+      snap: function () { return R.length ? [back, front] : []; }, state: function () { return { id: curId, layers: R.map(function (r) { return r.layers.length; }), running: !!raf, err: window.__wallErr || '' }; } };
+  })();
+
+  window.__Wall = Wall;   // 测试用
+
+  /* ---------- 5.0 天气场景动效：接进「天气」页头部和首页 ---------- */
+  if (walls.wxfx == null) walls.wxfx = true;
+  var WxLive = (function () {
+    var eng = null, raf = 0, last = 0, sig = '', mode = '', calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches, homeT = 0;
+    function stop() { if (raf) cancelAnimationFrame(raf); raf = 0; eng = null; sig = ''; mode = ''; }
+    function fontOf(el) { var c = getComputedStyle(el); return c.fontStyle + ' ' + c.fontWeight + ' ' + c.fontSize + ' ' + c.fontFamily; }
+    function running() {
+      if (!eng || document.hidden || chat.open) return false;
+      if (mode === 'wx') return state.tab === 'forecast' && !wxui.sheet && $main.scrollTop < 420;
+      return state.tab === 'today' && document.body.classList.contains('wall-home') && !document.body.classList.contains('wall-bare') && $main.scrollTop < innerHeight * .5;
+    }
+    function loop(now) {
+      raf = 0; if (!eng) return;
+      if (!running()) { last = now; raf = requestAnimationFrame(loop); return; }     // 看不见时不算不画，回来接着动
+      var dt = Math.min(.05, (now - last) / 1000 || 0);
+      if (now - last >= 31) { last = now; eng.step(dt); eng.draw(); }
+      raf = requestAnimationFrame(loop);
+    }
+    function go() { if (!eng) return; if (calm) { eng.draw(); return; } if (!raf) { last = performance.now(); raf = requestAnimationFrame(loop); } }
+    // 「天气」页：字形遮罩 = 页面上真实的字（同样的字体、字距）+ 地点胶囊
+    function attachWx() {
+      var top = document.querySelector('.wx-top'), c1 = document.getElementById('wxfx'), c2 = document.getElementById('wxfx2');
+      if (!top || !c1 || !c2 || !walls.wxfx) { stop(); return; }
+      var r = c1.getBoundingClientRect(), W = Math.round(r.width), H = Math.round(r.height), scn = top.getAttribute('data-scene');
+      var nm = document.querySelector('.wx-name'), tp = document.querySelector('.wx-temp');
+      if (!W || !H || !nm || !tp) return;
+      var k = [state.current, scn, W, H, nm.textContent, tp.textContent, state.cities.join()].join('|');
+      if (k === sig && eng) { go(); return; }
+      var m = document.createElement('canvas'); m.width = W; m.height = H; var x = m.getContext('2d'); x.fillStyle = '#fff';
+      var textBottom = 0;
+      [nm, tp].forEach(function (el) {
+        x.font = fontOf(el); try { x.letterSpacing = getComputedStyle(el).letterSpacing; } catch (e) {}
+        var bl = el.querySelector('.wx-bl').getBoundingClientRect(), er = el.getBoundingClientRect();
+        x.fillText(el.firstChild.nodeValue, er.left - r.left, bl.top - r.top);
+        textBottom = Math.max(textBottom, er.bottom - r.top);
+      });
+      try { x.letterSpacing = '0px'; } catch (e) {}
+      Array.prototype.forEach.call(document.querySelectorAll('.wx-chip'), function (el) { var q = el.getBoundingClientRect(); if (q.right < r.left || q.left > r.right) return; x.beginPath(); x.roundRect(q.left - r.left, q.top - r.top, q.width, q.height, q.height / 2); x.fill(); });
+      stop(); sig = k; mode = 'wx';
+      eng = WxFX.create({ back: c1, front: c2, w: W, h: H, mask: m, scene: scn, textBottom: textBottom + 2, dpr: Math.min(2, devicePixelRatio || 1), seed: 7 });
+      eng.draw(); go();
+    }
+    // 首页（有壁纸时）：只在下雨、雷雨、下雪时出现，只画落在手写字上的那一层
+    function attachHome() {
+      var cv = document.querySelector('.w-fx'), first = document.querySelector('.w-first'), v = view(state.current);
+      if (!cv || !first || !v || !walls.wxfx) { stop(); return; }
+      var scn = WxFX.sceneOf(v.icon, v.curText, 0, false);
+      if (!/^(rain|storm|snow)$/.test(scn)) { stop(); cv.style.display = 'none'; return; }
+      cv.style.display = '';
+      clearTimeout(homeT);
+      homeT = setTimeout(function () {                // 等手写字写完再取轮廓
+        var fr = first.getBoundingClientRect(), W = Math.round(fr.width), H = Math.round(Math.min(fr.height, innerHeight));
+        var svgs = Array.prototype.slice.call(document.querySelectorAll('#wall-mid svg.hr-t, .w-greet svg'));
+        var m = document.createElement('canvas'); m.width = W; m.height = H; var x = m.getContext('2d');
+        Promise.all(svgs.map(function (sv) {
+          var q = sv.getBoundingClientRect(); if (!q.width) return null;
+          var cl = sv.cloneNode(true); cl.setAttribute('width', q.width); cl.setAttribute('height', q.height); cl.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+          Array.prototype.forEach.call(cl.querySelectorAll('path'), function (pth) { if (/\b(out|nib)\b/.test(pth.getAttribute('class') || '')) { pth.remove(); return; } pth.setAttribute('style', 'fill:#000;stroke:#000;stroke-width:1px;fill-opacity:1;stroke-opacity:1;stroke-dasharray:none;opacity:1'); });
+          Array.prototype.forEach.call(cl.querySelectorAll('circle'), function (c) { c.remove(); });
+          return new Promise(function (ok) { var im = new Image(); im.onload = function () { x.drawImage(im, q.left - fr.left, q.top - fr.top, q.width, q.height); ok(); }; im.onerror = function () { ok(); };
+            im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(cl)); });
+        })).then(function () {
+          if (state.tab !== 'today' || !document.querySelector('.w-fx')) return;
+          stop(); sig = 'home'; mode = 'home';
+          eng = WxFX.create({ front: document.querySelector('.w-fx'), w: W, h: H, mask: m, scene: scn, light: true, dpr: Math.min(2, devicePixelRatio || 1), seed: 11 });
+          eng.draw(); go();
+        });
+      }, document.querySelector('.w-greet.gw') ? 5200 : 700);
+    }
+    function sync() {
+      if (state.tab === 'forecast' && document.querySelector('.wx-top')) { if (document.fonts && document.fonts.status !== 'loaded') document.fonts.ready.then(attachWx); else attachWx(); return; }
+      if (state.tab === 'today' && document.querySelector('.w-fx')) {
+        var cv = document.querySelector('.w-fx');
+        if (mode === 'home' && eng && cv._fx) { go(); return; }   // 同一块画布：接着动
+        cv._fx = 1; attachHome(); return;
+      }
+      stop();
+    }
+    window.addEventListener('resize', function () { sig = ''; sync(); });
+    setInterval(function () { if (mode === 'home' && eng && state.tab === 'today') attachHome(); }, 60000);   // 时间变了，重新取轮廓
+    return { sync: sync, stop: stop, state: function () { return { mode: mode, scene: eng && eng.scene, running: !!raf }; } };
+  })();
+  window.__WxLive = WxLive;
+
+  /* ======================= 5.0 「天气」模块：城市 + 预报合一，精确到区县 ======================= */
+  var wxui = { sheet: '', q: '', res: null, searching: false, edit: false, locating: false, locErr: '', slide: '' };
+  var STATION_KEY = 'cloud-weather-stations-v1', HOURS = {}, PATHS = {};
+  // 地点路径：「北京」「浙江 · 宁波」——搜索结果和我的地方里显示上一级，重名也分得清
+  function placePath(k) {
+    var m = META[k]; if (!m) return '';
+    if (m.path != null && m.path !== '') return m.path;
+    if (/^s_/.test(k)) return m.region || '';
+    // 内置的 34 个城市：写省份（直辖市、港澳台写本身就够了）
+    for (var pv in PROV_GEO) if (PROV_GEO[pv] === k) return pv === m.zh || /北京|天津|上海|重庆|香港|澳门/.test(pv) ? '' : pv;
+    return '';
+  }
+  function pathFromLoc(p, name) {   // "中国, 浙江, 海曙" → 「浙江」
+    var a = String(p || '').split(/\s*,\s*/).filter(function (x) { return x && x !== '中国' && x !== name; });
+    return a.join(' · ');
+  }
+  function addPlace(id, name, en, path, opt) {
+    opt = opt || {};
+    var k = 's_' + id;
+    META[k] = state.custom[k] = { zh: name, en: en || '', region: path || '', path: path || '', fid: id, nid: id, loc: !!opt.loc };
+    if (opt.loc) { state.cities = state.cities.filter(function (x) { return !(META[x] && META[x].loc) || x === k; }); Object.keys(state.custom).forEach(function (c) { if (c !== k && state.custom[c].loc) { state.custom[c].loc = false; META[c].loc = false; } }); }
+    if (state.cities.indexOf(k) < 0) { if (opt.loc) state.cities.unshift(k); else state.cities.push(k); }
+    else if (opt.loc) { state.cities = [k].concat(state.cities.filter(function (x) { return x !== k; })); }
+    if (opt.use) state.current = k;
+    save(); refreshOne(k);
+    return k;
+  }
+
+  /* ---------- 全国站点表（带经纬度）：定位兜底、没有实况的区借最近的站 ---------- */
+  function stations() {
+    var c = null; try { c = JSON.parse(localStorage.getItem(STATION_KEY) || 'null'); } catch (e) {}
+    if (c && Date.now() - c.at < 7 * 86400e3) return Promise.resolve(c.list);
+    return xget(API + 'map/weather/1').then(function (d) {
+      var list = ((d && d.city) || []).filter(function (x) { return x[2] === '中国'; }).map(function (x) { return [String(x[0]), x[1], +x[4], +x[5], x[16] || '']; });
+      try { localStorage.setItem(STATION_KEY, JSON.stringify({ at: Date.now(), list: list })); } catch (e) {}
+      return list;
+    }).catch(function () { return c ? c.list : []; });
+  }
+  function kmBetween(a, b) {
+    var R = 6371, dLa = (b[0] - a[0]) * Math.PI / 180, dLo = (b[1] - a[1]) * Math.PI / 180;
+    var s = Math.sin(dLa / 2) * Math.sin(dLa / 2) + Math.cos(a[0] * Math.PI / 180) * Math.cos(b[0] * Math.PI / 180) * Math.sin(dLo / 2) * Math.sin(dLo / 2);
+    return 2 * R * Math.asin(Math.sqrt(s));
+  }
+  function nearestObs(list, ll, notId) {    // 最近的有实况观测的站（五位数字的国家站）
+    var best = null;
+    list.forEach(function (s) { if (!/^\d{5}$/.test(s[0]) || s[0] === notId) return; var d = kmBetween(ll, [s[2], s[3]]); if (!best || d < best.d) best = { id: s[0], name: s[1], d: d }; });
+    return best;
+  }
+  // 这个区没有自己的实况（K 开头的站等）：借最近的站，注明来源
+  function borrowNow(key, doc) {
+    var m = META[key]; if (!m || m.nearFail) return Promise.resolve(null);
+    var go = function (id, name, km) {
+      return xget(API + 'now/' + encodeURIComponent(id)).then(function (a) {
+        var n = a && a.now; if (!n || n.temperature == null || n.temperature >= 9999) return null;
+        doc.now = { t: n.temperature, f: n.feelst, h: n.humidity, p: n.precipitation, pr: n.pressure, wd: clean(n.windDirection), ws: clean(n.windScale), wv: n.windSpeed, u: a.lastUpdate, al: alarmTitles(a.alarm),
+          via: { id: id, name: name, km: km == null ? null : Math.round(km) } };
+        return true;
+      }).catch(function () { return null; });
+    };
+    if (m.near) return go(m.near.id, m.near.name, m.near.km);
+    return stations().then(function (list) {
+      var me = list.filter(function (s) { return s[0] === m.fid; })[0], ll = me ? [me[2], me[3]] : (m.ll || null);
+      var cand = ll ? nearestObs(list, ll, m.fid) : null;
+      if (!cand) {  // 没有坐标：用省会
+        var pk = PROV_GEO[String(m.path || m.region || '').split(' · ')[0].replace(/(省|市|自治区).*$/, '')];
+        if (pk && META[pk]) cand = { id: META[pk].nid, name: META[pk].zh, d: null };
+      }
+      if (!cand) { m.nearFail = true; return null; }
+      m.near = { id: cand.id, name: cand.name, km: cand.d };
+      if (state.custom[key]) { state.custom[key].near = m.near; save(); }
+      return go(cand.id, cand.name, cand.d);
+    });
+  }
+
+  /* ---------- 定位：GPS → 查是哪个区 → 找这个区的站 ---------- */
+  function reverseGeo(lat, lon) {
+    function get(url, hdr) { return new Promise(function (ok, no) { var x = new XMLHttpRequest(); x.open('GET', url, true); x.timeout = 9000; if (hdr) x.setRequestHeader('Accept-Language', 'zh-CN'); x.onload = function () { try { ok(JSON.parse(x.responseText)); } catch (e) { no(e); } }; x.onerror = x.ontimeout = function () { no(new Error('net')); }; x.send(); }); }
+    function names(arr) { return arr.filter(Boolean).map(function (s) { return String(s).trim(); }).filter(function (s, i, a) { return s && a.indexOf(s) === i; }); }
+    return get('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=' + lat + '&longitude=' + lon + '&localityLanguage=zh').then(function (d) {
+      var adm = ((d.localityInfo || {}).administrative || []).slice().sort(function (a, b) { return (b.adminLevel || 0) - (a.adminLevel || 0); }).map(function (a) { return a.name; });
+      var out = names([d.locality].concat(adm, [d.city, d.principalSubdivision]));
+      if (!out.length) throw new Error('empty');
+      return { names: out, prov: d.principalSubdivision || '' };
+    }).catch(function () {
+      return get('https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=12&accept-language=zh-CN&lat=' + lat + '&lon=' + lon, true).then(function (d) {
+        var a = d.address || {};
+        return { names: names([a.city_district, a.district, a.county, a.suburb, a.town, a.city, a.state_district]), prov: a.state || a.province || a.city || '' };
+      });
+    });
+  }
+  function acSearch(q) {
+    return xget(API + 'autocomplete?q=' + encodeURIComponent(q)).then(function (d) {
+      return (d || []).map(function (s) { var p = String(s).split('|'); return { id: p[0], name: p[1], en: p[2], country: p[3] }; }).filter(function (r) { return r.country === '中国' && r.id; });
+    }).catch(function () { return []; });
+  }
+  function locate(silent) {
+    if (!navigator.geolocation) { wxui.locErr = '这台设备不能定位'; if (!silent) rerender(); return Promise.resolve(); }
+    wxui.locating = true; wxui.locErr = ''; if (!silent) rerender();
+    return new Promise(function (ok) {
+      navigator.geolocation.getCurrentPosition(function (pos) { ok([pos.coords.latitude, pos.coords.longitude]); }, function (e) { ok({ err: e && e.code === 1 ? '没有定位权限（可以在系统设置里打开）' : '定位失败，稍后再试' }); },
+        { enableHighAccuracy: false, timeout: 15000, maximumAge: 10 * 60e3 });
+    }).then(function (ll) {
+      if (ll.err) throw new Error(ll.err);
+      state.lastLL = ll;
+      return reverseGeo(ll[0], ll[1]).then(function (g) {
+        var prov = String(g.prov || '').replace(/(省|市|自治区|特别行政区|维吾尔|壮族|回族)+$/, '');
+        // 从最细的一级开始搜：海淀区 → 海淀
+        var tries = g.names.map(function (n) { return n.replace(/(特别行政区|自治县|自治旗|自治州|新区|地区|街道|区|县|市|旗|镇|乡)$/, ''); }).filter(function (n) { return n.length >= 2; });
+        var i = 0;
+        function next() {
+          if (i >= tries.length) return null;
+          var n = tries[i++];
+          return acSearch(n).then(function (rs) {
+            var hit = rs.filter(function (r) { return r.name === n; })[0] || rs.filter(function (r) { return r.name.indexOf(n) === 0; })[0];
+            if (!hit) return next();
+            return xget(API + 'weather/' + encodeURIComponent(hit.id)).then(function (w) {
+              var path = w && w.location ? pathFromLoc(w.location.path, hit.name) : '';
+              if (prov && path && path.indexOf(prov) < 0) return next();       // 省份对不上（重名）
+              return { id: hit.id, name: hit.name, en: hit.en, path: path };
+            }).catch(function () { return { id: hit.id, name: hit.name, en: hit.en, path: '' }; });
+          });
+        }
+        return next();
+      }).catch(function () { return null; }).then(function (hit) {
+        if (hit) return hit;
+        return stations().then(function (list) { var b = nearestObs(list, ll); return b ? { id: b.id, name: b.name, en: '', path: '' } : null; });
+      });
+    }).then(function (hit) {
+      wxui.locating = false;
+      if (!hit) { wxui.locErr = '没找到附近的气象站'; rerender(); return; }
+      var k = addPlace(hit.id, hit.name, hit.en, hit.path, { loc: true, use: true });
+      if (META[k]) META[k].ll = state.lastLL;
+      state.locAt = Date.now(); save();
+      if (!silent) { toast('定位到 ' + (hit.path ? hit.path + ' ' : '') + hit.name); wxui.sheet = ''; if (state.tab === 'forecast') { render({ top: true }); return; } }
+      rerender();
+    }).catch(function (e) { wxui.locating = false; wxui.locErr = String(e && e.message || e); rerender(); });
+  }
+
+  /* ---------- 逐小时：气象局网页里有，读得到就显示（网页有人机验证时读不到，就用昼夜代替） ---------- */
+  function loadHours(k) {
+    var m = META[k]; if (!m || HOURS[k] && Date.now() - HOURS[k].at < 30 * 60e3) return;
+    HOURS[k] = { at: Date.now(), list: null };
+    var x = new XMLHttpRequest(); x.open('GET', 'https://weather.cma.cn/web/weather/' + encodeURIComponent(m.fid) + '.html', true); x.timeout = 10000;
+    x.onload = function () {
+      try {
+        var doc = new DOMParser().parseFromString(x.responseText, 'text/html'), tb = doc.querySelector('table[id^="hourTable"]');
+        if (!tb) return;
+        var rows = Array.prototype.map.call(tb.querySelectorAll('tr'), function (tr) { return Array.prototype.map.call(tr.querySelectorAll('td'), function (td) { return td.textContent.trim(); }); });
+        var row = function (re) { return rows.filter(function (r) { return re.test(r[0] || ''); })[0] || []; };
+        var tm = row(/时间/), tp = row(/气温/), rain = row(/降水/), ws = row(/风速/);
+        var list = [];
+        for (var i = 1; i < tm.length; i++) { var t = parseFloat(tp[i]); if (isNaN(t)) continue; list.push({ h: tm[i].replace(/^.*?(\d{1,2}:\d{2}).*$/, '$1'), t: t, p: rain[i] || '', ws: ws[i] || '' }); }
+        if (list.length >= 4) { HOURS[k].list = list.slice(0, 8); if (state.tab === 'forecast') keepScroll(); }
+      } catch (e) {}
+    };
+    x.send();
+  }
+
+  /* ---------- 「天气」页 ---------- */
+  function viewWeather() {
+    var k = state.current, v = view(k), m = META[k];
+    if (!v) return statusView();
+    if (!HOURS[k]) loadHours(k);
+    var t = v.today, n = v.now, ds = v.days, path = placePath(k);
+    var html = '<section class="view weather' + (wxui.slide ? ' wx-slide-' + wxui.slide : '') + '">';
+    var scn_ = WxFX.sceneOf(v.icon, v.curText, n ? windLevel(n.ws) : 0, nowH >= 19 || nowH < 6), sky_ = WxFX.SKY[scn_];
+    html += '<div class="wx-top" data-scene="' + scn_ + '" style="--s0:' + sky_[0] + ';--s1:' + sky_[1] + '"><div class="wx-sky" aria-hidden="true"></div><canvas id="wxfx" aria-hidden="true"></canvas><canvas id="wxfx2" aria-hidden="true"></canvas>' +
+      '<button type="button" class="wx-head" data-wxsheet="places" aria-label="我的地方">' +
+        '<span class="wx-name">' + esc(m.zh) + '<i class="wx-bl"></i></span><span class="wx-path">' + esc([path, m.loc ? '当前位置' : ''].filter(Boolean).join(' · ')) + '</span>' + icon('down', 18) + '</button>' +
+      '<div class="wx-now"><span class="wx-temp">' + deg(v.temp) + '°<i class="wx-bl"></i></span><div class="wx-cond"><b>' + esc(v.curText || '—') + '</b>' +
+        '<span>' + (t ? deg(t.hi) + '° / ' + deg(t.lo) + '°' : '') + (n ? ' · 体感 ' + deg(n.f) + '°' : '') + '</span>' +
+        (n && n.via ? '<i class="wx-via">实况取自 ' + esc(n.via.name) + '站' + (n.via.km != null ? ' · ' + n.via.km + ' km' : '') + '</i>' : '') + '</div></div>' +
+      '<div class="wx-chips" role="tablist">' + state.cities.map(function (c) {
+        var mm = META[c]; if (!mm) return '';
+        return '<button type="button" class="wx-chip' + (c === k ? ' on' : '') + '" data-wxpl="' + c + '" role="tab" aria-selected="' + (c === k) + '">' + (mm.loc ? icon('pin', 13) : '') + esc(mm.zh) + '</button>';
+      }).join('') + '<button type="button" class="wx-chip add" data-wxsheet="search" aria-label="添加地点">' + icon('plus', 15) + '</button></div>' +
+      '</div>';
+    if (v.alarms.length) html += '<div class="alert a" role="alert">' + icon('warn', 20) + '<ul>' + v.alarms.map(function (a) { return '<li>' + esc(a) + '</li>'; }).join('') + '</ul></div>';
+    // 逐小时 / 今明昼夜
+    var hs = HOURS[k] && HOURS[k].list;
+    if (hs) {
+      html += '<div class="panel a wx-hours"><h2>逐小时 <em>Hourly</em></h2><div class="wx-hr">' + hs.map(function (h) {
+        return '<div><span>' + esc(h.h) + '</span><b>' + deg(h.t) + '°</b><small>' + esc(/无降水/.test(h.p) ? '' : h.p) + '</small></div>'; }).join('') + '</div></div>';
+    } else if (t) {
+      var tm_ = v.tomorrow, dn = [['今天白天', t.dt, t.hi, false], ['今晚', t.nt, t.lo, true]];
+      if (tm_) dn.push(['明天白天', tm_.dt, tm_.hi, false], ['明晚', tm_.nt, tm_.lo, true]);
+      html += '<div class="panel a wx-hours"><h2>今明两天 <em>Day &amp; Night</em></h2><div class="wx-hr">' + dn.map(function (x) {
+        return '<div><span>' + x[0] + '</span>' + icon(iconFor(x[1], x[3]), 22) + '<b>' + deg(x[2]) + '°</b><small>' + esc(x[1] || '') + '</small></div>'; }).join('') + '</div></div>';
+    }
+    // 未来 7 天（原「预报」页，点一天看昼夜）
+    if (ds.length) {
+      var min = Math.min.apply(null, ds.map(function (x) { return x.lo; })) - 1, max = Math.max.apply(null, ds.map(function (x) { return x.hi; })) + 1;
+      html += '<div class="panel a wx-week"><h2>未来 ' + ds.length + ' 天 <em>The Week Ahead</em></h2>' + ds.map(function (x, i) {
+        var left = (x.lo - min) / (max - min) * 100, width = (x.hi - x.lo) / (max - min) * 100, open = state.openDay === i;
+        var txt = x.dt && x.nt && x.dt !== x.nt ? x.dt + '转' + x.nt : (x.dt || x.nt || '—');
+        return '<div class="day-wrap"><button type="button" class="day" data-day="' + i + '" aria-expanded="' + open + '">' +
+          '<span class="n">' + dayLabel(x.d, i) + '</span>' + icon(iconFor(x.dt || x.nt, false), 20) + '<span class="c">' + esc(txt) + '</span>' +
+          '<span class="lo">' + deg(x.lo) + '°</span><span class="bar"><i style="left:' + left + '%;width:' + width + '%"></i></span><span class="hi">' + deg(x.hi) + '°</span></button>' +
+          (open ? '<div class="day-more"><div><span class="k">白天</span><span class="v">' + esc(x.dt || '—') + '</span></div><div><span class="k">夜间</span><span class="v">' + esc(x.nt || '—') + '</span></div>' +
+            '<div><span class="k">风</span><span class="v">' + esc(x.ws) + '</span></div><p>' + x.d.slice(5).replace('/', '月') + '日 · ' + esc(x.wd) + ' · 昼夜温差 ' + span(x.hi - x.lo) + '°。' + dayAdvice(x) + '</p></div>' : '') + '</div>';
+      }).join('') + '</div>';
+    }
+    // 指标
+    var st = sunTimes(now, geoOf(k));
+    var cards = [];
+    if (n) cards.push(['therm', '体感', deg(n.f) + '°', n.f < n.t - 1 ? '比实际凉 ' + span(n.t - n.f) + '°' : n.f > n.t + 1 ? '比实际热 ' + span(n.f - n.t) + '°' : '和实际差不多'],
+      ['drop', '湿度', Math.round(n.h) + '%', n.h < 30 ? '有点干，多喝水' : n.h > 80 ? '很潮湿' : '舒适'],
+      ['wind', '风', esc(n.ws || '—'), esc((n.wd || '') + (n.wv != null ? ' · ' + n.wv + ' m/s' : ''))],
+      ['gauge', '气压', Math.round(n.pr) + '', 'hPa · 降水 ' + n.p + ' mm']);
+    if (st) cards.push(['sun', '日出', hhmmOf(st.rise), '日落 ' + hhmmOf(st.set)]);
+    if (t) cards.push(['cal', '昼夜温差', span(t.hi - t.lo) + '°', t.hi - t.lo >= 10 ? '早晚加件外套' : '温差不大']);
+    if (cards.length) html += '<div class="wx-grid">' + cards.map(function (c) { return '<div class="panel a wx-card"><span class="k">' + icon(c[0], 14) + c[1] + '</span><span class="v">' + c[2] + '</span><span class="d">' + c[3] + '</span></div>'; }).join('') + '</div>';
+    html += '<div class="src a"><span>数据来自中国气象局</span><span>' + (n ? '实况 ' + hhmm(n.u) + (n.via ? '（' + esc(n.via.name) + '站）' : '') + ' · ' : '') + '预报发布 ' + esc(v.doc.fu || '') + '</span></div>';
+    html += '</section>';
+    if (wxui.sheet) html += wxSheet();
+    return html;
+  }
+
+  /* ---------- 我的地方 / 搜索（底部纸片） ---------- */
+  function wxSheet() {
+    var h = '<div class="wx-scrim" data-wxclose="1"></div><div class="wx-sheet" role="dialog" aria-label="' + (wxui.sheet === 'search' ? '添加地点' : '我的地方') + '"><div class="wx-grip"></div>';
+    if (wxui.sheet === 'search') {
+      h += '<div class="wx-sh-head"><label class="search wx-q" for="wx-q">' + icon('search', 18) + '<input id="wx-q" type="search" placeholder="搜索区县、城市或拼音" value="' + esc(wxui.q) + '" autocomplete="off" enterkeyhint="search"></label>' +
+        '<button type="button" class="wx-txt" data-wxsheet="places">取消</button></div>';
+      var q = wxui.q.trim();
+      if (!q) h += '<button type="button" class="wx-loc" data-wxloc="1">' + icon('pin', 17) + '<span>' + (wxui.locating ? '正在定位…' : '用定位找离你最近的站点') + '</span></button>' + (wxui.locErr ? '<p class="wx-err">' + esc(wxui.locErr) + '</p>' : '') +
+        '<p class="hint wx-hint">全国约 2400 个气象站，基本一个区县一个。输入一两个字就能找到，比如「海淀」「hd」「宁波」。</p>';
+      else if (wxui.searching && !wxui.res) h += '<p class="hint wx-hint">正在搜索…</p>';
+      else if (wxui.res && !wxui.res.length) h += '<p class="hint wx-hint">没有找到「' + esc(q) + '」。换个叫法试试，比如去掉「区」「县」。</p>';
+      else if (wxui.res) h += '<div class="smcap wx-cap">区县 · 城市</div>' + wxui.res.map(function (r) {
+        var have = state.cities.indexOf('s_' + r.id) >= 0 || state.cities.some(function (c) { return META[c] && META[c].nid === r.id; });
+        var nm = esc(r.name).replace(esc(q), '<u>' + esc(q) + '</u>');
+        return '<button type="button" class="wx-res" data-wxadd="' + esc(r.id) + '" data-wxname="' + esc(r.name) + '" data-wxen="' + esc(r.en || '') + '"' + (have ? ' disabled' : '') + '>' +
+          '<b>' + nm + '</b><span>' + esc(PATHS[r.id] || r.en || '') + '</span>' + (have ? '<em>已添加</em>' : '<i>' + icon('plus', 16) + '</i>') + '</button>';
+      }).join('');
+      return h + '</div>';
+    }
+    h += '<div class="wx-sh-head"><h2>我的地方 <em>My Places</em></h2><button type="button" class="wx-txt" data-wxedit="1">' + (wxui.edit ? '完成' : '编辑') + '</button></div>' +
+      '<button type="button" class="search wx-q wx-fake" data-wxsheet="search">' + icon('search', 18) + '<span>搜索区县、城市或拼音</span></button>' +
+      '<button type="button" class="wx-loc" data-wxloc="1">' + icon('pin', 17) + '<span>' + (wxui.locating ? '正在定位…' : '用定位找离你最近的站点') + '</span>' +
+        (function () { var lk = state.cities.filter(function (c) { return META[c] && META[c].loc; })[0]; return lk ? '<em>' + esc(META[lk].zh) + '</em>' : ''; })() + '</button>' +
+      (wxui.locErr ? '<p class="wx-err">' + esc(wxui.locErr) + '</p>' : '') +
+      '<div class="wx-list" id="wx-list">' + state.cities.map(function (c) {
+        var mm = META[c], vv = view(c); if (!mm) return '';
+        var td = vv && vv.today, nn = vv && vv.now;
+        return '<div class="wx-row' + (c === state.current ? ' cur' : '') + '" data-key="' + c + '">' +
+          (wxui.edit ? '<button type="button" class="wx-del" data-wxdel="' + c + '" aria-label="删除 ' + esc(mm.zh) + '"' + (state.cities.length <= 1 ? ' disabled' : '') + '>' + icon('x', 14) + '</button>' : '') +
+          '<button type="button" class="wx-pick" data-wxpick="' + c + '"><span class="wx-rn">' + (mm.loc ? icon('pin', 14) : '') + esc(mm.zh) + '<small>' + esc(placePath(c)) + '</small></span>' +
+          '<span class="wx-rs">' + (vv ? esc(vv.curText || '') + (td ? ' · ' + deg(td.lo) + '° / ' + deg(td.hi) + '°' : '') : '正在读取…') + (nn && nn.via ? '<i>实况取自 ' + esc(nn.via.name) + '站' + (nn.via.km != null ? ' · ' + nn.via.km + ' km' : '') + '</i>' : '') + '</span></button>' +
+          '<span class="wx-rt">' + (vv ? deg(vv.temp) + '°' : '') + '</span>' +
+          '<span class="wx-drag" data-wxdrag="' + c + '" aria-label="拖动排序">' + icon('menu', 18) + '</span></div>';
+      }).join('') + '</div>' +
+      '<p class="hint wx-hint">按住右边的 ≡ 拖动排序。定位时会把大概位置发给 OpenStreetMap / BigDataCloud 查是哪个区，只用来找气象站。</p>';
+    return h + '</div>';
+  }
+  var wxT = 0;
+  function wxSearch(q) {
+    clearTimeout(wxT); wxui.q = q; wxui.res = null;
+    if (!q.trim()) { wxui.searching = false; rerender(); return; }
+    wxui.searching = true;
+    wxT = setTimeout(function () {
+      var mine = q;
+      acSearch(q.trim()).then(function (rs) {
+        if (wxui.q !== mine) return;
+        wxui.res = rs.slice(0, 10); wxui.searching = false; rerender();
+        // 补上一级（省 · 市）：每个结果查一次 7 天预报接口里的 location.path（有缓存）
+        rs.slice(0, 10).forEach(function (r) {
+          if (PATHS[r.id]) return;
+          xget(API + 'weather/' + encodeURIComponent(r.id)).then(function (w) { if (w && w.location) { PATHS[r.id] = pathFromLoc(w.location.path, r.name) || '中国'; if (wxui.sheet === 'search') rerender(); } }).catch(function () {});
+        });
+      });
+    }, 280);
+  }
+  function wxGo(k, dir) {
+    if (!META[k] || k === state.current) return;
+    state.current = k; state.openDay = -1; save(); wxui.slide = dir || '';
+    render({ top: true }); setTimeout(function () { wxui.slide = ''; }, 500);
+    if (!DATA[k]) refreshOne(k);
+  }
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest && e.target.closest('[data-wxsheet],[data-wxclose],[data-wxpl],[data-wxpick],[data-wxadd],[data-wxdel],[data-wxedit],[data-wxloc]');
+    if (!t) return;
+    var g = function (a) { return t.getAttribute(a); };
+    if (g('data-wxsheet')) { if (state.tab !== 'forecast') { state.tab = 'forecast'; state.sub = ''; } wxui.sheet = g('data-wxsheet'); wxui.edit = false; if (wxui.sheet === 'search') { wxui.q = ''; wxui.res = null; } render(); if (wxui.sheet === 'search') { var qi = document.getElementById('wx-q'); if (qi) qi.focus(); } bindWxSheet(); return; }
+    if (g('data-wxclose')) { wxClose(); return; }
+    if (g('data-wxpl')) { var ks = state.cities, a = ks.indexOf(state.current), b = ks.indexOf(g('data-wxpl')); wxGo(g('data-wxpl'), b > a ? 'l' : 'r'); return; }
+    if (g('data-wxpick')) { wxui.sheet = ''; wxGo(g('data-wxpick')); return; }
+    if (g('data-wxadd')) { var id = g('data-wxadd'), nm = g('data-wxname'); addPlace(id, nm, g('data-wxen'), PATHS[id] && PATHS[id] !== '中国' ? PATHS[id] : '', { use: true }); wxui.sheet = ''; wxui.q = ''; wxui.res = null; toast('已添加 ' + nm); render({ top: true }); return; }
+    if (g('data-wxdel')) { var dk = g('data-wxdel'); if (state.cities.length <= 1) return; state.cities = state.cities.filter(function (x) { return x !== dk; }); if (state.current === dk) state.current = state.cities[0]; save(); toast('已删除 ' + META[dk].zh); keepScroll(); bindWxSheet(); return; }
+    if (g('data-wxedit')) { wxui.edit = !wxui.edit; keepScroll(); bindWxSheet(); return; }
+    if (g('data-wxloc')) { if (!wxui.locating) locate(false); return; }
+  });
+  document.addEventListener('input', function (e) { if (e.target.id === 'wx-q') { wxSearch(e.target.value); } });
+  function wxClose() { var sh = document.querySelector('.wx-sheet'); if (sh) { sh.classList.add('out'); var sc = document.querySelector('.wx-scrim'); if (sc) sc.classList.add('out'); } setTimeout(function () { wxui.sheet = ''; wxui.edit = false; keepScroll(); }, sh ? 260 : 0); }
+  // 纸片：下拉关闭（和其它纸片一样）；我的地方：按住 ≡ 拖动排序
+  function bindWxSheet() {
+    var sh = document.querySelector('.wx-sheet'); if (!sh || sh._b) return; sh._b = 1;
+    if (typeof sheetDrag === 'function') sheetDrag(sh, wxClose);
+    var list = sh.querySelector('#wx-list'); if (!list) return;
+    var drag = null;
+    list.addEventListener('pointerdown', function (e) {
+      var hd = e.target.closest('[data-wxdrag]'); if (!hd) return;
+      var row = hd.closest('.wx-row'); e.preventDefault();
+      drag = { row: row, y0: e.clientY, h: row.getBoundingClientRect().height + 8, id: e.pointerId };
+      row.classList.add('lift'); hd.setPointerCapture(e.pointerId);
+    });
+    list.addEventListener('pointermove', function (e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      var dy = e.clientY - drag.y0; drag.row.style.transform = 'translateY(' + dy + 'px)';
+      var rows = Array.prototype.slice.call(list.querySelectorAll('.wx-row')), i = rows.indexOf(drag.row), j = i + Math.round(dy / drag.h);
+      j = Math.max(0, Math.min(rows.length - 1, j));
+      rows.forEach(function (r, x) { if (r === drag.row) return; var sh_ = (x > i && x <= j) ? -drag.h : (x < i && x >= j) ? drag.h : 0; r.style.transform = sh_ ? 'translateY(' + sh_ + 'px)' : ''; });
+      drag.j = j; drag.i = i;
+    });
+    function end(e) {
+      if (!drag) return; var d = drag; drag = null;
+      if (d.j != null && d.j !== d.i) { var ks = state.cities.slice(), k = ks.splice(d.i, 1)[0]; ks.splice(d.j, 0, k); state.cities = ks; save(); }
+      keepScroll(); bindWxSheet();
+    }
+    list.addEventListener('pointerup', end); list.addEventListener('pointercancel', end);
+  }
+  // 左右滑换地点
+  (function () {
+    var x0 = null, y0 = 0, t0 = 0;
+    document.addEventListener('touchstart', function (e) {
+      if (state.tab !== 'forecast' || wxui.sheet || chat.open || !e.target.closest || !e.target.closest('#main .view.weather') || e.target.closest('.wx-chips')) { x0 = null; return; }
+      var tx = e.touches[0].clientX; if (tx < 22 || tx > innerWidth - 22) { x0 = null; return; }   // 边缘留给系统返回
+      x0 = tx; y0 = e.touches[0].clientY; t0 = Date.now();
+    }, { passive: true });
+    document.addEventListener('touchend', function (e) {
+      if (x0 == null) return; var t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0; x0 = null;
+      if (Math.abs(dx) < 60 || Math.abs(dy) > Math.abs(dx) * .6 || Date.now() - t0 > 700) return;
+      var ks = state.cities, i = ks.indexOf(state.current), j = i + (dx < 0 ? 1 : -1);
+      if (j < 0 || j >= ks.length) return;
+      wxGo(ks[j], dx < 0 ? 'l' : 'r');
+    }, { passive: true });
+  })();
+
+  /* ---------- 导入 ---------- */
+  function wallKind(u8, name) {
+    var s = String.fromCharCode.apply(null, u8.subarray(4, 12));
+    if (/^PKG[MV]/.test(s)) return 'scene';
+    if (u8[0] === 0xFF && u8[1] === 0xD8 || u8[0] === 0x89 && u8[1] === 0x50 || String.fromCharCode(u8[8], u8[9], u8[10], u8[11]) === 'WEBP') return 'image';
+    if (String.fromCharCode(u8[4], u8[5], u8[6], u8[7]) === 'ftyp' || u8[0] === 0x1A && u8[1] === 0x45) return 'video';
+    return /\.(mpkg|pkg)$/i.test(name || '') ? 'scene' : '';
+  }
+  // 读出标题、缩略图、主题色（缩略图压到 240px 存进列表，壁纸库里用）
+  function wallMeta(buf, kind) {
+    function thumb(blob) {
+      return new Promise(function (ok) {
+        var u = URL.createObjectURL(blob), done = function (el, w, h) {
+          try { var c = document.createElement('canvas'), k = 240 / Math.max(w, h); c.width = Math.round(w * k); c.height = Math.round(h * k); c.getContext('2d').drawImage(el, 0, 0, c.width, c.height); ok(c.toDataURL('image/jpeg', .72)); }
+          catch (e) { ok(''); } URL.revokeObjectURL(u);
+        };
+        if (/video/.test(blob.type)) { var v = document.createElement('video'); v.muted = true; v.src = u; v.onloadeddata = function () { v.currentTime = .5; }; v.onseeked = function () { done(v, v.videoWidth, v.videoHeight); }; v.onerror = function () { ok(''); }; }
+        else { var im = new Image(); im.onload = function () { done(im, im.naturalWidth, im.naturalHeight); }; im.onerror = function () { ok(''); }; im.src = u; }
+        setTimeout(function () { ok(''); }, 6000);
+      });
+    }
+    if (kind === 'image') return thumb(new Blob([buf])).then(function (t) { return { thumb: t }; });
+    if (kind === 'video') return thumb(new Blob([buf], { type: 'video/mp4' })).then(function (t) { return { thumb: t }; });
+    var pkg = WallScene.unpack(buf), dec = function (f) { try { return JSON.parse(new TextDecoder().decode(pkg.files[f])); } catch (e) { return null; } };
+    var pj = dec('project.json') || {}, sc = ((pj.general || {}).properties || {}).schemecolor, tint = '';
+    if (sc && sc.value) { var c = String(sc.value).split(/\s+/).map(Number); if (c.length >= 3) tint = '#' + c.slice(0, 3).map(function (x) { return ('0' + Math.round(Math.max(0, Math.min(1, x)) * 255).toString(16)).slice(-2); }).join(''); }
+    var pv = pj.preview && pkg.files[pj.preview];
+    var sceneOk = !!pkg.files['scene.json'] || /video/i.test(pj.type || '');
+    if (!sceneOk) throw new Error('这个壁纸包是「' + (pj.type || '未知') + '」类型，目前只支持场景和视频壁纸');
+    return (pv ? thumb(new Blob([pv], { type: /\.gif$/i.test(pj.preview) ? 'image/gif' : 'image/jpeg' })) : Promise.resolve('')).then(function (t) {
+      return { thumb: t, title: pj.title || '', tint: tint, wtype: pj.type || 'scene' };
+    });
+  }
+  function wallAdd(e, buf) {
+    var kind = e.kind || wallKind(new Uint8Array(buf.slice(0, 16)), e.name);
+    if (!kind) { toast('这不是壁纸包、图片或视频'); return Promise.resolve(); }
+    wallui.busy = true; if (state.sub === 'wall') render();
+    return wallMeta(buf, kind).then(function (m) {
+      var w = { id: 'w' + Date.now().toString(36), name: (m.title || e.name || '壁纸').replace(/\.(mpkg|pkg|jpe?g|png|webp|mp4|webm)$/i, '').slice(0, 40), path: e.path || '', kind: kind, size: e.size || buf.byteLength,
+        thumb: m.thumb || '', tint: m.tint || '', focus: [.5, .5], zoom: 1, align: 'auto', tags: [], at: Date.now() };
+      if (!w.path) WALL_MEM[w.id] = buf;
+      walls.list.unshift(w); walls.cur = w.id; walls.on = true; saveWalls();
+      wallui.busy = false; toast('壁纸已换好：' + w.name);
+      render();
+    }).catch(function (err) { wallui.busy = false; if (e.path && nat5('wallDelete')) AmorNative.wallDelete(e.path); toast(String(err && err.message || err)); render(); });
+  }
+  function nat5(fn) { try { return !!(window.AmorNative && typeof AmorNative[fn] === 'function'); } catch (e) { return false; } }
+  function wallImport() {
+    if (nat5('wallPick')) { AmorNative.wallPick(); return; }
+    var inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.mpkg,.pkg,image/*,video/*';
+    inp.onchange = function () { var f = inp.files && inp.files[0]; if (!f) return; wallui.busy = true; render(); f.arrayBuffer().then(function (b) { wallAdd({ name: f.name, size: f.size }, b); }); };
+    inp.click();
+  }
+  window.__wallBusy = function () { wallui.busy = true; if (state.sub === 'wall') render(); };
+  // 原生层复制好文件以后叫这个（也包括从别的 App「用云朵天气打开」）
+  window.__wallIn = function () {
+    var s = ''; try { s = AmorNative.takeWall() || ''; } catch (e) {}
+    if (!s) return; var r = {}; try { r = JSON.parse(s); } catch (e) {}
+    if (r.err) { wallui.busy = false; if (r.err !== 'cancel') toast(r.err); render(); return; }
+    var x = new XMLHttpRequest(); x.open('GET', r.path, true); x.responseType = 'arraybuffer';
+    x.onload = function () { if (!x.response) { wallui.busy = false; toast('读不到壁纸文件'); render(); return; } if (state.tab !== 'settings') { state.tab = 'today'; state.sub = ''; } wallAdd(r, x.response); };
+    x.onerror = function () { wallui.busy = false; toast('读不到壁纸文件'); render(); };
+    x.send();
+  };
+  function wallRemove(id) {
+    var w = wallById(id); if (!w) return;
+    if (w.path && nat5('wallDelete')) AmorNative.wallDelete(w.path);
+    delete WALL_MEM[id];
+    walls.list = walls.list.filter(function (x) { return x.id !== id; });
+    if (walls.cur === id) walls.cur = walls.list[0] ? walls.list[0].id : '';
+    saveWalls(); Wall.reload(); render();
+  }
+
+  /* ---------- 首页（有壁纸时） ---------- */
+  function alarmShort(a) { var m = /(\S{1,4}(暴雨|大风|寒潮|高温|大雾|霾|雷电|冰雹|暴雪|道路结冰|沙尘暴|台风|干旱|森林火险|霜冻|雷雨大风)(蓝色|黄色|橙色|红色)?)(预警|信号)?/.exec(a); return m ? m[2] + (m[3] || '') + '预警' : a.slice(0, 12); }
+  function alarmColor(a) { return /红色/.test(a) ? '#ff6b6b' : /橙色/.test(a) ? '#ffab5c' : /黄色/.test(a) ? '#ffd66b' : '#7fb0ff'; }
+  function viewTodayWall(v) {
+    var adv = advise(v), t = v.today, n = v.now, m = v.m;
+    var hello = nowH >= 5 && nowH < 12 ? 'Good Morning' : nowH >= 12 && nowH < 18 ? 'Good Afternoon' : nowH >= 18 && nowH < 22 ? 'Good Evening' : 'Good Night';
+    var en = greetName(), k1 = 'wgreet|' + hello + '|' + (en ? '1' : '0'), k2 = 'wgreet2|' + hello + '|' + en;
+    var w1 = Writer.markup(k1, [{ text: hello + (en ? ',' : ''), cls: 'ink' }], 40, { total: en ? 1400 : 2000, delay: 900 });
+    var w2 = en ? Writer.markup(k2, [{ text: 'Dear ', cls: 'acc' }, { text: en, cls: 'ink' }], 40, { total: 1300 + Math.min(700, en.length * 40), delay: 2100 }) : '';
+    var rg = String(placePath(state.current) || '').split(' · ').pop();
+    var place = (rg && rg !== m.zh && m.zh.indexOf(rg) < 0 ? rg + ' ' : '') + m.zh;
+    var dateEn = DAYS_EN[now.getDay()] + ' · ' + MONTHS_EN[now.getMonth()] + ' ' + now.getDate();
+    var st = sunTimes(now, geoOf(state.current));
+    var line = [n ? '体感 ' + deg(n.f) + '°' : '', n ? '湿度 ' + Math.round(n.h) + '%' : '', n && n.ws ? '风 ' + n.ws : '', st ? (nowH < 12 || now.getTime() > st.set ? '日出 ' + hhmmOf(st.rise + (now.getTime() > st.set ? 86400e3 : 0)) : '日落 ' + hhmmOf(st.set)) : ''].filter(Boolean).join(' · ');
+    var al = v.alarms[0];
+    var html = '<section class="view today wallv">' +
+      '<div class="w-first" data-wtap="1"><canvas class="w-fx" aria-hidden="true"></canvas>' +
+        '<p class="w-date">' + esc(dateEn) + ' · ' + esc(place) + '</p>' +
+        '<div class="w-time-space" data-wtap="1"></div>' +
+        '<button type="button" class="w-now" data-tab="forecast" aria-label="查看天气详情">' + icon(v.icon, 20) + '<b>' + deg(v.temp) + '°</b><span>' + esc(v.curText || '—') + '</span>' +
+          (t ? '<i>' + deg(t.hi) + '° / ' + deg(t.lo) + '°</i>' : '') + '</button>' +
+        (al ? '<button type="button" class="w-alert" data-walert="1" style="--ac:' + alarmColor(al) + '"><i></i>' + esc(alarmShort(al)) + (v.alarms.length > 1 ? ' 等 ' + v.alarms.length + ' 条' : '') + '</button>' +
+          (wallui.alert ? '<div class="w-alert-full">' + v.alarms.map(function (a) { return '<p>' + esc(a) + '</p>'; }).join('') + '</div>' : '') : '') +
+        '<div class="w-gap" data-wtap="1"></div>' +
+        '<div class="greeting w-greet' + (Writer.isWriting(k1) || (en && Writer.isWriting(k2)) ? ' gw' : '') + '"><h1 class="two" aria-label="' + esc(hello + (en ? ', Dear ' + en : '')) + '">' + (w1 ? w1 + w2 : esc(hello) + (en ? ', Dear ' + esc(en) : '')) + '</h1></div>' +
+        '<p class="w-line">' + esc(line) + '</p>' +
+        '<div class="w-hint" aria-hidden="true">' + icon('up', 16) + '</div>' +
+      '</div>' +
+      '<div class="w-more">' + todayBody(v, adv, true) + '</div>' +
+      '</section>';
+    return html;
+  }
+  // 轻点空白处：信息全部淡出，只看壁纸；再点一下回来
+  document.addEventListener('click', function (e) {
+    if (document.body.classList.contains('wall-bare')) { document.body.classList.remove('wall-bare'); e.preventDefault(); e.stopPropagation(); return; }
+    var t = e.target; if (!document.body.classList.contains('wall-home') || !t.closest) return;
+    if (t.closest('[data-walert]')) { wallui.alert = !wallui.alert; keepScroll(); return; }
+    var tap = t.closest('[data-wtap]');
+    if (tap && tap === t) { document.body.classList.add('wall-bare'); }
+  }, true);
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-walladj]'); if (!b) return;
+    if (b.getAttribute('data-walladj') === 'done') { Wall.adjust(false); state.tab = 'settings'; state.sub = 'wall'; render({ top: true }); }
+    else Wall.reset();
+  });
+
+  /* ---------- 设置 › 首页与壁纸 ---------- */
+  function wallSummary() {
+    if (!walls.list.length) return '导入 Wallpaper Engine 的 .mpkg、图片或视频';
+    var w = wallPick(); return !walls.on ? '已关闭 · 首页用博物画' : (w ? '正在用「' + w.name + '」' : '') + ' · 共 ' + walls.list.length + ' 张';
+  }
+  function wallPage() {
+    var cur = wallById(walls.cur);
+    var h = '<section class="view">' + subHead('back-settings', '首页与壁纸') +
+      '<div class="panel wall-lib"><h2>壁纸库 <em>Wallpapers</em></h2>' +
+      (walls.list.length ? '<div class="wl-grid">' + walls.list.map(function (w) {
+        var on = w.id === walls.cur;
+        return '<div class="wl-card' + (on ? ' on' : '') + '"><button type="button" class="wl-th" data-wuse="' + w.id + '" aria-label="用这张：' + esc(w.name) + '"' + (w.thumb ? ' style="background-image:url(' + w.thumb + ')"' : '') + '>' +
+          (on ? '<span class="wl-badge">正在用</span>' : '') + '<span class="wl-kind">' + (w.kind === 'scene' ? '动态' : w.kind === 'video' ? '视频' : '图片') + '</span></button>' +
+          '<div class="wl-nm"><span>' + esc(w.name) + '</span><button type="button" class="icon-btn" data-wedit="' + w.id + '" aria-label="设置这张">' + icon('more', 18) + '</button></div>' +
+          ((w.tags || []).length ? '<div class="wl-tags">' + w.tags.map(function (k) { return (W_TAGS.filter(function (x) { return x[0] === k; })[0] || [0, k])[1]; }).join(' · ') + '</div>' : '') + '</div>';
+      }).join('') + '</div>' : '<p class="hint" style="margin:4px 0 12px">支持 Wallpaper Engine 手机版的 <b>.mpkg</b>（电脑版「导出到手机」得到的文件）和 scene.pkg，也可以用普通图片、视频。在文件管理或微信里点 .mpkg，选「云朵天气」打开也能导入。</p>') +
+      '<button type="button" class="btn wl-add" data-wimport="1"' + (wallui.busy ? ' disabled' : '') + '>' + (wallui.busy ? '<span class="spin-dot"></span>正在导入…' : icon('plus', 18) + '导入壁纸') + '</button>' +
+      '</div>';
+    if (wallui.edit && wallById(wallui.edit)) {
+      var e = wallById(wallui.edit);
+      h += '<div class="panel wl-edit"><h2>' + esc(e.name) + ' <em>This Wallpaper</em></h2>' +
+        '<div class="field"><span class="lbl">按天气自动换</span><div class="chips">' + W_TAGS.map(function (x) { var on = (e.tags || []).indexOf(x[0]) >= 0; return '<button type="button" class="chip" data-wtag="' + x[0] + '" aria-pressed="' + on + '">' + x[1] + '</button>'; }).join('') + '</div>' +
+          '<p class="hint">标了哪种天气，那种天气时就自动换成这张；都没标的时候用「正在用」的那张。</p></div>' +
+        '<div class="field"><span class="lbl">手写时间放在</span><div class="seg">' + [['auto', '自动'], ['l', '左边'], ['c', '中间'], ['r', '右边']].map(function (x) { return '<button type="button" data-walign="' + x[0] + '" aria-pressed="' + ((e.align || 'auto') === x[0]) + '">' + x[1] + '</button>'; }).join('') + '</div></div>' +
+        '<div class="row2"><button type="button" class="btn" data-wadjust="' + e.id + '">' + icon('move', 18) + '调整画面</button>' +
+        (wallui.del === e.id ? '<button type="button" class="btn danger" data-wdelok="' + e.id + '">确认删除</button>' : '<button type="button" class="btn ghost" data-wdel="' + e.id + '">删除</button>') + '</div>' +
+        '</div>';
+    }
+    h += '<div class="panel"><h2>效果 <em>Motion</em></h2>' +
+      sw('on', walls.on, '沉浸式首页（关掉就回到博物画首页）', 'data-wsw') +
+      sw('dyn', walls.dyn, '动态效果（关掉只显示一张静止的画面，更省电）', 'data-wsw') +
+      sw('depth', walls.depth, '景深：时间藏在画面里的人物、物件后面', 'data-wsw') +
+      sw('wxfx', walls.wxfx, '天气动效：雨滴落在字上碎开、雪积在字上、晴天的彩虹云', 'data-wsw') +
+      '<div class="field"><span class="lbl">帧率</span><div class="seg">' + [[24, '24 省电'], [30, '30'], [60, '60 流畅']].map(function (x) { return '<button type="button" data-wfps="' + x[0] + '" aria-pressed="' + (walls.fps === x[0]) + '">' + x[1] + '</button>'; }).join('') + '</div>' +
+      '<p class="hint">只在首页动；切到别的页面、打开聊天、锁屏或退到后台时停下来。往上滑看详情时自动降到 20 帧。</p></div>' +
+      '</div>' +
+      '<p class="note">壁纸文件只存在这台手机里，不会上传。创意工坊里的壁纸版权归原作者，请只自己使用。</p>' +
+      (window.__wallWarn ? '<p class="note">这张壁纸有 ' + window.__wallWarn.length + ' 个特效暂时还原不了，已跳过。</p>' : '') +
+      '</section>';
+    return h;
+  }
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest && e.target.closest('[data-wimport],[data-wuse],[data-wedit],[data-wtag],[data-walign],[data-wadjust],[data-wdel],[data-wdelok],[data-wsw],[data-wfps]');
+    if (!t) return;
+    var g = function (a) { return t.getAttribute(a); }, ed = wallById(wallui.edit);
+    if (g('data-wimport')) { wallImport(); return; }
+    if (g('data-wuse')) { walls.cur = g('data-wuse'); walls.on = true; saveWalls(); Wall.sync(); keepScroll(); toast('已换成「' + wallById(walls.cur).name + '」'); return; }
+    if (g('data-wedit')) { wallui.edit = wallui.edit === g('data-wedit') ? '' : g('data-wedit'); wallui.del = ''; keepScroll(); return; }
+    if (g('data-wtag') && ed) { var k = g('data-wtag'), a = ed.tags || (ed.tags = []), i = a.indexOf(k); if (i >= 0) a.splice(i, 1); else a.push(k); saveWalls(); Wall.sync(); keepScroll(); return; }
+    if (g('data-walign') && ed) { ed.align = g('data-walign'); saveWalls(); keepScroll(); return; }
+    if (g('data-wadjust')) { walls.cur = g('data-wadjust'); walls.on = true; saveWalls(); state.tab = 'today'; state.sub = ''; render({ top: true }); setTimeout(function () { Wall.adjust(true); }, 60); return; }
+    if (g('data-wdel')) { wallui.del = g('data-wdel'); keepScroll(); return; }
+    if (g('data-wdelok')) { wallui.edit = ''; wallui.del = ''; wallRemove(g('data-wdelok')); toast('已删除'); return; }
+    if (g('data-wsw')) { var key = g('data-wsw'); walls[key] = !walls[key]; saveWalls(); Wall.sync(); keepScroll(); return; }
+    if (g('data-wfps')) { walls.fps = +g('data-wfps'); saveWalls(); keepScroll(); return; }
+  });
 
   // ---------- 日程：日期、农历、节气、节日 ----------
   function ymd(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
@@ -7371,7 +8417,7 @@
       c.push(['heart', '陪我聊聊天']);
       return c.slice(0, 3);
     }
-    function visible() { return (state.tab === 'today' || state.tab === 'forecast') && !state.sub && !chat.open && !calui.sheet && !splashHold; }
+    function visible() { return state.tab === 'today' && !state.sub && !chat.open && !calui.sheet && !splashHold; }
     function paintLine(anim) {
       var ln = el && el.querySelector('.dk-line'); if (!ln || !lines.length) return;
       var x = lines[li % lines.length];
@@ -7771,6 +8817,9 @@
         doc.fu = b.lastUpdate;
         if (doc.now && b.alarm) doc.now.al = alarmTitles((doc.now.al || []).concat(alarmTitles(b.alarm)));
         ok = true;
+      }
+      if (ok && !doc.now && m.nid !== '' && typeof borrowNow === 'function' && !/^(xg|am|tb)$/.test(key)) {   // 5.0：这个区没有自己的实况，借最近的站
+        return borrowNow(key, doc).then(function () { doc.fetchedAt = new Date().toISOString(); DATA[key] = doc; return ok; });
       }
       if (ok) { doc.fetchedAt = new Date().toISOString(); DATA[key] = doc; }
       return ok;
@@ -8740,6 +9789,7 @@
     if (a === 'assistant') { state.sub = 'assistant'; ui.pickModel = false; render({ top: true, anim: 'fwd' }); return; }
     if (a === 'pickmodel') { ui.pickModel = !ui.pickModel; render(); return; }
     if (a === 'font') { state.sub = 'font'; render({ top: true, anim: 'fwd' }); return; }
+    if (a === 'wall') { state.sub = 'wall'; wallui.edit = ''; wallui.del = ''; render({ top: true, anim: 'fwd' }); return; }
     if (a === 'notify') { state.sub = 'notify'; ntui.test = ''; render({ top: true, anim: 'fwd' }); notifySync(true); setTimeout(function () { if (state.sub === 'notify') keepScroll(); }, 900); return; }
     if (a === 'memory') { state.sub = 'memory'; mui.edit = ''; mui.clear = false; render({ top: true, anim: 'fwd' }); return; }
     if (a === 'gemini') { state.sub = 'gemini'; gemui.pick = false; gemui.edit = null; gemui.catEdit = null; gemui.del = ''; render({ top: true, anim: 'fwd' }); return; }
@@ -9315,12 +10365,18 @@
     else if (sources && sources.length) bits.push('已搜索 ' + sources.length + ' 个网页');
     return bits.join(' · ');
   }
-  // 思考标记：JS 画的星轨；想完后收成一滴墨 → 在左边写出羽毛笔 → 羽毛笔往右走，笔尖拖出一道墨迹，停在字前面
+  // 思考标记（4.9.3）：正在想 = 三颗点翻滚（照 Claude App 录屏逐帧取的轨迹：▽ 停 → 交错滑过 → △ 停 → 翻回来，3 秒一圈）；
+  // 想完后三颗点从当时的位置收成一滴墨 → 在左边写出羽毛笔 → 羽毛笔往右走，笔尖拖出一道墨迹，停在字前面
   var OrbQ = (function () {
+    var TB = [106,-100,-93,-94,9,77,106,-100,-92,-95,9,78,107,-100,-91,-97,9,79,107,-100,-91,-99,9,80,107,-100,-90,-100,9,80,107,-100,-90,-100,9,80,108,-100,-89,-100,9,80,108,-100,-89,-100,9,80,108,-100,-89,-100,10,80,107,-100,-89,-100,12,80,105,-99,-88,-99,14,79,104,-99,-86,-97,17,79,103,-99,-86,-97,19,78,102,-99,-85,-96,21,78,100,-98,-84,-95,24,77,98,-97,-83,-93,29,76,96,-95,-82,-91,35,75,92,-94,-80,-88,42,74,85,-90,-78,-85,54,71,76,-87,-74,-80,67,67,69,-83,-71,-75,78,63,62,-79,-68,-70,91,58,53,-73,-65,-63,104,52,44,-67,-63,-54,117,44,34,-56,-61,-44,128,33,23,-43,-59,-32,139,20,16,-26,-58,-18,144,4,13,-7,-58,-4,144,-15,14,11,-58,10,139,-31,20,27,-59,22,128,-45,27,40,-62,33,117,-57,37,50,-66,43,103,-65,42,55,-68,48,97,-70,46,57,-69,50,90,-73,56,62,-74,57,72,-80,64,67,-78,63,56,-86,69,69,-80,66,47,-88,74,70,-81,68,39,-90,77,72,-83,71,32,-92,81,72,-85,73,25,-93,84,73,-87,74,20,-95,87,73,-88,75,17,-96,88,73,-88,76,15,-97,88,73,-88,76,15,-97,89,73,-89,77,14,-97,91,74,-91,78,9,-98,93,74,-92,79,5,-99,94,74,-92,79,4,-99,94,74,-92,79,3,-99,95,75,-94,78,2,-99,95,79,-96,77,1,-99,95,80,-96,76,1,-99,95,80,-96,76,1,-99,96,79,-96,77,1,-99,96,78,-95,78,1,-99,96,78,-94,78,0,-99,96,76,-92,80,-1,-99,96,73,-88,81,-2,-99,96,73,-87,82,-2,-99,96,71,-86,83,-2,-99,96,66,-80,85,-5,-99,96,60,-75,89,-7,-100,96,56,-70,91,-9,-100,95,53,-66,94,-12,-100,95,52,-63,95,-13,-100,94,48,-59,96,-14,-100,92,41,-51,98,-18,-99,90,34,-42,99,-20,-99,86,25,-31,101,-23,-99,82,16,-20,100,-27,-99,70,1,2,95,-35,-99,57,-14,24,87,-44,-99,51,-19,32,83,-47,-99,44,-19,40,76,-50,-99,28,-19,55,62,-58,-99,15,-13,68,47,-64,-99,4,-3,78,31,-70,-99,-4,7,86,15,-75,-99,-9,17,92,-1,-80,-98,-11,27,95,-15,-85,-98,-12,36,96,-29,-88,-99,-12,44,97,-40,-92,-99,-12,53,97,-55,-96,-99,-11,61,97,-67,-100,-99,-11,63,97,-71,-101,-99,-11,65,96,-73,-102,-99,-11,68,96,-79,-103,-99,-10,70,95,-84,-104,-99,-9,73,94,-88,-105,-99,-9,75,94,-91,-105,-99,-8,77,93,-95,-105,-100,-8,79,93,-98,-106,-100,-8,79,93,-99,-106,-100,-8,80,92,-100,-106,-100,-8,80,92,-100,-106,-99,-8,81,92,-100,-106,-99,-8,81,92,-100,-107,-99,-8,80,92,-100,-107,-99,-8,80,92,-100,-107,-99,-9,80,92,-100,-106,-99,-13,80,91,-100,-105,-98,-17,79,90,-98,-103,-98,-20,78,90,-97,-102,-97,-23,77,89,-96,-100,-97,-24,77,88,-95,-99,-96,-27,76,87,-94,-97,-96,-37,75,84,-91,-91,-93,-48,73,80,-87,-85,-91,-52,72,79,-86,-82,-90,-57,71,77,-84,-80,-89,-66,68,74,-80,-75,-88,-77,64,71,-75,-69,-85,-96,55,67,-65,-58,-76,-114,44,63,-54,-44,-67,-126,32,60,-44,-34,-56,-138,19,58,-31,-23,-41,-143,13,57,-25,-18,-34,-143,4,57,-18,-17,-25,-144,-14,56,-2,-15,-6,-139,-31,57,11,-16,11,-128,-45,59,23,-19,27,-116,-56,62,34,-26,40,-103,-65,68,43,-36,50,-90,-73,71,50,-45,57,-77,-79,74,55,-52,62,-66,-83,76,60,-59,65,-52,-87,80,65,-66,68,-39,-90,83,69,-73,71,-34,-91,84,70,-75,71,-32,-92,86,71,-76,72,-23,-94,88,74,-81,73,-16,-96,91,76,-85,74,-12,-97,92,76,-86,74,-8,-98,92,77,-88,74,-6,-99,93,78,-89,74,-5,-99,93,78,-90,74,-4,-99,93,78,-92,74,-2,-99,93,79,-93,75,-1,-99,94,79,-94,75,0,-99,95,78,-94,77,2,-100,97,76,-95,79,2,-100,98,75,-95,80,2,-100,97,75,-95,80,2,-100,97,75,-95,79,2,-100,96,76,-95,79,2,-100,96,76,-95,79,3,-100,96,76,-95,78,3,-100,94,77,-94,77,4,-100,93,79,-94,75,6,-100,90,82,-94,72,7,-100,86,84,-94,69,9,-100,82,87,-94,66,10,-100,77,89,-94,62,12,-100,72,91,-93,58,15,-99,63,94,-92,51,18,-99,53,97,-90,42,21,-98,45,99,-88,34,24,-98,34,100,-85,25,26,-98,28,100,-83,21,28,-98,21,100,-80,15,37,-99,0,95,-69,0,46,-99,-23,88,-55,-14,50,-99,-31,84,-50,-19,53,-99,-39,77,-42,-19,59,-99,-54,63,-28,-18,64,-99,-67,47,-14,-13,70,-100,-76,31,-2,-4,76,-100,-84,14,6,6,83,-100,-92,-8,10,21,90,-100,-97,-28,13,36,94,-101,-98,-39,13,44,96,-101,-98,-50,13,51,98,-101,-98,-59,13,57,100,-100,-98,-66,12,61,102,-100,-97,-72,12,64,103,-100,-96,-78,11,67,104,-100,-95,-83,11,70,106,-100,-94,-86,10,72,106,-100,-93,-89,10,74,106,-100,-92,-92,10,76], TB_N = 180, TB_MS = 3000, TB_SIDE = 10, TB_R = 1.9, liveSince = 0;
+    function tumble(t, i) {   // 第 i 颗点在 t 毫秒时的位置（单位 = 三角形边长，以整段动作的包围盒为中心）
+      var f = ((t % TB_MS) + TB_MS) % TB_MS / TB_MS * TB_N, a = Math.floor(f), b = (a + 1) % TB_N, u = f - a;
+      return [(TB[a * 6 + i * 2] * (1 - u) + TB[b * 6 + i * 2] * u) / 200, (TB[a * 6 + i * 2 + 1] * (1 - u) + TB[b * 6 + i * 2 + 1] * u) / 200];
+    }
     var ST = ["M3.7 22.7C3.8 22.4 4.2 21.4 4.5 20.6C4.8 19.7 5.2 18.4 5.5 17.6C5.9 16.7 6.1 16 6.4 15.4C6.6 14.8 6.8 14.4 7.1 13.8C7.4 13.1 7.9 12.2 8.2 11.6C8.5 11 8.8 10.7 9 10.4C9.3 10 9.4 9.8 9.7 9.4C10 9.1 10.4 8.6 10.7 8.2C11 7.8 11.3 7.5 11.6 7.2C11.8 7 12.2 6.6 12.3 6.5", "M3.7 22.7C3.9 22.6 4.7 22.2 4.8 22C5 21.8 4.6 21.8 4.5 21.7", "M5.2 18.2C5.1 18 4.9 17.3 4.8 16.9C4.8 16.6 4.7 16.4 4.7 16.2C4.7 15.9 4.7 15.7 4.8 15.5C4.8 15.3 4.8 15.2 4.9 15C4.9 14.8 5 14.5 5.1 14.4C5.2 14.4 5.5 14.7 5.5 14.7C5.6 14.6 5.4 14.4 5.4 14.3C5.4 14.1 5.3 14 5.4 13.8C5.4 13.7 5.5 13.4 5.6 13.1C5.7 12.9 5.9 12.7 6 12.4C6.2 12.1 6.3 11.8 6.4 11.5C6.6 11.2 6.6 11 6.8 10.7C7 10.4 7.4 10.1 7.6 9.8C7.9 9.4 8.3 8.9 8.5 8.9C8.6 8.8 8.3 9.5 8.4 9.4C8.5 9.4 8.7 8.8 8.8 8.6C8.9 8.4 9 8.3 9.1 8.2C9.2 8.1 9.2 8.1 9.6 7.7C10 7.3 11 6.5 11.5 6.1C12.1 5.6 12.4 5.3 12.8 5C13.2 4.7 13.5 4.5 13.9 4.2C14.4 4 15.1 3.6 15.4 3.4C15.7 3.2 15.7 3.2 15.8 3.2C15.9 3.2 15.8 3.2 15.9 3.2C16 3.1 15.8 3.2 16.4 2.9C16.9 2.6 18.9 1.8 19.5 1.6C20.1 1.3 19.9 1.5 20 1.4", "M20.1 1.5C19.8 1.7 18.9 2.3 18.1 2.9C17.4 3.5 16 4.7 15.6 5C15.2 5.4 15.7 5 15.6 5.2C15.5 5.3 15.1 5.6 14.8 6C14.5 6.4 13.9 7.2 13.7 7.5C13.4 7.8 13.4 7.8 13.2 8C13 8.2 12.5 8.5 12.5 8.5C12.5 8.6 13.1 8.3 13.1 8.3C13.1 8.4 12.8 8.8 12.7 9.1C12.5 9.3 12.3 9.8 12.2 10.1C12.1 10.3 12.2 10.2 12 10.5C11.9 10.7 11.4 11.2 11.2 11.6C10.9 11.9 10.8 12.3 10.6 12.5C10.4 12.8 10.2 12.9 10.2 13C10.1 13.1 10.3 12.8 10.1 13.2C9.9 13.5 9.3 14.5 8.9 15C8.6 15.5 8.2 15.7 8 16C7.7 16.3 7.3 16.6 7.1 16.7C7 16.9 7 16.8 7.1 16.8C7.2 16.8 7.7 16.5 7.7 16.6C7.7 16.6 7.5 16.8 7.3 17.1C7.1 17.3 6.6 17.8 6.3 18.1C6 18.3 5.9 18.3 5.7 18.4C5.5 18.6 5.2 18.8 5.1 18.9", "M15.5 3.7 L15.9 3.2", "M15.6 5C15.5 5.1 15.6 5 15.3 5.1C15.1 5.3 14.3 5.7 14.1 5.8", "M12.6 8.6 L13.1 8.3", "M12.4 8.7 L10.8 9.8", "M8.4 9.4C8.4 9.5 8.3 9.7 8.3 9.8C8.2 10 8.2 10.3 8.1 10.4", "M10 13.3 L8.8 14.4", "M5.5 14.7 L5.8 14.8", "M5.1 14.4C5.2 14.4 5.3 14.6 5.4 14.6C5.5 14.7 5.5 14.7 5.5 14.7", "M7.7 16.5 L7.1 16.8", "M6.7 17.1 L7.1 16.8"], SW = '';
-    var ORBIT = 1700, FLIP = 5200, NIB = [3.66, 22.70];     // 羽毛笔笔尖在它自己 24×24 格子里的位置
-    var W = 42, OC = [21, 12], P0 = [4, 21.2], P1 = [21, 21.6]; // 画布 42×24：星轨在中间；墨迹从 P0 写到 P1（羽毛笔最后停在这）
-    var T_FACE = 1000, T_GATHER = [700, 1700], T_WRITE = [1600, 2700], T_MOVE = [2700, 4300], T_END = 4400;
+    var NIB = [3.66, 22.70];     // 羽毛笔笔尖在它自己 24×24 格子里的位置
+    var W = 42, OC = [12, 12], P0 = [4, 21.2], P1 = [21, 21.6]; // 画布 42×24：星轨在中间；墨迹从 P0 写到 P1（羽毛笔最后停在这）
+    var T_GATHER = [700, 1700], T_WRITE = [1600, 2700], T_MOVE = [2700, 4300], T_END = 4400;
     function ease(x) { x = Math.max(0, Math.min(1, x)); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
     function sine(x) { x = Math.max(0, Math.min(1, x)); return .5 - .5 * Math.cos(Math.PI * x); }
     function sm(a, b, x) { return ease((x - a) / (b - a)); }
@@ -9330,18 +10386,13 @@
         d += (i ? 'L' : 'M') + x.toFixed(2) + ' ' + y.toFixed(2); }
       return d;
     })();
-    function html() {
-      return '<svg class="oq" viewBox="0 0 ' + W + ' 24" width="' + (W * 22 / 24).toFixed(1) + '" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow:visible">' +
-        '<path class="oq-ring" stroke="currentColor" stroke-width=".8" opacity=".25"/>' +
-        '<path class="oq-t" stroke="currentColor" stroke-width="1" d="' + TRAIL + '"/>' +
+    function html(live) {    // 正在想：框只有 24 宽，文字紧跟三颗点；想完：42 宽，给羽毛笔拖墨迹（左边缘对齐，三颗点位置连续）
+      var w = live ? 24 : W;
+      return '<svg class="oq" viewBox="0 0 ' + w + ' 24" width="' + (w * 22 / 24).toFixed(1) + '" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="overflow:visible">' +
+                '<path class="oq-t" stroke="currentColor" stroke-width="1" d="' + TRAIL + '"/>' +
         '<g class="oq-q" stroke="currentColor" stroke-width="1.05">' + ST.map(function (d) { return '<path class="oq-f" d="' + d + '"/>'; }).join('') + '</g>' +
         '<circle class="oq-d" fill="currentColor"/><circle class="oq-d" fill="currentColor"/><circle class="oq-d" fill="currentColor"/>' +
         '<circle class="oq-nib" fill="currentColor" r="0"/></svg>';
-    }
-    function flipAt(t) {   // 停 → 向右翻半圈 → 停 → 向左翻回来
-      var p = (t % FLIP) / FLIP;
-      if (p < .25) return 0; if (p < .5) return 180 * ease((p - .25) / .25);
-      if (p < .75) return 180; return 180 - 180 * ease((p - .75) / .25);
     }
     function lens(svg) {
       if (svg._L) return svg._L;
@@ -9364,14 +10415,8 @@
       var t0 = +svg.getAttribute('data-done') || 0, m = t0 ? now - t0 : -1;
       if (svg.getAttribute('data-still') === '1') m = 99999;
       var o = lens(svg);
-      var tilt = 64, phi = flipAt(now), r = 7.6, cx = OC[0], cy = OC[1], ringOp = .25, dotR = 2.3, gOp = 1;
-      var ang = now / ORBIT * Math.PI * 2, nib = null, nibR = 0, qx = P0[0] - NIB[0], qy = P0[1] - NIB[1], rot = 0, tk = 0;
+      var gOp = 1, nib = null, nibR = 0, qx = P0[0] - NIB[0], qy = P0[1] - NIB[1], rot = 0, tk = 0;
       if (m >= 0) {
-        var a = sm(0, T_FACE, m); tilt = 64 * (1 - a); phi = phi * (1 - a);
-        var tt = Math.min(m, 1600) / 1000, w = Math.PI * 2 / (ORBIT / 1000);
-        ang = t0 / ORBIT * Math.PI * 2 + w * (tt - tt * tt / 3.2);
-        var b = sm(T_GATHER[0], T_GATHER[1], m); r = 7.6 * (1 - b); cx = OC[0] + (P0[0] - OC[0]) * b; cy = OC[1] + (P0[1] - OC[1]) * b;
-        ringOp = .25 * (1 - sm(500, 1300, m)); dotR = 2.3 - .7 * b;
         gOp = m < T_WRITE[0] ? 1 : 0;
         var k = m < T_WRITE[0] ? 0 : sine((m - T_WRITE[0]) / (T_WRITE[1] - T_WRITE[0]));
         var tip = writeTo(svg, k);
@@ -9384,24 +10429,15 @@
       } else writeTo(svg, 0);
       o.t.style.strokeDashoffset = (o.lt * (1 - tk)).toFixed(2); o.t.style.opacity = tk > .01 ? .85 : 0;
       o.g.setAttribute('transform', 'translate(' + qx.toFixed(2) + ' ' + qy.toFixed(2) + ') rotate(' + rot.toFixed(2) + ' ' + NIB[0] + ' ' + NIB[1] + ')');
-      var rx = tilt * Math.PI / 180, ry = (phi - 14 * (1 - (m >= 0 ? sm(0, T_FACE, m) : 0))) * Math.PI / 180;
-      function proj(u) {
-        var x = r * Math.cos(u), y = r * Math.sin(u);
-        var y1 = y * Math.cos(rx), z1 = y * Math.sin(rx);
-        var x2 = x * Math.cos(ry) + z1 * Math.sin(ry), z2 = -x * Math.sin(ry) + z1 * Math.cos(ry);
-        var kk = 34 / (34 - z2);
-        return [cx + x2 * kk, cy + y1 * kk, z2];
-      }
-      var d = '', i, P;
-      for (i = 0; i <= 36; i++) { P = proj(i / 36 * Math.PI * 2); d += (i ? 'L' : 'M') + P[0].toFixed(2) + ' ' + P[1].toFixed(2); }
-      var ring = svg.querySelector('.oq-ring'); ring.setAttribute('d', d); ring.setAttribute('opacity', ringOp.toFixed(3));
+      // 三颗点：翻滚的位置 → 按收拢进度 b 往墨滴点（P0）靠、变小；翻滚在收拢时继续，不会突然定住
+      var tt_ = (m >= 0 ? t0 + m : now) - (liveSince || 0), gb = m >= 0 ? sm(T_GATHER[0], T_GATHER[1], m) : 0, sc = 1 - gb, i;
       var ds = svg.querySelectorAll('.oq-d');
       for (i = 0; i < 3; i++) {
-        P = proj(ang + i * Math.PI * 2 / 3);
-        var dep = Math.max(-1, Math.min(1, P[2] / 8));
-        ds[i].setAttribute('cx', P[0].toFixed(2)); ds[i].setAttribute('cy', P[1].toFixed(2));
-        ds[i].setAttribute('r', Math.max(0, dotR * (1 + dep * .22)).toFixed(2));
-        ds[i].setAttribute('opacity', (gOp * (.72 + dep * .28)).toFixed(3));
+        var P = tumble(tt_, i), px = OC[0] + P[0] * TB_SIDE * sc, py = OC[1] + P[1] * TB_SIDE * sc;
+        px += (P0[0] - OC[0]) * gb; py += (P0[1] - OC[1]) * gb;
+        ds[i].setAttribute('cx', px.toFixed(2)); ds[i].setAttribute('cy', py.toFixed(2));
+        ds[i].setAttribute('r', Math.max(0, TB_R - (TB_R - 1.6) * gb).toFixed(2));
+        ds[i].setAttribute('opacity', gOp);
       }
       var nb = svg.querySelector('.oq-nib');
       if (nib && nibR > .05) { nb.setAttribute('cx', nib[0].toFixed(2)); nb.setAttribute('cy', nib[1].toFixed(2)); nb.setAttribute('r', nibR.toFixed(2)); }
@@ -9410,6 +10446,7 @@
     var raf = 0;
     function loop() {
       raf = 0; var now = Date.now(), live = false;
+      if (!liveSince && document.querySelector('svg.oq:not([data-done]):not([data-still])')) liveSince = now;
       Array.prototype.forEach.call(document.querySelectorAll('svg.oq'), function (s) {
         var rc = s.getBoundingClientRect(); if (!rc.width || rc.bottom < 0 || rc.top > innerHeight) return;
         var still = s.getAttribute('data-still') === '1';
@@ -9419,13 +10456,14 @@
         if (!still && (!t0 || now - t0 < T_END + 200)) live = true;
       });
       if (live) raf = requestAnimationFrame(loop);
+      else liveSince = 0;
     }
     function kick() { if (!raf) raf = requestAnimationFrame(loop); }
     return { html: html, kick: kick, draw: draw, END: T_END, TEXT: 3900 };
   })();
   // 4.4.2 思考标记：live=正在想（一直转）；done=刚想完的时刻（收拢成羽毛笔）；都没有=早就想完了（静止的羽毛笔）
   function orbHtml(live, doneAt) {
-    var h = OrbQ.html();
+    var h = OrbQ.html(live);
     if (live) return h;
     if (doneAt && Date.now() - doneAt < OrbQ.END) return h.replace('<svg ', '<svg data-done="' + doneAt + '" ');
     return h.replace('<svg ', '<svg data-still="1" ');
@@ -10537,6 +11575,7 @@
       if (chat.mmenu || chat.editIdx != null) d += 1;
     }
     if (calui.sheet) d += 1;
+    if (state.tab === 'forecast' && wxui.sheet) d += 1;
     if (state.sub === 'gemini' && (gemui.edit || gemui.catEdit)) d += 1;
     if (state.tab === 'plan' && noteui.ed) d += noteui.amor ? 2 : 1;
     var back = document.querySelector('#main .sub-head [data-ui^="back-"]');
@@ -10555,6 +11594,7 @@
       closeChat(); return;
     }
     if (calui.sheet) { calui.sheet = null; keepScroll(); return; }
+    if (state.tab === 'forecast' && wxui.sheet) { wxClose(); return; }
     if (state.sub === 'gemini' && (gemui.edit || gemui.catEdit)) { gemCloseSheet(gemui.catEdit ? 'cat' : 'card'); return; }
     if (state.tab === 'plan' && noteui.ed) { if (noteui.amor) { noteui.amor = null; keepScroll(); } else noteClose(); return; }
     var back = document.querySelector('#main .sub-head [data-ui^="back-"]');

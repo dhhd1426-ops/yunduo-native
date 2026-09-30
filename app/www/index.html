@@ -2147,6 +2147,9 @@
   body.walled .app { position: relative; z-index: 1; background: transparent; }
   #wall .wl-c, #wall .wl-media { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity .9s ease, filter .6s ease, transform .6s ease; }
   #wall.ready .wl-c, #wall.ready .wl-media { opacity: 1; }
+  .wl-ph { position: absolute; inset: -24px; background: #0b0f12 center / cover no-repeat; filter: blur(10px) brightness(.85); transition: opacity 1.2s ease; }
+  #wall.ready .wl-ph { opacity: 0; transition-delay: .6s; }
+  #wall.dim .wl-ph { filter: blur(26px) brightness(.56); }
   #wall .wl-media img, #wall .wl-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
   #wall-back { z-index: 0; } #wall-front { z-index: 2; }
   #wall-mid { position: absolute; left: 0; right: 0; top: 0; z-index: 1; pointer-events: none; will-change: transform, opacity;
@@ -5726,7 +5729,7 @@
     function dom() {
       if (root) return;
       root = document.createElement('div'); root.id = 'wall'; root.setAttribute('aria-hidden', 'true');
-      root.innerHTML = '<div class="wl-media"></div><canvas class="wl-c" id="wall-back"></canvas><div id="wall-mid"></div><canvas class="wl-c" id="wall-front"></canvas><div class="wl-scrim"></div><div class="wl-adj" hidden></div>';
+      root.innerHTML = '<div class="wl-ph"></div><div class="wl-media"></div><canvas class="wl-c" id="wall-back"></canvas><div id="wall-mid"></div><canvas class="wl-c" id="wall-front"></canvas><div class="wl-scrim"></div><div class="wl-adj" hidden></div>';
       document.body.insertBefore(root, document.body.firstChild);
       back = root.querySelector('#wall-back'); front = root.querySelector('#wall-front'); mid = root.querySelector('#wall-mid');
       bindAdjust();
@@ -5750,6 +5753,7 @@
     function load(w) {
       var tok = ++loadTok; curId = w.id; clear(); root.classList.remove('ready');
       document.body.style.setProperty('--wtint', w.tint || '#0e2a30');
+      var ph = root.querySelector('.wl-ph'); ph.style.backgroundImage = w.thumb ? 'url(' + w.thumb + ')' : ''; ph.style.backgroundPosition = ((w.focus || [.5])[0] * 100) + '% 50%';   // 解码时先垫缩略图
       return bytes(w).then(function (buf) {
         if (tok !== loadTok) return;
         if (w.kind === 'image' || w.kind === 'video') return showMedia(w, new Blob([buf], { type: w.mime || '' }));

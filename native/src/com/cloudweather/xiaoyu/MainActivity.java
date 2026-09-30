@@ -2,11 +2,14 @@ package com.cloudweather.xiaoyu;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.Window;
 import android.webkit.GeolocationPermissions;
 import android.webkit.PermissionRequest;
@@ -25,11 +28,12 @@ import org.json.JSONObject;
  */
 public class MainActivity extends Activity {
     private static final int WV_ID = 0x0100;
-    static final int REQ_FILE = 41, REQ_WALL = 42, REQ_LOC = 43, REQ_WMIC = 46;
+    static final int REQ_FILE = 41, REQ_WALL = 42, REQ_LOC = 43, REQ_WMIC = 46, REQ_CAM = 48;
     private WebView web;
     private ValueCallback<Uri[]> fileCb;
     private GeolocationPermissions.Callback geoCb;
     private String geoOrigin;
+    private Uri photoUri;              // 5.7：+ 面板「相机」拍的那张
     private PermissionRequest micReq;   // 5.5：网页要麦克风（语音模式自己录音、云端识别）
     Voice voice;                 // 5.4：麦克风听写 / 语音模式 / 系统朗读兜底
     Mic mic;                     // 5.5.2：语音对话的原生录音（通话模式，带回声消除）
@@ -55,6 +59,24 @@ public class MainActivity extends Activity {
             public boolean onShowFileChooser(WebView v, ValueCallback<Uri[]> cb, FileChooserParams p) {
                 if (fileCb != null) fileCb.onReceiveValue(null);
                 fileCb = cb;
+                // 5.7：网页要拍照（<input capture>）→ 直接开系统相机，照片存进 相册/云朵天气（安卓 10+ 走 MediaStore，不用存储和相机权限）
+                if (p.isCaptureEnabled() && Build.VERSION.SDK_INT >= 29) {
+                    try {
+                        ContentValues cv = new ContentValues();
+                        cv.put(MediaStore.Images.Media.DISPLAY_NAME, "yunduo_" + System.currentTimeMillis() + ".jpg");
+                        cv.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                        cv.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/云朵天气");
+                        photoUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv);
+                        Intent ci = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        ci.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                        ci.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivityForResult(ci, REQ_CAM);
+                        return true;
+                    } catch (Throwable t) {
+                        Store.err(MainActivity.this, "camera", t);
+                        if (photoUri != null) { try { getContentResolver().delete(photoUri, null, null); } catch (Throwable ignore) { } photoUri = null; }
+                    }
+                }
                 try {
                     Intent i = p.createIntent();
                     i.addCategory(Intent.CATEGORY_OPENABLE);
@@ -158,6 +180,14 @@ public class MainActivity extends Activity {
         super.onActivityResult(req, res, data);
         if (req == REQ_FILE) {
             if (fileCb != null) fileCb.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(res, data));
+            fileCb = null;
+        } else if (req == REQ_CAM) {
+            Uri u = photoUri; photoUri = null;
+            if (res == RESULT_OK && u != null) { if (fileCb != null) fileCb.onReceiveValue(new Uri[]{u}); }
+            else {
+                if (u != null) { try { getContentResolver().delete(u, null, null); } catch (Throwable ignore) { } }
+                if (fileCb != null) fileCb.onReceiveValue(null);
+            }
             fileCb = null;
         } else if (req == Voice.REQ_STT) {
             if (voice != null) voice.onActivityResult(res, data);

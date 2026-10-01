@@ -28,6 +28,18 @@ public class AmorBridge {
         return 1;
     }
 
+    /** 5.13 状态栏、手势条、刘海占掉的边（CSS 像素）"上,下,左,右" */
+    @JavascriptInterface
+    public String insets() {
+        return act instanceof MainActivity ? ((MainActivity) act).insets : "0,0,0,0";
+    }
+
+    /** 5.13 状态栏图标：dark = 深色图标（背后是浅色页面），否则白色（壁纸、深色主题） */
+    @JavascriptInterface
+    public void barIcons(boolean dark) {
+        try { if (act instanceof MainActivity) ((MainActivity) act).setBarIcons(dark); } catch (Throwable t) { Store.err(app, "barIcons", t); }
+    }
+
     /** 设置：头像/小图标、颜色、锁屏是否显示内容、超级岛开关、用眼参数 */
     @JavascriptInterface
     public void setConfig(String json) {

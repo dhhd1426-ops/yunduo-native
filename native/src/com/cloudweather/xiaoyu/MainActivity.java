@@ -10,7 +10,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.graphics.Color;
+import android.view.View;
 import android.view.Window;
+import android.view.WindowInsets;
+import android.view.WindowManager;
 import android.webkit.GeolocationPermissions;
 import android.webkit.PermissionRequest;
 import android.webkit.ValueCallback;
@@ -39,6 +43,8 @@ public class MainActivity extends Activity {
     Voice voice;                 // 5.4：麦克风听写 / 语音模式 / 系统朗读兜底
     Mic mic;                     // 5.5.2：语音对话的原生录音（通话模式，带回声消除）
     Viz viz;                     // 5.11：动态壁纸跟着手机里正在放的声音动（Visualizer 频谱）
+    volatile String insets = "0,0,0,0";   // 5.13 状态栏 / 手势条 / 刘海占掉的边（CSS 像素：上,下,左,右）
+    private boolean darkIcons = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +134,63 @@ public class MainActivity extends Activity {
         takeShared(getIntent());
         web.loadUrl("file:///android_asset/index.html");
         setContentView(web);
+        edgeToEdge();
+    }
+
+    /** 5.13 壁纸铺满整块屏幕：状态栏、手势条透明，刘海那一条也画；网页按 insets 自己让开 */
+    private void edgeToEdge() {
+        try {
+            Window w = getWindow();
+            w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            w.setStatusBarColor(Color.TRANSPARENT);
+            w.setNavigationBarColor(Color.TRANSPARENT);
+            if (Build.VERSION.SDK_INT >= 29) { w.setStatusBarContrastEnforced(false); w.setNavigationBarContrastEnforced(false); }
+            if (Build.VERSION.SDK_INT >= 28) {
+                WindowManager.LayoutParams lp = w.getAttributes();
+                lp.layoutInDisplayCutoutMode = Build.VERSION.SDK_INT >= 30 ? 3 /* ALWAYS */ : WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+                w.setAttributes(lp);
+            }
+            applyBars();
+            web.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+                @Override
+                public WindowInsets onApplyWindowInsets(View v, WindowInsets in) {
+                    try {
+                        int t = in.getSystemWindowInsetTop(), b = in.getSystemWindowInsetBottom(), l = in.getSystemWindowInsetLeft(), r = in.getSystemWindowInsetRight();
+                        // 铺满以后系统不再替我们给键盘让位：键盘弹出时把网页底边抬到键盘上面（和原来 adjustResize 一样），手势条那一截就不用让了
+                        int ime;
+                        if (Build.VERSION.SDK_INT >= 30) { ime = in.getInsets(WindowInsets.Type.ime()).bottom; b = ime > 0 ? 0 : in.getInsets(WindowInsets.Type.navigationBars()).bottom; }
+                        else { int nav = in.getStableInsetBottom(); ime = b > nav + 40 ? b : 0; b = ime > 0 ? 0 : nav; }
+                        android.view.ViewGroup.LayoutParams lp0 = web.getLayoutParams();
+                        if (lp0 instanceof android.view.ViewGroup.MarginLayoutParams && ((android.view.ViewGroup.MarginLayoutParams) lp0).bottomMargin != ime) {
+                            ((android.view.ViewGroup.MarginLayoutParams) lp0).bottomMargin = ime; web.setLayoutParams(lp0);
+                        }
+                        if (Build.VERSION.SDK_INT >= 28 && in.getDisplayCutout() != null) {
+                            android.view.DisplayCutout c = in.getDisplayCutout();
+                            t = Math.max(t, c.getSafeInsetTop()); b = Math.max(b, c.getSafeInsetBottom()); l = Math.max(l, c.getSafeInsetLeft()); r = Math.max(r, c.getSafeInsetRight());
+                        }
+                        float d = getResources().getDisplayMetrics().density;
+                        String s2 = Math.round(t / d) + "," + Math.round(b / d) + "," + Math.round(l / d) + "," + Math.round(r / d);
+                        if (!s2.equals(insets)) { insets = s2; js("window.__insets&&window.__insets('" + s2 + "')"); }
+                    } catch (Throwable e) { Store.err(MainActivity.this, "insets", e); }
+                    return in;
+                }
+            });
+            web.requestApplyInsets();
+        } catch (Throwable t) {
+            Store.err(this, "edge", t);
+        }
+    }
+
+    private void applyBars() {
+        int f = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+        if (darkIcons) { f |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR; if (Build.VERSION.SDK_INT >= 26) f |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR; }
+        getWindow().getDecorView().setSystemUiVisibility(f);
+    }
+
+    /** 网页说：现在背后是浅色（要深色图标）还是深色 / 壁纸（白色图标） */
+    void setBarIcons(final boolean dark) {
+        runOnUiThread(new Runnable() { public void run() { try { if (dark != darkIcons) { darkIcons = dark; applyBars(); } } catch (Throwable t) { Store.err(MainActivity.this, "bars", t); } } });
     }
 
     boolean hasLoc() {

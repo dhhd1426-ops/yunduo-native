@@ -327,6 +327,17 @@ public class AmorBridge {
     @JavascriptInterface
     public void micStop() { ui(new Runnable() { public void run() { Mic m = mic(); if (m != null) m.stop(true); } }); }
 
+    // 5.11：动态壁纸跟着手机里正在放的声音动。audioStart 返回 ok / perm（没录音权限）/ err:…；audioBands 每帧取 64 段频谱
+    private Viz viz() { return act instanceof MainActivity ? ((MainActivity) act).viz : null; }
+    @JavascriptInterface
+    public String audioStart() { try { Viz z = viz(); return z == null ? "err:none" : z.start(); } catch (Throwable t) { Store.err(app, "viz", t); return "err"; } }
+    @JavascriptInterface
+    public void audioStop() { try { Viz z = viz(); if (z != null) z.stop(); } catch (Throwable ignore) { } }
+    @JavascriptInterface
+    public String audioBands() { try { Viz z = viz(); return z == null ? "" : z.get(); } catch (Throwable t) { return ""; } }
+    @JavascriptInterface
+    public void audioPerm() { ui(new Runnable() { public void run() { Viz z = viz(); if (z != null) z.ask(); } }); }
+
     @JavascriptInterface
     public void sttStart(final String lang) { ui(new Runnable() { public void run() { Voice v = v(); if (v != null) v.start(lang); } }); }
 

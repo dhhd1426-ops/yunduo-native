@@ -135,6 +135,11 @@ sleep 3; shot 9d-after-slide
 T --ez ringOff true; sleep 2; shot 9e-after-off
 adb shell dumpsys notification --noredact | grep -c "id=8 " > $O/ring-notif-after-off.txt || true
 
+note "10 viz: Visualizer on the global output (wallpaper follows the music)"
+adb shell pm grant $PKG android.permission.RECORD_AUDIO || true
+T --ez viz true; sleep 4
+adb shell run-as $PKG cat shared_prefs/amor.xml | grep -o "viz[^&]*" | head -5 > $O/viz.txt 2>&1 || true
+
 note "8 collect"
 (adb shell pidof $PKG || echo DEAD) > $O/pid-end.txt
 adb shell run-as $PKG cat shared_prefs/amor.xml > $O/prefs.xml 2>&1 || true

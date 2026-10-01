@@ -116,6 +116,7 @@ public class AmorReceiver extends BroadcastReceiver {
         if (i.hasExtra("alarmFire")) Alarms.fire(c, i.getIntExtra("alarmFire", 0), false);
         if (i.getBooleanExtra("ringOff", false)) c.startService(new Intent(c, AlarmService.class).setAction(AlarmService.ACT_DISMISS));
         if (i.getBooleanExtra("ringSnooze", false)) c.startService(new Intent(c, AlarmService.class).setAction(AlarmService.ACT_SNOOZE));
+        if (i.getBooleanExtra("viz", false)) Viz.probe(c);
         Store.log(c, "test", null);
     }
 }

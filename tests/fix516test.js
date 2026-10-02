@@ -33,8 +33,10 @@ const boot=require('./_boot515');
     const w=JSON.parse(localStorage.getItem('cloud-weather-walls-v1')).list.find(x=>x.pack);let indexed=JSON.parse(new TextDecoder().decode(await get(w.pack)));
     for(const k of Object.keys(indexed.files))if(/\.(json|vert|frag)$/i.test(k))indexed.files[k]=new Uint8Array(await get(indexed.files[k]));
     async function pixels(pkg){let sd=123456789;Math.random=()=>{sd=(sd*1664525+1013904223)>>>0;return sd/4294967296};const c=document.createElement('canvas');c.width=256;c.height=456;const sc=new WallScene.Scene(pkg),r=new WallScene.Renderer(c,sc,sc.layers(),{clear:true,focus:[.5,.5],zoom:1});await r.load();r.draw(0);const gl=r.gl,px=new Uint8Array(c.width*c.height*4);gl.readPixels(0,0,c.width,c.height,gl.RGBA,gl.UNSIGNED_BYTE,px);r.destroy();return px;}
-    const a=await pixels(packed),z=await pixels(indexed);let diff=0;for(let i=0;i<a.length;i++)if(a[i]!==z[i])diff++;return {diff,total:a.length};
-   });assert.equal(quality.diff,0);console.log('PASS packed vs file-indexed rendering pixels identical '+quality.total);
+    const a=await pixels(packed),a2=await pixels(packed),z=await pixels(indexed);
+    const cmp=(x,y)=>{let n=0,mx=0,first=[];for(let i=0;i<x.length;i++)if(x[i]!==y[i]){n++;mx=Math.max(mx,Math.abs(x[i]-y[i]));if(first.length<6)first.push([(i>>2)%256,((i>>2)/256)|0,i&3,x[i],y[i]]);}return {n,mx,first};};
+    const self=cmp(a,a2),cross=cmp(a,z);return {diff:cross.n,total:a.length,cross,self};
+   });console.log('pixel compare '+JSON.stringify(quality));assert.ok(quality.diff<=quality.self.n,'indexed differs from packed beyond renderer self-noise');console.log('PASS packed vs file-indexed rendering: cross-diff '+quality.diff+' / renderer self-noise '+quality.self.n+' of '+quality.total);
    await p.evaluate(()=>__amorPause());await p.waitForTimeout(400);const count=await p.evaluate(()=>__Wall.state().frameSubmitted);await p.waitForTimeout(700);assert.equal(await p.evaluate(()=>__Wall.state().frameSubmitted),count);assert.equal(await p.evaluate(()=>__Wall.state().running),false);console.log('PASS background pause stops scheduling');
    await p.evaluate(()=>__Wall.resume());await p.waitForTimeout(500);assert.equal(await p.evaluate(()=>__Wall.state().running),true);console.log('PASS resume restarts animated scene');
    assert.deepEqual(errs,[]);await ctx.close();

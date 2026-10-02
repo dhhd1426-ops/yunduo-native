@@ -2736,6 +2736,7 @@
 </style>
 <script src="fonts/script-glyphs.js"></script>
 <script src="fonts/pinyin.js"></script>
+<script src="fonts/wall-runtime.js"></script>
 <script src="fonts/wall.js"></script>
 <script src="fonts/ear.js"></script>
 <script src="fonts/docs.js"></script>
@@ -3709,7 +3710,7 @@
       '</div>' +
       '<div class="panel"><h2>数据来源 <em>Source</em></h2>' +
         '<div class="field"><span class="lbl">中国气象局 · weather.cma.cn</span>' +
-        '<p class="hint">实况、7 天预报和气象预警。每次打开 App 自动获取，也可以点右上角的刷新按钮' + (latest ? '。最近一次更新是 ' + fmtAgo(latest) : '') + '。</p>' +
+        '<p class="hint" id="weather-source-status">实况、7 天预报和气象预警。每次打开 App 自动获取，也可以点右上角的刷新按钮' + (latest ? '。最近一次更新是 ' + fmtAgo(latest) : '') + '。</p>' +
         '<p class="hint">香港、澳门、台北的实况观测气象局暂未提供，只显示预报。</p></div>' +
       '</div>' +
       aiEntries() +
@@ -4627,9 +4628,10 @@
 
   var renderAnim = '', heroEverShown = false;
   function render(opts) {
+    clearTimeout(rrTimer); rrTimer = 0; rrTries = 0; // 新页面已包含最新数据，取消旧页留下的延迟重绘
     opts = opts || {};
     var tab = state.tab;
-    renderAnim = opts.anim || '';
+    renderAnim = opts.anim === 'none' ? '' : (opts.anim || '');
     // 天气第一次出现时（例如刚装好还没有缓存），也播放一次入场
     if (tab === 'today' && !heroEverShown && view(state.current)) { renderAnim = renderAnim || 'up'; }
     if (tab === 'cities') { tab = state.tab = 'forecast'; wxui.sheet = 'places'; }
@@ -4657,15 +4659,24 @@
     if (typeof Wall !== 'undefined') Wall.sync();
     document.body.classList.toggle('tab-wx', tab === 'forecast'); document.body.classList.toggle('tab-plan', tab === 'plan'); document.body.classList.toggle('tab-set', tab === 'settings' && !state.sub);
     NbSx.after(); MB.after(); SegInd.sync(); Circ.place(); Ico.after();
+    weatherStatus();
+    if (chat.open && !chat.busy && document.activeElement && ['chat-in', 'conv-q', 'sd-q', 'sd-rn', 'sd-pn', 'sd-pd'].indexOf(document.activeElement.id) < 0 && !chat.smenu && !chat.ssheet) renderSheet();
+    if (opts.top) $main.scrollTop = 0;
+    if (Fluid) Fluid.ranges();
+    if (opts.focus) { var el = document.getElementById(opts.focus); if (el) { el.focus(); var n = el.value.length; try { el.setSelectionRange(n, n); } catch (e) {} } }
+  }
+  function weatherStatus() {
     var v = view(state.current);
     $pill.innerHTML = icon('pin', 16) + esc(META[state.current].zh) + (v ? ' ' + deg(v.temp) + '°' : '');
     var rb = document.getElementById('refresh-btn');
     rb.innerHTML = refreshing ? Ico.ring(20, '正在刷新天气') : icon('refresh', 20);
     rb.className = 'icon-btn';
-    if (chat.open && !chat.busy && document.activeElement && ['chat-in', 'conv-q', 'sd-q', 'sd-rn', 'sd-pn', 'sd-pd'].indexOf(document.activeElement.id) < 0 && !chat.smenu && !chat.ssheet) renderSheet();
-    if (opts.top) $main.scrollTop = 0;
-    if (Fluid) Fluid.ranges();
-    if (opts.focus) { var el = document.getElementById(opts.focus); if (el) { el.focus(); var n = el.value.length; try { el.setSelectionRange(n, n); } catch (e) {} } }
+    var status = document.getElementById('weather-source-status');
+    if (status) {
+      var latest = null;
+      Object.keys(DATA).forEach(function (k) { var d = new Date(DATA[k].fetchedAt); if (!isNaN(d) && (!latest || d > latest)) latest = d; });
+      status.textContent = '实况、7 天预报和气象预警。每次打开 App 自动获取，也可以点右上角的刷新按钮' + (latest ? '。最近一次更新是 ' + fmtAgo(latest) : '') + '。';
+    }
   }
 
   /* ---------- 5.13.1 跟手手势的两个共用工具 ----------
@@ -5129,22 +5140,31 @@
 
   var Wall = (function () {
     var root = null, back = null, front = null, mid = null, R = [], curId = '', raf = 0, last = 0, t0 = performance.now(), paused = false, media = null, scene = null;
-    var G = wallGen(null), wtime = 0, wlast = 0, audNeed = false, tiltX = 0, panX = 0;
+    var G = wallGen(null), wtime = 0, clock = new WallRuntime.Clock(), sceneMotion = false, mediaUrl = '', audNeed = false, tiltX = 0, panX = 0;
     // 5.12 后台线程渲染：两块画布交给 Worker（OffscreenCanvas），主线程每帧只发一条参数消息；不支持时退回主线程画
     var WK = null, wkUse = !window.__noWallWorker && WallScene.workerOk && WallScene.workerOk(), wkSeq = 0, wkCb = {}, cw = 1, ch = 1;
     function wkMode() { return wkUse && WK; }
     function wk() {
-      if (WK === null) { try { WK = WallScene.makeWorker(); WK.onmessage = onWk; WK.onerror = function (e) { window.__wallErr = 'worker: ' + (e && e.message || ''); }; } catch (e) { WK = false; wkUse = false; } }
+      if (WK === null) { try { WK = WallScene.makeWorker(); WK.onmessage = onWk; WK.onerror = function (e) { wkFail(new Error('worker: ' + (e && e.message || ''))); }; } catch (e) { WK = false; wkUse = false; } }
       return WK;
     }
+    function wkFail(err) {
+      window.__wallWkErr = String(err && err.message || err);
+      if (WK) WK.terminate(); WK = false; wkUse = false; framePipe.reset();
+      Object.keys(wkCb).forEach(function (id) { var cb = wkCb[id]; delete wkCb[id]; cb(null); });
+      if (wkReady) { var pending = wkReady; wkReady = null; pending.no(err); }
+      else if (curId) { curId = ''; sync(); }
+    }
     function wkAsk(msg, transfer, wait) { return new Promise(function (ok) { var id = ++wkSeq; msg.id = id; wkCb[id] = ok; WK.postMessage(msg, transfer || []); setTimeout(function () { if (wkCb[id]) { delete wkCb[id]; ok(null); } }, wait || 4000); }); }
-    var wkReady = null, wkBusy = 0, wkNext = null;
-    // 一次只让 Worker 画一帧：上一帧还没画完，就只记下最新这帧的参数，画完再发（不会越排越长、越来越延迟）
-    function wkPost(m) { if (wkBusy && performance.now() - wkBusy < 1000) { wkNext = m; return; } wkBusy = performance.now(); WK.postMessage(m); }
-    function wkFree() { return !(wkBusy && performance.now() - wkBusy < 1000); }
+    var wkReady = null;
+    var framePipe = new WallRuntime.FramePipe(function (m) { m.tok = loadTok; WK.postMessage(m, m.bmp ? [m.bmp] : []); });
+    // 只保留正在画的一帧和最新请求；回执带编号，旧场景的回执不能释放新场景的槽位。
+    function wkPost(m) { framePipe.push(m); }
+    function wkFree() { return !framePipe.pending; }
     function onWk(e) {
       var d = e.data;
-      if (d.t === 'f') { wkBusy = 0; if (wkNext) { var n = wkNext; wkNext = null; wkPost(n); } return; }
+      if (d.t === 'asset') { var worker = WK; wallReadBytes(d.url).then(function (b) { if (WK !== worker) return; worker.postMessage({ t: 'asset', assetId: d.assetId, buf: b }, [b]); }, function (err) { if (WK !== worker) return; worker.postMessage({ t: 'asset', assetId: d.assetId, err: String(err && err.message || err) }); }); return; }
+      if (d.t === 'f') { framePipe.ack(d.frameId, running()); return; }
       if (d.id && wkCb[d.id]) { var cb = wkCb[d.id]; delete wkCb[d.id]; cb(d); return; }
       if (d.t === 'ready' && wkReady && wkReady.tok === d.tok) { var f = wkReady; wkReady = null; f.ok(d); }
       else if (d.t === 'err' && wkReady && wkReady.tok === d.tok) { var g = wkReady; wkReady = null; g.no(new Error(d.msg)); }
@@ -5164,6 +5184,7 @@
       bindAdjust();
     }
     function bytes(w) {
+      if (w.pack) return wallPackage(w.pack);
       if (WALL_MEM[w.id]) return Promise.resolve(WALL_MEM[w.id]);
       return new Promise(function (ok, no) {
         var x = new XMLHttpRequest(); x.open('GET', w.path, true); x.responseType = 'arraybuffer';
@@ -5173,6 +5194,9 @@
     }
     function sizeC(c) { var d = Math.min(2, window.devicePixelRatio || 1); cw = Math.round(innerWidth * d); ch = Math.round(innerHeight * d); if (c && !c.__off) { c.width = cw; c.height = ch; } }
     function clear() {
+      framePipe.reset(); clock.pause(); sceneMotion = false;
+      if (media) { if (media.pause) media.pause(); media.removeAttribute('src'); if (media.load) media.load(); }
+      if (mediaUrl) { URL.revokeObjectURL(mediaUrl); mediaUrl = ''; }
       if (wkMode()) WK.postMessage({ t: 'drop' }); else R.forEach(function (r) { try { r.destroy(); } catch (e) {} });
       R = [];
       // WebGL 上下文丢了以后画布不能再用：换两块新的
@@ -5237,10 +5261,11 @@
       clear(); root.classList.remove('ready'); scene = null; audNeed = false; WallAudio.want(false);
       document.body.style.setProperty('--wtint', w.tint || '#0e2a30');
       var ph = root.querySelector('.wl-ph'); ph.style.backgroundImage = w.thumb ? 'url(' + w.thumb + ')' : ''; ph.style.backgroundPosition = ((w.focus || [.5])[0] * 100) + '% 50%';   // 解码时先垫缩略图
+      if (w.mediaPath || ((w.kind === 'image' || w.kind === 'video') && w.path)) return showMedia(w, w.mediaPath || w.path, !!w.mediaPath);
       return bytes(w).then(function (buf) {
         if (tok !== loadTok) return;
         if (w.kind === 'image' || w.kind === 'video') return showMedia(w, new Blob([buf], { type: w.mime || '' }));
-        var pkg = WallScene.unpack(buf), proj = (function () { var f = pkg.files['project.json']; try { return JSON.parse(new TextDecoder().decode(f)); } catch (e) { return {}; } })();
+        var pkg = buf.files ? buf : WallScene.unpack(buf), proj = (function () { var f = pkg.files['project.json']; try { return JSON.parse(new TextDecoder().decode(f)); } catch (e) { return {}; } })();
         if (proj.type && /video/i.test(proj.type) && pkg.files[proj.file]) return showMedia(w, new Blob([pkg.files[proj.file]], { type: 'video/mp4' }), true);
         var sc = new WallScene.Scene(pkg);
         sizeC(back); sizeC(front);
@@ -5248,6 +5273,7 @@
         var cov = G.align === 'cover', opt = { focus: cov ? (w.focus0 || [.5, .5]).slice() : w.focus || [.5, .5], zoom: cov ? 1 : w.zoom || 1, props: w.props || {}, audio: WallAudio.get, flip: G.flip, ca: genCA(G), align: G.align };
         if (wkUse && wk()) return loadWk(w, tok, buf, sc, opt);
         var L = sc.layers(), parts = WallScene.split(L, sc.size());
+        sceneMotion = L.some(function (l) { return l.kind === 'particle' || l.effects.length > 0; });
         R = [new WallScene.Renderer(back, sc, parts[0], Object.assign({ clear: true }, opt)), new WallScene.Renderer(front, sc, parts[1], opt)];
         return Promise.all(R.map(function (r) { return r.load(); })).then(function () {
           if (tok !== loadTok) return;
@@ -5267,18 +5293,21 @@
       R = [new Proxy(sc.size()), new Proxy(sc.size())]; R.forEach(function (r) { r.focus = o2.focus; r.zoom = o2.zoom; r.flip = o2.flip; r.ca = o2.ca; r.align = o2.align; });
       return new Promise(function (ok, no) {
         wkReady = { tok: tok, ok: ok, no: no };
-        WK.postMessage({ t: 'load', tok: tok, buf: data, back: ob, front: of_, w: cw, h: ch, opt: o2 }, [data, ob, of_]);
+        var transfer = [ob, of_];
+        if (data.files) Object.keys(data.files).forEach(function (n) { var a = data.files[n]; if (a instanceof Uint8Array) transfer.push(a.buffer); });
+        else transfer.push(data);
+        WK.postMessage({ t: 'load', tok: tok, buf: data, back: ob, front: of_, w: cw, h: ch, opt: o2 }, transfer);
       }).then(function (d) {
         if (tok !== loadTok) return;
         if (d.warn && d.warn.length) window.__wallWarn = d.warn;
         R.forEach(function (r, i) { r.ready = true; r.S = d.S; r.layers = (d.kinds[i] || []).map(function (k) { var a = k.split(':'); return { kind: a[0], fx: a[1] != null ? new Array(+a[1]) : null }; }); });
         R.fg = d.fg;
-        root.classList.add('ready', 'gl'); audNeed = d.audio; WallAudio.want(audNeed && G.audio); tilt(); draw(); if (!document.body.classList.contains('wall-home')) snap(); kick(); xfadeEnd();
+        root.classList.add('ready', 'gl'); sceneMotion = !!d.motion; audNeed = d.audio; WallAudio.want(audNeed && G.audio); tilt(); draw(); if (!document.body.classList.contains('wall-home')) snap(); kick(); xfadeEnd();
         setTimeout(function () { if (tok === loadTok && document.body.classList.contains('wall-home')) autoAlign(w); }, 400);
       }, function (err) {
         if (tok !== loadTok) return;
         // Worker 里建不起来（比如 OffscreenCanvas 的 WebGL 不行）：以后都在主线程画，重新来一次
-        window.__wallWkErr = String(err && err.message || err); wkUse = false; curId = ''; sync();
+        window.__wallWkErr = String(err && err.message || err); if (WK) WK.terminate(); WK = false; wkUse = false; curId = ''; sync();
       });
     }
     // 5.11 图片 / 视频壁纸：翻转、颜色、对齐用 CSS（只改合成，不重画）；视频的播放速度用 playbackRate
@@ -5291,7 +5320,7 @@
       if (media.tagName === 'VIDEO') { if (G.rate <= 0) media.pause(); else { media.playbackRate = Math.max(.25, G.rate / 100); kick(); } }
     }
     function showMedia(w, blob, isVid) {
-      var u = URL.createObjectURL(blob), box = root.querySelector('.wl-media');
+      var u = typeof blob === 'string' ? blob : (mediaUrl = URL.createObjectURL(blob)), box = root.querySelector('.wl-media');
       // 5.10.1：安卓 WebView 的 <video> 没有 poster 时，第一帧解出来之前会画一个灰色大播放键（被首页虚化后就是那个灰三角）。
       // poster 用透明 1×1 图盖掉；而且等第一帧真的出来了才加 ready，在那之前一直垫着缩略图。
       var tk = loadTok, vid = w.kind === 'video' || isVid, shown = false;
@@ -5307,7 +5336,7 @@
     var rip = null;   // 5.10 启动动画落到首页时的水波 { x, y（CSS 像素）, at, speed（CSS 像素/秒）}
     function draw() {
       var now_ = performance.now(); window.__wallFrames = (window.__wallFrames || 0) + 1;
-      if (wlast) wtime += Math.min(.25, (now_ - wlast) / 1000) * (G.rate / 100); wlast = now_;   // 5.11 播放速度（0 = 停住）
+      wtime = clock.step(now_, paused || document.hidden ? 0 : G.rate / 100); // 可见时间推进；恢复时不补画后台经过的时间
       var t = wtime;
       R.forEach(function (r) { r.pan = tiltX + panX; });
       if (wkMode() && R.length) {   // 后台模式：算好这一帧的参数发过去（水波 / 水光束按画布像素）
@@ -5485,7 +5514,7 @@
       if (rainSrc.width !== W || rainSrc.height !== H) { rainSrc.width = W; rainSrc.height = H; }
       try { rainSrcX.clearRect(0, 0, W, H); paintMedia(rainSrcX, W, H); } catch (e) { return; }
       rainPend = true;
-      createImageBitmap(rainSrc).then(function (bmp) { rainPend = false; wkBusy = performance.now(); WK.postMessage({ t: 'rainf', bmp: bmp }, [bmp]); }, function () { rainPend = false; });
+      createImageBitmap(rainSrc).then(function (bmp) { rainPend = false; if (!running() || !rainBusy()) { bmp.close(); return; } wkPost({ t: 'rainf', bmp: bmp }); }, function () { rainPend = false; });
     }
     /* 5.13 状态栏图标颜色：看屏幕最上面那一条后面是什么——壁纸 / 深色就用白色图标，浅色页面用深色图标 */
     var barDark = null;
@@ -5506,7 +5535,7 @@
     window.addEventListener('insets', function () { if (root) { sync(); } });
     // 5.11 跟着手机晃动：左右倾斜时画面轻轻平移（视差）
     var tiltOn = false;
-    function onTilt(e) { if (e.gamma == null) return; tiltX = Math.max(-1, Math.min(1, e.gamma / 35)) * .025; }
+    function onTilt(e) { if (e.gamma == null) return; var x = Math.max(-1, Math.min(1, e.gamma / 35)) * .025; if (x !== tiltX) { tiltX = x; kick(); } }
     function tilt() {
       var want = G.motion === 'tilt';
       if (want && !tiltOn) { window.addEventListener('deviceorientation', onTilt); tiltOn = true; }
@@ -5516,21 +5545,21 @@
     var idleSig = '';
     function idle() {
       if (rainBusy()) { idleSig = ''; return false; }
-      if (G.rate > 0 || audNeed && G.audio || rip || (window.Launch && Launch.active && Launch.active())) { idleSig = ''; return false; }
-      if (R.some(function (r) { return r.layers.some(function (L) { return L.kind === 'particle'; }); })) return false;
+      if (G.rate > 0 && sceneMotion || audNeed && G.audio || rip || (window.Launch && Launch.active && Launch.active())) { idleSig = ''; return false; }
       var sig = (tiltX + panX).toFixed(4) + '|' + (R[0] ? R[0].focus + '|' + R[0].zoom : '');
       if (sig === idleSig) return true; idleSig = sig; return false;
     }
-    function running() { return (R.length || media && rainBusy()) && !paused && !document.hidden && walls.dyn && !reduce && root.classList.contains('live') && !(typeof chat !== 'undefined' && chat.open && !glassUI()); }
-    // 5.11.1 兜底：该动却没在跑（哪条路忘了 kick），一秒半内自己接上
-    setInterval(function () { if (root && !raf && running()) kick(); }, 1500);
+    function running() { return (R.length || media && rainBusy()) && !paused && !document.hidden && !(scrollP > .42 && snapped) && walls.dyn && !reduce && root.classList.contains('live') && !(typeof chat !== 'undefined' && chat.open && !glassUI()); }
     function frame(now) {
-      raf = 0; if (!running()) return;
+      raf = 0; if (!running()) { clock.pause(); return; }
       var gap = 1000 / (window.Launch && Launch.active() ? 60 : scrollP > .02 ? 20 : (typeof chat !== 'undefined' && chat.open) || state.tab !== 'today' ? Math.min(30, G.fps || walls.fps || 30) : G.fps || walls.fps || 30);   // 启动动画的水光束期间跟满帧
-      if (now - last >= gap - 2 && !(scrollP > .42 && snapped) && !idle()) { last = now; if (R.length) draw(); else rainMedia(); if (glOn) glassMask(); }   // 上滑过 4 成：虚化图整个盖住了，不用画
+      if (now - last >= gap - 2 && !(scrollP > .42 && snapped)) {
+        if (idle()) { clock.pause(); return; }
+        last = now - Math.max(0, now - last) % gap; if (R.length) draw(); else rainMedia(); if (glOn) glassMask();
+      }   // 上滑过 4 成：虚化图整个盖住了，不用画
       raf = requestAnimationFrame(frame);
     }
-    function kick() { WallAudio.tick(); if (!raf && running()) raf = requestAnimationFrame(frame); if (media && media.play) { if (running() || (!R.length && walls.dyn && root.classList.contains('live'))) media.play().catch(function () {}); else media.pause(); } }
+    function kick() { WallAudio.tick(); if (!running()) { if (raf) cancelAnimationFrame(raf); raf = 0; framePipe.discard(); clock.pause(); } else if (!raf) raf = requestAnimationFrame(frame); if (media && media.play) { if (running() || (!R.length && walls.dyn && !paused && !document.hidden && !reduce && G.rate > 0 && root.classList.contains('live'))) media.play().catch(function () {}); else media.pause(); } }
     // 每次 render 之后：决定显示 / 虚化 / 隐藏，以及要不要换一张
     function sync() {
       var w = wallPick(); dom();
@@ -5575,7 +5604,7 @@
       if (scrollP > 0 && (was === 0 || !snapped) && R.length) snap();          // 开始上滑时拍一张虚化图
       root.classList.toggle('scrl', scrollP > 0);
       root.style.setProperty('--wp', scrollP.toFixed(3));
-      placeMid();
+      placeMid(); kick();
     }
     var scrRaf = 0;   // 一帧只算一次（快速滑动时一帧会来好几次 scroll）
     $main.addEventListener('scroll', function () { if (!scrRaf && document.body.classList.contains('wall-home')) scrRaf = requestAnimationFrame(function () { scrRaf = 0; onScroll(); }); }, { passive: true });
@@ -5585,7 +5614,7 @@
       if (wkMode()) { R.forEach(function (r) { r.canvas = { width: cw, height: ch }; }); WK.postMessage({ t: 'size', w: cw, h: ch }); draw(); return; }
       R.forEach(function (r) { r.canvas = r === R[0] ? back : front; }); draw(); });
     document.addEventListener('visibilitychange', kick);
-    window.__amorPause = function () { paused = true; WallAudio.tick(); };   // 5.11 切后台时也停掉听声音
+    window.__amorPause = function () { paused = true; kick(); };   // 5.11 切后台时也停掉听声音
     window.__amorResume0 = function () { paused = false; kick(); };
 
     // 调整画面：直接在首页上拖（左右 / 上下），双指缩放
@@ -5661,13 +5690,13 @@
       setGen: function (w) {   // 5.11 通用设置改了：马上生效，不重新加载
         if (!w || w.id !== curId) return; G = wallGen(w);
         R.forEach(function (r) { r.flip = G.flip; r.ca = genCA(G); r.align = G.align; if (G.align === 'cover') { r.focus = (w.focus0 || [.5, .5]).slice(); r.zoom = 1; } else { r.focus = w.focus || [.5, .5]; r.zoom = w.zoom || 1; } });
-        if (R.length) wkSet({ flip: R[0].flip, ca: R[0].ca, align: R[0].align, focus: R[0].focus, zoom: R[0].zoom });
+        idleSig = ''; if (R.length) wkSet({ flip: R[0].flip, ca: R[0].ca, align: R[0].align, focus: R[0].focus, zoom: R[0].zoom });
         WallAudio.want(audNeed && G.audio); mediaGen(); tilt(); if (R.length) draw(); kick();
       },
       pan: function (dx) { var n = G.motion === 'scroll' ? -dx / innerWidth * .06 : 0; if (n === panX) return; panX = n; if (R.length) draw(); },
       gen: function () { return G; },
       worker: function () { return !!wkMode(); },
-      state: function () { return { id: curId, worker: !!wkMode(), wkErr: window.__wallWkErr || '', layers: R.map(function (r) { return r.layers.length; }), kinds: R.map(function (r) { return r.layers.map(function (L) { return L.kind + (L.fx ? ':' + L.fx.length : ''); }); }), running: !!raf, rain: rainOn, rainMode: rainOn ? (RN ? 'main' : rainSent ? 'worker' : '') : '', rainErr: window.__rainErr || '', err: window.__wallErr || '', warn: window.__wallWarn || null, audio: WallAudio.need() }; } };
+      state: function () { return { id: curId, worker: !!wkMode(), framePending: framePipe.pending ? 1 : 0, frameQueued: framePipe.next ? 1 : 0, frameSubmitted: framePipe.submitted, frameCoalesced: framePipe.coalesced, sceneMotion: sceneMotion, wkErr: window.__wallWkErr || '', layers: R.map(function (r) { return r.layers.length; }), kinds: R.map(function (r) { return r.layers.map(function (L) { return L.kind + (L.fx ? ':' + L.fx.length : ''); }); }), running: !!raf, rain: rainOn, rainMode: rainOn ? (RN ? 'main' : rainSent ? 'worker' : '') : '', rainErr: window.__rainErr || '', err: window.__wallErr || '', warn: window.__wallWarn || null, audio: WallAudio.need() }; } };
   })();
 
   window.__Wall = Wall;   // 测试用
@@ -6049,28 +6078,43 @@
     if (String.fromCharCode(u8[4], u8[5], u8[6], u8[7]) === 'ftyp' || u8[0] === 0x1A && u8[1] === 0x45) return 'video';
     return /\.(mpkg|pkg)$/i.test(name || '') ? 'scene' : '';
   }
+  // 5.16 原生流式解包后只预读小型配置；贴图由渲染器逐张读取，视频直接从文件播放。
+  function wallReadBytes(url) {
+    return new Promise(function (ok, no) {
+      var x = new XMLHttpRequest(); x.open('GET', url, true); x.responseType = 'arraybuffer';
+      x.onload = function () { if ((x.status === 0 || x.status < 400) && x.response) ok(x.response); else no(new Error('读不到壁纸资源')); };
+      x.onerror = function () { no(new Error('读不到壁纸资源')); }; x.send();
+    });
+  }
+  function wallPackage(url) {
+    return wallReadBytes(url).then(function (b) {
+      var pkg = JSON.parse(new TextDecoder().decode(b)), names = Object.keys(pkg.files).filter(function (n) { return /\.(json|vert|frag)$/i.test(n); }), next = 0;
+      function readNext() { var n = names[next++]; if (!n) return Promise.resolve(); return wallReadBytes(pkg.files[n]).then(function (v) { pkg.files[n] = new Uint8Array(v); return readNext(); }); }
+      return Promise.all([readNext(), readNext(), readNext(), readNext()]).then(function () { return pkg; });
+    });
+  }
   // 读出标题、缩略图、主题色（缩略图压到 240px 存进列表，壁纸库里用）
   function wallMeta(buf, kind) {
     function thumb(blob) {
       return new Promise(function (ok) {
-        var u = URL.createObjectURL(blob), done = function (el, w, h) {
+        var own = typeof blob !== 'string', u = own ? URL.createObjectURL(blob) : blob, done = function (el, w, h) {
           try { var c = document.createElement('canvas'), k = 240 / Math.max(w, h); c.width = Math.round(w * k); c.height = Math.round(h * k); c.getContext('2d').drawImage(el, 0, 0, c.width, c.height); ok(c.toDataURL('image/jpeg', .72)); }
-          catch (e) { ok(''); } URL.revokeObjectURL(u);
+          catch (e) { ok(''); } if (own) URL.revokeObjectURL(u);
         };
-        if (/video/.test(blob.type)) { var v = document.createElement('video'); v.muted = true; v.src = u; v.onloadeddata = function () { v.currentTime = .5; }; v.onseeked = function () { done(v, v.videoWidth, v.videoHeight); }; v.onerror = function () { ok(''); }; }
+        if (kind === 'video' || /video/.test(blob.type || '')) { var v = document.createElement('video'); v.muted = true; v.src = u; v.onloadeddata = function () { v.currentTime = .5; }; v.onseeked = function () { done(v, v.videoWidth, v.videoHeight); }; v.onerror = function () { ok(''); }; }
         else { var im = new Image(); im.onload = function () { done(im, im.naturalWidth, im.naturalHeight); }; im.onerror = function () { ok(''); }; im.src = u; }
         setTimeout(function () { ok(''); }, 6000);
       });
     }
-    if (kind === 'image') return thumb(new Blob([buf])).then(function (t) { return { thumb: t }; });
-    if (kind === 'video') return thumb(new Blob([buf], { type: 'video/mp4' })).then(function (t) { return { thumb: t }; });
-    var pkg = WallScene.unpack(buf), dec = function (f) { try { return JSON.parse(new TextDecoder().decode(pkg.files[f])); } catch (e) { return null; } };
+    if (kind === 'image') return thumb(typeof buf === 'string' ? buf : new Blob([buf])).then(function (t) { return { thumb: t }; });
+    if (kind === 'video') return thumb(typeof buf === 'string' ? buf : new Blob([buf], { type: 'video/mp4' })).then(function (t) { return { thumb: t }; });
+    var pkg = buf.files ? buf : WallScene.unpack(buf), dec = function (f) { try { return JSON.parse(new TextDecoder().decode(pkg.files[f])); } catch (e) { return null; } };
     var pj = dec('project.json') || {}, sc = ((pj.general || {}).properties || {}).schemecolor, tint = '';
     if (sc && sc.value) { var c = String(sc.value).split(/\s+/).map(Number); if (c.length >= 3) tint = '#' + c.slice(0, 3).map(function (x) { return ('0' + Math.round(Math.max(0, Math.min(1, x)) * 255).toString(16)).slice(-2); }).join(''); }
     var pv = pj.preview && pkg.files[pj.preview];
     var sceneOk = !!pkg.files['scene.json'] || /video/i.test(pj.type || '');
     if (!sceneOk) throw new Error('这个壁纸包是「' + (pj.type || '未知') + '」类型，目前只支持场景和视频壁纸');
-    return (pv ? thumb(new Blob([pv], { type: /\.gif$/i.test(pj.preview) ? 'image/gif' : 'image/jpeg' })) : Promise.resolve('')).then(function (t) {
+    return (pv ? thumb(typeof pv === 'string' ? pv : new Blob([pv], { type: /\.gif$/i.test(pj.preview) ? 'image/gif' : 'image/jpeg' })) : Promise.resolve('')).then(function (t) {
       return { thumb: t, title: pj.title || '', tint: tint, wtype: pj.type || 'scene', pdef: wpSlim(WallScene.userProps(pj)), aud: !!((pj.general || {}).supportsaudioprocessing) };
     });
   }
@@ -6080,7 +6124,7 @@
     wallui.busy = true; if (state.sub === 'wall') render();
     return wallMeta(buf, kind).then(function (m) {
       var w = { id: 'w' + Date.now().toString(36), name: (m.title || e.name || '壁纸').replace(/\.(mpkg|pkg|jpe?g|png|webp|mp4|webm)$/i, '').slice(0, 40), path: e.path || '', kind: kind, size: e.size || buf.byteLength,
-        thumb: m.thumb || '', tint: m.tint || '', focus: [.5, .5], zoom: 1, align: 'auto', tags: [], at: Date.now() };
+        pack: e.pack || '', mediaPath: e.mediaPath || '', thumb: m.thumb || '', tint: m.tint || '', focus: [.5, .5], zoom: 1, align: 'auto', tags: [], at: Date.now() };
       if (m.pdef) { w.pdef = m.pdef; w.aud = m.aud; w.pdefV = 2; }
       if (!w.path) WALL_MEM[w.id] = buf;
       walls.list.unshift(w); walls.cur = w.id; walls.wxKey = wallWx(); saveWalls(); wallTr(w);
@@ -6101,6 +6145,8 @@
     var s = ''; try { s = AmorNative.takeWall() || ''; } catch (e) {}
     if (!s) return; var r = {}; try { r = JSON.parse(s); } catch (e) {}
     if (r.err) { wallui.busy = false; if (r.err !== 'cancel') toast(r.err); render(); return; }
+    if (r.pack) { wallPackage(r.pack).then(function (pkg) { return wallAdd(r, pkg); }).catch(function (err) { wallui.busy = false; if (nat5('wallDelete')) AmorNative.wallDelete(r.path); toast(String(err && err.message || err)); render(); }); return; }
+    if (r.kind === 'image' || r.kind === 'video') { wallAdd(r, r.path); return; }
     var x = new XMLHttpRequest(); x.open('GET', r.path, true); x.responseType = 'arraybuffer';
     x.onload = function () { if (!x.response) { wallui.busy = false; toast('读不到壁纸文件'); render(); return; } if (state.tab !== 'settings') { state.tab = 'today'; state.sub = ''; } wallAdd(r, x.response); };
     x.onerror = function () { wallui.busy = false; toast('读不到壁纸文件'); render(); };
@@ -9084,8 +9130,8 @@
       if (state.tab === 'plan' && calui.seg === 'notes' && typeof noteNavDepth === 'function' && noteNavDepth()) return true;
       return false;
     }
-    // 5.11.1 像循环一样：天气页、日程页往哪边划都回首页
-    function target(dx) { if (state.tab !== 'today') return 'today'; return dx > 0 ? 'forecast' : 'plan'; }
+    // 5.16 三页环：左滑 今天→日程→天气→今天，右滑反向。
+    function target(dx) { var i = PAGES.indexOf(state.tab); return PAGES[(i + (dx > 0 ? -1 : 1) + PAGES.length) % PAGES.length]; }
     function els() { var v = document.querySelector('#main .view'); return v ? [v] : []; }
     function paint(dx, tr, list) {
       (list || s.els).forEach(function (el) {
@@ -9630,8 +9676,12 @@
     var active = document.activeElement && document.activeElement.id;
     render(['city-q', 'name-in', 'st-q', 'p-key', 'p-base', 'p-name', 'p-path', 'p-new', 'prov-q', 'a-name', 'a-ctx'].indexOf(active) >= 0 ? { focus: active } : {});
   }
+  function weatherRender() {
+    weatherStatus();
+    if ((state.tab === 'today' || state.tab === 'forecast' || state.tab === 'plan') && !Circ.busy()) rerender();
+  }
   function refreshOne(key) {
-    return fetchCity(key).then(function (ok) { persist(); if (!ok && !DATA[key]) toast('这个站点暂时取不到数据'); rerender(); });
+    return fetchCity(key).then(function (ok) { persist(); if (!ok && !DATA[key]) toast('这个站点暂时取不到数据'); weatherRender(); });
   }
   function refreshAll(force) {
     if (refreshing) return;
@@ -9639,15 +9689,15 @@
       var d = DATA[k];
       return force || !d || Date.now() - new Date(d.fetchedAt).getTime() > 10 * 60000;
     });
-    if (!keys.length) { dbState = 'ready'; rerender(); return; }
-    refreshing = true; rerender();
+    if (!keys.length) { dbState = 'ready'; return; }
+    refreshing = true; weatherRender();
     Promise.all(keys.map(function (k) { return fetchCity(k).catch(function () { return false; }); })).then(function (res) {
       refreshing = false;
       var good = res.filter(Boolean).length;
       dbState = (good || Object.keys(DATA).length) ? 'ready' : 'unavailable';
       persist();
       notifySync(); notifyCopy();
-      rerender();
+      weatherRender();
       if (force && good === keys.length) toast('已更新');
       else if (good < keys.length) toast(good ? '部分城市没有更新成功' : '网络连接失败，显示的是上次的数据');
     });
@@ -12421,19 +12471,23 @@
     return new Promise(function (ok, bad) {
       var u = URL.createObjectURL(file), im = new Image();
       im.onload = function () {
-        var k = Math.min(1, max / Math.max(im.naturalWidth, im.naturalHeight)), w = Math.max(1, Math.round(im.naturalWidth * k)), h = Math.max(1, Math.round(im.naturalHeight * k));
-        var c = document.createElement('canvas'); c.width = w; c.height = h;
-        var g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.drawImage(im, 0, 0, w, h);
-        URL.revokeObjectURL(u); ok(c.toDataURL('image/jpeg', q));
+        try {
+          var k = Math.min(1, max / Math.max(im.naturalWidth, im.naturalHeight)), w = Math.max(1, Math.round(im.naturalWidth * k)), h = Math.max(1, Math.round(im.naturalHeight * k));
+          var c = document.createElement('canvas'); c.width = w; c.height = h;
+          var g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.drawImage(im, 0, 0, w, h);
+          ok(c.toDataURL('image/jpeg', q));
+        } catch (e) { bad(e); } finally { URL.revokeObjectURL(u); }
       };
       im.onerror = function () { URL.revokeObjectURL(u); bad(); };
       im.src = u;
     });
   }
   function pickImages() {
+    if ((chat.att || []).length >= 4) { toast('一次最多 4 张图片'); return; }
     var inp = document.createElement('input');
     inp.type = 'file'; inp.accept = 'image/*'; inp.multiple = true; inp.style.display = 'none';
     document.body.appendChild(inp);
+    inp.oncancel = function () { inp.remove(); };
     inp.onchange = function () {
       var fs = Array.prototype.slice.call(inp.files || [], 0, Math.max(0, 4 - (chat.att || []).length));
       inp.remove();
@@ -12455,7 +12509,7 @@
     return noteFromChat(body, cv.title, []);
   }
   function plusAction(k) {
-    if (k === 'img') { chat.pop = ''; renderSheet(); setTimeout(pickImages, 60); return; }
+    if (k === 'img') { pickImages(); chat.pop = ''; chat.popSub = ''; renderSheet(); return; }
     if (k === 'cam') { chat.pop = ''; renderSheet(); setTimeout(takePhoto, 60); return; }
     if (k === 'file') { chat.pop = ''; renderSheet(); setTimeout(pickFiles, 60); return; }
     if (k === 'conn') { chat.pop = 'conn'; chat.popSub = ''; cnui.msg = null; renderSheet(); return; }

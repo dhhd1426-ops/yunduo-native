@@ -1,0 +1,20 @@
+const assert = require('node:assert/strict');
+const { FramePipe, Clock, AssetPool } = require('../apk/www/fonts/wall-runtime');
+(async () => {
+  const sent = [], pipe = new FramePipe(f => sent.push(f));
+  pipe.push({ t: 'draw', time: 0 });
+  for (let i=1;i<=200;i++) pipe.push({t:'draw',time:i});
+  assert.equal(sent.length,1); assert.equal(pipe.next.time,200);
+  assert.equal(pipe.ack(999,true),false); assert.equal(sent.length,1);
+  pipe.ack(sent[0].frameId,true); assert.equal(sent.length,2); assert.equal(sent[1].time,200);
+  const stale=sent[1].frameId;pipe.reset();pipe.push({t:'draw',time:201});
+  assert.equal(pipe.ack(stale,true),false);assert.ok(pipe.pending);
+  pipe.push({t:'draw',time:202});pipe.ack(pipe.pending,false);assert.equal(pipe.pending,0);assert.equal(pipe.next,null);assert.equal(sent.length,3);
+  console.log('PASS bounded frame queue / newest frame / stale replies / background cancellation');
+  const clock=new Clock();clock.step(0,1);assert.equal(clock.step(100,1),.1);clock.pause();assert.equal(clock.step(10000,1),.1);assert.ok(Math.abs(clock.step(10100,2)-.3)<1e-10);assert.ok(Math.abs(clock.step(10200,0)-.3)<1e-10);
+  console.log('PASS visible clock / resume without jump / speed and freeze');
+  const pool=new AssetPool(2);let concurrent=0,peak=0;
+  const work=Array.from({length:12},(_,i)=>pool.run(async()=>{concurrent++;peak=Math.max(peak,concurrent);await new Promise(r=>setTimeout(r,3));concurrent--;if(i===4)throw Error('decode failure');return i;}));
+  const result=await Promise.allSettled(work);assert.equal(peak,2);assert.equal(pool.active,0);assert.equal(result.filter(x=>x.status==='rejected').length,1);assert.equal(result[11].value,11);
+  console.log('PASS bounded decoding / failure releases slot');
+})().catch(e=>{console.error(e);process.exitCode=1});

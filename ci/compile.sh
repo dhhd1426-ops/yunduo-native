@@ -21,3 +21,5 @@ javac -encoding UTF-8 -source 8 -target 8 -Xlint:-options \
 "$BT/d8" --release --min-api 26 --lib "$PLAT/android.jar" --output out $(find out/classes -name '*.class')
 ls -la out/classes.dex out/base.apk out/base-debug.apk
 echo "$(basename "$PLAT") $(basename "$BT")" > out/toolchain.txt
+
+bash ci/check516.sh

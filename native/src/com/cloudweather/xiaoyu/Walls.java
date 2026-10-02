@@ -59,11 +59,11 @@ final class Walls {
                 if (in == null) throw new IllegalStateException("打不开这个文件");
                 byte[] buf = new byte[256 * 1024];
                 int r;
-                while ((r = in.read(buf)) > 0) {
+                while ((r = in.read(buf)) != -1) {
+                    if (r == 0) continue;
                     if (hn < 16) { int k = Math.min(16 - hn, r); System.arraycopy(buf, 0, head, hn, k); hn += k; }
                     out.write(buf, 0, r);
                     size += r;
-                    if (size > 400L * 1024 * 1024) throw new IllegalStateException("文件太大了（超过 400MB）");
                 }
             }
             String k = kind(head, hn, name);
@@ -72,8 +72,13 @@ final class Walls {
             o.put("name", name);
             o.put("size", size);
             o.put("kind", k);
+            if ("scene".equals(k)) {
+                JSONObject unpacked = WallPackage.extract(f);
+                o.put("pack", unpacked.getString("pack"));
+                if (unpacked.has("mediaPath")) o.put("mediaPath", unpacked.getString("mediaPath"));
+            }
         } catch (Throwable t) {
-            if (f != null) f.delete();
+            if (f != null) { WallPackage.remove(WallPackage.directory(f)); f.delete(); }
             try { o.put("err", String.valueOf(t.getMessage())); } catch (Throwable ignore) { }
             Store.err(c, "wallCopy", t);
         }
@@ -85,6 +90,7 @@ final class Walls {
         try {
             File f = AmorFiles.local(c, path);
             if (!f.getParentFile().getCanonicalPath().equals(dir(c).getCanonicalPath())) return false;
+            WallPackage.remove(WallPackage.directory(f));
             return f.delete();
         } catch (Throwable t) { return false; }
     }

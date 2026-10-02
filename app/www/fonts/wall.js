@@ -26,6 +26,16 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
     return { ver: ver, files: files };
   }
 
+  // 解包后的磁盘资源：后台线程向主线程要字节，主线程模式直接 XHR。
+  function readAsset(src) {
+    if (typeof src !== 'string') return Promise.resolve(src);
+    if (typeof self !== 'undefined' && self.__wallReadAsset) return self.__wallReadAsset(src);
+    return new Promise(function (ok, no) {
+      var x = new XMLHttpRequest(); x.open('GET', src, true); x.responseType = 'arraybuffer';
+      x.onload = function () { if ((x.status === 0 || x.status < 400) && x.response) ok(new Uint8Array(x.response)); else no(new Error('读不到壁纸贴图')); };
+      x.onerror = function () { no(new Error('读不到壁纸贴图')); }; x.send();
+    });
+  }
   /* ---------- LZ4 块解压 ---------- */
   function lz4(src, n) {
     var dst = new Uint8Array(n), i = 0, j = 0, L = src.length;
@@ -134,7 +144,7 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
   function J(files, p) { var f = files[p]; if (!f) return null; try { return JSON.parse(str(f, 0, f.length).replace(/^﻿/, '')); } catch (e) { return null; } }
   function bbox(px, w, h) {                     // 不透明部分的范围（全屏大图层里常常只有一小块有东西）
     var x0 = w, y0 = h, x1 = -1, y1 = -1;
-    for (var y = 0; y < h; y += 2) { var row = y * w * 4; for (var x = 0; x < w; x += 2) if (px[row + x * 4 + 3] > 2) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; } }
+    for (var y = 0; y < h; y++) { var row = y * w * 4; for (var x = 0; x < w; x++) if (px[row + x * 4 + 3] > 0) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; } }
     if (x1 < 0) return null;
     x0 = Math.max(0, x0 - 8); y0 = Math.max(0, y0 - 8); x1 = Math.min(w, x1 + 10); y1 = Math.min(h, y1 + 10);
     return [x0, y0, x1, y1];
@@ -402,6 +412,7 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
     }
   };
 
+  var assetPool = new WallRuntime.AssetPool(2);
   /* ---------- 渲染器：一块画布画一段图层 ---------- */
   function Renderer(canvas, scene, layers, opt) {
     opt = opt || {};
@@ -472,9 +483,10 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
   Renderer.prototype.tex1 = function (c) { var gl = this.gl, t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(c)); this.params(); return { t: t, w: 1, h: 1, iw: 1, ih: 1, crop: [0, 0, 1, 1] }; };
   Renderer.prototype.params = function () { var gl = this.gl; gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); };
   Renderer.prototype.upload = function (t, doCrop, pad) {  // → {t, w, h, iw, ih, crop:[u0,v0,du,dv]}
+    if (this.disposed) { if (t.image && t.image.close) t.image.close(); throw new Error('wallpaper replaced'); }
     var gl = this.gl, tx = gl.createTexture(), crop = [0, 0, 1, 1], w = t.w, h = t.h;
     gl.bindTexture(gl.TEXTURE_2D, tx); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
-    if (t.image) gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, t.image);
+    if (t.image) { try { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, t.image); } finally { if (t.image.close) t.image.close(); } }
     else {
       var px = t.data, b = doCrop && w * h > 600000 ? ('box' in t ? t.box || null : bbox(px, w, h)) : null;
       if (b && pad) { var pw = Math.round(w * pad), ph = Math.round(h * pad); b = [Math.max(0, b[0] - pw), Math.max(0, b[1] - ph), Math.min(w, b[2] + pw), Math.min(h, b[3] + ph)]; }  // 特效会把内容挪出原来的范围
@@ -504,7 +516,7 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
     if (BUILTIN[name]) return Promise.resolve(this.texCache[name] || (this.texCache[name] = this.tex1(BUILTIN[name])));
     var p = 'materials/' + name + '.tex'; if (!this.scene.files[p]) return Promise.resolve(null);
     if (this.texCache[p]) return Promise.resolve(this.texCache[p]);
-    return (this.texCache[p] = readTexBg(this.scene.files[p]).then(function (t) { return (self.texCache[p] = self.upload(t, false)); }));
+    return (this.texCache[p] = assetPool.run(function () { return readAsset(self.scene.files[p]).then(function (b) { return readTexBg(b); }).then(function (t) { return (self.texCache[p] = self.upload(t, false)); }); }));
   };
   Renderer.prototype.fbo = function (w, h) {
     var gl = this.gl, t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null); this.params();
@@ -541,7 +553,7 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
   Renderer.prototype.load = function () {        // 解码贴图、编译特效（逐层异步，不一次卡死）
     var self = this, warn = this.warn = [];
     // 5.8.1 流水线：所有贴图先排进后台线程解码；每层解完就上传、特效送去编译（不等上一层编完）
-    var dec = this.layers.map(function (L) { return L.kind === 'image' ? readTexBg(self.scene.files[L.tex], true) : null; }), fxAll = [];
+    var fxAll = []; // 每层按需解码、上传完成再让出槽位，避免所有 RGBA 解码结果同时驻留。
     function compileFx(L) {
       fxAll.push(Promise.all(L.effects.map(function (E) {
         return Promise.all(E.passes.map(function (ps) {
@@ -556,14 +568,14 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
     }
     return this.layers.reduce(function (pr, L, li) {
       return pr.then(function () {
+        if (self.disposed) throw new Error('wallpaper replaced');
         if (L.kind === 'solid') { L.gtex = self.white; if (!L.size) L.size = [1, 1]; return; }
         if (L.kind === 'particle') { L.sys = new PSys(L, self.props); return self.loadTex(L.ptex).then(function (T) { L.gtex = T || self.halo(); }); }
         if (L.kind === 'capture') { L.gtex = { t: null, w: 1, h: 1, iw: L.size[0], ih: L.size[1], crop: [0, 0, 1, 1] }; L.fx = []; compileFx(L); return; }
-        return dec[li].then(function (t) {
-          L.gtex = self.upload(t, true, L.effects.length ? .1 : 0);
+        return assetPool.run(function () { return readAsset(self.scene.files[L.tex]).then(function (b) { return readTexBg(b, true); }).then(function (t) {
+          L.gtex = self.upload(t, !L.effects.length, 0);
           if (!L.size) L.size = [t.iw, t.ih];
-          L.fx = []; compileFx(L);
-        });
+        }); }).then(function () { L.fx = []; compileFx(L); });
       }).then(function () { return new Promise(function (r) { setTimeout(r, 0); }); });   // 每层之间让一下主线程
     }, Promise.resolve()).then(function () { return Promise.all(fxAll); }).then(function () { self.ready = true; return self; });
   };
@@ -773,7 +785,7 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
     if (a >= 0) { gl.enableVertexAttribArray(a); gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 16, 0); }
     if (b >= 0) { gl.enableVertexAttribArray(b); gl.vertexAttribPointer(b, 2, gl.FLOAT, false, 16, 8); }
   };
-  Renderer.prototype.destroy = function () { var e = this.gl.getExtension('WEBGL_lose_context'); if (e) e.loseContext(); };
+  Renderer.prototype.destroy = function () { this.disposed = true; var e = this.gl.getExtension('WEBGL_lose_context'); if (e) e.loseContext(); };
   Renderer.prototype.usesAudio = function () {   // 有特效要听声音（组合开关 AUDIOPROCESSING 开着）
     return this.layers.some(function (L) { return (L.effects || []).some(function (E) { return E.passes.some(function (p) { return ((p.combos && p.combos.AUDIOPROCESSING) | 0) > 0; }); }); });
   };
@@ -1021,19 +1033,24 @@ function __wallWorkerMain() {
     x.drawImage(cvs[0], -W * m, -H * m, W * (1 + 2 * m), H * (1 + 2 * m)); x.drawImage(cvs[1], -W * m, -H * m, W * (1 + 2 * m), H * (1 + 2 * m));
   }
   function drop() { R.forEach(function (r) { try { r.destroy(); } catch (e) {} }); R = []; }
+  var assetSeq = 0, assets = {};
+  self.__wallReadAsset = function (url) {
+    return new Promise(function (ok, no) { var id = ++assetSeq; assets[id] = { ok: ok, no: no }; postMessage({ t: 'asset', assetId: id, url: url }); });
+  };
   onmessage = function (e) {
     var d = e.data;
+    if (d.t === 'asset') { var a = assets[d.assetId]; if (!a) return; delete assets[d.assetId]; if (d.err) a.no(new Error(d.err)); else a.ok(new Uint8Array(d.buf)); return; }
     try {
       if (d.t === 'load') {
         drop(); curTok = d.tok; cvs = [d.back, d.front]; cvs.forEach(function (c) { c.width = d.w; c.height = d.h; });
-        var pkg = WallScene.unpack(d.buf), sc = new WallScene.Scene(pkg), L = sc.layers(), parts = WallScene.split(L, sc.size());
+        var pkg = d.buf.files ? d.buf : WallScene.unpack(d.buf), sc = new WallScene.Scene(pkg), L = sc.layers(), parts = WallScene.split(L, sc.size());
         var opt = d.opt || {}; opt.audio = audio;
         var RR = [new WallScene.Renderer(cvs[0], sc, parts[0], Object.assign({ clear: true }, opt)), new WallScene.Renderer(cvs[1], sc, parts[1], opt)];
         R = RR;
         Promise.all(RR.map(function (r) { return r.load(); })).then(function () {
           if (curTok !== d.tok) return;
           draw();
-          postMessage({ t: 'ready', tok: d.tok, warn: RR[0].warn.concat(RR[1].warn), audio: RR.some(function (r) { return r.usesAudio(); }), S: sc.size(),
+          postMessage({ t: 'ready', tok: d.tok, warn: RR[0].warn.concat(RR[1].warn), audio: RR.some(function (r) { return r.usesAudio(); }), S: sc.size(), motion: L.some(function (l) { return l.kind === 'particle' || l.effects.length > 0; }),
             kinds: RR.map(function (r) { return r.layers.map(function (L) { return L.kind + (L.fx ? ':' + L.fx.length : ''); }); }),
             fg: RR[1].layers.some(function (L) { return L.kind === 'image'; }) });
         }, function (err) { postMessage({ t: 'err', tok: d.tok, msg: String(err && err.message || err) }); });
@@ -1043,14 +1060,15 @@ function __wallWorkerMain() {
       } else if (d.t === 'rain') {   // {canvas?（第一次交过来）, on, w, h, k}
         if (d.canvas) { try { RN = new WallScene.Rain(d.canvas); } catch (e) { RN = null; postMessage({ t: 'err', msg: 'rain: ' + (e && e.message || e) }); } }
         if (RN) { if (d.w) RN.size(d.w, d.h, d.k || 1); RN.on = !!d.on; if (d.cut) { RN.alpha = 0; RN.frame(paintScene); } }
-      } else if (d.t === 'rainf') {   // 没有场景壁纸（视频 / 图片）时单独画一帧雨；bmp = 当前画面的小图
+      } else if (d.t === 'rainf') {
+        if (d.tok !== curTok && R.length) { if (d.bmp && d.bmp.close) d.bmp.close(); postMessage({ t: 'f', frameId: d.frameId }); return; }   // 没有场景壁纸（视频 / 图片）时单独画一帧雨；bmp = 当前画面的小图
         if (d.bmp) { if (rbmp && rbmp.close) rbmp.close(); rbmp = d.bmp; }
-        if (!R.length) rain(); postMessage({ t: 'f' });
+        if (!R.length) rain(); postMessage({ t: 'f', frameId: d.frameId });
       } else if (d.t === 'size') { if (cvs) cvs.forEach(function (c) { c.width = d.w; c.height = d.h; }); draw(); }
       else if (d.t === 'set') {
         R.forEach(function (r) { if (d.focus) r.focus = d.focus; if (d.zoom != null) r.zoom = d.zoom; if ('flip' in d) r.flip = d.flip; if ('ca' in d) r.ca = d.ca; if (d.align) r.align = d.align; if (d.props) r.setProps(d.props); });
         if (d.redraw) draw();
-      } else if (d.t === 'draw') { last = d; if (d.audio) A = d.audio; draw(); postMessage({ t: 'f' }); }   // 画完回一声，主线程才发下一帧（不排队）
+      } else if (d.t === 'draw') { if (d.tok !== curTok) { postMessage({ t: 'f', frameId: d.frameId }); return; } last = d; if (d.audio) A = d.audio; draw(); postMessage({ t: 'f', frameId: d.frameId }); }   // 画完回一声，主线程才发下一帧（不排队）
       else if (d.t === 'snap' || d.t === 'grab') {
         var W = d.w || (cvs ? cvs[0].width : 1), H = d.h || (cvs ? cvs[0].height : 1), oc = new OffscreenCanvas(W, H), x = oc.getContext('2d');
         if (R.length && cvs) { if (d.time != null) R.forEach(function (r) { r.lastT = null; }); draw(d.time); x.drawImage(cvs[0], 0, 0, W, H); x.drawImage(cvs[1], 0, 0, W, H); }
@@ -1077,6 +1095,6 @@ WallScene.workerOk = function () {
   catch (e) { return false; }
 };
 WallScene.makeWorker = function () {
-  var src = 'self.window = self;\nvar WallScene = (' + __wallFactory.toString() + ')();\n(' + __wallWorkerMain.toString() + ')();';
+  var src = 'self.window = self;\nvar WallRuntime = (' + __wallRuntimeFactory.toString() + ')();\nvar WallScene = (' + __wallFactory.toString() + ')();\n(' + __wallWorkerMain.toString() + ')();';
   return new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' })));
 };

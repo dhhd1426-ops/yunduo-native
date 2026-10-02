@@ -86,13 +86,19 @@ public class MainActivity extends Activity {
                     }
                 }
                 try {
-                    Intent i = p.createIntent();
+                    Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    i.setType("*/*");
+                    String[] types = p.getAcceptTypes();
+                    if (types != null && types.length == 1 && types[0] != null && types[0].contains("/") && !types[0].contains(",")) i.setType(types[0]);
+                    i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, p.getMode() == FileChooserParams.MODE_OPEN_MULTIPLE);
+                    i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     i.addCategory(Intent.CATEGORY_OPENABLE);
                     startActivityForResult(i, REQ_FILE);
                 } catch (Throwable t) {
-                    fileCb = null;
+                    ValueCallback<Uri[]> failed = fileCb; fileCb = null;
+                    if (failed != null) failed.onReceiveValue(null);
                     Store.err(MainActivity.this, "chooser", t);
-                    return false;
+                    return true;
                 }
                 return true;
             }
@@ -252,8 +258,18 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int req, int res, Intent data) {
         super.onActivityResult(req, res, data);
         if (req == REQ_FILE) {
-            if (fileCb != null) fileCb.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(res, data));
-            fileCb = null;
+            ValueCallback<Uri[]> cb = fileCb; fileCb = null;
+            if (cb != null) {
+                Uri[] uris = null;
+                if (res == RESULT_OK && data != null) {
+                    android.content.ClipData clips = data.getClipData();
+                    if (clips != null && clips.getItemCount() > 0) {
+                        uris = new Uri[clips.getItemCount()];
+                        for (int i = 0; i < uris.length; i++) uris[i] = clips.getItemAt(i).getUri();
+                    } else if (data.getData() != null) uris = new Uri[]{data.getData()};
+                }
+                cb.onReceiveValue(uris);
+            }
         } else if (req == REQ_CAM) {
             Uri u = photoUri; photoUri = null;
             if (res == RESULT_OK && u != null) { if (fileCb != null) fileCb.onReceiveValue(new Uri[]{u}); }

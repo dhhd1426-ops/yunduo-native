@@ -52,8 +52,8 @@ def manifest():
     A = True
     root = ('manifest', [
         (False, 'package', T_STRING, PKG),
-        (A, 'versionCode', T_INT_DEC, 52),
-        (A, 'versionName', T_STRING, '4.9.2'),
+        (A, 'versionCode', T_INT_DEC, 79),
+        (A, 'versionName', T_STRING, '5.16'),
     ], [
         ('uses-sdk', [(A, 'minSdkVersion', T_INT_DEC, MIN_SDK), (A, 'targetSdkVersion', T_INT_DEC, 29)], []),
     ] + [('uses-permission', [(A, 'name', T_STRING, 'android.permission.' + p)], []) for p in PERMS] + [
@@ -135,6 +135,18 @@ def main(out_path):
         for fn in sorted(os.listdir(fonts_dir)):
             # woff 已经压缩过，原样存放
             entries.append(('assets/fonts/' + fn, open(os.path.join(fonts_dir, fn), 'rb').read(), False))
+    for sub in ('lib', 'skills'):   # 5.7 PDF / 表格组件和中文字体子集；5.9 内置技能（都压缩存放）
+        d = os.path.join(HERE, 'www', sub)
+        if os.path.isdir(d):
+            for root, _, files in sorted(os.walk(d)):
+                for fn in sorted(files):
+                    full = os.path.join(root, fn)
+                    rel = os.path.relpath(full, os.path.join(HERE, 'www')).replace(os.sep, '/')
+                    entries.append(('assets/' + rel, open(full, 'rb').read(), True))
+    walls_dir = os.path.join(HERE, 'www', 'walls')   # 5.1 自带壁纸（tools/wall/bake_default.py 生成）
+    if os.path.isdir(walls_dir):
+        for fn in sorted(os.listdir(walls_dir)):
+            entries.append(('assets/walls/' + fn, open(os.path.join(walls_dir, fn), 'rb').read(), fn.endswith('.mpkg')))
     blob, central, eocd = write_zip(entries)
     key, cert, pub = make_key(HERE)
     apk, digest = sign_v2(blob, central, eocd, key, cert, pub)

@@ -5016,6 +5016,7 @@
     if (walls.preview && wallById(walls.preview)) return wallById(walls.preview);   // 5.11 主题里正在预览的那张
     var key = wallWx();
     if (walls.pl && walls.pl.on) walls.wxKey = key;   // 5.11 开着轮播：按天气换先停下
+    else if (walls.wxCity !== state.current && view(state.current)) { walls.wxCity = state.current; walls.wxKey = key; saveWalls(); }   // 5.16.1 换城市不算「天气变了」：只记下新城市的天气，不换你选的壁纸
     else if (key !== walls.wxKey && view(state.current)) {
       var night = key.indexOf('night|') === 0, tag = key.split('|')[1];
       var hit = (night && walls.list.filter(function (w) { return (w.tags || []).indexOf('night') >= 0; })[0]) ||

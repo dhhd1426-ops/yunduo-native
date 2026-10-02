@@ -27,7 +27,7 @@ for name,offset,size in items:
  p=root/name;p.parent.mkdir(parents=True,exist_ok=True);f.seek(start+offset);p.write_bytes(f.read(size));files[name]=p.as_uri()
 (root/'__yunduo_manifest.json').write_text(json.dumps({'ver':ver,'files':files}))
 PY
-for test in fix516test pagertest icon515test motion514test; do
+for test in fix516test citywall516test pagertest icon515test motion514test; do
  timeout 450 node "tests/$test.js" > "out/check516/$test.log" 2>&1 || { cat "out/check516/$test.log"; exit 1; }
  tail -6 "out/check516/$test.log"
  if grep -Eq '^FAIL|FAILED' "out/check516/$test.log"; then cat "out/check516/$test.log"; exit 1; fi

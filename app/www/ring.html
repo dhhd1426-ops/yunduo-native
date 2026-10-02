@@ -61,7 +61,8 @@
   document.getElementById('to').textContent = h < 11 ? 'Good morning' : h < 14 ? 'Good noon' : h < 18 ? 'Good afternoon' : 'Good evening';
   document.getElementById('txt').textContent = a.text || '时间到啦。';
   document.getElementById('sg').textContent = '— ' + (a.name || 'Amor');
-  document.getElementById('snooze').textContent = '再睡 ' + (a.snooze || 10) + ' 分钟';
+  var snz = a.snooze != null ? +a.snooze : 10;   // 5.14：0 = 不能再睡，不显示这个按钮
+  document.getElementById('snooze').textContent = '再睡 ' + snz + ' 分钟'; if (!snz) document.getElementById('snooze').hidden = true;
   var done = false;
   function bye(fn) { if (done) return; done = true; document.getElementById('bye').classList.add('on'); setTimeout(fn, 650); }
   document.getElementById('snooze').addEventListener('click', function () { bye(function () { R.snooze(); }); });

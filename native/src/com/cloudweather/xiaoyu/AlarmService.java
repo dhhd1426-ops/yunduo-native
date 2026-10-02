@@ -76,7 +76,7 @@ public class AlarmService extends Service {
         channel(this);
         String hm = String.format(java.util.Locale.US, "%02d:%02d", a.optInt("h"), a.optInt("m"));
         String label = a.optString("label", "");
-        int snz = Math.max(1, a.optInt("snooze", 10));
+        int snz = Math.max(0, a.optInt("snooze", 10));   // 5.14：0 = 不能再睡（不给「再睡」按钮）
         JSONObject cfg = Store.cfg(this);
         Notification.Builder b = new Notification.Builder(this, CH)
                 .setSmallIcon(R.drawable.nt_icon)
@@ -92,7 +92,7 @@ public class AlarmService extends Service {
                 .setFullScreenIntent(ringPi(this), true)
                 .setContentIntent(ringPi(this));
         android.graphics.drawable.Icon ic = android.graphics.drawable.Icon.createWithResource(this, R.drawable.nt_icon);
-        b.addAction(new Notification.Action.Builder(ic, "再睡 " + snz + " 分钟", svcPi(this, ACT_SNOOZE, 7011)).build());
+        if (snz > 0) b.addAction(new Notification.Action.Builder(ic, "再睡 " + snz + " 分钟", svcPi(this, ACT_SNOOZE, 7011)).build());
         b.addAction(new Notification.Action.Builder(ic, "关闭", svcPi(this, ACT_DISMISS, 7012)).build());
         return b.build();
     }

@@ -136,6 +136,7 @@ const init = () => {
       await p.waitForTimeout(600); c1 = await ck(A); ok('① 连点三次后停在「勾上」', c1.on && Math.abs(c1.off + 61.08) < .5, c1);
     }
     await tap(A); await wait(600); c1 = await ck(A);
+    for (let i = 0; i < 12 && c1.arr.trim() !== '56.55px'; i++) { await wait(250); c1 = await ck(A); }   // 慢机器上过渡可能还没收尾
     ok(tag + '① 再点：逆向回到空心圆，进度 1/4', !c1.on && Math.abs(c1.off) < .5 && c1.arr.trim() === '56.55px' && (await prog()).t === '1/4', c1);
     const saved = await p.evaluate(() => JSON.parse(localStorage.getItem('cloud-weather-notes-v1')).filter(n => n.id === 'nck')[0].body);
     ok(tag + '① 存进去的正文跟着变', /- \[ \] 牛奶/.test(saved) && /- \[x\] 鸡蛋/.test(saved), saved);

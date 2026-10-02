@@ -46,6 +46,27 @@ public class AmorBridge {
         } catch (Throwable t) { return false; }
     }
 
+    /** 5.16.1 API 页触觉：0 轻点 · 1 嗒（CLOCK_TICK）· 2 中等 · 3 稍重（失败）。成功返回 true。 */
+    @JavascriptInterface
+    public boolean hapticLevel(final int level) {
+        try {
+            act.runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    try {
+                        android.view.View v = act.getWindow().getDecorView();
+                        int sdk = Build.VERSION.SDK_INT, kind;
+                        if (level <= 0) kind = sdk >= 27 ? android.view.HapticFeedbackConstants.TEXT_HANDLE_MOVE : android.view.HapticFeedbackConstants.KEYBOARD_TAP;
+                        else if (level == 1) kind = android.view.HapticFeedbackConstants.CLOCK_TICK;
+                        else if (level == 2) kind = sdk >= 30 ? android.view.HapticFeedbackConstants.CONFIRM : android.view.HapticFeedbackConstants.CONTEXT_CLICK;
+                        else kind = sdk >= 30 ? android.view.HapticFeedbackConstants.REJECT : android.view.HapticFeedbackConstants.LONG_PRESS;
+                        v.performHapticFeedback(kind);
+                    } catch (Throwable t) { Store.err(app, "hapticLevel", t); }
+                }
+            });
+            return true;
+        } catch (Throwable t) { return false; }
+    }
+
     /** 5.13 状态栏、手势条、刘海占掉的边（CSS 像素）"上,下,左,右" */
     @JavascriptInterface
     public String insets() {

@@ -1,0 +1,51 @@
+/* 云朵天气 · API 设置页三个控件的动效组件（测试连接 / 保存 / 刷新）—— 样式。参数在 api-motion.js 的 ApiMo.C 里。 */
+.ap-test, .ap-save, .ap-rf { --ap-acc: #4fa3d9; --ap-ok: #7fb88a; --ap-err: #e07a6e; --ap-s: var(--ap-slow, 1); -webkit-tap-highlight-color: transparent; }
+body.walled .ap-test, body.walled .ap-save, body.walled .ap-rf { --ap-acc: var(--wtint, #4fa3d9); }
+
+/* ===== 1. 测试连接：全宽胶囊 ===== */
+.ap-slot { display: block; width: 100%; margin: 10px 0 2px; }
+.ap-test { position: relative; display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%; min-height: 48px; padding: 0 18px; overflow: hidden;
+  border-radius: 24px; border: 1px solid rgba(90, 110, 140, .34); background: rgba(250, 246, 236, .62); color: var(--text, #1c2640); font: inherit; font-size: 15.5px; cursor: pointer;
+  transform: scale(1); transition: transform calc(.12s * var(--ap-s)) ease; }
+html[data-theme="dark"] .ap-test { background: rgba(236, 228, 214, .14); border-color: rgba(190, 205, 230, .3); }
+.ap-test.pr { transform: scale(.97); }
+.ap-test:focus-visible, .ap-save:focus-visible, .ap-rf:focus-visible { outline: 3px solid var(--ap-acc); outline-offset: 3px; }
+.ap-test::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; background: var(--ap-ok); transition: opacity calc(.26s * var(--ap-s)) ease, background-color calc(.26s * var(--ap-s)) ease; }
+.ap-test.ph-ok::before { opacity: .35; background: var(--ap-ok); }
+.ap-test.ph-err::before { opacity: .35; background: var(--ap-err); }
+.ap-test > * { position: relative; }
+.ap-ic { display: inline-grid; place-items: center; width: 22px; height: 22px; }
+.ap-svg { width: 22px; height: 22px; overflow: visible; }
+.ap-svg g { transition: opacity calc(.16s * var(--ap-s)) ease; }
+.ap-svg .p-sock, .ap-svg .p-chk, .ap-svg .p-bad { opacity: 0; }
+.ap-test.ph-ok .p-sock, .ap-test.ph-ok .p-chk { opacity: 1; }
+.ap-test.ph-ok .p-plug { transform: translateY(1px); }
+.ap-test.ph-err .p-bad { opacity: 1; }
+.ap-test.ph-err .p-plug { transform: translate(0, 2.5px) rotate(-16deg); transform-origin: 12px 12px; }
+.ap-tx { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.ap-band { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; overflow: hidden; opacity: 0; pointer-events: none; }
+.ap-test.ph-load .ap-band { opacity: 1; }
+
+/* ===== 2. 保存：右下角胶囊 ===== */
+.ap-sv { display: inline-block; perspective: 300px; flex: none; }
+.ap-save { position: relative; display: inline-grid; place-items: center; min-width: 96px; height: 44px; padding: 0 18px; border-radius: 22px; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer;
+  border: 1px solid transparent; background: rgba(128, 138, 155, .2); color: rgba(96, 106, 126, .5); box-shadow: none;
+  transition: background-color calc(.22s * var(--ap-s)) ease, color calc(.22s * var(--ap-s)) ease, box-shadow calc(.22s * var(--ap-s)) ease, border-color calc(.22s * var(--ap-s)) ease; backface-visibility: visible; }
+.ap-save.ph-clean { cursor: default; border-style: dashed; border-color: rgba(120, 130, 150, .3); }
+.ap-save.ph-dirty, .ap-save.ph-saving, .ap-save.ph-saved { background: #f6efdf; color: #26324f; border-color: rgba(120, 100, 60, .22); box-shadow: 0 2px 10px rgba(40, 50, 80, .18), inset 0 1px 0 rgba(255, 255, 255, .8); }
+html[data-theme="dark"] .ap-save.ph-dirty, html[data-theme="dark"] .ap-save.ph-saving, html[data-theme="dark"] .ap-save.ph-saved { background: #efe6d2; color: #1c2640; }
+.ap-save.ph-fail { background: #f4d3cd; color: #9c3d33; border-color: rgba(224, 122, 110, .6); }
+.ap-save > span, .ap-save > svg { grid-area: 1 / 1; }
+.ap-sv-ck { width: 22px; height: 22px; opacity: 0; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.ap-save.ph-saved .ap-sv-ck { opacity: 1; }
+.ap-save.ph-saved .ap-sv-tx { opacity: 0; }
+
+/* ===== 3. 刷新：图标按钮（点击区 44） ===== */
+.ap-rf { display: inline-grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: inherit; cursor: pointer; }
+.ap-rf svg { display: block; }
+.ap-rf:active { background: color-mix(in srgb, currentColor 10%, transparent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ap-test, .ap-test::before, .ap-svg g, .ap-save { transition: none !important; }
+  .ap-test.pr { transform: none; }
+}

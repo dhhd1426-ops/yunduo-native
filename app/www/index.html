@@ -2737,8 +2737,10 @@
 <script src="fonts/script-glyphs.js"></script>
 <script src="fonts/pinyin.js"></script>
 <link rel="stylesheet" href="fonts/sw-motion.css">
+<link rel="stylesheet" href="fonts/api-motion.css">
 <script src="fonts/wall-runtime.js"></script>
 <script src="fonts/sw-motion.js"></script>
+<script src="fonts/api-motion.js"></script>
 <script src="fonts/wall.js"></script>
 <script src="fonts/ear.js"></script>
 <script src="fonts/docs.js"></script>
@@ -2936,7 +2938,7 @@
     else { ex.note = pre.note || ''; ex.balanceKind = pre.balance || ''; }
   });
   function prov(id) { return providers.filter(function (x) { return x.id === id; })[0] || null; }
-  function saveProviders() { try { localStorage.setItem(PROV_KEY, JSON.stringify(providers)); } catch (e) {} }
+  function saveProviders() { try { localStorage.setItem(PROV_KEY, JSON.stringify(providers)); return true; } catch (e) { return false; } }
 
   var DEFAULT_PROMPT = '你是 Amor，{name} 的私人助理，也是随时可以聊天的朋友。\n' +
     '你温暖、聪明、有好奇心，偶尔幽默。什么都可以聊：日常小事、心情、工作学习、写东西、出主意，或者只是闲聊。\n' +
@@ -3814,11 +3816,11 @@
         sw('enabled', d.enabled, '是否启用') +
         (pv.balanceKind ? sw('showBalance', d.showBalance, '获取账户余额') +
           (d.showBalance ? '<div class="bal">' + (bal ? '余额 <b>' + esc(bal.text) + '</b>' + (bal.detail ? ' · ' + esc(bal.detail) : '') + (bal.ok === false ? ' · 余额不足' : '') : '点右下角的刷新按钮查询余额') + '</div>' : '') : '') +
-        MB.html({ key: 'ptest', attr: 'data-ui="test"', icon: icon('plug', 18), label: '测试连接', st: b === 'test' ? 'load' : st && st.from === 'test' ? st.type : 'idle', res: st && st.type === 'ok' ? '连接成功 · 再测一次' : '连接失败 · 点我重试' }) +
+        ApiMo.test.html('ptest:' + ui.pid, { attr: 'data-ui="test"' }) +
         '<div class="ds-foot">' +
           '<span class="grow"></span>' +
-          (pv.balanceKind ? '<button type="button" class="icon-btn" data-ui="balance" aria-label="刷新余额"' + Ico.ldAttr('bal', st && st.type === 'err' ? 'err' : 'ok') + (b ? ' disabled' : '') + '>' + (b === 'balance' ? Ico.ring(20, '正在查询余额') : icon('refresh', 20)) + '</button>' : '') +
-          '<button type="button" class="btn primary" data-ui="save">保存</button>' +
+          (pv.balanceKind ? ApiMo.refresh.html('bal:' + ui.pid, { attr: 'data-ui="balance"', label: '刷新余额', svg: icon('refresh', 20) }) : '') +
+          ApiMo.save.html('psave:' + ui.pid, { attr: 'data-ui="save"', dirty: apiDirty() }) +
         '</div>' +
         (st ? '<p class="ds-status ' + st.type + '" style="margin-top:10px">' + esc(st.text) + '</p>' : '') +
         '</div>' +
@@ -4660,7 +4662,7 @@
     if (typeof Dock !== 'undefined' && Dock) Dock.update();
     if (typeof Wall !== 'undefined') Wall.sync();
     document.body.classList.toggle('tab-wx', tab === 'forecast'); document.body.classList.toggle('tab-plan', tab === 'plan'); document.body.classList.toggle('tab-set', tab === 'settings' && !state.sub);
-    NbSx.after(); MB.after(); SegInd.sync(); Circ.place(); Ico.after(); SwX.after();
+    NbSx.after(); MB.after(); SegInd.sync(); Circ.place(); Ico.after(); SwX.after(); ApiMo.after();
     weatherStatus();
     if (chat.open && !chat.busy && document.activeElement && ['chat-in', 'conv-q', 'sd-q', 'sd-rn', 'sd-pn', 'sd-pd'].indexOf(document.activeElement.id) < 0 && !chat.smenu && !chat.ssheet) renderSheet();
     if (opts.top) $main.scrollTop = 0;
@@ -9522,7 +9524,7 @@
     if (e.target.id === 'name-en') { state.nameEn = e.target.value; save(); return; }
     if (e.target.id === 'st-q') { state.stq = e.target.value; render({ focus: 'st-q' }); }
     var dmap = { 'p-name': 'name', 'p-key': 'key', 'p-base': 'base', 'p-path': 'path' };
-    if (dmap[e.target.id] && ui.draft) ui.draft[dmap[e.target.id]] = e.target.id === 'p-name' ? e.target.value : e.target.value.trim();
+    if (dmap[e.target.id] && ui.draft) { ui.draft[dmap[e.target.id]] = e.target.id === 'p-name' ? e.target.value : e.target.value.trim(); ApiMo.save.setDirty('psave:' + ui.pid, apiDirty()); }
     if (e.target.id === 'p-new') ui.newModel = e.target.value.trim();
     var vmap = { 'v-key': 'key', 'v-base': 'base', 'v-path': 'path' };
     if (vmap[e.target.id]) { vconf()[vmap[e.target.id]] = e.target.value.trim(); saveVoice(); return; }
@@ -10639,7 +10641,20 @@
     ['name', 'key', 'base', 'path', 'enabled', 'showBalance', 'balance', 'type'].forEach(function (k) { pv[k] = d[k]; });
     if (!pv.path) pv.path = pv.type === 'anthropic' ? '/messages' : '/chat/completions';
     if (!pv.name) pv.name = '自定义';
-    saveProviders();
+    return saveProviders();
+  }
+  // 5.16.1 配置页「有没有改动」：草稿和已保存的供应商逐项比
+  function apiDirty() {
+    var pv = prov(ui.pid), d = ui.draft; if (!pv || !d) return false;
+    return ['name', 'key', 'base', 'path', 'type'].some(function (k) { return (d[k] || '') !== (pv[k] || ''); }) || ['enabled', 'showBalance'].some(function (k) { return !!d[k] !== !!pv[k]; });
+  }
+  // 状态文字（连接成功 · … / 失败原因）原位更新，不整页重画——重画会打断按钮动画
+  function apiStatusPatch(st) {
+    var foot = document.querySelector('#main .ds-foot'); if (!foot) return;
+    var p = foot.parentNode.querySelector('.ds-status');
+    if (!st) { if (p) p.remove(); return; }
+    if (!p) { p = document.createElement('p'); p.style.marginTop = '10px'; foot.parentNode.insertBefore(p, foot.nextSibling); }
+    p.className = 'ds-status ' + st.type; p.textContent = st.text;
   }
 
   function uiAction(a) {
@@ -10675,38 +10690,49 @@
       saveProviders(); state.sub = 'providers'; ui.draft = null; render({ top: true }); toast('已删除'); return;
     }
     if (a === 'eye') { ui.showKey = !ui.showKey; render(); return; }
-    if (a === 'save') { commitDraft(); ui.status = null; render(); toast('已保存'); return; }
+    if (a === 'save') {   // 5.16.1 保存按钮自己翻折盖章，不整页重画（重画会打断动画）
+      if (ApiMo.save.phase('psave:' + ui.pid) !== 'dirty') { if (ApiMo.save.phase('psave:' + ui.pid) === 'clean') return; return; }
+      ApiMo.save.click('psave:' + ui.pid, function () { var ok = commitDraft(); if (ok) { ui.status = null; apiStatusPatch(null); } return ok; });
+      return;
+    }
     if (a === 'add') { ui.adding = !ui.adding; ui.showAvail = false; render(ui.adding ? { focus: 'p-new' } : {}); return; }
     if (a === 'addnew') { if (ui.newModel) { var nm = ui.newModel; ui.newModel = ''; ui.adding = false; addModel(nm); } return; }
     if (a === 'avail') { ui.showAvail = true; ui.adding = false; fetchModels(); return; }
     var cfg = d || pv;
-    if (!cfg || !cfg.key) { ui.status = { type: 'err', text: '先填写 API Key' }; rerender(); return; }
+    if (!cfg || !cfg.key) {
+      ui.status = { type: 'err', text: '先填写 API Key' };
+      if (a === 'test' && pv && !ApiMo.refresh.busy('bal:' + ui.pid)) { var nk_ = 'ptest:' + ui.pid; if (ApiMo.test.begin(nk_)) { ui.status.from = 'test'; ApiMo.test.done(nk_, false, { msg: '没填密钥' }); apiStatusPatch(ui.status); return; } }
+      rerender(); return;
+    }
     if (a === 'balance') {
-      ui.busy = 'balance'; rerender();
+      if (ui.busy || !ApiMo.refresh.start('bal:' + ui.pid)) return;
+      ui.busy = 'balance';
       fetchBalance(cfg).then(function (bal) {
         cfg.balance = bal; if (pv) { pv.balance = bal; saveProviders(); }
         if (ui.fixedKey) { ui.status = { type: 'ok', text: 'Key 少了开头的 sk-，已自动补上。记得点保存。' }; ui.fixedKey = false; }
       }, function (e) { ui.status = { type: 'err', text: '查询余额失败：' + e.msg }; })
-        .then(function () { ui.busy = ''; rerender(); });
+        .then(function () { ui.busy = ''; ApiMo.refresh.finish('bal:' + ui.pid, function () { if (state.sub === 'provider') rerender(); }); });   // 数据回来先把刷新图标的收尾播完，再显示结果
       return;
     }
     if (a === 'test') {
       if (ui.busy) return;   // 测试中：不重复提交
-      ui.busy = 'test'; ui.status = null; rerender();
+      var tk_ = 'ptest:' + ui.pid; if (!ApiMo.test.begin(tk_)) return;
+      ui.busy = 'test'; ui.status = null; apiStatusPatch(null);
       var known = pv.models[0];
       var pick = known ? Promise.resolve(known) : listModels(cfg).then(function (ids) {
         pv.available = ids; if (!pv.models.length) pv.models = ids.slice(); saveProviders();
         return pv.models[0] || '';
       }, function () { return ''; });
       pick.then(function (model) {
-        if (!model) { ui.status = { type: 'err', from: 'test', text: '没拿到模型列表。到“模型”里手动添加一个模型再测试。' }; ui.busy = ''; rerender(); return; }
+        if (!model) { ui.status = { type: 'err', from: 'test', text: '没拿到模型列表。到“模型”里手动添加一个模型再测试。' }; ui.busy = ''; ApiMo.test.done(tk_, false, { msg: '没有模型' }); apiStatusPatch(ui.status); return; }
         var t0 = Date.now();
         chatOnce(cfg, model, '请只回复四个字：连接成功').then(function (res) {
           ui.status = { type: 'ok', from: 'test', text: (ui.fixedKey ? 'Key 少了开头的 sk-，已自动补上。' : '') + '连接成功 · ' + res.model + ' · ' + (Date.now() - t0) + ' 毫秒' +
             (res.text ? ' · 回复：' + res.text.trim().slice(0, 40) : '') + '。记得点保存。' };
           ui.fixedKey = false;
-        }, function (e) { ui.status = { type: 'err', from: 'test', text: e.msg }; }).then(function () { ui.busy = ''; rerender(); });
-      });
+          ui.busy = ''; ApiMo.test.done(tk_, true, { ms: Date.now() - t0 }); apiStatusPatch(ui.status);
+        }, function (e) { ui.status = { type: 'err', from: 'test', text: e.msg }; ui.busy = ''; ApiMo.test.done(tk_, false, { msg: e.msg }); apiStatusPatch(ui.status); });
+      }, function () { ui.busy = ''; ApiMo.test.done(tk_, false, { msg: '' }); });
     }
   }
 

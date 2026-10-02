@@ -1,0 +1,56 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>API 页控件动效预览</title>
+<style>
+:root{--bg:#e4ebf2;--surface:#f5f8fb;--line:#c7d3df;--text:#1c2640;--muted:#525f78;--accent:#a0505d;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0e1424;--surface:#1a2239;--line:#2a3452;--text:#e8ecf4;--muted:#9aa5bf;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 -apple-system,"PingFang SC","Noto Sans SC",system-ui,sans-serif;padding:20px 16px 56px}
+.wrap{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-size:20px;margin:0}h2{font-size:13px;color:var(--muted);font-weight:500;margin:0 0 6px;letter-spacing:.04em}p.n{margin:0;color:var(--muted);font-size:13px}
+.panel{background:var(--surface);border-radius:20px;padding:14px 18px 16px}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 0}.ctl b{font-weight:500;margin-right:4px}
+.pill{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:999px;padding:5px 14px;font:inherit;cursor:pointer}
+.pill[aria-pressed=true]{background:var(--text);color:var(--bg);border-color:var(--text)}
+.dot{width:26px;height:26px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0}.dot[aria-pressed=true]{border-color:var(--text)}
+.foot{display:flex;align-items:center;gap:6px;margin-top:10px}.grow{flex:1}.st{font-size:13px;color:var(--muted);min-height:20px;margin:8px 0 0}
+code{font-size:12px;color:var(--muted)}
+/*CSS*/
+</style></head><body>
+<div class="wrap">
+<h1>API 设置页 · 控件动效预览</h1>
+<p class="n">三个控件是 App 里同一份组件。下面的按钮手动触发各种结果；「慢放」会把动画时长和定时器一起放慢。</p>
+<div class="panel"><h2>1 · 测试连接</h2><div id="t"></div>
+ <div class="ctl"><button class="pill" id="tok">模拟成功（0.9s）</button><button class="pill" id="terr">模拟失败：密钥无效</button><button class="pill" id="tto">模拟失败：超时</button></div></div>
+<div class="panel"><h2>2 · 保存</h2><div class="foot"><span class="grow" style="color:var(--muted);font-size:13px" id="sv-hint">点「制造改动」让按钮亮起</span><div id="s"></div></div>
+ <div class="ctl"><button class="pill" id="dirty">制造改动</button><button class="pill" id="undo">撤销改动</button><button class="pill" id="failnext" aria-pressed="false">下次保存失败</button></div></div>
+<div class="panel"><h2>3 · 刷新</h2><div class="foot"><span class="grow" style="color:var(--muted);font-size:13px" id="rf-hint">点图标；用下面的按钮选请求快慢</span><div id="r"></div></div>
+ <div class="ctl"><b>请求耗时</b><button class="pill" data-d="150" aria-pressed="false">很快 0.15s</button><button class="pill" data-d="1200" aria-pressed="true">1.2s</button><button class="pill" data-d="4000" aria-pressed="false">很慢 4s</button></div></div>
+<div class="panel">
+ <div class="ctl"><b>速度</b><button class="pill" data-s="1" aria-pressed="false">1×</button><button class="pill" data-s="3" aria-pressed="true">慢放 3×</button><button class="pill" data-s="6" aria-pressed="false">慢放 6×</button></div>
+ <div class="ctl"><b>主题色</b><button class="dot" data-c="" style="background:#4fa3d9" aria-pressed="true" aria-label="默认 #4fa3d9"></button><button class="dot" data-c="#0a8bc7" style="background:#0a8bc7" aria-pressed="false"></button><button class="dot" data-c="#c2566b" style="background:#c2566b" aria-pressed="false"></button><button class="dot" data-c="#2f8f6b" style="background:#2f8f6b" aria-pressed="false"></button></div>
+ <div class="ctl"><b>模拟「减少动态效果」</b><button class="pill" id="calm" aria-pressed="false">关</button></div>
+ <div class="ctl"><code id="hap">触觉：—</code></div></div>
+</div>
+<script>
+/*JS*/
+</script>
+<script>
+(function(){
+ var body=document.body,dirty=false,failNext=false,delay=1200,$=function(i){return document.getElementById(i)};
+ var RF='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>';
+ function draw(){ $('t').innerHTML=ApiMo.test.html('t',{}); $('s').innerHTML=ApiMo.save.html('s',{dirty:dirty}); $('r').innerHTML=ApiMo.refresh.html('r',{svg:RF,label:'刷新'}); ApiMo.after(); }
+ var oh=ApiMo.hap;ApiMo.hap=function(l){$('hap').textContent='触觉：'+['轻点','嗒 (CLOCK_TICK)','中等','稍重'][l]+'（'+new Date().toLocaleTimeString()+'）';};
+ draw();
+ function run(ok,ms,msg){ if(!ApiMo.test.begin('t'))return; setTimeout(function(){ApiMo.test.done('t',ok,ok?{ms:ms}:{msg:msg});},ms*(window.__slow||1)); }
+ $('tok').onclick=function(){run(true,900)}; $('terr').onclick=function(){run(false,900,'401 invalid api key')}; $('tto').onclick=function(){run(false,1200,'请求超时 timeout')};
+ $('t').onclick=function(e){var b=e.target.closest('.ap-test');if(b)run(true,900)};
+ $('dirty').onclick=function(){dirty=true;ApiMo.save.setDirty('s',true)}; $('undo').onclick=function(){dirty=false;ApiMo.save.setDirty('s',false)};
+ $('failnext').onclick=function(){failNext=!failNext;this.setAttribute('aria-pressed',failNext)};
+ $('s').onclick=function(e){var b=e.target.closest('.ap-save');if(!b)return;ApiMo.save.click('s',function(){if(failNext){return false}dirty=false;return true});};
+ $('r').onclick=function(e){var b=e.target.closest('.ap-rf');if(!b)return;if(!ApiMo.refresh.start('r'))return;setTimeout(function(){ApiMo.refresh.finish('r',function(){$('rf-hint').textContent='余额已更新 '+new Date().toLocaleTimeString()})},delay*(window.__slow||1));};
+ document.querySelectorAll('[data-d]').forEach(function(b){b.onclick=function(){delay=+b.dataset.d;document.querySelectorAll('[data-d]').forEach(function(x){x.setAttribute('aria-pressed',x===b)})}});
+ document.querySelectorAll('[data-s]').forEach(function(b){b.onclick=function(){window.__slow=+b.dataset.s;ApiMo.setSlow(window.__slow);document.querySelectorAll('[data-s]').forEach(function(x){x.setAttribute('aria-pressed',x===b)})}});
+ window.__slow=3;ApiMo.setSlow(3);
+ document.querySelectorAll('[data-c]').forEach(function(b){b.onclick=function(){var c=b.dataset.c;if(c){body.classList.add('walled');body.style.setProperty('--wtint',c)}else{body.classList.remove('walled');body.style.removeProperty('--wtint')}document.querySelectorAll('[data-c]').forEach(function(x){x.setAttribute('aria-pressed',x===b)})}});
+ $('calm').onclick=function(){ApiMo.opts.calm=!ApiMo.opts.calm;this.textContent=ApiMo.opts.calm?'开（只切颜色和文字）':'关';this.setAttribute('aria-pressed',ApiMo.opts.calm)};
+})();
+</script></body></html>

@@ -8627,9 +8627,9 @@
       bgAnim = Mo.run(bg, 'c', [{ clipPath: 'circle(0px at ' + cx + 'px ' + cy + 'px)' }, { clipPath: 'circle(' + R(cx, cy) + 'px at ' + cx + 'px ' + cy + 'px)' }], { duration: 460, easing: 'cubic-bezier(.3,.7,.2,1)', fill: 'forwards' });
       bgAnim.finished.then(function () {
         if (my !== tok) return;
-        goTab('settings', 'none');                                                  // 背景铺满后才换页：底下的首页一直在
+        goTab('settings', 'none');                                                  // 背景铺满后才换页：底下的首页一直在；设置页原地出现，只靠遮罩淡出露出来（不再往上弹）
         place();
-        Mo.stagger(items(), 0, 50, 12);
+       
         settle(bg);
       }, function () {});
     }
@@ -8657,7 +8657,7 @@
       var my = ++tok; bgAnim.reverse();
       var mx = ov && ov.querySelector('.mx'); if (mx) mx.classList.toggle('x', dir === 'open');
       if (dir === 'close') { phase = 'closing'; bgAnim.finished.then(function () { if (my === tok && ov) { ov.remove(); ov = null; phase = ''; } }, function () {}); }
-      else { phase = 'opening'; bgAnim.finished.then(function () { if (my !== tok) return; goTab('settings', 'none'); place(); Mo.stagger(items(), 0, 50, 12); settle(ov.querySelector('.circ-bg')); }, function () {}); }
+      else { phase = 'opening'; bgAnim.finished.then(function () { if (my !== tok) return; goTab('settings', 'none'); place(); settle(ov.querySelector('.circ-bg')); }, function () {}); }
     }
     return { open: open, close: close, place: place, busy: function () { return !!phase; } };
   })();

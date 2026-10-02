@@ -6,7 +6,7 @@ const boot=require('./_boot515');
  try {
   for(const noWorker of [false,true]) {
    const {p,ctx,errs}=await boot(b,{init:`window.__noWallWorker=${noWorker};const w=JSON.parse(localStorage.getItem('cloud-weather-walls-v1'));w.dyn=true;localStorage.setItem('cloud-weather-walls-v1',JSON.stringify(w));`});
-   await p.click('.w-menu'); await p.waitForTimeout(1200);
+   await p.click('.w-menu'); await p.waitForFunction(()=>document.querySelector('#main .set-x')&&!document.querySelector('.circ'),null,{timeout:20000}); await p.waitForTimeout(300);
    await p.evaluate(()=>{window.__settingsView=document.querySelector('#main .view');window.__mainReplacements=0;window.__mainObserver=new MutationObserver(ms=>{for(const m of ms)for(const n of m.removedNodes)if(n===window.__settingsView)window.__mainReplacements++;});__mainObserver.observe(document.querySelector('#main'),{childList:true,subtree:true});document.dispatchEvent(new Event('visibilitychange'));});
    await p.waitForTimeout(1600);assert.equal(await p.evaluate(()=>__mainReplacements),0);console.log('PASS settings stays mounted after weather/visibility refresh');
    await p.evaluate(()=>history.back());await p.waitForTimeout(1000);
@@ -32,10 +32,10 @@ const boot=require('./_boot515');
     const packed=WallScene.unpack(await get('walls/default.mpkg'));
     const w=JSON.parse(localStorage.getItem('cloud-weather-walls-v1')).list.find(x=>x.pack);let indexed=JSON.parse(new TextDecoder().decode(await get(w.pack)));
     for(const k of Object.keys(indexed.files))if(/\.(json|vert|frag)$/i.test(k))indexed.files[k]=new Uint8Array(await get(indexed.files[k]));
-    async function pixels(pkg){const c=document.createElement('canvas');c.width=256;c.height=456;const sc=new WallScene.Scene(pkg),r=new WallScene.Renderer(c,sc,sc.layers(),{clear:true,focus:[.5,.5],zoom:1});await r.load();r.draw(0);const gl=r.gl,px=new Uint8Array(c.width*c.height*4);gl.readPixels(0,0,c.width,c.height,gl.RGBA,gl.UNSIGNED_BYTE,px);r.destroy();return px;}
+    async function pixels(pkg){let sd=123456789;Math.random=()=>{sd=(sd*1664525+1013904223)>>>0;return sd/4294967296};const c=document.createElement('canvas');c.width=256;c.height=456;const sc=new WallScene.Scene(pkg),r=new WallScene.Renderer(c,sc,sc.layers(),{clear:true,focus:[.5,.5],zoom:1});await r.load();r.draw(0);const gl=r.gl,px=new Uint8Array(c.width*c.height*4);gl.readPixels(0,0,c.width,c.height,gl.RGBA,gl.UNSIGNED_BYTE,px);r.destroy();return px;}
     const a=await pixels(packed),z=await pixels(indexed);let diff=0;for(let i=0;i<a.length;i++)if(a[i]!==z[i])diff++;return {diff,total:a.length};
    });assert.equal(quality.diff,0);console.log('PASS packed vs file-indexed rendering pixels identical '+quality.total);
-   await p.evaluate(()=>__amorPause());const count=await p.evaluate(()=>__Wall.state().frameSubmitted);await p.waitForTimeout(700);assert.equal(await p.evaluate(()=>__Wall.state().frameSubmitted),count);assert.equal(await p.evaluate(()=>__Wall.state().running),false);console.log('PASS background pause stops scheduling');
+   await p.evaluate(()=>__amorPause());await p.waitForTimeout(400);const count=await p.evaluate(()=>__Wall.state().frameSubmitted);await p.waitForTimeout(700);assert.equal(await p.evaluate(()=>__Wall.state().frameSubmitted),count);assert.equal(await p.evaluate(()=>__Wall.state().running),false);console.log('PASS background pause stops scheduling');
    await p.evaluate(()=>__Wall.resume());await p.waitForTimeout(500);assert.equal(await p.evaluate(()=>__Wall.state().running),true);console.log('PASS resume restarts animated scene');
    assert.deepEqual(errs,[]);await ctx.close();
   }

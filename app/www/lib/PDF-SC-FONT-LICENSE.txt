@@ -1,0 +1,7 @@
+lib/pdf-sc.ttf 是思源宋体 / Noto Serif CJK SC（Adobe · Google）的子集，轮廓由 CFF 转成 TrueType（fontTools cu2qu），
+只保留 7546 个常用字的字形，用于 App 生成 PDF 时嵌入中文字体。
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+Copyright © 2017 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'.
+Noto is a trademark of Google Inc. The full license text: https://openfontlicense.org
+This Font Software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.

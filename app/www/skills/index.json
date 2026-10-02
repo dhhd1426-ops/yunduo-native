@@ -1,0 +1,83 @@
+{
+ "from": "https://github.com/anthropics/skills",
+ "license": "Apache-2.0",
+ "skills": [
+  {
+   "id": "frontend-design",
+   "title": "前端设计",
+   "zh": "做网页作品时的排版、配色、动效讲究，不做成千篇一律的样子",
+   "desc": "Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.",
+   "files": [],
+   "src": "https://github.com/anthropics/skills/tree/main/skills/frontend-design"
+  },
+  {
+   "id": "algorithmic-art",
+   "title": "算法艺术",
+   "zh": "用 p5.js 写会生长、有随机种子的生成艺术作品",
+   "desc": "Creating algorithmic art using p5.js with seeded randomness and interactive parameter exploration. Use this when users request creating art using code, generative art, algorithmic art, flow fields, or particle systems. Create original algorithmic art rather than copying existing artists' work to avoid copyright violations.",
+   "files": [
+    "templates/generator_template.js",
+    "templates/viewer.html"
+   ],
+   "src": "https://github.com/anthropics/skills/tree/main/skills/algorithmic-art"
+  },
+  {
+   "id": "theme-factory",
+   "title": "主题工厂",
+   "zh": "给作品、文档套一套配色和字体（10 套现成主题）",
+   "desc": "Toolkit for styling artifacts with a theme. These artifacts can be slides, docs, reportings, HTML landing pages, etc. There are 10 pre-set themes with colors/fonts that you can apply to any artifact that has been creating, or can generate a new theme on-the-fly.",
+   "files": [
+    "themes/arctic-frost.md",
+    "themes/botanical-garden.md",
+    "themes/desert-rose.md",
+    "themes/forest-canopy.md",
+    "themes/golden-hour.md",
+    "themes/midnight-galaxy.md",
+    "themes/modern-minimalist.md",
+    "themes/ocean-depths.md",
+    "themes/sunset-boulevard.md",
+    "themes/tech-innovation.md"
+   ],
+   "src": "https://github.com/anthropics/skills/tree/main/skills/theme-factory"
+  },
+  {
+   "id": "internal-comms",
+   "title": "内部沟通",
+   "zh": "周报、公告、FAQ、项目进展这类内部沟通的写法",
+   "desc": "A set of resources to help me write all kinds of internal communications, using the formats that my company likes to use. Claude should use this skill whenever asked to write some sort of internal communications (status reports, leadership updates, 3P updates, company newsletters, FAQs, incident reports, project updates, etc.).",
+   "files": [
+    "examples/3p-updates.md",
+    "examples/company-newsletter.md",
+    "examples/faq-answers.md",
+    "examples/general-comms.md"
+   ],
+   "src": "https://github.com/anthropics/skills/tree/main/skills/internal-comms"
+  },
+  {
+   "id": "mcp-builder",
+   "title": "MCP 构建",
+   "zh": "怎么设计和写一个好用的 MCP 服务器",
+   "desc": "Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MCP servers to integrate external APIs or services, whether in Python (FastMCP) or Node/TypeScript (MCP SDK).",
+   "files": [
+    "reference/evaluation.md",
+    "reference/mcp_best_practices.md",
+    "reference/node_mcp_server.md",
+    "reference/python_mcp_server.md"
+   ],
+   "src": "https://github.com/anthropics/skills/tree/main/skills/mcp-builder"
+  },
+  {
+   "id": "skill-creator",
+   "title": "技能创建",
+   "zh": "把一套做法写成新技能（SKILL.md），并反复改进",
+   "desc": "Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or optimize a skill's description for better triggering accuracy.",
+   "files": [
+    "agents/analyzer.md",
+    "agents/comparator.md",
+    "agents/grader.md",
+    "references/schemas.md"
+   ],
+   "src": "https://github.com/anthropics/skills/tree/main/skills/skill-creator"
+  }
+ ]
+}

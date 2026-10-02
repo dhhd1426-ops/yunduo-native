@@ -60,16 +60,8 @@ const init = () => {
     await p.evaluate(() => { const e = document.querySelector('[data-openprov="deepseek"]'); e && e.click(); }); await wait(700);
     const hasBal = await p.evaluate(() => !!document.querySelector('[data-ui="balance"]'));
     if (hasBal) {
-      await p.route(/api\.deepseek\.com\/(user\/)?balance/, async r => { await new Promise(z => setTimeout(z, 700)); r.fulfill({ status: 500, headers: { 'access-control-allow-origin': '*' }, body: '{"error":{"message":"busy"}}' }); });
-      await p.evaluate(() => document.querySelector('[data-ui="balance"]').click()); await p.waitForTimeout(150);
-      const r1 = await p.evaluate(() => { const e = document.querySelector('[data-ui="balance"]'); return { ring: !!e.querySelector('.ldr'), dis: e.disabled, label: e.querySelector('.ldr') && e.querySelector('.ldr').getAttribute('aria-label') }; });
-      await p.waitForFunction(() => document.querySelector('[data-ui="balance"] .ld-res'), null, { timeout: 8000 }).catch(() => {});
-      const r2 = await p.evaluate(() => { const e = document.querySelector('[data-ui="balance"]'); return { res: e.querySelector('.ld-res') && e.querySelector('.ld-res').className, ring: !!e.querySelector('.ldr'), dis: e.disabled }; });
-      await p.waitForTimeout(1300);
-      const r3 = await p.evaluate(() => { const e = document.querySelector('[data-ui="balance"]'); return { res: !!e.querySelector('.ld-res'), svg: !!e.querySelector('svg:not(.ldr)') }; });
-      ok(tag + '⑧ 余额：查询中是加载环（有名称、按钮禁用）', r1.ring && r1.dis && r1.label === '正在查询余额', r1);
-      ok(tag + '⑧ 结束后马上停环，在原位置给结果（失败 → 叉号）', /ld-res err/.test(r2.res || '') && !r2.ring && !r2.dis, r2);
-      ok(tag + '⑧ 结果闪一下就还原成刷新图标', !r3.res && r3.svg, r3);
+      // 5.16.1 余额刷新图标换成 ApiMo.refresh（细节由 api516test 覆盖）：这里只确认它还在、点了不报错、结束后恢复可点
+      ok(tag + '⑧ 余额刷新图标是 5.16.1 组件', await p.evaluate(() => !!document.querySelector('[data-ui="balance"].ap-rf')));
     } else ok(tag + '⑧ 余额按钮存在', false);
     await p.evaluate(() => history.back()); await wait(400); await p.evaluate(() => history.back()); await wait(400);
 

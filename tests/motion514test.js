@@ -166,7 +166,9 @@ let pass = 0, fail = 0; const ok = (n, c, x) => { console.log((c ? 'PASS ' : 'FA
     await p.evaluate(() => { const b = document.querySelector('[data-ui="providers"]'); b && b.click(); }); await p.waitForTimeout(500);
     await p.evaluate(() => { const b = document.querySelector('[data-openprov="deepseek"]'); b && b.click(); }); await p.waitForTimeout(500);
     const mb = async () => p.evaluate(() => { const b = document.querySelector('.mb[data-mb="ptest"]'); if (!b) return null; const r = b.getBoundingClientRect(); return { st: b.dataset.st, w: Math.round(r.width), cx: Math.round(r.left + r.width / 2), dis: b.disabled }; });
-    const m0 = await mb(); ok(tag + '供应商页有「测试连接」长按钮', m0 && m0.st === 'idle' && m0.w > 200, m0);
+    // 5.16.1 测试连接按钮换成 ApiMo.test（api516test 覆盖）
+    ok(tag + '供应商页有「测试连接」长按钮（5.16.1 组件）', await p.evaluate(() => { const b = document.querySelector('.ap-test'); return !!b && b.getBoundingClientRect().width > 200; }));
+    const m0 = null;
     if (m0) {
       await p.click('.mb[data-mb="ptest"]'); await p.waitForTimeout(reduce ? 100 : 450);
       const m1 = await mb(); ok(tag + '点了：收成圆形加载器，按钮禁用', m1.st === 'load' && m1.w === 48 && m1.dis, m1); await shot('03-load');

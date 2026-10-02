@@ -1,0 +1,111 @@
+      whenElapsed=+2m5s659ms maxWhenElapsed=+5m50s659ms
+      operation=PendingIntent{b67eb22: PendingIntentRecord{32fa9b3 com.google.android.gms/com.google.android.gms.icing startService}}
+    RTC #9: Alarm{b7f002f type 1 origWhen 1790959363184 whenElapsed 474191 com.cloudweather.xiaoyu}
+      tag=*alarm*:com.cloudweather.xiaoyu.EYE
+      type=RTC origWhen=2026-10-02 16:42:43.184 window=+3m44s999ms repeatInterval=0 count=0 flags=0x20
+      policyWhenElapsed: requester=+4m2s439ms app_standby=-57s560ms device_idle=-- battery_saver=-57s560ms tare=-57s560ms
+      whenElapsed=+4m2s439ms maxWhenElapsed=+7m47s438ms
+      operation=PendingIntent{a7b963c: PendingIntentRecord{d7ab304 com.cloudweather.xiaoyu broadcastIntent}}
+      idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=false, android:broadcast.temporaryAppAllowlistReasonCode=302, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=0, android:broadcast.flags=8}]
+    ELAPSED_WAKEUP #10: Alarm{471fb70 type 2 origWhen 628986 whenElapsed 628986 android}
+      tag=*walarm*:DeviceIdleController.motion
+      type=ELAPSED_WAKEUP origWhen=+6m37s234ms window=+1m0s0ms repeatInterval=0 count=0 flags=0x8
+      policyWhenElapsed: requester=+6m37s234ms app_standby=-3m21s544ms device_idle=-- battery_saver=-- tare=-3m22s766ms
+      whenElapsed=+6m37s234ms maxWhenElapsed=+7m37s234ms
+--
+      whenElapsed=+8m14s63ms maxWhenElapsed=+9m29s63ms
+      operation=PendingIntent{f1a4341: PendingIntentRecord{487fa0e com.google.android.gms/com.google.android.gms.location_base broadcastIntent}}
+    RTC_WAKEUP #13: Alarm{a53ca8 type 0 origWhen 1790959689381 whenElapsed 800389 com.cloudweather.xiaoyu}
+      tag=*walarm*:com.cloudweather.xiaoyu.ALARM
+      type=RTC_WAKEUP origWhen=2026-10-02 16:48:09.381 window=0 exactAllowReason=compat repeatInterval=0 count=0 flags=0x3
+      policyWhenElapsed: requester=+9m28s637ms app_standby=-12s63ms device_idle=-- battery_saver=-- tare=-12s63ms
+      whenElapsed=+9m28s637ms maxWhenElapsed=+9m28s637ms
+      Alarm clock:
+        triggerTime=2026-10-02 16:48:09.381
+        showIntent=PendingIntent{c633c1: PendingIntentRecord{ea7f910 com.cloudweather.xiaoyu startActivity}}
+      operation=PendingIntent{6f0766: PendingIntentRecord{6902c40 com.cloudweather.xiaoyu broadcastIntent}}
+      idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=false, android:broadcast.temporaryAppAllowlistReasonCode=302, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=0, android:broadcast.flags=8}]
+    ELAPSED #14: Alarm{3f2a0e6 type 3 origWhen 900000 whenElapsed 900000 com.google.android.gms}
+      tag=*alarm*:com.google.android.gms.platformconfigurator.RETRY_UPDATE
+      type=ELAPSED origWhen=+11m8s248ms window=+10m1s266ms repeatInterval=0 count=0 flags=0x0
+      policyWhenElapsed: requester=+11m8s248ms app_standby=-12s809ms device_idle=-- battery_saver=-2m13s435ms tare=-2m13s435ms
+      whenElapsed=+11m8s248ms maxWhenElapsed=+21m9s514ms
+--
+      whenElapsed=+28m0s580ms maxWhenElapsed=+50m30s579ms
+      operation=PendingIntent{b7e572: PendingIntentRecord{cd10d94 com.google.android.gms/com.google.android.gms.core startService}}
+    RTC_WAKEUP #19: Alarm{26b6aa7 type 0 origWhen 1790962200000 whenElapsed 3311008 com.cloudweather.xiaoyu}
+      tag=*walarm*:com.cloudweather.xiaoyu.FIRE
+      type=RTC_WAKEUP origWhen=2026-10-02 17:30:00.000 window=0 exactAllowReason=compat repeatInterval=0 count=0 flags=0x21
+      policyWhenElapsed: requester=+51m19s256ms app_standby=-12s114ms device_idle=-- battery_saver=-12s114ms tare=-12s114ms
+      whenElapsed=+51m19s256ms maxWhenElapsed=+51m19s256ms
+      operation=PendingIntent{6657b54: PendingIntentRecord{e0f7183 com.cloudweather.xiaoyu broadcastIntent}}
+      idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=false, android:broadcast.temporaryAppAllowlistReasonCode=302, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=0, android:broadcast.flags=8}]
+    ELAPSED #20: Alarm{25e8779 type 3 origWhen 4593663 whenElapsed 4593663 com.google.android.gms}
+      tag=*alarm*:com.google.android.location.ALARM_WAKEUP_SENSOR_COLLECTOR
+      type=ELAPSED origWhen=+1h12m41s911ms window=+55m2s669ms repeatInterval=0 count=0 flags=0x0
+      policyWhenElapsed: requester=+1h12m41s911ms app_standby=-12s809ms device_idle=-- battery_saver=-41s645ms tare=-41s645ms
+      whenElapsed=+1h12m41s911ms maxWhenElapsed=+2h7m44s580ms
+--
+  Temporary Quota Reserves:
+  
+  Next wake from idle: Alarm{a53ca8 type 0 origWhen 1790959689381 whenElapsed 800389 com.cloudweather.xiaoyu}
+    tag=*walarm*:com.cloudweather.xiaoyu.ALARM
+    type=RTC_WAKEUP origWhen=2026-10-02 16:48:09.381 window=0 exactAllowReason=compat repeatInterval=0 count=0 flags=0x3
+    policyWhenElapsed: requester=+9m28s637ms app_standby=-12s63ms device_idle=-- battery_saver=-- tare=-12s63ms
+    whenElapsed=+9m28s637ms maxWhenElapsed=+9m28s637ms
+    Alarm clock:
+      triggerTime=2026-10-02 16:48:09.381
+      showIntent=PendingIntent{c633c1: PendingIntentRecord{ea7f910 com.cloudweather.xiaoyu startActivity}}
+    operation=PendingIntent{6f0766: PendingIntentRecord{6902c40 com.cloudweather.xiaoyu broadcastIntent}}
+    idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=false, android:broadcast.temporaryAppAllowlistReasonCode=302, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=0, android:broadcast.flags=8}]
+  
+  Past-due non-wakeup alarms: (none)
+    Number of delayed alarms: 4, total delay time: +4s203ms
+    Max delay time: +2s750ms, max non-interactive time: +3s214ms
+  
+--
+      #1: Reason=alarm_cancelled elapsed=-12s64ms rtc=2026-10-02 16:38:28.680
+        Snapshot:
+          type=RTC_WAKEUP tag=*walarm*:com.cloudweather.xiaoyu.ALARM 
+          policyWhenElapsed: requester=+9m28s636ms app_standby=-13s62ms device_idle=-- battery_saver=-- tare=-13s62ms
+      #2: Reason=alarm_cancelled elapsed=-12s65ms rtc=2026-10-02 16:38:28.679
+        Snapshot:
+          type=RTC_WAKEUP tag=*walarm*:com.cloudweather.xiaoyu.ALARM 
+          policyWhenElapsed: requester=+2d14h51m19s256ms app_standby=-13s63ms device_idle=-- battery_saver=-- tare=-13s63ms
+      #3: Reason=alarm_cancelled elapsed=-12s65ms rtc=2026-10-02 16:38:28.679
+        Snapshot:
+          type=RTC_WAKEUP tag=*walarm*:com.cloudweather.xiaoyu.ALARM 
+          policyWhenElapsed: requester=+2m19s256ms app_standby=-13s66ms device_idle=-- battery_saver=-- tare=-13s66ms
+      #4: Reason=alarm_cancelled elapsed=-13s62ms rtc=2026-10-02 16:38:27.682
+        Snapshot:
+          type=RTC_WAKEUP tag=*walarm*:com.cloudweather.xiaoyu.ALARM 
+          policyWhenElapsed: requester=+9m28s637ms app_standby=-19s842ms device_idle=-- battery_saver=-- tare=-19s842ms
+      #5: Reason=alarm_cancelled elapsed=-13s83ms rtc=2026-10-02 16:38:27.661
+        Snapshot:
+          type=RTC_WAKEUP tag=*walarm*:com.cloudweather.xiaoyu.ALARM 
+          policyWhenElapsed: requester=+2d14h51m19s256ms app_standby=-19s847ms device_idle=-- battery_saver=-- tare=-19s847ms
+      #6: Reason=alarm_cancelled elapsed=-13s83ms rtc=2026-10-02 16:38:27.661
+        Snapshot:
+          type=RTC_WAKEUP tag=*walarm*:com.cloudweather.xiaoyu.ALARM 
+          policyWhenElapsed: requester=+2m19s256ms app_standby=-19s849ms device_idle=-- battery_saver=-- tare=-19s849ms
+      #7: Reason=alarm_cancelled elapsed=-19s843ms rtc=2026-10-02 16:38:20.901
+        Snapshot:
+          type=RTC_WAKEUP tag=*walarm*:com.cloudweather.xiaoyu.ALARM 
+          policyWhenElapsed: requester=+9m28s637ms app_standby=-20s917ms device_idle=-- battery_saver=-- tare=-20s917ms
+      #8: Reason=alarm_cancelled elapsed=-19s852ms rtc=2026-10-02 16:38:20.892
+        Snapshot:
+          type=RTC_WAKEUP tag=*walarm*:com.cloudweather.xiaoyu.ALARM 
+          policyWhenElapsed: requester=+2d14h51m19s256ms app_standby=-20s925ms device_idle=-- battery_saver=-- tare=-20s925ms
+      #9: Reason=alarm_cancelled elapsed=-19s853ms rtc=2026-10-02 16:38:20.892
+        Snapshot:
+          type=RTC_WAKEUP tag=*walarm*:com.cloudweather.xiaoyu.ALARM 
+          policyWhenElapsed: requester=+2m19s256ms app_standby=-20s928ms device_idle=-- battery_saver=-- tare=-20s928ms
+      #10: Reason=alarm_cancelled elapsed=-20s923ms rtc=2026-10-02 16:38:19.821
+        Snapshot:
+          type=RTC_WAKEUP tag=*walarm*:com.cloudweather.xiaoyu.ALARM 
+          policyWhenElapsed: requester=+9m28s637ms app_standby=-23s982ms device_idle=-- battery_saver=-- tare=-23s982ms
+  
+  Top Alarms:
+    +8s460ms running, 0 wakeups, 2 alarms: u0a131:com.google.android.gms
+      *alarm*:com.google.android.location.ALARM_WAKEUP_BURST_COLLECTION_TRIGGER
+    +864ms running, 3 wakeups, 3 alarms: 1000:android

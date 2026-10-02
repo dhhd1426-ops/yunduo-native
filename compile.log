@@ -1,0 +1,282 @@
+SDK=/usr/local/lib/android/sdk
+platform=/usr/local/lib/android/sdk/platforms/android-36
+build-tools=/usr/local/lib/android/sdk/build-tools/37.0.0
+version=80 5.16.1
+openjdk version "17.0.20.1" 2026-08-18
+Archive:  out/base.apk
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+     7644  1980-01-01 00:00   AndroidManifest.xml
+     1000  1980-01-01 00:00   res/drawable/nt_bar.xml
+      716  1980-01-01 00:00   res/drawable/nt_icon.xml
+      484  1980-01-01 00:00   res/drawable/nt_pill_fill.xml
+      520  1980-01-01 00:00   res/drawable/nt_pill_line.xml
+      408  1980-01-01 00:00   res/drawable/nt_ring.xml
+     3268  1980-01-01 00:00   res/layout/nt_big.xml
+     2140  1980-01-01 00:00   res/layout/nt_small.xml
+     9060  1980-01-01 00:00   res/mipmap-xxxhdpi-v4/ic_launcher.png
+     2352  1980-01-01 00:00   resources.arsc
+---------                     -------
+    27592                     10 files
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+-rw-r--r-- 1 runner runner 17869 Oct  2 16:23 out/base-debug.apk
+-rw-r--r-- 1 runner runner 17841 Oct  2 16:23 out/base.apk
+-rw-r--r-- 1 runner runner 90156 Oct  2 16:24 out/classes.dex
+PASS frame pipe, clock and bounded asset pool
+
+added 2 packages in 2s
+Installing dependencies...
+Switching to root user to install dependencies...
+Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [511 kB]
+Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [458 kB]
+Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.6 kB]
+Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1364 kB]
+Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [304 kB]
+Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [180 kB]
+Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1699 kB]
+Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [341 kB]
+Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [388 kB]
+Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1720 kB]
+Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [394 kB]
+Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+Get:19 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [5764 B]
+Get:20 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [12.6 kB]
+Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1069 kB]
+Get:22 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [221 kB]
+Get:23 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [46.3 kB]
+Get:24 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1216 kB]
+Get:25 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [244 kB]
+Get:26 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [76.3 kB]
+Get:27 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1566 kB]
+Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [361 kB]
+Fetched 12.6 MB in 1s (9998 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+libasound2t64 is already the newest version (1.2.11-1ubuntu0.3).
+libasound2t64 set to manually installed.
+libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+libatk-bridge2.0-0t64 set to manually installed.
+libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+libatk1.0-0t64 set to manually installed.
+libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+libatspi2.0-0t64 set to manually installed.
+libcairo2 is already the newest version (1.18.0-3build1).
+libcairo2 set to manually installed.
+libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+libcups2t64 set to manually installed.
+libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+libdbus-1-3 set to manually installed.
+libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+libdrm2 set to manually installed.
+libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.9).
+libglib2.0-0t64 set to manually installed.
+libnspr4 is already the newest version (2:4.35-1.1build1).
+libnspr4 set to manually installed.
+libnss3 is already the newest version (2:3.98-1ubuntu0.2).
+libnss3 set to manually installed.
+libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+libpango-1.0-0 set to manually installed.
+libx11-6 is already the newest version (2:1.8.7-1build1).
+libx11-6 set to manually installed.
+libxcb1 is already the newest version (1.15-1ubuntu2).
+libxcb1 set to manually installed.
+libxcomposite1 is already the newest version (1:0.4.5-1build3).
+libxcomposite1 set to manually installed.
+libxdamage1 is already the newest version (1:1.1.6-1build1).
+libxdamage1 set to manually installed.
+libxext6 is already the newest version (2:1.3.4-1build2).
+libxext6 set to manually installed.
+libxfixes3 is already the newest version (1:6.0.0-2build1).
+libxfixes3 set to manually installed.
+libxkbcommon0 is already the newest version (1.6.0-1build1).
+libxkbcommon0 set to manually installed.
+libxrandr2 is already the newest version (2:1.5.2-2build1).
+libxrandr2 set to manually installed.
+xvfb is already the newest version (2:21.1.12-1ubuntu1.8).
+fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+libfontconfig1 set to manually installed.
+libfreetype6 is already the newest version (2.13.2+dfsg-1ubuntu0.1).
+libfreetype6 set to manually installed.
+fonts-liberation is already the newest version (1:2.1.5-3).
+fonts-liberation set to manually installed.
+The following additional packages will be installed:
+  libgl1-mesa-dri libglx-mesa0 mesa-libgallium xfonts-encodings xfonts-utils
+Recommended packages:
+  fonts-ipafont-mincho fonts-tlwg-loma
+The following NEW packages will be installed:
+  fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+  fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+  xfonts-utils
+The following packages will be upgraded:
+  libgbm1 libgl1-mesa-dri libglx-mesa0 mesa-libgallium
+4 upgraded, 9 newly installed, 0 to remove and 21 not upgraded.
+Need to get 32.1 MB of archives.
+After this operation, 79.5 MB of additional disk space will be used.
+Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-ipafont-gothic all 00303-21ubuntu1 [3513 kB]
+Get:3 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 fonts-freefont-ttf all 20211204+svn4273-2 [5641 kB]
+Get:4 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-tlwg-loma-otf all 1:0.7.3-1 [107 kB]
+Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-unifont all 1:15.1.01-1build1 [2993 kB]
+Get:6 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8 [7472 kB]
+Get:7 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libgl1-mesa-dri amd64 25.2.8-0ubuntu0.24.04.4 [38.0 kB]
+Get:8 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libglx-mesa0 amd64 25.2.8-0ubuntu0.24.04.4 [110 kB]
+Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libgbm1 amd64 25.2.8-0ubuntu0.24.04.4 [34.2 kB]
+Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 mesa-libgallium amd64 25.2.8-0ubuntu0.24.04.4 [10.8 MB]
+Get:11 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2 [578 kB]
+Get:12 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
+Get:13 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
+Get:14 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
+Fetched 32.1 MB in 1s (25.6 MB/s)
+Selecting previously unselected package fonts-ipafont-gothic.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 202296 files and directories currently installed.)
+Preparing to unpack .../00-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
+Unpacking fonts-ipafont-gothic (00303-21ubuntu1) ...
+Selecting previously unselected package fonts-freefont-ttf.
+Preparing to unpack .../01-fonts-freefont-ttf_20211204+svn4273-2_all.deb ...
+Unpacking fonts-freefont-ttf (20211204+svn4273-2) ...
+Selecting previously unselected package fonts-tlwg-loma-otf.
+Preparing to unpack .../02-fonts-tlwg-loma-otf_1%3a0.7.3-1_all.deb ...
+Unpacking fonts-tlwg-loma-otf (1:0.7.3-1) ...
+Selecting previously unselected package fonts-unifont.
+Preparing to unpack .../03-fonts-unifont_1%3a15.1.01-1build1_all.deb ...
+Unpacking fonts-unifont (1:15.1.01-1build1) ...
+Selecting previously unselected package fonts-wqy-zenhei.
+Preparing to unpack .../04-fonts-wqy-zenhei_0.9.45-8_all.deb ...
+Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+Preparing to unpack .../05-libgl1-mesa-dri_25.2.8-0ubuntu0.24.04.4_amd64.deb ...
+Unpacking libgl1-mesa-dri:amd64 (25.2.8-0ubuntu0.24.04.4) over (25.2.8-0ubuntu0.24.04.2) ...
+Preparing to unpack .../06-libglx-mesa0_25.2.8-0ubuntu0.24.04.4_amd64.deb ...
+Unpacking libglx-mesa0:amd64 (25.2.8-0ubuntu0.24.04.4) over (25.2.8-0ubuntu0.24.04.2) ...
+Preparing to unpack .../07-libgbm1_25.2.8-0ubuntu0.24.04.4_amd64.deb ...
+Unpacking libgbm1:amd64 (25.2.8-0ubuntu0.24.04.4) over (25.2.8-0ubuntu0.24.04.2) ...
+Preparing to unpack .../08-mesa-libgallium_25.2.8-0ubuntu0.24.04.4_amd64.deb ...
+Unpacking mesa-libgallium:amd64 (25.2.8-0ubuntu0.24.04.4) over (25.2.8-0ubuntu0.24.04.2) ...
+Selecting previously unselected package xfonts-encodings.
+Preparing to unpack .../09-xfonts-encodings_1%3a1.0.5-0ubuntu2_all.deb ...
+Unpacking xfonts-encodings (1:1.0.5-0ubuntu2) ...
+Selecting previously unselected package xfonts-utils.
+Preparing to unpack .../10-xfonts-utils_1%3a7.7+6build3_amd64.deb ...
+Unpacking xfonts-utils (1:7.7+6build3) ...
+Selecting previously unselected package xfonts-cyrillic.
+Preparing to unpack .../11-xfonts-cyrillic_1%3a1.0.5+nmu1_all.deb ...
+Unpacking xfonts-cyrillic (1:1.0.5+nmu1) ...
+Selecting previously unselected package xfonts-scalable.
+Preparing to unpack .../12-xfonts-scalable_1%3a1.0.3-1.3_all.deb ...
+Unpacking xfonts-scalable (1:1.0.3-1.3) ...
+Setting up mesa-libgallium:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+Setting up libgbm1:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+Setting up libgl1-mesa-dri:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+Setting up fonts-wqy-zenhei (0.9.45-8) ...
+Setting up fonts-freefont-ttf (20211204+svn4273-2) ...
+Setting up fonts-tlwg-loma-otf (1:0.7.3-1) ...
+Setting up xfonts-encodings (1:1.0.5-0ubuntu2) ...
+Setting up fonts-ipafont-gothic (00303-21ubuntu1) ...
+update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+Setting up fonts-unifont (1:15.1.01-1build1) ...
+Setting up libglx-mesa0:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+Setting up xfonts-utils (1:7.7+6build3) ...
+Setting up xfonts-cyrillic (1:1.0.5+nmu1) ...
+Setting up xfonts-scalable (1:1.0.3-1.3) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Not building database; man-db/auto-update is not 'true'.
+Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+Downloading Chromium 134.0.6998.35 (playwright build v1161) from https://cdn.playwright.dev/dbazure/download/playwright/builds/chromium/1161/chromium-linux.zip
+|                                                                                |   0% of 164.9 MiB
+|■■■■■■■■                                                                        |  10% of 164.9 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 164.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 164.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 164.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 164.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 164.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 164.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 164.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 164.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 164.9 MiB
+Chromium 134.0.6998.35 (playwright build v1161) downloaded to /home/runner/.cache/ms-playwright/chromium-1161
+Downloading FFMPEG playwright build v1011 from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1011/ffmpeg-linux.zip
+|                                                                                |   0% of 2.3 MiB
+|■■■■■■■■                                                                        |  10% of 2.3 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 2.3 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.3 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.3 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.3 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.3 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.3 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.3 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.3 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.3 MiB
+FFMPEG playwright build v1011 downloaded to /home/runner/.cache/ms-playwright/ffmpeg-1011
+Downloading Chromium Headless Shell 134.0.6998.35 (playwright build v1161) from https://cdn.playwright.dev/dbazure/download/playwright/builds/chromium/1161/chromium-headless-shell-linux.zip
+|                                                                                |   0% of 100.9 MiB
+|■■■■■■■■                                                                        |  10% of 100.9 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 100.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 100.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 100.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 100.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 100.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 100.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 100.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 100.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 100.9 MiB
+Chromium Headless Shell 134.0.6998.35 (playwright build v1161) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1161
+PASS extracted scene import and lazy URL textures: main
+pixel compare {"diff":0,"total":466944,"cross":{"n":0,"mx":0,"first":[]},"self":{"n":0,"mx":0,"first":[]}}
+PASS packed vs file-indexed rendering: cross-diff 0 / renderer self-noise 0 of 466944
+PASS background pause stops scheduling
+PASS resume restarts animated scene
+ALL PASS fix516
+tagged false new wall wmur6dcsn [["wmur6dcsn","wmur6dcsn","night|rain"],["wmur6dcsn","wmur6dcsn","night|cloud"],["wmur6dcsn","wmur6dcsn","night|rain"],["wmur6dcsn","wmur6dcsn","night|rain"],["wmur6dcsn","wmur6dcsn","night|cloud"],["wmur6dcsn","wmur6dcsn","night|rain"],["wmur6dcsn","wmur6dcsn","night|cloud"],["wmur6dcsn","wmur6dcsn","night|sun"],["wmur6dcsn","wmur6dcsn","night|rain"],["wmur6dcsn","wmur6dcsn","night|cloud"],["wmur6dcsn","wmur6dcsn","night|rain"],["wmur6dcsn","wmur6dcsn","night|rain"]]
+tagged false cur after import wmur6dcsn
+tagged true new wall wmur6e4o0 [["wmur6e4o0","wmur6e4o0","night|rain"],["wmur6e4o0","wmur6e4o0","night|cloud"],["wmur6e4o0","wmur6e4o0","night|rain"],["wmur6e4o0","wmur6e4o0","night|rain"],["wmur6e4o0","wmur6e4o0","night|cloud"],["wmur6e4o0","wmur6e4o0","night|rain"],["wmur6e4o0","wmur6e4o0","night|cloud"],["wmur6e4o0","wmur6e4o0","night|sun"],["wmur6e4o0","wmur6e4o0","night|rain"],["wmur6e4o0","wmur6e4o0","night|cloud"],["wmur6e4o0","wmur6e4o0","night|rain"],["wmur6e4o0","wmur6e4o0","night|rain"]]
+tagged true cur after import wmur6e4o0
+PASS [减少动态] spark 起始为关
+PASS [减少动态] spark 开启后：aria-checked=true、滑块在右端、没有残留动画  {"x":20,"aria":"true","knob":"rgb(255, 255, 255)","color":"rgb(10, 139, 199)","border":"rgb(10, 139, 199)","fill":"circle(46px at 17px 17px)","anims":0}
+PASS [减少动态] spark 开启后滑块变白、轨道填主题色  {"x":20,"aria":"true","knob":"rgb(255, 255, 255)","color":"rgb(10, 139, 199)","border":"rgb(10, 139, 199)","fill":"circle(46px at 17px 17px)","anims":0}
+PASS [减少动态] spark 减少动态：没有任何位移/洇色/光晕动画  [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+PASS [减少动态] spark 关闭后回到左端、轨道收回、滑块灰蓝  {"aria":"false","x":0,"fill":"circle(0px at 17px 17px)","knob":"rgb(129, 151, 176)"}
+PASS [减少动态] 无页面错误  []
+PASS [减少动态] 测试：成功背景泛绿（35%）
+PASS [减少动态] 测试：成功后 2.2s 恢复空闲
+PASS [减少动态] 刷新：点击后进入动画/请求中  {"run":false,"an":0}
+PASS [减少动态] 刷新：进行中重复点击被忽略
+PASS [减少动态] 刷新：结束后没有残留动画
+PASS [减少动态] 无页面错误  []
+PASS 设置页返回手势 → 首页  "today"
+PASS 简洁：聊天时壁纸停帧
+PASS 关掉聊天回首页：壁纸马上又动起来
+PASS 磨砂玻璃：聊天窗半透明 + 共用模糊图露在玻璃下面（不再 backdrop-filter），后面的壁纸在动  {"cls":true,"shared":true,"bf":"none","run":true}
+PASS 无页面错误  []
+ALL PASS 20
+PASS ③ 点暂停：变回播放三角，音频真的停了  {"st":"idle","on":false,"msg":"","label":"播放"}
+PASS ③ 放完：回到播放键、进度归零  {"st":"idle","on":false,"msg":"","label":"播放"}
+PASS ③ 文件坏了 / 格式不支持：马上报错（不用等点播放）  {"st":"err","on":false,"msg":"这个格式这台手机放不了，点播放再试一次","label":"播放"}
+PASS ③ 再点：重新取文件，能播了  {"st":"play","on":true,"msg":"","label":"暂停"}
+PASS ③ 无页面错误  []
+ALL PASS 68
+PASS [减少动态] 再点收起
+PASS [减少动态] 供应商页有「测试连接」长按钮（5.16.1 组件）
+PASS [减少动态] 面板打开，选项都显示
+PASS [减少动态] 关掉后面板没了，聊天还在
+PASS [减少动态] 无页面错误  []
+ALL PASS 66

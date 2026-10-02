@@ -1,0 +1,7 @@
+Starting: Intent { cmp=com.cloudweather.xiaoyu/.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: com.cloudweather.xiaoyu/.MainActivity
+TotalTime: 4758
+WaitTime: 4768
+Complete

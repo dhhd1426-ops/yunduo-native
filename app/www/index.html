@@ -602,8 +602,6 @@
   .now .label { font-size: 13px; color: var(--muted); }
   /* 天气特效：只在当前天气卡片里 */
   .top-actions { display: flex; align-items: center; gap: 4px; }
-  .spin svg { animation: spin 1s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
   .txt-in {
     height: 44px; padding: 0 12px; min-width: 0; width: 100%;
     border-radius: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--text);
@@ -1869,8 +1867,8 @@
   .n-tags::-webkit-scrollbar { display: none; }
   .p-warm { --pp: #b98a5a; } .p-blue { --pp: #7f95c4; } .p-rose { --pp: #c47f93; } .p-sage { --pp: #7fa58a; }
   .n-ck { display: flex; align-items: flex-start; gap: 7px; width: 100%; border: 0; background: none; padding: 1px 0; text-align: left; font: inherit; color: inherit; }
-  .n-ck i { flex: none; width: 15px; height: 15px; margin-top: 4px; border-radius: 4px; border: 1.5px solid color-mix(in srgb, var(--muted) 80%, transparent); display: flex; align-items: center; justify-content: center; color: var(--on-accent, #fff); }
-  .n-ck.y i { background: var(--accent); border-color: var(--accent); } .n-ck.y span { text-decoration: line-through; opacity: .6; }
+  .n-ck i { flex: none; display: flex; margin-top: 2px; color: color-mix(in srgb, var(--muted) 85%, transparent); transition: color .3s; }
+  .n-ck.y i { color: var(--accent); } .n-ck span { transition: opacity .34s; } .n-ck.y span { opacity: .55; }
   .n-li { position: relative; padding-left: 12px; } .n-li::before { content: ""; position: absolute; left: 2px; top: .8em; width: 4px; height: 4px; border-radius: 2px; background: currentColor; opacity: .6; }
   .note-fab { position: fixed; right: 22px; bottom: calc(92px + var(--sab, env(safe-area-inset-bottom, 0px))); z-index: 12; height: 56px; border-radius: 28px; display: flex; align-items: center; gap: 8px; padding: 0 20px 0 13px;
     border: 1px solid #d9cfbf; background: #f1ece3; color: #2b241d; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 15.5px; font-weight: 600; letter-spacing: .08em;
@@ -1904,7 +1902,7 @@
   .ne-body::placeholder { color: color-mix(in srgb, var(--muted) 60%, transparent); }
   .ne-body.read p { margin: 0 0 4px; word-break: break-word; } .ne-body.read .n-gap { height: 10px; margin: 0; }
   .ne-body.read h4 { margin: 14px 0 2px; font-family: "Amor Serif SC", "Noto Serif CJK SC", serif; font-size: 17px; }
-  .ne-body.read .n-ck { font-size: 15.5px; line-height: 1.9; } .ne-body.read .n-ck i { width: 17px; height: 17px; margin-top: 6px; border-radius: 5px; }
+  .ne-body.read .n-ck { font-size: 15.5px; line-height: 1.9; } .ne-body.read .n-ck i { margin-top: 5px; } .ne-body.read .n-ck .ck-ic { width: 20px; height: 20px; }
   .ne-body.read hr { border: 0; border-top: 1px dashed var(--line); margin: 14px 0; }
   .n-act { display: flex; align-items: center; gap: 12px; width: 100%; border: 0; background: none; padding: 12px 4px; border-bottom: 1px solid var(--line); text-align: left; font: inherit; color: var(--text); }
   .n-act .ico { flex: none; width: 36px; height: 36px; border-radius: 11px; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--surface) 70%, var(--text) 7%); font-size: 16px; }
@@ -1914,8 +1912,8 @@
   .n-out { font-size: 14px; line-height: 1.8; white-space: pre-wrap; color: var(--text); max-height: 46vh; overflow-y: auto; }
   .n-err { color: var(--muted); font-size: 13.5px; margin: 0; }
   .n-todo { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 2px 10px; width: 100%; border: 0; background: none; padding: 8px 0; text-align: left; font: inherit; color: var(--text); font-size: 14px; }
-  .n-todo i { grid-row: 1 / 3; width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid var(--accent); background: var(--accent); color: var(--on-accent, #fff); display: flex; align-items: center; justify-content: center; margin-top: 1px; }
-  .n-todo small { color: var(--muted); font-size: 12px; } .n-todo.off i { background: none; border-color: var(--line); } .n-todo.off span { opacity: .5; }
+  .n-todo i { grid-row: 1 / 3; display: flex; margin-top: 1px; color: var(--accent); transition: color .3s; }
+  .n-todo small { color: var(--muted); font-size: 12px; } .n-todo.off i { color: color-mix(in srgb, var(--muted) 85%, transparent); } .n-todo span { transition: opacity .34s; } .n-todo.off span { opacity: .5; }
   .n-btns { display: flex; gap: 8px; margin-top: 12px; } .n-btns .btn { flex: 1; justify-content: center; }
   .n-chip { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; margin: 2px 0 10px; padding: 8px 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); font: inherit; font-size: 13px; color: var(--muted); }
   .n-chip span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .n-chip b { color: var(--text); font-weight: 500; }
@@ -2201,7 +2199,6 @@
   .wl-nm { display: flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 13.5px; }
   .wl-nm span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .wl-nm .icon-btn { width: 30px; height: 30px; }
-  .spin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: spin 0.8s linear infinite; display: inline-block; }
   @media (min-width: 720px) {
     .w-first { padding-left: 40px; padding-right: 40px; padding-bottom: calc(var(--sab, env(safe-area-inset-bottom, 0px)) + 120px); }
     .w-hint { bottom: 96px; }
@@ -2575,7 +2572,7 @@
   /* ② ＋ 面板：从 ＋ 的位置用裁切长出来（不再从底下滑上来） */
   .pop-wrap.mo .pop { animation: none !important; }
   .pop-wrap.mo .pop-scrim { animation: none !important; }
-  .pl-ghost { position: absolute; display: grid; place-items: center; color: var(--muted); pointer-events: none; z-index: 3; }
+  .pl-ghost { position: absolute; display: grid; place-items: center; color: var(--muted); pointer-events: none; z-index: 3; transform-origin: 50% 50%; }
   /* ③ 提交按钮：长按钮 → 圆形加载 → 勾 / 叉 → 结果条；容器始终居中 */
   .mb-slot { display: flex; justify-content: center; margin: 4px 0 2px; }
   .mb { position: relative; height: 48px; width: 100%; max-width: 470px; border: 0; border-radius: 24px; padding: 0; overflow: hidden; font: inherit; font-size: 15px;
@@ -2602,12 +2599,16 @@
   @media (prefers-reduced-motion: reduce) { .mb[data-st="load"] .mb-ring .pg { animation-duration: 2.4s; } }
   /* ④ 菜单 ⇄ 叉：中间那条缩短淡出，上下两条各转 45° */
   .mx { position: relative; display: block; width: 18px; height: 12px; }
-  .mx i { position: absolute; left: 0; right: 0; height: 1.7px; border-radius: 1px; background: currentColor; transition: transform .38s cubic-bezier(.2,.9,.22,1), opacity .22s ease, right .3s ease; }
+  /* 5.15 ⑦ 两段：上下两条先靠到中间（i 移动），再各转 45°（::after 旋转）；收回时反过来，先转回再分开 */
+  .mx i { position: absolute; left: 0; right: 0; height: 1.7px; border-radius: 1px; transition: transform .15s cubic-bezier(.4, 0, .2, 1) .14s, opacity .14s ease, right .14s ease; }
+  .mx i::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: currentColor; transition: transform .16s cubic-bezier(.3, .7, .2, 1) 0s; }
   .mx i:nth-child(1) { top: 0; } .mx i:nth-child(2) { top: 5.15px; right: 6px; } .mx i:nth-child(3) { top: 10.3px; }
-  .mx.x i:nth-child(1) { transform: translateY(5.15px) rotate(45deg); }
+  .mx.x i { transition: transform .15s cubic-bezier(.4, 0, .2, 1) 0s, opacity .14s ease, right .14s ease; }
+  .mx.x i::after { transition: transform .16s cubic-bezier(.3, .7, .2, 1) .14s; }
+  .mx.x i:nth-child(1) { transform: translateY(5.15px); } .mx.x i:nth-child(3) { transform: translateY(-5.15px); }
+  .mx.x i:nth-child(1)::after { transform: rotate(45deg); } .mx.x i:nth-child(3)::after { transform: rotate(-45deg); }
   .mx.x i:nth-child(2) { right: 18px; opacity: 0; }
-  .mx.x i:nth-child(3) { transform: translateY(-5.15px) rotate(-45deg); }
-  @media (prefers-reduced-motion: reduce) { .mx i { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .mx i, .mx i::after { transition: none; } }
   .w-menu .mx { color: inherit; }
   .pp-ic path { transition: d .34s cubic-bezier(.4,0,.2,1); }
   @media (prefers-reduced-motion: reduce) { .pp-ic path { transition: none; } }
@@ -2657,6 +2658,81 @@
   @media (min-width: 720px) { .nb-rows.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   .nb-row, .nb-th, .nb-rt { transform-origin: 0 0; }
   body.nb-d { --n-row-g: #141416; } body.nb-l { --n-row-g: var(--n-row); }
+  /* ===================== 5.15 图标微动效 ===================== */
+  /* ① 空心圆 ⇄ 对勾：一条路径（圆 → 过渡线 → 勾），只露出其中一段；切换时露出的那段沿路径滑过去，圆的轮廓「流进」勾里 */
+  .ck-ic { flex: none; overflow: visible; }
+  .ck-ic path { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 56.55 140; stroke-dashoffset: 0; transition: stroke-dasharray .34s cubic-bezier(.65, 0, .35, 1), stroke-dashoffset .34s cubic-bezier(.65, 0, .35, 1), stroke-width .34s; }
+  .ck-ic.on path { stroke-dasharray: 13.09 140; stroke-dashoffset: -61.08; stroke-width: 2.3; }
+  /* 完成的文字：一道线从左划到右（每一行都划），同时变淡 */
+  .n-ck u { text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 58% / 0% 1.2px no-repeat; -webkit-box-decoration-break: clone; box-decoration-break: clone; transition: background-size .34s cubic-bezier(.65, 0, .35, 1); }
+  .n-ck.y u { background-size: 100% 1.2px; }
+  .ne-prog { display: inline-flex; align-items: center; gap: 6px; font-variant-numeric: tabular-nums; }
+  .ne-prog i { position: relative; width: 44px; height: 4px; border-radius: 2px; background: color-mix(in srgb, var(--muted) 25%, transparent); overflow: hidden; }
+  .ne-prog i::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--accent); transform-origin: 0 50%; transform: scaleX(var(--p, 0)); transition: transform .34s cubic-bezier(.65, 0, .35, 1); }
+  /* ② 聊天 ＋ 面板：＋ 跟着面板的角转 45° 变成面板左上角的 ✕；关时原路转回 ＋ */
+  .pop-head .x-hide { opacity: 0; }
+  /* ③ 播放 ⇄ 暂停（文件里的音频）：两块四边形的顶点插值；缓冲时外面一圈加载环 */
+  .ap { display: flex; align-items: center; gap: 12px; width: min(100%, 360px); }
+  .ap-b { position: relative; flex: none; width: 52px; height: 52px; border: 0; border-radius: 50%; padding: 0; background: var(--ink); color: var(--surface); display: grid; place-items: center; }
+  .ap-b:active { transform: scale(.94); }
+  .ap-b .ldr { position: absolute; inset: -5px; width: 62px; height: 62px; color: var(--ink); stroke-width: .9; opacity: 0; transition: opacity .2s; }
+  .ap[data-st="load"] .ap-b .ldr { opacity: 1; }
+  .ap-pp path { transition: d .3s cubic-bezier(.4, 0, .2, 1); }
+  .ap-pp .a { d: path("M8 5.5L13.25 8.75L13.25 15.25L8 18.5Z"); } .ap-pp .b { d: path("M13.25 8.75L18.5 12L18.5 12L13.25 15.25Z"); }
+  .ap-pp.on .a { d: path("M6.5 5.5L10.5 5.5L10.5 18.5L6.5 18.5Z"); } .ap-pp.on .b { d: path("M13.5 5.5L17.5 5.5L17.5 18.5L13.5 18.5Z"); }
+  .ap-tl { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .ap-tl input { width: 100%; margin: 0; }
+  .ap-t { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .ap-msg { margin: 0; min-height: 1.4em; font-size: 13px; color: var(--muted); text-align: center; }
+  .ap[data-st="err"] + .ap-msg { color: var(--danger, #c0504a); }
+  /* ④ 太阳 ⇄ 月亮：中间的圆（12 段三次曲线）连续变成弯月，光芒缩回、转走 */
+  .lbl .thm-ic { vertical-align: -5px; margin-left: 6px; }
+  .thm-ic { overflow: visible; }
+  .thm-ic .c { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; transition: d .46s cubic-bezier(.6, 0, .25, 1), transform .46s cubic-bezier(.6, 0, .25, 1); transform-origin: 12px 12px;
+    d: path("M11.55 7.42C10.80 7.52 9.87 7.85 9.23 8.33C8.59 8.81 8.02 9.57 7.72 10.31C7.43 11.05 7.33 12.00 7.47 12.78C7.60 13.57 8.01 14.43 8.54 15.03C9.06 15.63 9.86 16.15 10.62 16.39C11.39 16.63 12.34 16.66 13.11 16.46C13.89 16.27 14.71 15.80 15.27 15.23C15.83 14.66 16.28 13.78 16.48 13.05C16.68 12.33 16.63 11.57 16.46 10.89C16.29 10.21 15.92 9.50 15.46 8.97C15.00 8.44 14.34 7.98 13.69 7.72C13.04 7.46 12.29 7.32 11.55 7.42Z"); }
+  .thm-ic.on .c { d: path("M11.25 4.44C11.25 4.44 8.39 5.18 7.32 6.01C6.25 6.84 5.30 8.16 4.84 9.44C4.39 10.72 4.29 12.34 4.58 13.67C4.88 14.99 5.67 16.42 6.63 17.37C7.58 18.33 9.01 19.12 10.33 19.42C11.66 19.71 13.28 19.61 14.56 19.16C15.84 18.70 17.16 17.75 17.99 16.68C18.82 15.61 19.56 12.75 19.56 12.75C19.56 12.75 17.050 13.30 15.91 13.07C14.76 12.83 13.50 12.15 12.67 11.33C11.85 10.50 11.17 9.24 10.93 8.09C10.70 6.95 11.25 4.44 11.25 4.44Z"); transform: rotate(-12deg); }
+  .thm-ic .r { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; transform-origin: 12px 12px; transition: transform .4s cubic-bezier(.6, 0, .25, 1), opacity .3s; }
+  .thm-ic.on .r { transform: rotate(-60deg) scale(.45); opacity: 0; }
+  /* 只给设置页上看得见的块（卡片、按钮、分段、说明文字）加颜色过渡。实测（CPU 降速 4 倍）：给所有元素加，最长一帧 140ms；
+     body / .view 的文字颜色若也逐帧过渡，所有子元素每帧都要重算样式（6 帧超 34ms）。所以它俩的文字颜色在过渡一半时一次换过去（那时底色正好居中，两种字色都看得清），
+     其余照常过渡——最长一帧回到 30–40ms，和旧做法（不过渡、整页重画）一个水平 */
+  html.thm-x .panel, html.thm-x .seg, html.thm-x .seg-ind, html.thm-x .entry, html.thm-x .btn, html.thm-x .txt-in, html.thm-x .field input, html.thm-x .lbl, html.thm-x .hint, html.thm-x .note, html.thm-x .set-x {
+    transition: background-color .42s ease, color .42s ease, border-color .42s ease !important; }
+  html.thm-x body, html.thm-x #main .view { transition: background-color .42s ease, color 0s linear .21s !important; }
+  /* ⑤ 纸飞机：飞出去的那只挂在 body 上；按钮在原位置变成「转圈 → 圆形对勾 + 已发送」 */
+  .plane-fly { position: fixed; z-index: 40; pointer-events: none; display: grid; place-items: center; color: var(--accent); }
+  .ps-b { min-width: 150px; justify-content: center; }
+  .ps-b .ldr { margin: -2px 0; }
+  .ps-b[data-st="ok"] { color: var(--ok, #3f8f62); }
+  .ps-b[data-st="ok"] .ok-c circle { stroke-dasharray: 57; stroke-dashoffset: 57; animation: okDraw .36s cubic-bezier(.65, 0, .35, 1) forwards; }
+  .ps-b[data-st="ok"] .ok-c path { stroke-dasharray: 14; stroke-dashoffset: 14; animation: okDraw .26s .26s cubic-bezier(.65, 0, .35, 1) forwards; }
+  @keyframes okDraw { to { stroke-dashoffset: 0; } }
+  /* ⑥ 清空后的托盘：晃一下，小音符从上面浮出来再落定；只在刚清空时播一次，之后静止 */
+  .etray { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; padding: 26px 16px 22px; color: var(--muted); }
+  .etray svg { width: 64px; height: 64px; overflow: visible; color: color-mix(in srgb, var(--muted) 85%, transparent); }
+  .etray svg * { vector-effect: non-scaling-stroke; }
+  .etray b { color: var(--text); font-size: 15px; font-weight: 600; margin-top: 4px; }
+  .etray p { margin: 0 0 6px; font-size: 13px; line-height: 1.6; max-width: 280px; }
+  .etray .tray { transform-box: fill-box; transform-origin: 50% 100%; }
+  .etray .nt { transform-box: fill-box; transform-origin: 50% 100%; color: var(--accent); }
+  .etray.play .tray { animation: trayWob .46s cubic-bezier(.3, .7, .3, 1) both; animation-delay: var(--el, 0ms); }
+  .etray.play .nt { animation: noteUp .86s cubic-bezier(.3, .7, .3, 1) both; animation-delay: var(--el, 0ms); }
+  @keyframes trayWob { 0% { transform: none; } 22% { transform: rotate(-7deg); } 50% { transform: rotate(5deg); } 76% { transform: rotate(-2.5deg); } 100% { transform: none; } }
+  @keyframes noteUp { 0%, 30% { transform: translateY(9px) scale(.5); opacity: 0; } 62% { transform: translateY(-4px) rotate(-8deg); opacity: 1; } 82% { transform: translateY(1px) rotate(3deg); } 100% { transform: none; opacity: 1; } }
+  /* ⑧ 加载环：一段高亮弧沿圆周转，0.9 秒一圈；结束后在原位置闪一下结果 */
+  .ldr { flex: none; fill: none; stroke-width: 2; stroke-linecap: round; }
+  .ldr .t { stroke: currentColor; opacity: .18; }
+  .ldr .h { stroke: currentColor; stroke-dasharray: 15 60; transform-origin: 12px 12px; animation: ldrSpin .9s linear infinite; }
+  @keyframes ldrSpin { to { transform: rotate(360deg); } }
+  .ld-res { display: inline-grid; place-items: center; animation: ldPop .32s cubic-bezier(.3, 1.4, .5, 1) both; }
+  .ld-res.ok { color: var(--ok, #3f8f62); } .ld-res.err { color: var(--danger, #c0504a); }
+  @keyframes ldPop { from { transform: scale(.4); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .ck-ic path, .n-ck u, .n-todo u, .ne-prog i::after, .ap-pp path, .thm-ic .c, .thm-ic .r { transition: none; }
+    .etray.play .tray, .etray.play .nt, .ld-res, .ps-b[data-st="ok"] .ok-c circle, .ps-b[data-st="ok"] .ok-c path { animation: none; stroke-dashoffset: 0; }
+    .ldr .h { animation-duration: 2.4s; }
+  }
 </style>
 <script src="fonts/script-glyphs.js"></script>
 <script src="fonts/pinyin.js"></script>
@@ -3625,7 +3701,7 @@
           '<input id="name-en" type="text" maxlength="30" value="' + esc(state.nameEn || '') + '" placeholder="' + esc(toPinyin(state.name)) + '" autocomplete="off" spellcheck="false">' +
           '<p class="hint">自动生成的是“' + esc(toPinyin(state.name)) + '”。多音字读错了、或者想用英文名，可以在这里改，留空就用自动的。</p></div>' : '') +
         '<div class="field"><span class="lbl">温度单位</span>' + seg('unit', [['C', '摄氏 °C'], ['F', '华氏 °F']]) + '</div>' +
-        '<div class="field"><span class="lbl">外观</span>' + seg('theme', [['system', '跟随系统'], ['light', '浅色'], ['dark', '深色']]) + '</div>' +
+        '<div class="field"><span class="lbl">外观' + Ico.theme(noteDark()) + '</span>' + seg('theme', [['system', '跟随系统'], ['light', '浅色'], ['dark', '深色']]) + '</div>' +
       '</div>' +
       '<div class="panel"><h2>主题 <em>Theme</em></h2>' +
         '<button type="button" class="entry" data-ui="wall"><span class="ds-logo">' + icon('spark', 20) + '</span>' +
@@ -3738,7 +3814,7 @@
         MB.html({ key: 'ptest', attr: 'data-ui="test"', icon: icon('plug', 18), label: '测试连接', st: b === 'test' ? 'load' : st && st.from === 'test' ? st.type : 'idle', res: st && st.type === 'ok' ? '连接成功 · 再测一次' : '连接失败 · 点我重试' }) +
         '<div class="ds-foot">' +
           '<span class="grow"></span>' +
-          (pv.balanceKind ? '<button type="button" class="icon-btn' + (b === 'balance' ? ' spin' : '') + '" data-ui="balance" aria-label="刷新余额"' + (b ? ' disabled' : '') + '>' + icon('refresh', 20) + '</button>' : '') +
+          (pv.balanceKind ? '<button type="button" class="icon-btn" data-ui="balance" aria-label="刷新余额"' + Ico.ldAttr('bal', st && st.type === 'err' ? 'err' : 'ok') + (b ? ' disabled' : '') + '>' + (b === 'balance' ? Ico.ring(20, '正在查询余额') : icon('refresh', 20)) + '</button>' : '') +
           '<button type="button" class="btn primary" data-ui="save">保存</button>' +
         '</div>' +
         (st ? '<p class="ds-status ' + st.type + '" style="margin-top:10px">' + esc(st.text) + '</p>' : '') +
@@ -3758,7 +3834,7 @@
                 modelTags(m).map(function (t) { return '<span class="pill">' + t + '</span>'; }).join('') +
               '</span></span></button>' +
             '<span style="display:flex;gap:2px">' +
-              '<button type="button" class="icon-btn' + (ui.testing === m ? ' spin' : '') + '" data-dstest="' + esc(m) + '" aria-label="测试 ' + esc(m) + '"' + (ui.testing ? ' disabled' : '') + '>' + icon(ui.testing === m ? 'refresh' : 'plug', 20) + '</button>' +
+              '<button type="button" class="icon-btn" data-dstest="' + esc(m) + '" aria-label="测试 ' + esc(m) + '"' + Ico.ldAttr('mt:' + m, ui.status && ui.status.type === 'err' ? 'err' : 'ok') + (ui.testing ? ' disabled' : '') + '>' + (ui.testing === m ? Ico.ring(20, '正在测试') : icon('plug', 20)) + '</button>' +
               '<button type="button" class="icon-btn" data-dsdel="' + esc(m) + '" aria-label="移除 ' + esc(m) + '">' + icon('x', 18) + '</button>' +
             '</span></div>';
         }).join('') : '<div class="panel"><p class="empty" style="padding:8px 0">还没有模型。先在“配置”里填好 API Key，再点下面的“获取模型”，或者手动添加。</p></div>') +
@@ -4127,7 +4203,14 @@
     var inf = nInfo();
     return (inf && inf.enabled === false ? '系统通知没打开 · ' : '') + n + ' 类提醒已开' + (inf && inf.next ? ' · 下一条 ' + clock(inf.next) : '');
   }
-  var ntui = { test: '' };
+  var ntui = { test: '', send: '' };
+  // 5.15 ⑤「发一条试试」：纸飞机飞出 → 转圈 → 圆形对勾 + 结果；没发出去就回到按钮、写着再试一次
+  function ntSendFace() {
+    var s = ntui.send;
+    if (s === 'busy') return Ico.ring(18, '正在发送') + '发送中…';
+    if (s === 'ok') return '<svg class="ok-c" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" transform="rotate(-90 12 12)"/><path d="M8 12.5l2.7 2.7L16 9.6"/></svg>' + esc(ntui.test);
+    return Ico.plane(18) + (s === 'err' ? '没发出去 · 再试一次' : '发一条试试');
+  }
   function notifyPage() {
     var an = asst.name || 'Amor', ok = nativeOk(), inf = ok ? nInfo() : null;
     var html = '<section class="view">' + subHead('back-settings', '通知') +
@@ -4145,7 +4228,7 @@
           '<p class="hint" style="margin:6px 0 4px">小米“一键清理”会把 App 彻底关掉，排好的提醒也会被清空：在最近任务里<b>长按云朵天气的卡片 → 点“锁定”</b>（卡片上出现小锁），清理时就不会清掉它。</p>' : '') +
         (inf.plain ? '<p class="hint" style="margin:6px 0 4px">这台手机显示不了“信笺”样式的通知，已自动改用系统样式。</p>' : '') +
         '<div class="nt-next"><span>' + (inf.next ? '下一条提醒 ' + agoTextFuture(inf.next) + ' · 已排好 ' + inf.planned + ' 条' : '还没有排好的提醒') + (drank ? ' · 今天喝了 ' + drank + ' 杯水 💧' : '') + '</span>' +
-          '<button type="button" class="btn" data-nttest="1">' + icon('bell', 18) + (ntui.test || '发一条试试') + '</button></div>' +
+          '<button type="button" class="btn ps-b" data-nttest="1" data-st="' + (ntui.send || 'idle') + '"' + (ntui.send === 'busy' ? ' aria-busy="true"' : '') + ' aria-live="polite">' + ntSendFace() + '</button></div>' +
       '</div>';
     }
     var dis = ok ? '' : ' mem-panel off';
@@ -4251,6 +4334,7 @@
         (mem.on ? sw('auto', mem.auto, '聊天时自动记住新的事', 'data-msw') +
           '<p class="hint" style="margin:0 0 10px">打开后，' + esc(an) + ' 会在你说到自己的事、或说“记住…”时，在后台整理出要记的内容（会多用一点模型额度）。聊天里出现“记忆已更新”就是她记下了。</p>' : '') +
       '</div>';
+    if (!mem.items.length) html += '<div class="panel">' + Ico.empty('mem', '记忆是空的', esc(an) + ' 现在不记得关于你的事。聊天时她会慢慢重新记住，你也可以自己写一条。', '<button type="button" class="btn" data-memfocus="1">' + icon('plus', 18) + '自己写一条</button>') + '</div>';
     MEM_KINDS.forEach(function (k) {
       var list = mem.items.filter(function (x) { return x.kind === k.id; }).slice().reverse();
       var shown = mui.open[k.id] ? list : list.slice(0, 6);
@@ -4311,7 +4395,7 @@
             (function () { var vo = (c.voices || []).filter(function (x) { return x.id === c.voice; })[0];
               return vo && vo.raw ? '<details class="vtrace"><summary>音色原始信息（出问题时截图给开发者）</summary><pre>' + esc(JSON.stringify(vo.raw, null, 1)) + '</pre></details>' : ''; })() +
           '</div>' +
-          '<div class="ds-actions"><button type="button" class="btn' + (vui.busy === 'voices' ? ' spin-ic' : '') + '" data-vui="voices"' + (vui.busy ? ' disabled' : '') + '>' + icon('refresh', 18) + (vui.busy === 'voices' ? '获取中…' : '获取音色') + '</button></div>' +
+          '<div class="ds-actions"><button type="button" class="btn" data-vui="voices"' + Ico.ldAttr('voices', vui.vstatus && vui.vstatus.type === 'err' ? 'err' : 'ok') + (vui.busy ? ' disabled' : '') + '>' + (vui.busy === 'voices' ? Ico.ring(18, '正在获取音色') : icon('refresh', 18)) + (vui.busy === 'voices' ? '获取中…' : '获取音色') + '</button></div>' +
           (vs ? '<p class="ds-status ' + vs.type + '" style="margin:0 0 10px">' + esc(vs.text) + '</p>' : '') +
           (vs && vs.trace && vs.trace.length ? '<details class="vtrace" open><summary>请求记录（截图发给开发者）</summary><ol>' + vs.trace.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ol></details>' : '')
         : '<p class="empty" style="padding:4px 0 12px">先在上面的“语音 API”里填好 API Key 和模型。</p>') +
@@ -4526,6 +4610,21 @@
     else root.setAttribute('data-theme', state.theme);
   }
 
+  // 5.15 ④ 换明暗：不整页重画——只换 data-theme、按钮的选中态和太阳 / 月亮；
+  // 页面上的颜色在 0.42 秒里一起过渡过去（同一批节点，不闪白、不闪黑），过渡中照样能点、能反悔
+  var thmT = 0;
+  function setTheme(v, btn) {
+    if (state.theme === v) return;
+    state.theme = v; save();
+    var root = document.documentElement, seg = btn && btn.closest('.seg');
+    if (!Mo.calm()) { root.classList.add('thm-x'); clearTimeout(thmT); thmT = setTimeout(function () { root.classList.remove('thm-x'); }, 460); }
+    applyTheme();
+    if (!seg) { render(); return; }
+    Array.prototype.forEach.call(seg.querySelectorAll('[data-set="theme"]'), function (x) { x.setAttribute('aria-pressed', x.getAttribute('data-val') === v); });
+    SegInd.sync();
+    var dk = noteDark(), ic = document.querySelector('.thm-ic'); Ico.keep('thm', dk); if (ic) ic.classList.toggle('on', dk);
+  }
+
   var renderAnim = '', heroEverShown = false;
   function render(opts) {
     opts = opts || {};
@@ -4557,12 +4656,12 @@
     if (typeof Dock !== 'undefined' && Dock) Dock.update();
     if (typeof Wall !== 'undefined') Wall.sync();
     document.body.classList.toggle('tab-wx', tab === 'forecast'); document.body.classList.toggle('tab-plan', tab === 'plan'); document.body.classList.toggle('tab-set', tab === 'settings' && !state.sub);
-    NbSx.after(); MB.after(); SegInd.sync(); Circ.place();
+    NbSx.after(); MB.after(); SegInd.sync(); Circ.place(); Ico.after();
     var v = view(state.current);
     $pill.innerHTML = icon('pin', 16) + esc(META[state.current].zh) + (v ? ' ' + deg(v.temp) + '°' : '');
     var rb = document.getElementById('refresh-btn');
-    rb.innerHTML = icon('refresh', 20);
-    rb.className = 'icon-btn' + (refreshing ? ' spin' : '');
+    rb.innerHTML = refreshing ? Ico.ring(20, '正在刷新天气') : icon('refresh', 20);
+    rb.className = 'icon-btn';
     if (chat.open && !chat.busy && document.activeElement && ['chat-in', 'conv-q', 'sd-q', 'sd-rn', 'sd-pn', 'sd-pd'].indexOf(document.activeElement.id) < 0 && !chat.smenu && !chat.ssheet) renderSheet();
     if (opts.top) $main.scrollTop = 0;
     if (Fluid) Fluid.ranges();
@@ -6079,7 +6178,7 @@
           (on ? '<span class="wl-badge">正在用</span>' : '') + '<span class="wl-kind">' + (w.builtin ? '自带 · ' : '') + (w.kind === 'scene' ? '动态' : w.kind === 'video' ? '视频' : '图片') + '</span></button>' +
           '<div class="wl-nm"><span>' + esc(w.name) + '</span></div></div>';
       }).join('') +
-        '<div class="wl-card"><button type="button" class="wl-th wl-new" data-wimport="1"' + (wallui.busy ? ' disabled' : '') + ' aria-label="导入壁纸">' + (wallui.busy ? '<span class="spin-dot"></span>' : icon('plus', 28)) + '<i>' + (wallui.busy ? '正在导入…' : '导入') + '</i></button><div class="wl-nm"><span>.mpkg · 图片 · 视频</span></div></div>' +
+        '<div class="wl-card"><button type="button" class="wl-th wl-new" data-wimport="1"' + (wallui.busy ? ' disabled' : '') + ' aria-label="导入壁纸">' + (wallui.busy ? Ico.ring(28, '正在导入壁纸') : icon('plus', 28)) + '<i>' + (wallui.busy ? '正在导入…' : '导入') + '</i></button><div class="wl-nm"><span>.mpkg · 图片 · 视频</span></div></div>' +
       '</div>' +
       (walls.list.length > 1 ? '<button type="button" class="w-row wl-plrow" data-wpl="open">' + icon('regen', 20) + '<span>轮播<i>' + wallPlText() + '</i></span>' + icon('chev', 16) + '</button>' : '') +
       '<p class="hint">Wallpaper Engine 手机版导出的 .mpkg 和电脑版的 scene.pkg 都能用，包里带了什么设置，点开那张就能调什么。在文件管理或微信里点 .mpkg，选「云朵天气」打开也能导入。</p>' +
@@ -6352,7 +6451,7 @@
   function noteLineHtml(l, id, i, cap) {
     var m;
     if ((m = l.match(/^\s*-\s*\[([ xX])\]\s*(.*)$/))) { var y = m[1] !== ' ';
-      return '<button type="button" class="n-ck' + (y ? ' y' : '') + '" data-ntick="' + id + ':' + i + '"><i>' + (y ? icon('tick', 12) : '') + '</i><span>' + esc(m[2]) + '</span></button>'; }
+      return '<button type="button" class="n-ck' + (y ? ' y' : '') + '" role="checkbox" aria-checked="' + y + '" data-ntick="' + id + ':' + i + '"><i>' + Ico.check(y, 18) + '</i><span><u>' + esc(m[2]) + '</u></span></button>'; }
     if ((m = l.match(/^\s*#{1,3}\s+(.*)$/))) return '<h4>' + esc(m[1]) + '</h4>';
     if ((m = l.match(/^\s*[-*•]\s+(.*)$/))) return '<p class="n-li">' + esc(m[1]) + '</p>';
     if (/^\s*(---+|———+)\s*$/.test(l)) return '<hr>';
@@ -6418,7 +6517,8 @@
         '<button type="button" class="nb-tile new" data-nfnew="' + (noteui.folder || '') + '" aria-label="新建文件夹">' + icon('plus', 24) + '</button></div>';
     }
     if (!live.length && !vw) h += '<div class="nb-empty">' + quillIcon(40) + '<p>还没有笔记。点右下角的笔写第一篇，<br>或者在聊天里对 ' + esc(asst.name || 'Amor') + ' 说「记一下…」。</p></div>';
-    else if (!list.length) h += '<p class="nb-none">' + (q ? '没有找到相关的笔记。' : noteui.view === 'trash' ? '最近删除里是空的。删掉的笔记会在这里放 30 天。' : f ? '这个文件夹里还没有笔记。' : '没有笔记。') + '</p>';
+    else if (!list.length && noteui.view === 'trash' && !q) h += Ico.empty('trash', '最近删除是空的', '删掉的笔记会在这里放 30 天，之后自动清掉。', '<button type="button" class="btn" data-nview="">回到所有笔记</button>');
+    else if (!list.length) h += '<p class="nb-none">' + (q ? '没有找到相关的笔记。' : f ? '这个文件夹里还没有笔记。' : '没有笔记。') + '</p>';
     else if (root && !q) {
       var pins = list.filter(function (n) { return n.pin; }), rest = list.filter(function (n) { return !n.pin; });
       if (pins.length) h += '<div class="nb-sec">置顶<i>' + pins.length + '</i></div>' + nbRows(pins, true);
@@ -6545,7 +6645,7 @@
       '<div class="ne-scroll">' +
         '<button type="button" class="nb-fchip" data-note="move">' + icon('folder', 14) + '<span>' + (fp ? esc(fp) : '未归档') + '</span>' + icon('down', 13) + '</button>' +
         '<input id="ne-title" class="ne-t" type="text" maxlength="40" placeholder="标题" value="' + esc(n.title) + '" autocomplete="off">' +
-        '<div class="ne-meta"><span>' + (created.getMonth() + 1) + '月' + created.getDate() + '日 周' + wk + ' 写</span>' +
+        '<div class="ne-meta"><span>' + (created.getMonth() + 1) + '月' + created.getDate() + '日 周' + wk + ' 写</span>' + (e.mode === 'read' ? noteProgHtml(n) : '') +
           (n.date ? '<button type="button" class="ne-chip l" data-note="date">' + icon('cal', 13) + dateZh(n.date) + ' · 已关联日程</button>' : '') + '</div>' +
         (noteui.dateIn ? '<div class="ne-in"><input id="ne-date" type="date" value="' + esc(n.date || ymd(new Date())) + '"><button type="button" class="chip" data-note="date-ok">关联</button>' + (n.date ? '<button type="button" class="chip" data-note="date-off">取消关联</button>' : '') + '</div>' : '') +
         (e.mode === 'read' && n.body.trim() ? '<div class="ne-body read" data-note="edit">' + noteBodyHtml(n) + '</div>'
@@ -6576,8 +6676,21 @@
   }
   function noteToggleTick(id, i) {
     var n = noteById(id); if (!n) return; var ls = noteLines(n.body), l = ls[+i]; if (l == null) return;
-    ls[+i] = l.replace(/\[([ xX])\]/, function (m, c) { return c === ' ' ? '[x]' : '[ ]'; }); n.body = ls.join('\n'); noteTouch(n); saveNotes();
-    if (noteui.ed) keepScroll(); else keepScroll();
+    var on = /\[ \]/.test(l);
+    ls[+i] = l.replace(/\[([ xX])\]/, on ? '[x]' : '[ ]'); n.body = ls.join('\n'); noteTouch(n); saveNotes();
+    // 5.15 原地切换：勾从当前形状接着变，读到哪儿不动；不在阅读页（找不到这一项）才整页重画
+    var b = document.querySelector('[data-ntick="' + id + ':' + i + '"]');
+    if (!b) { keepScroll(); return; }
+    b.classList.toggle('y', on); b.setAttribute('aria-checked', on); b.querySelector('.ck-ic').classList.toggle('on', on);
+    noteProg(n);
+  }
+  // 清单进度：「清单 ▬▬▭ 2/5」，勾一项就跟着走
+  function noteTicks(n) { var d = 0, t = 0; noteLines(n.body).forEach(function (l) { var m = l.match(/^\s*-\s*\[([ xX])\]/); if (m) { t++; if (m[1] !== ' ') d++; } }); return [d, t]; }
+  function noteProgHtml(n) { var c = noteTicks(n); return c[1] ? '<span class="ne-prog" role="status" aria-label="清单完成 ' + c[0] + ' / ' + c[1] + '">清单<i style="--p:' + (c[0] / c[1]).toFixed(3) + '"></i><b>' + c[0] + '/' + c[1] + '</b></span>' : ''; }
+  function todoApplyBtn(items) { var k = items.filter(function (x) { return !x.off; }).length; return '<button type="button" class="btn primary" data-note="amor-apply"' + (k ? '' : ' disabled') + '>' + (k ? '记进日程 · ' + k + ' 项' : '一项都没选') + '</button>'; }
+  function noteProg(n) {
+    var e = document.querySelector('.ne-prog'), c = noteTicks(n); if (!e || !c[1]) return;
+    e.querySelector('i').style.setProperty('--p', (c[0] / c[1]).toFixed(3)); e.querySelector('b').textContent = c[0] + '/' + c[1]; e.setAttribute('aria-label', '清单完成 ' + c[0] + ' / ' + c[1]);
   }
   // 关联日期 = 在日程里建一条同名的日程（笔记改标题时跟着改）
   function noteLinkDate(n, ds) {
@@ -6604,13 +6717,13 @@
       h += '<div class="n-res"><h5>' + icon('spark', 15) + (a.busy ? '正在' + t[2].replace(/，.*/, '') + '…' : a.err ? '没成功' : t[2]) + '</h5>';
       if (a.err) h += '<p class="n-err">' + esc(a.err) + '</p>';
       else if (a.act === 'todo') {
-        if (a.items) h += a.items.length ? a.items.map(function (it, i) { return '<button type="button" class="n-todo' + (it.off ? ' off' : '') + '" data-ntodo="' + i + '"><i>' + (it.off ? '' : icon('tick', 14)) + '</i><span>' + esc((it.date ? dateZh(it.date) + (it.time ? ' ' + it.time : '') + ' · ' : '') + it.title) + '</span><small>' + (it.date ? (it.time ? '提前 1 小时提醒' : '当天早上提醒') : '没写日期，记在今天') + '</small></button>'; }).join('')
+        if (a.items) h += a.items.length ? a.items.map(function (it, i) { return '<button type="button" class="n-todo' + (it.off ? ' off' : '') + '" role="checkbox" aria-checked="' + !it.off + '" data-ntodo="' + i + '"><i>' + Ico.check(!it.off, 20) + '</i><span>' + esc((it.date ? dateZh(it.date) + (it.time ? ' ' + it.time : '') + ' · ' : '') + it.title) + '</span><small>' + (it.date ? (it.time ? '提前 1 小时提醒' : '当天早上提醒') : '没写日期，记在今天') + '</small></button>'; }).join('')
           : '<p class="n-err">没找到要做的事。</p>';
         else h += '<p class="g-wait">正在读笔记…<span class="g-caret"></span></p>';
       } else h += '<div class="n-out">' + esc(a.out || '') + (a.busy ? '<span class="g-caret"></span>' : '') + '</div>';
       h += '</div>';
       if (!a.busy) h += '<div class="n-btns"><button type="button" class="btn" data-note="amor-back">' + (a.err ? '返回' : '再想想') + '</button>' +
-        (a.err ? '' : a.act === 'todo' ? (a.items && a.items.some(function (x) { return !x.off; }) ? '<button type="button" class="btn primary" data-note="amor-apply">记进日程</button>' : '')
+        (a.err ? '' : a.act === 'todo' ? (a.items && a.items.length ? todoApplyBtn(a.items) : '')
           : '<button type="button" class="btn primary" data-note="amor-apply">' + (a.act === 'tidy' ? '换成整理后的' : '接在后面') + '</button>') + '</div>';
     }
     return h + '</section></div>';
@@ -6717,7 +6830,10 @@
   }
   function nbStick() { var bar = document.querySelector('#main .nb.root .nb-bar'), hero = document.querySelector('#main .nb-hero'); if (!bar || !hero) return; bar.classList.toggle('on', $main.scrollTop > hero.offsetTop + hero.offsetHeight - 70); }
   $main.addEventListener('scroll', function () { if (state.tab === 'plan' && calui.seg === 'notes') { nbStick(); NbSx.onScroll(); } }, { passive: true });
-  if (window.matchMedia) try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { if (state.tab === 'plan') nbTheme(); }); } catch (e) {}
+  if (window.matchMedia) try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+    if (state.tab === 'plan') nbTheme();
+    var ic = document.querySelector('.thm-ic'), dk = noteDark(); Ico.keep('thm', dk); if (ic) ic.classList.toggle('on', dk);   // 跟随系统时，系统换了明暗，太阳 / 月亮跟着变
+  }); } catch (e) {}
   // 长按文件夹格子 → 文件夹菜单
   longPress(function (t) { return t.closest('[data-nfold]'); }, function (el) {
     var r = el.getBoundingClientRect(); window.__nbLong = Date.now();
@@ -6811,7 +6927,7 @@
     if (ds.ntrash) { var tr = ds.ntrash.split(':');
       if (tr[0] === 'restore') { var rn = noteById(tr[1]); if (rn) { delete rn.del; if (rn.folder && !nfById(rn.folder)) rn.folder = ''; saveNotes(); toast('已恢复'); } }
       else if (tr[0] === 'kill') { notes = notes.filter(function (x) { return x.id !== tr[1]; }); saveNotes(); }
-      else if (tr[0] === 'empty') { if (!noteui.emptyAsk) { noteui.emptyAsk = Date.now(); toast('再点一次「清空」，就彻底删掉了'); return true; } if (Date.now() - noteui.emptyAsk < 5000) { notes = notes.filter(function (x) { return !x.del; }); saveNotes(); toast('已清空'); } noteui.emptyAsk = 0; }
+      else if (tr[0] === 'empty') { if (!noteui.emptyAsk) { noteui.emptyAsk = Date.now(); toast('再点一次「清空」，就彻底删掉了'); return true; } if (Date.now() - noteui.emptyAsk < 5000) { notes = notes.filter(function (x) { return !x.del; }); saveNotes(); Ico.cleared('trash'); } noteui.emptyAsk = 0; }
       keepScroll(); return true; }
     if (ds.nundo) { var ta0 = document.getElementById('ne-body'); if (!ta0) { if (noteui.ed) { noteui.ed.mode = 'edit'; keepScroll(); } return true; } try { ta0.focus({ preventScroll: true }); document.execCommand(ds.nundo); } catch (x) {} return true; }
     if (ds.npaper) { var n0 = noteEnsure(); n0.paper = ds.npaper; noteTouch(n0); keepScroll(); return true; }
@@ -6819,7 +6935,11 @@
     if (ds.naddtag) { var n2 = noteEnsure(); if ((n2.tags || []).indexOf(ds.naddtag) < 0) (n2.tags = n2.tags || []).push(ds.naddtag); noteTouch(n2); noteui.tagIn = false; keepScroll(); return true; }
     if (ds.nins) { noteInsert(ds.nins); return true; }
     if (ds.namor) { noteAmorRun(ds.namor); return true; }
-    if (ds.ntodo != null) { var it = noteui.amor && noteui.amor.items && noteui.amor.items[+ds.ntodo]; if (it) { it.off = !it.off; keepScroll(); } return true; }
+    if (ds.ntodo != null) { var it = noteui.amor && noteui.amor.items && noteui.amor.items[+ds.ntodo]; if (!it) return true; it.off = !it.off;
+      var tb = b.closest('[data-ntodo]'), ab = document.querySelector('[data-note="amor-apply"]');   // 原地切换，勾从当前形状接着变；下面按钮的数量跟着变
+      if (!tb || !ab) { keepScroll(); return true; }
+      tb.classList.toggle('off', it.off); tb.setAttribute('aria-checked', !it.off); tb.querySelector('.ck-ic').classList.toggle('on', !it.off);
+      ab.outerHTML = todoApplyBtn(noteui.amor.items); return true; }
     if (ds.nopenchip) { closeChat(); setTimeout(function () { noteOpen(ds.nopenchip); }, 250); return true; }
     var a = ds.note; if (!a) return false;
     var n = noteCur();
@@ -7933,6 +8053,7 @@
       if (!r) { close(true); return; }
       if (!el) { el = document.createElement('div'); el.id = 'artv'; document.body.appendChild(el); el.addEventListener('click', onClick, true); bindDrag(el); }
       var keepFrame = document.getElementById('artv-frame'), old = keepFrame && keepFrame.firstChild;
+      stopMedia(el);
       el.className = 'artv' + (anim ? ' enter' : '') + (st.full ? ' full' : '');
       el.innerHTML = html(r);
       if (r.file || r.inline) { fileMount(r); document.documentElement.classList.toggle('art-stack', innerWidth < 720 && chat.open); navSync(); return; }
@@ -7952,7 +8073,7 @@
     function openFile(o) { if (el) close(true); st = { file: o, tab: 'preview', full: false }; frameKey = ''; errMsg = ''; vid = null; render(true); }
     function close(now) {
       if (!el) { st = null; return; }
-      var e = el; st = null; el = null; frameKey = ''; document.documentElement.classList.remove('art-split', 'art-stack', 'art-drag'); document.documentElement.style.removeProperty('--artp');
+      var e = el; st = null; el = null; frameKey = ''; stopMedia(e); document.documentElement.classList.remove('art-split', 'art-stack', 'art-drag'); document.documentElement.style.removeProperty('--artp');
       if (now || reduceMotion) e.remove(); else { e.classList.add('leave'); setTimeout(function () { e.remove(); }, 380); }
       navSync();
     }
@@ -8124,7 +8245,9 @@
       if (fl && fl.bundle) body = '<div class="fv-zip">' + fl.entries.map(function (e, j) { return '<div class="fv-row">' + fileTile(e.name) + '<span><b>' + esc(e.name) + '</b><small>' + fileSize(new Blob([e.text]).size) + '</small></span></div>' + (j < 3 ? '<pre class="fv-peek">' + esc(e.text.slice(0, 400)) + '</pre>' : ''); }).join('') + '</div>';
       else if (fl) body = fileExt(n) === 'md' ? '<div class="artv-doc msg bot">' + md(fl.text) + '</div>' : k === 'html' || fileExt(n) === 'svg' ? '<div class="artv-frame" id="fv-frame"></div>' : '<pre class="artv-code fv-text">' + esc(fl.text) + '</pre>';
       else if (k === 'video') body = '<div class="fv-media"><video id="fv-media" controls playsinline></video></div>';
-      else if (k === 'audio') body = '<div class="fv-audio">' + fileTile(n) + '<b>' + esc(n) + '</b><audio id="fv-media" controls></audio></div>';
+      else if (k === 'audio') body = '<div class="fv-audio">' + fileTile(n) + '<b>' + esc(n) + '</b><audio id="fv-media" preload="metadata"></audio>' +
+        '<div class="ap" id="fv-ap" data-st="idle"><button type="button" class="ap-b" aria-label="播放">' + Ico.ring(62, '正在加载') + '<svg class="ap-pp" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path class="a"/><path class="b"/></svg></button>' +
+        '<div class="ap-tl"><input type="range" min="0" max="1000" value="0" aria-label="播放进度"><span class="ap-t">00:00 / --:--</span></div></div><p class="ap-msg" role="status"></p></div>';
       else if (k === 'zip') body = '<div class="fv-zip" id="fv-zip"><p class="stu-load">正在打开…</p></div>';
       else if (k === 'html') body = '<div class="artv-frame" id="fv-frame"></div>';
       else body = '<pre class="artv-code fv-text" id="fv-text">…</pre>';
@@ -8150,10 +8273,13 @@
         else Files.blobOf(f).then(function (b) { return b.text(); }).then(function (t) { ifr.srcdoc = doc({ type: 'html', content: t }, st.tok); });
         fr.appendChild(ifr); return; }
       if (!f) return;
-      var m = document.getElementById('fv-media'); if (m) Files.urlOf(f).then(function (u) { m.src = u; }, function (e) { toast(e.msg); });
+      var m = document.getElementById('fv-media');
+      if (m && document.getElementById('fv-ap')) audioBind(m, function () { return Files.urlOf(f); });   // 音频：自己的播放键，第一次点播放时再取文件也行
+      else if (m) Files.urlOf(f).then(function (u) { m.src = u; }, function (e) { toast(e.msg); });
       var z = document.getElementById('fv-zip'); if (z) Files.blobOf(f).then(function (b) { return b.arrayBuffer(); }).then(function (buf) { var L = readZip(buf); z.innerHTML = L.map(function (e) { return '<div class="fv-row">' + fileTile(e.name) + '<span><b>' + esc(e.name) + '</b><small>' + fileSize(e.size) + '</small></span></div>'; }).join('') || '<p class="stu-load">空的压缩包</p>'; });
       var tx = document.getElementById('fv-text'); if (tx) Files.blobOf(f).then(function (b) { return b.text(); }).then(function (t) { tx.textContent = t.slice(0, 200000); });
     }
+    function stopMedia(box) { Array.prototype.forEach.call(box.querySelectorAll('audio, video'), function (m) { try { m.pause(); } catch (x) {} }); }
     function fileOf() { var r = resolve(); if (!r) return null; return r.file || Files.fromInline(st.file.ref); }
     /* 4.6.1 抽屉式弹性交互（仿 iOS 弹层）：按住顶部（抓手 / 标题 / 预览代码切换）或代码滚到顶时往下拉，面板跟手；
        后面的聊天窗跟着从“缩小叠在后面”慢慢放大、变亮；拉过 1/4（或快速一甩）松手就收起，不够就带一点回弹弹回去；往上拉进入全屏。 */
@@ -8511,31 +8637,46 @@
 
   /* ---------- ② ＋ 展开成底部面板：同一块从按钮的位置长出来，里面的选项依次淡入；关的时候收回 ＋ ---------- */
   var PlusMo = (function () {
-    var anim = null, closing = null;
+    var closing = null;
     function parts() {
       var pw = $sheet.querySelector('.pop-wrap'), pp = pw && pw.querySelector('.pl-pop'), btn = $sheet.querySelector('[data-tool="plus"]');
-      return pp && btn ? { pw: pw, pp: pp, btn: btn, scrim: pw.querySelector('.pop-scrim') } : null;
+      return pp && btn ? { pw: pw, pp: pp, btn: btn, scrim: pw.querySelector('.pop-scrim'), x: pp.querySelector('.pop-head > button') } : null;
     }
     function inset(p) {   // ＋ 在面板里的位置，换成 clip-path 的 inset
       var pr = p.pp.getBoundingClientRect(), br = p.btn.getBoundingClientRect();
       return 'inset(' + (br.top - pr.top) + 'px ' + (pr.right - br.right) + 'px ' + (pr.bottom - br.bottom) + 'px ' + (br.left - pr.left) + 'px round ' + br.height / 2 + 'px)';
     }
+    // 5.15 ② ＋ 本身不消失：转 45° 变成叉，跟着面板长开的角一路到左上角，就是面板的 ✕；关的时候原路转回 ＋
+    function ghost(p) {
+      var g = p.pp.querySelector('.pl-ghost'); if (g) return g;
+      var pr = p.pp.getBoundingClientRect(), br = p.btn.getBoundingClientRect();
+      g = document.createElement('span'); g.className = 'pl-ghost'; g.innerHTML = icon('plus', 20);
+      g.style.cssText = 'left:' + (br.left - pr.left) + 'px;top:' + (br.top - pr.top) + 'px;width:' + br.width + 'px;height:' + br.height + 'px';
+      p.pp.appendChild(g); return g;
+    }
+    function toX(p, g) {   // ＋ 的中心移到 ✕ 的中心；＋ 转 45° 后的大小对齐 ✕ 的叉（＋ 臂长 14，转过去每边 14/√2；✕ 每边 12）
+      var xs = p.x && p.x.querySelector('svg'); if (!xs) return 'rotate(45deg)';
+      var pr = p.pp.getBoundingClientRect(), b = xs.getBoundingClientRect(), k = (b.width * 12 / 24) / (20 * 14 / Math.SQRT2 / 24);   // 按 left/top 算原位（ghost 可能正在动）
+      var ax = pr.left + parseFloat(g.style.left) + g.offsetWidth / 2, ay = pr.top + parseFloat(g.style.top) + g.offsetHeight / 2;
+      return 'translate(' + (b.left + b.width / 2 - ax).toFixed(1) + 'px, ' + (b.top + b.height / 2 - ay).toFixed(1) + 'px) rotate(45deg) scale(' + k.toFixed(3) + ')';
+    }
+    function landed(p) { var g = p.pp.querySelector('.pl-ghost'); if (g) g.remove(); if (p.x) p.x.classList.remove('x-hide'); }
     function open() {
       var p = parts(); if (!p || Mo.calm()) return;
-      p.pw.classList.add('mo');
-      var ghost = document.createElement('span'); ghost.className = 'pl-ghost'; ghost.innerHTML = icon('plus', 20);
-      var pr = p.pp.getBoundingClientRect(), br = p.btn.getBoundingClientRect();
-      ghost.style.cssText = 'left:' + (br.left - pr.left) + 'px;top:' + (br.top - pr.top) + 'px;width:' + br.width + 'px;height:' + br.height + 'px';
-      p.pp.appendChild(ghost);
-      Mo.run(ghost, 'out', [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'rotate(45deg) scale(.6)' }], { duration: 200, fill: 'forwards', done: function () { ghost.remove(); } });
-      anim = Mo.run(p.pp, 'clip', [{ clipPath: inset(p) }, { clipPath: 'inset(0px 0px 0px 0px round 28px 28px 0px 0px)' }], { duration: 480, easing: 'cubic-bezier(.2,.9,.22,1)' });
+      p.pw.classList.add('mo'); if (p.x) p.x.classList.add('x-hide');
+      var g = ghost(p);
+      Mo.run(g, 'mv', [{ transform: 'none' }, { transform: toX(p, g) }], { duration: 480, easing: 'cubic-bezier(.2,.9,.22,1)', fill: 'forwards', done: function () { landed(p); } });
+      Mo.run(p.pp, 'clip', [{ clipPath: inset(p) }, { clipPath: 'inset(0px 0px 0px 0px round 28px 28px 0px 0px)' }], { duration: 480, easing: 'cubic-bezier(.2,.9,.22,1)' });
       Mo.run(p.scrim, 'fade', [{ opacity: 0 }, { opacity: 1 }], { duration: 300 });
       Mo.stagger(p.pp.querySelectorAll('.pop-head, .pl-tiles > *, .pl-card'), 260, 67, 10);   // 面板基本展开后，每隔约 4 帧一个
     }
     // 关：逆着收回 ＋。done 在收完后重画（清掉 chat.pop）
     function close(done) {
       var p = parts(); if (!p || Mo.calm()) return false;
-      var tok = closing = {};
+      var tok = closing = {}, had = p.pp.querySelector('.pl-ghost'), g = ghost(p);
+      if (!had) g.style.transform = toX(p, g);   // 从 ✕ 那里出发（展开到一半就关的话，接着它现在的样子）
+      if (p.x) p.x.classList.add('x-hide');
+      Mo.run(g, 'mv', [{ transform: 'none' }], { duration: 360, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
       Array.prototype.forEach.call(p.pp.querySelectorAll('.pop-head, .pl-tiles > *, .pl-card'), function (el) { Mo.run(el, 'in', [{ opacity: 0 }], { duration: 120, fill: 'forwards' }); });
       Mo.run(p.scrim, 'fade', [{ opacity: 0 }], { duration: 300, fill: 'forwards' });
       var a = Mo.run(p.pp, 'clip', [{ clipPath: inset(p) }], { duration: 360, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
@@ -8546,12 +8687,14 @@
     function reopen() {
       var p = parts(); if (!closing || !p) return false;
       closing = null; chat.pop = 'plus';
+      var g = ghost(p);
+      Mo.run(g, 'mv', [{ transform: toX(p, g) }], { duration: 360, fill: 'forwards', done: function () { landed(p); } });
       Mo.run(p.pp, 'clip', [{ clipPath: 'inset(0px 0px 0px 0px round 28px 28px 0px 0px)' }], { duration: 360, keep: true });
       Mo.run(p.scrim, 'fade', [{ opacity: 1 }], { duration: 200, keep: true });
       Array.prototype.forEach.call(p.pp.querySelectorAll('.pop-head, .pl-tiles > *, .pl-card'), function (el) { Mo.run(el, 'in', [{ opacity: 1 }], { duration: 160, keep: true }); });
       return true;
     }
-    return { open: open, close: close, reopen: reopen, closing: function () { return !!closing; } };
+    return { open: open, close: close, reopen: reopen };
   })();
 
   /* ---------- ③ 提交按钮 → 圆形加载 → 勾 / 叉 → 结果条（跟着真实请求，失败可重试，加载中不能重复提交） ---------- */
@@ -8794,6 +8937,119 @@
     return { grab: grab, play: play };
   })();
 
+  /* ======================= 5.15 图标微动效 =======================
+     状态变形（勾、＋/✕、播放/暂停、太阳/月亮、三条杠）来回都能播，从当前形状接着变；
+     事件反馈（纸飞机、清空后的托盘、加载结束的结果）按事件播一次。都跟着真实状态走，减少动态效果时直接到终态。 */
+  var Ico = (function () {
+    var last = {}, busy = {}, fresh = null;
+    // 整页重画会把图标换成新节点：先按上一次的状态画，下一帧再切过去，CSS 过渡就从旧形状接上
+    function keep(key, on) {
+      var was = last[key]; last[key] = on;
+      if (was != null && was !== on) requestAnimationFrame(function () { var el = document.querySelector('[data-mk="' + key + '"]'); if (el) el.classList.toggle('on', on); });
+      return was == null ? on : was;
+    }
+    // ① 圆 → 过渡线 → 勾 的一条路径（长度：圆 56.55，过渡线 4.53，勾 13.09；CSS 里的数字就是这几个）
+    function check(on, size) {
+      return '<svg class="ck-ic' + (on ? ' on' : '') + '" width="' + size + '" height="' + size + '" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12A9 9 0 0 0 21 12A9 9 0 0 0 3 12L7.5 12.5L10.5 15.5L16.5 9"/></svg>';
+    }
+    // ④ 外观那一栏的太阳 / 月亮（跟着实际生效的明暗，跟随系统时也一样）
+    function theme(dark) {
+      var s = keep('thm', dark);
+      return '<svg class="thm-ic' + (s ? ' on' : '') + '" data-mk="thm" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path class="c"/>' +
+        '<path class="r" d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>';
+    }
+    // ⑧ 加载环：不知道真实进度，所以只转不报百分比
+    function ring(size, label) {
+      return '<svg class="ldr" width="' + size + '" height="' + size + '" viewBox="0 0 24 24" role="img" aria-label="' + (label || '正在处理') + '"><circle class="t" cx="12" cy="12" r="8.5"/><circle class="h" cx="12" cy="12" r="8.5"/></svg>';
+    }
+    // 带加载环的图标按钮：busy 时图标换成环；data-ldr 写这次的结果（ok / err），停下来那一刻在原位置闪一下
+    function ldAttr(key, res) { return ' data-ld="' + key + '"' + (res ? ' data-ldr="' + res + '"' : ''); }
+    function after() {
+      var seen = {};
+      Array.prototype.forEach.call(document.querySelectorAll('[data-ld]'), function (el) {
+        var k = el.getAttribute('data-ld'), b = !!el.querySelector('.ldr'), r = el.getAttribute('data-ldr'); seen[k] = 1;
+        if (busy[k] && !b && r) flash(el, r === 'ok');
+        busy[k] = b;
+      });
+      Object.keys(busy).forEach(function (k) { if (!seen[k]) delete busy[k]; });
+      if (fresh && Date.now() - fresh.t > 1200) fresh = null;
+    }
+    function flash(el, ok) {
+      var svg = el.querySelector('svg'); if (!svg) return;
+      var sz = svg.getAttribute('width') || 20, res = document.createElement('span');
+      res.className = 'ld-res ' + (ok ? 'ok' : 'err'); res.innerHTML = icon(ok ? 'tick' : 'warn', sz);
+      svg.replaceWith(res);
+      setTimeout(function () { if (res.isConnected) res.replaceWith(svg); }, 1100);
+    }
+    // ⑤ 纸飞机：从按钮里的图标位置先往后一沉，再沿弧线向右上飞出，机头跟着飞行方向转
+    var PLANE = '<path d="M20.5 3.5 3.5 10.6l6.6 2.8 2.8 6.6z"/><path d="M20.5 3.5 10.1 13.4"/>';
+    function plane(size) { return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + PLANE + '</svg>'; }
+    function fly(from) {
+      if (!from || Mo.calm()) return;
+      var r = from.getBoundingClientRect(), f = document.createElement('span');
+      f.className = 'plane-fly'; f.style.cssText = 'left:' + r.left + 'px;top:' + r.top + 'px;width:' + r.width + 'px;height:' + r.height + 'px';
+      f.innerHTML = plane(r.width); document.body.appendChild(f);
+      var a = f.animate([
+        { transform: 'none', opacity: 1 },
+        { transform: 'translate(-3px, 3px) rotate(10deg) scale(.92)', opacity: 1, offset: .14 },
+        { transform: 'translate(46px, -30px) rotate(-6deg)', opacity: 1, offset: .55 },
+        { transform: 'translate(118px, -112px) rotate(-26deg) scale(.72)', opacity: 0 }
+      ], { duration: 680, easing: 'cubic-bezier(.45, 0, .55, 1)' });
+      function rm() { f.remove(); }
+      a.finished.then(rm, rm);
+    }
+    // ⑥ 空状态：托盘 + 小音符。刚清空时播一次；1.2 秒内再重画就从播到的地方接着（负的 delay），之后静止
+    var TRAY = '<g class="tray"><path d="M4 14h4.3l1.3 2.2h4.8l1.3-2.2H20"/><path d="M4 14 6.2 9h11.6L20 14v4.4a1.6 1.6 0 0 1-1.6 1.6H5.6A1.6 1.6 0 0 1 4 18.4z"/></g>' +
+      '<g class="nt"><path d="M13.4 6.8V2.4l3 .9"/><ellipse cx="12" cy="6.9" rx="1.45" ry="1.1" transform="rotate(-20 12 6.9)" fill="currentColor"/></g>';
+    function cleared(key) { fresh = { key: key, t: Date.now() }; }
+    function empty(key, title, sub, act) {
+      var el = fresh && fresh.key === key ? Date.now() - fresh.t : -1, play = el >= 0 && el < 1000;
+      return '<div class="etray' + (play ? ' play' : '') + '" role="status"' + (play ? ' style="--el:-' + el + 'ms"' : '') + '>' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + TRAY + '</svg>' +
+        '<b>' + title + '</b>' + (sub ? '<p>' + sub + '</p>' : '') + (act || '') + '</div>';
+    }
+    return { keep: keep, check: check, theme: theme, ring: ring, ldAttr: ldAttr, after: after, plane: plane, fly: fly, cleared: cleared, empty: empty };
+  })();
+
+  /* ---------- ③ 文件里的音频：自己的播放键（播放 ⇄ 暂停变形），跟着 <audio> 的真实事件走 ----------
+     load：点了播放、还没出声（缓冲 / 等文件）→ 外圈加载环；err：加载或播放失败 → 回到播放键，下面写原因，再点就重试 */
+  function audioBind(a, getUrl) {
+    var box = document.getElementById('fv-ap'); if (!box || !a) return;
+    var btn = box.querySelector('.ap-b'), pp = box.querySelector('.ap-pp'), seek = box.querySelector('input'), tl = box.querySelector('.ap-t'), msg = box.nextElementSibling;
+    var want = false, dragging = false;
+    function set(st, m) {
+      box.setAttribute('data-st', st); pp.classList.toggle('on', st === 'play' || st === 'load' && want);
+      btn.setAttribute('aria-label', st === 'play' ? '暂停' : st === 'load' ? '正在加载，点一下取消' : '播放');
+      msg.textContent = m || '';
+    }
+    function t2(s) { s = isFinite(s) ? Math.max(0, s) : 0; var m = Math.floor(s / 60); return (m < 10 ? '0' : '') + m + ':' + ('0' + Math.floor(s % 60)).slice(-2); }
+    function time() { tl.textContent = t2(a.currentTime) + ' / ' + (isFinite(a.duration) ? t2(a.duration) : '--:--'); if (!dragging && isFinite(a.duration) && a.duration) seek.value = Math.round(a.currentTime / a.duration * 1000); }
+    function fail(why) { want = false; set('err', why + '，点播放再试一次'); }
+    function load() { return a.getAttribute('src') ? Promise.resolve() : getUrl().then(function (u) { a.src = u; }); }
+    function play() {
+      want = true; set('load');
+      load().then(function () { return a.play(); }).catch(function (e) {
+        if (!want) return;
+        fail(e && e.name === 'NotSupportedError' ? '这个格式这台手机放不了' : e && e.msg ? '文件读不出来（' + e.msg + '）' : '没能开始播放');
+      });
+    }
+    btn.addEventListener('click', function () {
+      var st = box.getAttribute('data-st');
+      if (st === 'play' || st === 'load') { want = false; a.pause(); set('idle'); return; }
+      if (st === 'err') { a.removeAttribute('src'); a.load(); }   // 重试：重新取文件
+      play();
+    });
+    a.addEventListener('playing', function () { if (want) set('play'); });
+    a.addEventListener('waiting', function () { if (want) set('load'); });
+    a.addEventListener('pause', function () { if (box.getAttribute('data-st') !== 'err') { want = false; set('idle'); } });
+    a.addEventListener('ended', function () { want = false; set('idle'); a.currentTime = 0; time(); });
+    a.addEventListener('error', function () { if (a.getAttribute('src')) fail(a.error && a.error.code === 4 ? '这个格式这台手机放不了' : '文件加载失败'); });
+    a.addEventListener('timeupdate', time); a.addEventListener('durationchange', time);
+    seek.addEventListener('input', function () { dragging = true; if (isFinite(a.duration)) tl.textContent = t2(seek.value / 1000 * a.duration) + ' / ' + t2(a.duration); });
+    seek.addEventListener('change', function () { dragging = false; if (isFinite(a.duration)) a.currentTime = seek.value / 1000 * a.duration; });
+    set('idle'); load().then(time, function () {});
+  }
+
   // 5.11 起导航岛不显示（.tabs display:none），翻页和三条杠代替它；按钮只建一次，留给 [data-tab] 的点击（首页天气行、测试）
   var tabsBuilt = false;
   function updateTabs(tab) {
@@ -9018,15 +9274,22 @@
     if (ds.ntopen) { try { AmorNative.open(ds.ntopen); } catch (e) {} return; }
     if (ds.ntclear) { try { AmorNative.clearLog(); } catch (e) {} keepScroll(); return; }
     if (ds.nttest) {
+      if (ntui.send === 'busy') return;   // 发送中：不重复发
+      Ico.fly(b.querySelector('svg')); ntui.send = 'busy'; ntui.test = ''; b.setAttribute('data-st', 'busy'); b.innerHTML = ntSendFace();
       var tv = view(state.current), ok_ = false;
-      var later_ = !!AmorNative.notifyLater, send_ = function (o) { return later_ ? AmorNative.notifyLater(JSON.stringify(o), 5000) : AmorNative.notifyNow(JSON.stringify(o)); };
+      var later_ = !!(window.AmorNative && AmorNative.notifyLater), send_ = function (o) { return later_ ? AmorNative.notifyLater(JSON.stringify(o), 5000) : AmorNative.notifyNow(JSON.stringify(o)); };
       try { ok_ = send_(({ id: 4242, ch: 'care', kind: 'test', title: '测试提醒', short: '这是 ' + (asst.name || 'Amor') + ' 的一条测试', meta: clock(Date.now()), progress: 60,
         text: ntName() + '，这是一条测试提醒 🌹' + (tv && tv.today ? ' 今天' + tv.m.zh + (tv.today.dt || '') + '，' + deg(tv.today.lo) + '~' + deg(tv.today.hi) + '°。' : ''),
         actions: ['done', 'chat'], doneLabel: '收到', island: nt.island ? islandParam('测试提醒', '这是一条测试提醒', '测试') : '' })); } catch (e) {}
       // 再发一条系统标准样式的，用来判断是不是“信笺”样式在这台手机上显示不出来
       try { send_(({ id: 4243, ch: 'care', kind: 'test2', plain: true, title: '测试②·系统样式', short: '如果只看到这条，说明信笺样式在这台手机上显示不了',
         text: '如果只看到这条、没看到“测试提醒”，说明信笺样式在这台手机上显示不了，把“通知样式”改成“系统样式”就好。', actions: ['done'], doneLabel: '收到' })); } catch (e) {}
-      ntui.test = ok_ ? (later_ ? '5 秒后弹出，先回到桌面' : '已发送 2 条 ✓') : '没发出去，看下面的诊断'; keepScroll(); setTimeout(function () { ntui.test = ''; if (state.sub === 'notify') keepScroll(); }, 3000); return; }
+      // 原生调用是同步的，结果当场就有；等纸飞机飞完再在原位置给结果。成功的对勾留 2.6 秒后回到按钮，失败的留着等重试
+      setTimeout(function () {
+        ntui.send = ok_ ? 'ok' : 'err'; ntui.test = ok_ ? (later_ ? '5 秒后弹出，先回到桌面' : '已发送 2 条') : '';
+        if (state.sub === 'notify') keepScroll();
+        if (ok_) setTimeout(function () { if (ntui.send !== 'ok') return; ntui.send = ''; ntui.test = ''; if (state.sub === 'notify') keepScroll(); }, 2600);
+      }, Mo.calm() ? 0 : 640); return; }
     if (ds.msw) { mem[ds.msw] = !mem[ds.msw]; saveMem(); keepScroll(); return; }
     if (ds.memadd) { var mk_ = ds.memadd, mt_ = (mui.draft[mk_] || '').trim(); if (!mt_) { var fi_ = document.getElementById('mem-add-' + mk_); if (fi_) fi_.focus(); return; }
       if (memAdd(mk_, mt_, 'manual')) { mui.draft[mk_] = ''; toast('记住了'); } else toast(memSafe(mt_) ? '这条已经记过了' : '这条不能记（太长或像是密钥、密码）'); keepScroll(); return; }
@@ -9038,7 +9301,8 @@
       state.tab = 'today'; state.sub = ''; save(); render({ top: true }); openChat('', oc.id); chat.city = oc.city; return; }
     if (ds.memmore) { mui.open[ds.memmore] = !mui.open[ds.memmore]; keepScroll(); return; }
     if (ds.memclear) { if (!mui.clear) { mui.clear = true; keepScroll(); setTimeout(function () { if (mui.clear) { mui.clear = false; if (state.sub === 'memory') keepScroll(); } }, 4000); return; }
-      mem.items = []; mui.clear = false; saveMem(); keepScroll(); toast('已清空全部记忆'); return; }
+      mem.items = []; mui.clear = false; saveMem(); Ico.cleared('mem'); keepScroll(); return; }
+    if (ds.memfocus) { var mf_ = document.getElementById('mem-add-' + MEM_KINDS[0].id); if (mf_) { mf_.scrollIntoView({ block: 'center', behavior: Mo.calm() ? 'auto' : 'smooth' }); mf_.focus({ preventScroll: true }); } return; }
     if (ds.vsw) { voice[ds.vsw] = !voice[ds.vsw]; saveVoice(); keepScroll(); return; }
     if (ds.vcstt) { vchat.stt = ds.vcstt; saveVchat(); keepScroll(); return; }
     if (ds.vcmode) { vchat.mode = ds.vcmode; saveVchat(); keepScroll(); return; }
@@ -9176,7 +9440,8 @@
       save(); render(); toast('已移除' + META[k].zh); return;
     }
     if (ds.add) { state.cities.push(ds.add); state.query = ''; save(); render(); toast('已添加' + META[ds.add].zh); refreshOne(ds.add); return; }
-    if (ds.set) { state[ds.set] = ds.val; if (ds.set === 'theme') applyTheme(); save(); render(); return; }
+    if (ds.set === 'theme') { setTheme(ds.val, b); return; }
+    if (ds.set) { state[ds.set] = ds.val; save(); render(); return; }
   });
   document.addEventListener('keydown', function (e) {
     if (e.target && e.target.id === 'ne-tag' && e.key === 'Enter') {
@@ -10334,7 +10599,7 @@
     if (a === 'pickmodel') { ui.pickModel = !ui.pickModel; render(); return; }
     if (a === 'font') { state.sub = 'font'; render({ top: true, anim: 'fwd' }); return; }
     if (a === 'wall') { state.sub = 'wall'; wallui.edit = ''; wallui.del = ''; wallui.pl = false; delete walls.preview; render({ top: true, anim: 'fwd' }); return; }
-    if (a === 'notify') { state.sub = 'notify'; ntui.test = ''; render({ top: true, anim: 'fwd' }); notifySync(true); setTimeout(function () { if (state.sub === 'notify') keepScroll(); }, 900); return; }
+    if (a === 'notify') { state.sub = 'notify'; ntui.test = ''; if (ntui.send !== 'busy') ntui.send = ''; render({ top: true, anim: 'fwd' }); notifySync(true); setTimeout(function () { if (state.sub === 'notify') keepScroll(); }, 900); return; }
     if (a === 'conn') { state.sub = 'conn'; cnui.msg = null; render({ top: true, anim: 'fwd' }); return; }
     if (a === 'memory') { state.sub = 'memory'; mui.edit = ''; mui.clear = false; render({ top: true, anim: 'fwd' }); return; }
     if (a === 'gemini') { state.sub = 'gemini'; gemui.pick = false; gemui.edit = null; gemui.catEdit = null; gemui.del = ''; render({ top: true, anim: 'fwd' }); return; }

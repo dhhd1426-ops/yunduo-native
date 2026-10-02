@@ -1,0 +1,55 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>开关动效预览</title>
+<style>
+:root{--bg:#e4ebf2;--surface:#f5f8fb;--line:#c7d3df;--text:#1c2640;--muted:#525f78;--accent:#a0505d;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0e1424;--surface:#1a2239;--line:#2a3452;--text:#e8ecf4;--muted:#9aa5bf;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 -apple-system,"PingFang SC","Noto Sans SC",system-ui,sans-serif;padding:20px 16px 48px}
+.wrap{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-size:20px;margin:0}p.n{margin:0;color:var(--muted);font-size:13px}
+.panel{background:var(--surface);border-radius:20px;padding:6px 18px 10px}
+.panel h2{font-size:13px;color:var(--muted);font-weight:500;margin:12px 0 0;letter-spacing:.04em}
+.switch-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;border-top:1px solid var(--line)}
+.switch-row:first-of-type{border-top:0}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.ctl:first-of-type{border-top:0}.ctl b{font-weight:500;margin-right:4px}
+.pill{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:999px;padding:5px 14px;font:inherit;cursor:pointer}
+.pill[aria-pressed=true]{background:var(--text);color:var(--bg);border-color:var(--text)}
+.dot{width:26px;height:26px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0}.dot[aria-pressed=true]{border-color:var(--text)}
+code{font-size:12px;color:var(--muted)}
+/*CSS*/
+</style></head><body>
+<div class="wrap">
+<h1>开关（Switch）动效预览</h1>
+<p class="n">点开关就是 App 里的真实流程（整行重画 → 先画旧状态 → 切到新状态播动画）。用下面的速度键可以慢放。</p>
+<div class="panel" id="rows"></div>
+<div class="panel">
+ <div class="ctl"><b>速度</b><button class="pill" data-s="1" aria-pressed="false">1×</button><button class="pill" data-s="3" aria-pressed="true">慢放 3×</button><button class="pill" data-s="6" aria-pressed="false">慢放 6×</button></div>
+ <div class="ctl"><b>主题色</b><button class="dot" data-c="" style="background:#4aa3e8" aria-pressed="true" aria-label="天空蓝（没有壁纸时）"></button><button class="dot" data-c="#0a8bc7" style="background:#0a8bc7" aria-pressed="false" aria-label="壁纸色·蓝眼睛"></button><button class="dot" data-c="#c2566b" style="background:#c2566b" aria-pressed="false" aria-label="玫瑰"></button><button class="dot" data-c="#2f8f6b" style="background:#2f8f6b" aria-pressed="false" aria-label="青绿"></button><button class="dot" data-c="#e0a030" style="background:#e0a030" aria-pressed="false" aria-label="琥珀"></button></div>
+ <div class="ctl"><b>模拟「减少动态效果」</b><button class="pill" id="calm" aria-pressed="false">关</button></div>
+ <div class="ctl"><b>全部切换</b><button class="pill" id="all">一键全开 / 全关</button></div>
+</div>
+<div class="panel"><div class="ctl"><code id="info"></code></div><div class="ctl"><code id="log">触觉：—</code></div></div>
+</div>
+<script>
+/*JS*/
+</script>
+<script>
+(function(){
+ var st={time:false,on:false,auto:false},slow=3,body=document.body;
+ var defs=[['clock','time','让 Amor 感知时间'],['star','on','启用记忆'],['spark','auto','聊天时自动记住新的事']];
+ function draw(){document.getElementById('rows').innerHTML='<h2>时间感知</h2>'+SwX.html('clock','time',st.time,defs[0][2],'data-k')+'<h2>设置</h2>'+SwX.html('star','on',st.on,defs[1][2],'data-k')+SwX.html('spark','auto',st.auto,defs[2][2],'data-k');SwX.after();}
+ var nativeAnimate=Element.prototype.animate;
+ Element.prototype.animate=function(){var a=nativeAnimate.apply(this,arguments);if(this.closest&&this.closest('.sw2'))a.playbackRate=1/slow;return a;};
+ document.documentElement.style.setProperty('--sw-slow',slow);
+ // 触觉（预览里只记录）
+ var h=SwX.haptic;SwX.haptic=function(on){document.getElementById('log').textContent='触觉：'+(on?'开启 → 轻「嗒」CLOCK_TICK':'关闭 → 更轻的一下')+'（'+new Date().toLocaleTimeString()+'）';try{navigator.vibrate&&navigator.vibrate(on?10:5)}catch(e){}};
+ document.getElementById('rows').addEventListener('click',function(e){var b=e.target.closest('.sw2');if(!b)return;var k=b.getAttribute('data-k');st[k]=!st[k];SwX.haptic(st[k]);draw();});
+ document.querySelectorAll('[data-s]').forEach(function(b){b.onclick=function(){slow=+b.dataset.s;document.documentElement.style.setProperty('--sw-slow',slow);document.querySelectorAll('[data-s]').forEach(function(x){x.setAttribute('aria-pressed',x===b)});};});
+ document.querySelectorAll('[data-c]').forEach(function(b){b.onclick=function(){var c=b.dataset.c;if(c){body.classList.add('walled');body.style.setProperty('--wtint',c)}else{body.classList.remove('walled');body.style.removeProperty('--wtint')}document.querySelectorAll('[data-c]').forEach(function(x){x.setAttribute('aria-pressed',x===b)});};});
+ document.getElementById('calm').onclick=function(){SwX.opts.calm=!SwX.opts.calm;this.textContent=SwX.opts.calm?'开（只直切颜色 + 触觉）':'关';this.setAttribute('aria-pressed',SwX.opts.calm);};
+ document.getElementById('all').onclick=function(){var v=!(st.time&&st.on&&st.auto);st.time=st.on=st.auto=v;SwX.haptic(v);draw();};
+ var sp=SwX.spring(),C=SwX.C,z=C.damping/(2*Math.sqrt(C.stiffness*C.mass)),os=Math.exp(-Math.PI*z/Math.sqrt(1-z*z));
+ document.getElementById('info').textContent='弹簧 k='+C.stiffness+' c='+C.damping+'（ζ='+z.toFixed(2)+'，过冲 '+(os*100).toFixed(1)+'%，落定 '+sp.ms+'ms） · 洇色 '+C.trackMs+'ms · 光晕 0→'+C.glowPx+'px/'+C.glowMs+'ms · 拉伸 '+C.squash+'×';
+ draw();
+})();
+</script></body></html>

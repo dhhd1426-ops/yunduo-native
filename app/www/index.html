@@ -2736,7 +2736,9 @@
 </style>
 <script src="fonts/script-glyphs.js"></script>
 <script src="fonts/pinyin.js"></script>
+<link rel="stylesheet" href="fonts/sw-motion.css">
 <script src="fonts/wall-runtime.js"></script>
+<script src="fonts/sw-motion.js"></script>
 <script src="fonts/wall.js"></script>
 <script src="fonts/ear.js"></script>
 <script src="fonts/docs.js"></script>
@@ -4328,11 +4330,11 @@
       '<div class="panel"><h2>时间感知 <em>Sense of Time</em></h2>' +
         '<div class="mem-tiles">' + tiles.map(function (t) { return '<div class="stat"><span class="k">' + t[0] + '</span><span class="v">' + esc(t[1]) + '</span></div>'; }).join('') + '</div>' +
         '<p class="hint mem-line">' + esc(st.last ? (st.streak >= 2 ? '已经连续 ' + st.streak + ' 天来找 ' + an + ' 了。' : '') + '今天聊了 ' + st.today + ' 条，一共 ' + st.total + ' 条。' : '还没聊过天，去和 ' + an + ' 打个招呼吧。') + '</p>' +
-        sw('time', mem.time, '让 ' + esc(an) + ' 感知时间（多久没聊、聊得频繁、现在几点）', 'data-msw') +
+        SwX.html('clock', 'time', mem.time, '让 ' + esc(an) + ' 感知时间（多久没聊、聊得频繁、现在几点）', 'data-msw') +
       '</div>' +
       '<div class="panel"><h2>设置 <em>Memory</em></h2>' +
-        sw('on', mem.on, '启用记忆', 'data-msw') +
-        (mem.on ? sw('auto', mem.auto, '聊天时自动记住新的事', 'data-msw') +
+        SwX.html('star', 'on', mem.on, '启用记忆', 'data-msw') +
+        (mem.on ? SwX.html('spark', 'auto', mem.auto, '聊天时自动记住新的事', 'data-msw') +
           '<p class="hint" style="margin:0 0 10px">打开后，' + esc(an) + ' 会在你说到自己的事、或说“记住…”时，在后台整理出要记的内容（会多用一点模型额度）。聊天里出现“记忆已更新”就是她记下了。</p>' : '') +
       '</div>';
     if (!mem.items.length) html += '<div class="panel">' + Ico.empty('mem', '记忆是空的', esc(an) + ' 现在不记得关于你的事。聊天时她会慢慢重新记住，你也可以自己写一条。', '<button type="button" class="btn" data-memfocus="1">' + icon('plus', 18) + '自己写一条</button>') + '</div>';
@@ -4658,7 +4660,7 @@
     if (typeof Dock !== 'undefined' && Dock) Dock.update();
     if (typeof Wall !== 'undefined') Wall.sync();
     document.body.classList.toggle('tab-wx', tab === 'forecast'); document.body.classList.toggle('tab-plan', tab === 'plan'); document.body.classList.toggle('tab-set', tab === 'settings' && !state.sub);
-    NbSx.after(); MB.after(); SegInd.sync(); Circ.place(); Ico.after();
+    NbSx.after(); MB.after(); SegInd.sync(); Circ.place(); Ico.after(); SwX.after();
     weatherStatus();
     if (chat.open && !chat.busy && document.activeElement && ['chat-in', 'conv-q', 'sd-q', 'sd-rn', 'sd-pn', 'sd-pd'].indexOf(document.activeElement.id) < 0 && !chat.smenu && !chat.ssheet) renderSheet();
     if (opts.top) $main.scrollTop = 0;
@@ -9337,7 +9339,7 @@
         if (state.sub === 'notify') keepScroll();
         if (ok_) setTimeout(function () { if (ntui.send !== 'ok') return; ntui.send = ''; ntui.test = ''; if (state.sub === 'notify') keepScroll(); }, 2600);
       }, Mo.calm() ? 0 : 640); return; }
-    if (ds.msw) { mem[ds.msw] = !mem[ds.msw]; saveMem(); keepScroll(); return; }
+    if (ds.msw) { mem[ds.msw] = !mem[ds.msw]; saveMem(); if (b.classList.contains('sw2')) SwX.haptic(mem[ds.msw]); keepScroll(); return; }
     if (ds.memadd) { var mk_ = ds.memadd, mt_ = (mui.draft[mk_] || '').trim(); if (!mt_) { var fi_ = document.getElementById('mem-add-' + mk_); if (fi_) fi_.focus(); return; }
       if (memAdd(mk_, mt_, 'manual')) { mui.draft[mk_] = ''; toast('记住了'); } else toast(memSafe(mt_) ? '这条已经记过了' : '这条不能记（太长或像是密钥、密码）'); keepScroll(); return; }
     if (ds.memdel) { var dd_ = mem.items.filter(function (x) { return x.id === ds.memdel; })[0]; mem.items = mem.items.filter(function (x) { return x.id !== ds.memdel; }); saveMem(); keepScroll(); if (dd_) toast('已忘掉：' + dd_.text.slice(0, 16)); return; }

@@ -28,6 +28,24 @@ public class AmorBridge {
         return 1;
     }
 
+    /** 5.16.1 开关触觉：on = 轻"嗒"（CLOCK_TICK），off = 更轻的一下（API 27+ 用 TEXT_HANDLE_MOVE，否则 KEYBOARD_TAP）。成功返回 true。 */
+    @JavascriptInterface
+    public boolean haptic(final boolean on) {
+        try {
+            act.runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    try {
+                        android.view.View v = act.getWindow().getDecorView();
+                        int kind = on ? android.view.HapticFeedbackConstants.CLOCK_TICK
+                            : (Build.VERSION.SDK_INT >= 27 ? android.view.HapticFeedbackConstants.TEXT_HANDLE_MOVE : android.view.HapticFeedbackConstants.KEYBOARD_TAP);
+                        v.performHapticFeedback(kind);
+                    } catch (Throwable t) { Store.err(app, "haptic", t); }
+                }
+            });
+            return true;
+        } catch (Throwable t) { return false; }
+    }
+
     /** 5.13 状态栏、手势条、刘海占掉的边（CSS 像素）"上,下,左,右" */
     @JavascriptInterface
     public String insets() {

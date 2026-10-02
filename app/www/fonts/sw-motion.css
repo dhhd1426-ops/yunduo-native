@@ -1,0 +1,30 @@
+/* 云朵天气 · 开关（Switch）统一动效组件 —— 样式。参数在 sw-motion.js 的 SwX.C 里；这里只放静态外观。
+   尺寸：轨道 52×32，滑块 26×26，行程 20（与 SwX.C.travel 一致）。 */
+.sw2 { --on: #4aa3e8; --off-knob: #8197b0; position: relative; width: 52px; height: 32px; flex: none; padding: 0; margin: 0;
+  border-radius: 16px; border: 1px solid rgba(90, 110, 140, .4); background: rgba(250, 246, 236, .66); cursor: pointer;
+  box-shadow: inset 0 1px 3px rgba(60, 80, 110, .16); -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+  transition: border-color calc(.2s * var(--sw-slow, 1)) ease; }
+body.walled .sw2 { --on: var(--wtint, #4aa3e8); }
+html[data-theme="dark"] .sw2 { background: rgba(236, 228, 214, .16); border-color: rgba(190, 205, 230, .34); }
+.sw2:focus-visible { outline: 3px solid var(--accent, #a0505d); outline-offset: 3px; }
+.sw2[aria-checked="true"] { border-color: var(--on); }
+/* 轨道填色：从滑块的位置向外径向洇开（clip-path 圆），关闭时收回 */
+.sw2-fill { position: absolute; inset: -1px; border-radius: 16px; background: var(--on); clip-path: circle(0px at 17px 17px); pointer-events: none; }
+.sw2[aria-checked="true"] .sw2-fill { clip-path: circle(46px at 17px 17px); }
+.sw2-glow { position: absolute; inset: -1px; border-radius: 16px; pointer-events: none; }
+.sw2-rip { position: absolute; left: 2px; top: 2px; width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--on); box-sizing: border-box;
+  opacity: 0; transform: translateX(20px); pointer-events: none; }
+.sw2-knob { position: absolute; left: 2px; top: 2px; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--off-knob); color: rgba(255, 255, 255, .92); box-shadow: 0 1px 3px rgba(20, 30, 50, .28);
+  transform: translateX(0); transform-origin: 0 50%; transition: background-color calc(.2s * var(--sw-slow, 1)) ease, color calc(.2s * var(--sw-slow, 1)) ease; }
+.sw2[aria-checked="true"] .sw2-knob { background: #fff; color: var(--on); transform: translateX(20px); transform-origin: 100% 50%; }
+.sw2-knob svg { width: 14px; height: 14px; display: block; overflow: visible; }
+/* 按下：滑块横向拉长约 30%（像水滴被压扁），松手恢复圆形 */
+.sw2.pr .sw2-knob { transform: translateX(0) scaleX(1.3); transition: transform calc(.14s * var(--sw-slow, 1)) cubic-bezier(.2, .8, .3, 1), background-color calc(.2s * var(--sw-slow, 1)) ease, color calc(.2s * var(--sw-slow, 1)) ease; }
+.sw2.pr[aria-checked="true"] .sw2-knob { transform: translateX(20px) scaleX(1.3); }
+/* 减少动态效果：颜色直切，不播任何位移 */
+@media (prefers-reduced-motion: reduce) {
+  .sw2, .sw2-knob { transition: none !important; }
+  .sw2.pr .sw2-knob { transform: translateX(0); }
+  .sw2.pr[aria-checked="true"] .sw2-knob { transform: translateX(20px); }
+}

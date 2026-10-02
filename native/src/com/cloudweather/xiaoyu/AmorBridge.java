@@ -57,8 +57,8 @@ public class AmorBridge {
                         int sdk = Build.VERSION.SDK_INT, kind;
                         if (level <= 0) kind = sdk >= 27 ? android.view.HapticFeedbackConstants.TEXT_HANDLE_MOVE : android.view.HapticFeedbackConstants.KEYBOARD_TAP;
                         else if (level == 1) kind = android.view.HapticFeedbackConstants.CLOCK_TICK;
-                        else if (level == 2) kind = sdk >= 30 ? android.view.HapticFeedbackConstants.CONFIRM : android.view.HapticFeedbackConstants.CONTEXT_CLICK;
-                        else kind = sdk >= 30 ? android.view.HapticFeedbackConstants.REJECT : android.view.HapticFeedbackConstants.LONG_PRESS;
+                        else if (level == 2) kind = sdk >= 30 ? 16 /*CONFIRM*/ : android.view.HapticFeedbackConstants.CONTEXT_CLICK;
+                        else kind = sdk >= 30 ? 17 /*REJECT*/ : android.view.HapticFeedbackConstants.LONG_PRESS;
                         v.performHapticFeedback(kind);
                     } catch (Throwable t) { Store.err(app, "hapticLevel", t); }
                 }

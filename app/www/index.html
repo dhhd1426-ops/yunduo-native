@@ -4487,7 +4487,11 @@
   function longPress(find, fire, ms, cls) {
     var lp = null;
     function cancel() { if (lp) { clearTimeout(lp.t); lp.el.classList.remove(cls); lp = null; } }
-    function go() { var z = lp; lp = null; z.el.classList.remove(cls); if (z.el.isConnected) { lpSwallow = true; try { navigator.vibrate && navigator.vibrate(12); } catch (x) {} fire(z.el); } }
+    function go() {
+      var z = lp, el = z.el; lp = null; el.classList.remove(cls);
+      if (!el.isConnected) { var h = document.elementFromPoint(z.x, z.y); el = h && h.closest && find(h); }   // 按着的时候列表被重画了（比如回答刚写完）：按手指位置找回同一处
+      if (el) { lpSwallow = true; try { navigator.vibrate && navigator.vibrate(12); } catch (x) {} fire(el); }
+    }
     document.addEventListener('touchstart', function (e) {
       cancel(); var el = e.touches.length === 1 && e.target.closest && find(e.target); if (!el) return;
       lp = { el: el, x: e.touches[0].clientX, y: e.touches[0].clientY, at: e.timeStamp, t: setTimeout(go, ms) }; el.classList.add(cls);

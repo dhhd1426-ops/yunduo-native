@@ -232,7 +232,7 @@ final class Notif {
             ShortcutManager sm = c.getSystemService(ShortcutManager.class);
             if (sm != null) {
                 Intent si = new Intent(c, MainActivity.class).setAction(Intent.ACTION_VIEW);
-                ShortcutInfo sc = new ShortcutInfo.Builder(c, "amor").setShortLabel(name).setLongLabel("和 " + name + " 聊聊")
+                ShortcutInfo sc = new ShortcutInfo.Builder(c, "amor").setShortLabel(name).setLongLabel(name)
                         .setIcon(face).setIntent(si).setLongLived(true).setPerson(amor).build();
                 sm.pushDynamicShortcut(sc);
                 b.setShortcutId("amor");
@@ -242,6 +242,7 @@ final class Notif {
             Person me = new Person.Builder().setName("我").setKey("me").build();
             Notification.MessagingStyle ms = new Notification.MessagingStyle(me);
             ms.setGroupConversation(false);
+            ms.setConversationTitle(name);
             ms.addMessage(new Notification.MessagingStyle.Message(body, now, amor));
             b.setStyle(ms);
             b.setLargeIcon(av);

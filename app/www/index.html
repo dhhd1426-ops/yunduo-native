@@ -3071,7 +3071,7 @@
   ];
   var mem = { on: true, auto: true, time: true, recall: true, items: [], meta: null, done: {} };
   try { var sm = JSON.parse(localStorage.getItem(MEM_KEY) || 'null'); if (sm) for (var mk in sm) mem[mk] = sm[mk]; } catch (e) {}
-  function saveMem() { try { localStorage.setItem(MEM_KEY, JSON.stringify(mem)); } catch (e) {} }
+  function saveMem() { try { localStorage.setItem(MEM_KEY, JSON.stringify(mem)); return true; } catch (e) { return false; } }
   function dayStr(ts) { var d = new Date(ts); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
   // 第一次用：从已有的聊天记录推出“认识多久、上次什么时候聊”
   if (!mem.meta) {
@@ -3301,8 +3301,10 @@
   }
   // 聊完后在后台让模型整理出值得长期记住的新信息
   var memBusy = false;
-  function memExtract(conv, msgIndex) {
-    if (!mem.on || !mem.auto || memBusy || !conv) return;
+  var memAgain = null;
+  function memExtract(conv, msgIndex, tries) {
+    if (!mem.on || !mem.auto || !conv) return;
+    if (memBusy) { memAgain = [conv, msgIndex]; return; }   // 5.17：正在整理上一次时，这次排队，不再直接丢掉
     var rm = resolveModel(); if (!rm) return;
     var from = mem.done[conv.id] || 0, recent = conv.msgs.slice(Math.max(from, conv.msgs.length - 8));
     if (!recent.some(function (x) { return x.role === 'user'; })) return;
@@ -3324,18 +3326,27 @@
                     : { model: rm.id, stream: false, max_tokens: 600, temperature: 0.2, messages: [{ role: 'system', content: sys }, { role: 'user', content: user }] };
     pCall(rm.p, 'POST', joinUrl(rm.p.base, rm.p.path), body, 90000).then(function (j) {
       var t = anth ? (j.content || []).map(function (c) { return c.text || ''; }).join('') : ((j.choices && j.choices[0] && j.choices[0].message) || {}).content || '';
-      var mm = /\{[\s\S]*\}/.exec(t); if (!mm) return;
+      var mm = /\{[\s\S]*\}/.exec(t); if (!mm) return false;
       var r = JSON.parse(mm[0]), noted = [];
       (r.remove || []).forEach(function (id) { var hit = mem.items.filter(function (x) { return x.id === id; })[0]; if (hit) { mem.items = mem.items.filter(function (x) { return x !== hit; }); noted.push('忘掉了：' + hit.text); } });
       (r.update || []).forEach(function (u) { var hit = mem.items.filter(function (x) { return x.id === u.id; })[0], nt = memSafe(u.text); if (hit && nt && nt !== hit.text) { hit.text = nt; hit.at = Date.now(); hit.src = 'auto'; noted.push(nt); } });
       (r.add || []).slice(0, 4).forEach(function (a) { var k = ['global', 'pref', 'amor'].indexOf(a.type) >= 0 ? a.type : 'amor', it = memAdd(k, a.text, 'auto', a.date); if (it) noted.push(it.text); });
-      mem.done[conv.id] = conv.msgs.length; saveMem();
+      mem.done[conv.id] = conv.msgs.length; if (!saveMem()) return false;
       var msg = conv.msgs[msgIndex];
       if (noted.length && msg && msg.role === 'assistant') {
         msg.memNote = noted; saveChats(); msg.memFresh = true;
         if (chat.open && chat.cur === conv.id && !chat.busy) renderSheet();
       }
-    }).catch(function () {}).then(function () { memBusy = false; });
+      return true;
+    }).catch(function () { return false; }).then(function (ok) {
+      memBusy = false;
+      if (!ok) {
+        // 5.17：整理失败（网络、模型没按格式回）→ 过一会儿再试一次；还不行而且对方明说了「记住」，就告诉 TA 没记上
+        if (!tries) setTimeout(function () { memExtract(conv, msgIndex, 1); }, 8000);
+        else if (recent.some(function (x) { return x.role === 'user' && /记住|记得|别忘/.test(String(x.content)); })) toast('刚才让我记住的那句没记进记忆，可以稍后再说一次');
+      }
+      if (memAgain) { var ag_ = memAgain; memAgain = null; setTimeout(function () { memExtract(ag_[0], ag_[1]); }, 500); }
+    });
   }
   if (!state.splashMode) state.splashMode = 'always';
   var chat = { snav: '', smenu: null, ssheet: null, sq: '', sqf: 'all', newProj: '', open: false, side: false, cur: null, city: '', busy: false, err: '', draft: '', lastQ: '', q: '', filter: 'all', fresh: 0, partial: '', partialThink: '', phase: '', pop: '', mpq: '', stest: null, t0: 0, popSub: '', popAnim: '', procKey: '', procLine: '', thinkMs: 0, xhr: null, stopped: false };
@@ -3903,7 +3914,7 @@
     sleep: { on: false, at: '23:30' }, morning: { on: true, at: '07:30' }, alert: { on: true }, miss: { on: true, days: 3 }, memo: { on: true },
     quiet: { from: 23, to: 7 }, lockFull: true, island: false, aiCopy: true, maxPerDay: 8, copy: null, seenAlarms: [], style: 'letter', reminders: [], keep: true };
   try { var sn = JSON.parse(localStorage.getItem(NT_KEY) || 'null'); if (sn) for (var nk in sn) nt[nk] = sn[nk]; } catch (e) {}
-  function saveNt() { try { localStorage.setItem(NT_KEY, JSON.stringify(nt)); } catch (e) {} }
+  function saveNt() { try { localStorage.setItem(NT_KEY, JSON.stringify(nt)); return true; } catch (e) { return false; } }
   function nativeOk() { try { return !!(window.AmorNative && AmorNative.version && AmorNative.version() >= 1); } catch (e) { return false; } }
   function nInfo() { try { return nativeOk() ? JSON.parse(AmorNative.info() || '{}') : null; } catch (e) { return null; } }
 
@@ -3982,9 +3993,11 @@
       if (nt.reminders.length >= 30) return { content: '提醒太多了（最多 30 个），先取消一些再设。' };
       var title = String(a.title || '提醒').trim().slice(0, 12), text = memSafe(String(a.text || '').slice(0, 80)) || title;
       var id = 70000 + Math.floor(Math.random() * 20000);
-      nt.reminders.push({ id: id, t: t, title: title, text: text, conv: conv && conv.id, at: now });
-      saveNt(); notifySync(true);
-      var inf = nInfo(), warn = inf && inf.enabled === false ? '（注意：系统通知权限还没打开，可能弹不出来，提醒他到 设置 › 通知 里打开）' : '';
+      var rr_ = { id: id, t: t, title: title, text: text, conv: conv && conv.id, at: now };
+      nt.reminders.push(rr_);
+      if (!saveNt()) { nt.reminders = nt.reminders.filter(function (r) { return r !== rr_; }); return toolFail('设提醒', STORE_FULL); }
+      notifySync(true);
+      var inf = nInfo(), warn = inf && inf.enabled === false ? '（注意：系统通知权限还没打开，可能弹不出来，提醒他到 设置 › 通知 里打开）' : inf && inf.exact === false ? '（注意：系统没允许「精确闹钟」，提醒可能会晚几分钟到，告诉他一声）' : '';
       return { log: { tool: 'remind', q: title, at: t, id: id, hits: [], file: remindLabel(t), diff: [['+', remindLabel(t) + '  ' + title]].concat(text !== title ? [['+', '  ' + text.slice(0, 40)]] : []) }, content: '已设好提醒 id=' + id + '：' + remindLabel(t) + '「' + title + '」' + text + warn };
     }
     if (name === 'list_reminders') {
@@ -3995,7 +4008,9 @@
     if (name === 'cancel_reminder') {
       var hit = nt.reminders.filter(function (r) { return r.id === +a.id; })[0];
       if (!hit) return { content: '没有找到 id=' + a.id + ' 的提醒。' };
-      nt.reminders = nt.reminders.filter(function (r) { return r !== hit; }); saveNt(); notifySync(true);
+      var rk_ = nt.reminders; nt.reminders = nt.reminders.filter(function (r) { return r !== hit; });
+      if (!saveNt()) { nt.reminders = rk_; return toolFail('取消提醒', STORE_FULL); }
+      notifySync(true);
       return { log: { tool: 'rcancel', q: hit.title, at: hit.t, id: hit.id, hits: [], file: remindLabel(hit.t), diff: [['-', remindLabel(hit.t) + '  ' + hit.title]] }, content: '已取消：' + remindLabel(hit.t) + '「' + hit.title + '」' };
     }
     return null;
@@ -4324,7 +4339,7 @@
       '<p class="note" style="margin-top:-6px">' + esc(an) + ' 会记住关于你的事，下次聊天时自然地用上。所有记忆只保存在这台手机上，可以随时修改或删除。</p>' +
       '<div class="panel' + (mem.on ? '' : ' mem-panel off') + '"><h2>全局记忆 <em>All Conversations</em></h2>' +
         '<p class="hint" style="margin:0 0 8px">' + esc(an) + ' 可以调阅你们以前所有的聊天，而且由她自己判断什么时候需要：你提到以前的事、接着之前的话题，或者回答需要你以前说过的背景时，她会去搜索、浏览或打开旧对话；闲聊和一般问题不会去翻。调阅过的回答上方会显示“查阅了过去的对话”，点开能看到她搜了什么、找到了哪几段。</p>' +
-        '<p class="hint" style="margin:0 0 8px">检索在手机上完成；调阅时模型会多回一轮，多用一点额度。' + (function () { var r = resolveModel(); return r && r.p.noTools ? '当前的 ' + esc(r.p.name) + ' 不支持工具调用，已改为：你提到“上次/还记得”时由 App 帮她找。' : ''; })() + '</p>' +
+        '<p class="hint" style="margin:0 0 8px">检索在手机上完成；调阅时模型会多回一轮，多用一点额度。' + (function () { var r = resolveModel(); return r && toolsOffFor(r.p, r.id) ? '当前的 ' + esc(r.p.name) + ' 不支持工具调用，已改为：你提到“上次/还记得”时由 App 帮她找。' : ''; })() + '</p>' +
         '<div class="mem-tiles" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="stat"><span class="k">可调阅的对话</span><span class="v">' + nConv + ' 段</span></div>' +
           '<div class="stat"><span class="k">消息</span><span class="v">' + nMsg + ' 条</span></div></div>' +
         sw('recall', mem.recall, '调阅以前的聊天记录', 'data-msw') +
@@ -6455,13 +6470,13 @@
   var CAL_KEY = 'cloud-weather-calendar-v1';
   var cal = { events: [], alarms: [] };
   try { var scal = JSON.parse(localStorage.getItem(CAL_KEY) || 'null'); if (scal) { cal.events = scal.events || []; cal.alarms = scal.alarms || []; } } catch (e) {}
-  function saveCal() { try { localStorage.setItem(CAL_KEY, JSON.stringify(cal)); } catch (e) {} alarmSync(); notifySync(); }
+  function saveCal() { var ok = true; try { localStorage.setItem(CAL_KEY, JSON.stringify(cal)); } catch (e) { ok = false; } alarmSync(); notifySync(); return ok; }   // 5.17：返回有没有真的存上，工具要照实告诉 Amor
   var calui = { seg: 'cal', ym: null, sel: '', sheet: null, alarm: null, tear: '', advAll: false };
   /* ======================= 4.9.2 笔记：日程页第三栏 · 写笔记 · Amor 帮笔记 · 聊天里存/翻笔记 ======================= */
   var NOTE_KEY = 'cloud-weather-notes-v1';
   var notes = [];
   try { notes = JSON.parse(localStorage.getItem(NOTE_KEY) || '[]') || []; } catch (e) { notes = []; }
-  function saveNotes() { try { localStorage.setItem(NOTE_KEY, JSON.stringify(notes)); } catch (e) { toast('手机存储满了，笔记没存上'); } }
+  function saveNotes() { try { localStorage.setItem(NOTE_KEY, JSON.stringify(notes)); return true; } catch (e) { toast('手机存储满了，笔记没存上'); return false; } }
   // 5.9 文件夹：可以一层套一层；一篇笔记只在一个文件夹（n.folder，'' = 未归档）。删掉的笔记先进「最近删除」（n.del = 时间），30 天后清掉
   var NF_KEY = 'cloud-weather-note-folders-v1', nfolders = [];
   function saveFolders() { try { localStorage.setItem(NF_KEY, JSON.stringify({ v: 1, list: nfolders })); } catch (e) {} }
@@ -6823,8 +6838,13 @@
     var fid = typeof tags === 'string' ? (tags ? nfEnsurePath(tags) : '') : '';
     var n = { id: noteNewId(), title: String(title || '').trim().slice(0, 40), body: body, tags: [], folder: fid, pin: false, paper: 'plain', date: '', src: 'chat', created: Date.now(), updated: Date.now() };
     if (!n.title) { var h1 = body.match(/^\s*#{1,3}\s+(.+)$/m) || body.match(/【姓名】\s*(\S+)/); n.title = h1 ? h1[1].slice(0, 20) : noteTitleOf({ title: '', body: body }); }
-    notes.unshift(n); saveNotes(); return n;
+    notes.unshift(n);
+    if (!saveNotes()) { notes = notes.filter(function (x) { return x !== n; }); return null; }   // 5.17：没存上就别留一篇重启就消失的笔记
+    return n;
   }
+  // 5.17 工具失败统一的样子：交回模型的话写明「没做成」，过程里显示一条红字
+  function toolFail(label, why, extra) { return { content: '没存上：' + why + '。这次' + label + '没有成功，照实告诉对方，不要说已经做好了。' + (extra || ''), fail: true, log: { tool: 'fail', q: label, err: why, hits: [] } }; }
+  var STORE_FULL = '手机存储满了';
   var NOTE_TOOLS = [
     { name: 'save_note', description: '把内容存进用户的笔记。用户说“记一下/存成笔记/帮我记下这个配方”之类、要长期留着查的内容时使用（有日期要提醒的事用 add_event）。',
       params: { type: 'object', properties: { title: { type: 'string', description: '标题，20 个字以内' }, body: { type: 'string', description: '正文，可以用「## 小标题」「- 列表」「- [ ] 待办」' },
@@ -6848,11 +6868,15 @@
   }
   function runNoteTool(name, a) {
     if (name === 'save_note') {
+      if (!String(a.body || '').trim() && !String(a.title || '').trim()) return { content: '标题和正文都是空的，这次没有执行。把要记的内容写进 body 再调用。', fail: true };
       var old = a.note_id ? noteById(String(a.note_id)) : null;
-      if (old) { old.body = old.body.replace(/\s*$/, '') + '\n\n' + String(a.body || ''); old.updated = Date.now(); saveNotes();
+      if (a.note_id && (!old || old.del)) return { content: '没有 id=' + a.note_id + ' 的笔记，这次没有执行。先用 search_notes 找到 id，或者不填 note_id 新建一篇。', fail: true };
+      if (old) { var ob_ = old.body, ou_ = old.updated; old.body = old.body.replace(/\s*$/, '') + '\n\n' + String(a.body || ''); old.updated = Date.now();
+        if (!saveNotes()) { old.body = ob_; old.updated = ou_; return toolFail('追加笔记', STORE_FULL); }
         return { log: { tool: 'note', q: noteTitleOf(old), id: old.id, tags: old.tags || [], hits: [], diff: [['+', String(a.body || '').split('\n')[0].slice(0, 40)]] }, content: '已追加到笔记「' + noteTitleOf(old) + '」。' }; }
       var fpath = String(a.folder || (Array.isArray(a.tags) && a.tags[0]) || '').replace(/^#/, '').trim();
       var n = noteFromChat(String(a.body || ''), a.title, fpath);
+      if (!n) return toolFail('记进笔记', STORE_FULL);
       if (state.tab === 'plan' && !chat.open) keepScroll();
       return { log: { tool: 'note', q: noteTitleOf(n), id: n.id, tags: n.folder ? [nfPathStr(n.folder)] : [], hits: [], diff: [['+', noteTitleOf(n)]].concat(noteLines(n.body).filter(function (l) { return l.trim(); }).slice(0, 3).map(function (l) { return ['+', '  ' + l.slice(0, 40)]; })) },
         content: '已存进笔记「' + noteTitleOf(n) + '」' + (n.folder ? '，放在文件夹「' + nfPathStr(n.folder) + '」' : '') + '（id=' + n.id + '）。' };
@@ -7198,7 +7222,9 @@
       var t = /^\d{1,2}:\d{2}$/.test(String(a.time || '').trim()) ? String(a.time).trim().padStart(5, '0') : '';
       var rem = String(a.remind || (t ? '60' : 'am')).split(/[,，\s]+/).filter(function (x) { return /^(0|10|60|eve|am)$/.test(x); });
       var ev = { id: calNewId(), d: ymd(d), t: t, title: String(a.title || '日程').trim().slice(0, 24), rem: rem.length ? rem : [t ? '60' : 'am'], rep: 'none', at: Date.now(), src: 'amor' };
-      cal.events.push(ev); saveCal(); if (state.tab === 'plan' && !chat.open) keepScroll();
+      cal.events.push(ev);
+      if (!saveCal()) { cal.events = cal.events.filter(function (e) { return e !== ev; }); return toolFail('记进日程', STORE_FULL); }
+      if (state.tab === 'plan' && !chat.open) keepScroll();
       return { log: { tool: 'event', q: ev.title, hits: [], file: dateZh(ev.d), diff: [['+', dateZh(ev.d) + (ev.t ? ' ' + ev.t : '') + '  ' + ev.title], ['+', '  ' + ev.rem.map(function (r) { return REM_ZH[r] || r; }).join('、') + '提醒']] }, content: '已记下 id=' + ev.id + '：' + dateZh(ev.d) + (ev.t ? ' ' + ev.t : '') + '「' + ev.title + '」' };
     }
     if (name === 'list_events') {
@@ -7209,7 +7235,8 @@
     if (name === 'delete_event') {
       var hit = cal.events.filter(function (e) { return e.id === String(a.id); })[0];
       if (!hit) return { content: '没有找到 id=' + a.id + ' 的日程。' };
-      cal.events = cal.events.filter(function (e) { return e !== hit; }); saveCal();
+      var keep_ = cal.events; cal.events = cal.events.filter(function (e) { return e !== hit; });
+      if (!saveCal()) { cal.events = keep_; return toolFail('删除日程', STORE_FULL); }
       return { log: { tool: 'edel', q: hit.title, hits: [], file: dateZh(hit.d), diff: [['-', dateZh(hit.d) + (hit.t ? ' ' + hit.t : '') + '  ' + hit.title]] }, content: '已删除「' + hit.title + '」' };
     }
     if (name === 'set_alarm') {
@@ -7218,7 +7245,9 @@
       var days = String(a.days || '').split(/[,，\s]+/).map(Number).filter(function (x) { return x >= 1 && x <= 7; });
       var dt = pymd(String(a.date || '').trim());
       var al = { id: 1 + Math.floor(Math.random() * 90000), h: +mm[1], m: +mm[2], days: days, date: days.length ? '' : (dt ? ymd(dt) : ''), on: true, label: String(a.label || '').slice(0, 10), snooze: 10, ramp: true, amor: true };
-      cal.alarms.push(al); saveCal(); if (state.tab === 'plan' && !chat.open) keepScroll();
+      cal.alarms.push(al);
+      if (!saveCal()) { cal.alarms = cal.alarms.filter(function (x) { return x !== al; }); alarmSync(); return toolFail('定闹钟', STORE_FULL); }
+      if (state.tab === 'plan' && !chat.open) keepScroll();
       var nx = alarmNext(al);
       return { log: { tool: 'alarm', q: mm[1].padStart(2, '0') + ':' + mm[2], at: nx, hits: [], file: al.label || '闹钟', diff: [['+', mm[1].padStart(2, '0') + ':' + mm[2] + '  ' + (days.length ? '每周' + days.map(function (x) { return WEEK_ZH[x % 7]; }).join('') : al.date ? dateZh(al.date) : '响一次') + (al.label ? '  ' + al.label : '')], ['+', '  再睡 10 分钟 · 渐强铃声']] }, content: nx ? '闹钟已定好：' + whenShort(nx) + (days.length ? '（每周 ' + days.map(function (x) { return WEEK_ZH[x % 7]; }).join('') + '）' : '') : '闹钟已存好，但算不出下一次响的时间。' };
     }
@@ -7885,17 +7914,18 @@
     function nat(fn) { return nativeOk() && typeof AmorNative[fn] === 'function'; }
     function b64(u8) { var s = ''; for (var i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); }
     function writeNative(f, blob) {
-      if (!nat('fileBegin')) return Promise.resolve();
+      if (!nat('fileBegin')) return Promise.resolve(true);
       return blob.arrayBuffer().then(function (buf) {
         var u = new Uint8Array(buf), id = AmorNative.fileBegin(f.name, f.mime), CH = 768 * 1024;
         for (var i = 0; i < u.length; i += CH) AmorNative.fileAppend(id, b64(u.subarray(i, i + CH)));
         var r = {}; try { r = JSON.parse(AmorNative.fileEnd(id) || '{}'); } catch (e) {}
         if (r.path) { f.path = r.path; persist(); }
+        return !!r.path;   // 5.17：告诉调用方有没有真的写进手机
       });
     }
     function add(name, blob, src) {
       var f = { id: 'f' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), name: name, mime: blob.type || fileMime(name), size: blob.size, at: Date.now(), src: src || null };
-      mem[f.id] = blob; list.unshift(f); persist(); pend[f.id] = writeNative(f, blob).catch(function () {});
+      mem[f.id] = blob; list.unshift(f); persist(); pend[f.id] = writeNative(f, blob).catch(function () { return false; });
       if (chat.open) keepChatScroll();
       return f;
     }
@@ -7925,7 +7955,7 @@
       var blob = fl.bundle ? zipBlob(fl.entries) : new Blob([fl.text], { type: fileMime(fl.name) + ';charset=utf-8' });
       return add(fl.name, blob, { k: key, ref: ref });
     }
-    return { add: add, get: get, persist: persist, all: function () { return list.slice(); }, forKey: function (k) { return list.filter(function (f) { return f.src && f.src.k === k && !f.src.ref; }); },
+    return { add: add, get: get, persist: persist, wait: function (id) { return Promise.resolve(pend[id] == null ? true : pend[id]); }, all: function () { return list.slice(); }, forKey: function (k) { return list.filter(function (f) { return f.src && f.src.k === k && !f.src.ref; }); },
       blobOf: blobOf, urlOf: urlOf, save: saveToPhone, share: share, open: openWith, remove: remove, fromInline: fromInline };
   })();
   window.__files = Files;   // 测试用
@@ -9457,7 +9487,7 @@
       var t_ = document.getElementById('chat-in'); if (t_) { try { t_.focus({ preventScroll: true }); t_.setSelectionRange(t_.value.length, t_.value.length); } catch (x) {} fitInput(); }
       return;
     }
-    if (ds.mnote != null) { var cn_ = curConv(), mn_ = cn_ && cn_.msgs[+ds.mnote]; chat.mmenu = null; keepChatScroll(); if (mn_) { var nt_ = noteFromChat(artStrip ? artStrip(mn_.content) : mn_.content, '', []); toastAct('已存进笔记「' + (noteTitleOf(nt_).length > 10 ? noteTitleOf(nt_).slice(0, 9) + '…' : noteTitleOf(nt_)) + '」', '打开', function () { closeChat(); setTimeout(function () { noteOpen(nt_.id); }, 250); }); } return; }
+    if (ds.mnote != null) { var cn_ = curConv(), mn_ = cn_ && cn_.msgs[+ds.mnote]; chat.mmenu = null; keepChatScroll(); if (mn_) { var nt_ = noteFromChat(artStrip ? artStrip(mn_.content) : mn_.content, '', []); if (nt_) toastAct('已存进笔记「' + (noteTitleOf(nt_).length > 10 ? noteTitleOf(nt_).slice(0, 9) + '…' : noteTitleOf(nt_)) + '」', '打开', function () { closeChat(); setTimeout(function () { noteOpen(nt_.id); }, 250); }); } return; }
     if (ds.msel != null) { chat.mmenu = null; chat.selIdx = +ds.msel; chat.pop = 'seltext'; chat.popSub = ''; chat.popIn = true; renderSheet(); return; }
     if (ds.brv) { var bp_ = ds.brv.split('|'); switchBranch(+bp_[0], +bp_[1]); return; }
     if (ds.tstep) { chat.popAnim = 'fwd'; chat.popSub = 'step:' + ds.tstep; renderSheet(); return; }
@@ -10459,6 +10489,57 @@
     return body;
   }
 
+  /* ---------- 5.17 工具调用的可靠性：说做了就要真的做了 ---------- */
+  // 会改东西的工具：这一轮里至少有一个成功了，Amor 说「记下了 / 设好了」才算数
+  var TOOL_WRITE = /^(save_note|add_event|delete_event|set_alarm|set_reminder|cancel_reminder|pdf_edit|pdf_create|sheet_edit|sheet_create|install_skill|connect_mcp)$/;
+  var TOOL_ZH = { save_note: '记进笔记', add_event: '记进日程', delete_event: '删除日程', set_alarm: '定闹钟', set_reminder: '设提醒', cancel_reminder: '取消提醒',
+    pdf_edit: '改 PDF', pdf_create: '做 PDF', sheet_edit: '改表格', sheet_create: '做表格', install_skill: '装技能', connect_mcp: '接入连接器' };
+  function toolLabel(n) { return TOOL_ZH[n] || n; }
+  // 参数解析：中转站有时把整段 JSON 发两遍、或者后面多了东西；能救就救，救不了返回 null（别当成空参数去执行）
+  function toolArgs(s) {
+    if (s && typeof s === 'object') return s;
+    s = String(s == null ? '' : s).trim(); if (!s) return {};
+    try { var o = JSON.parse(s); return o && typeof o === 'object' ? o : null; } catch (e) {}
+    var dep = 0, q = false, esc_ = false;
+    for (var i = 0; i < s.length; i++) {
+      var ch = s[i];
+      if (q) { if (esc_) esc_ = false; else if (ch === '\\') esc_ = true; else if (ch === '"') q = false; continue; }
+      if (ch === '"') q = true; else if (ch === '{') dep++;
+      else if (ch === '}' && --dep === 0) { try { var o2 = JSON.parse(s.slice(s.indexOf('{'), i + 1)); return o2 && typeof o2 === 'object' ? o2 : null; } catch (e) { return null; } }
+    }
+    return null;
+  }
+  // 「不支持工具」只记在这个模型上，而且一天后重新试；旧版记在整个供应商上、永远不再试的标记直接作废
+  function toolsOffFor(cfg, model) {
+    if (cfg.noTools === true || cfg.toolsOk != null) { delete cfg.noTools; delete cfg.toolsOk; saveProviders(); }
+    var t = cfg.noToolsM && cfg.noToolsM[model];
+    if (t && Date.now() - t > 86400000) { delete cfg.noToolsM[model]; saveProviders(); return false; }
+    return !!t;
+  }
+  function toolsOkFor(cfg, model) { return !!(cfg.toolsOkM && cfg.toolsOkM[model]); }
+  function toolsMark(cfg, model, ok) {
+    if (ok) { if (toolsOkFor(cfg, model) && !(cfg.noToolsM && cfg.noToolsM[model])) return; (cfg.toolsOkM = cfg.toolsOkM || {})[model] = 1; if (cfg.noToolsM) delete cfg.noToolsM[model]; }
+    else (cfg.noToolsM = cfg.noToolsM || {})[model] = Date.now();
+    saveProviders();
+  }
+  // 回答里「已经记下 / 存好 / 设好 / 到时候提醒你」这类说法；只在对方这句话确实是让她记 / 存 / 设 / 提醒时才核对
+  var CLAIM_V = '记下|记好|记上|记进|存好|存下|存上|存进|存到|保存|设好|设置好|设上|定好|加好|加上|加进|添加|放进|建好|排好|安排好|删掉|删除|删好|取消';
+  var CLAIM_RE = [
+    new RegExp('已经?(为你|帮你|给你|替你)?(把[^，。！？\\n]{0,16})?(' + CLAIM_V + ')'),
+    new RegExp('(帮你|给你|替你)(把[^，。！？\\n]{0,16})?(' + CLAIM_V + ')(好|下|上|进)?[^，。！？\\n]{0,8}(了|啦)'),
+    new RegExp('(' + CLAIM_V + ')(好了|好啦|下了|下啦|上了|进去了|进去啦)'),
+    /(到时(候)?|到点)(我)?(会)?(提醒|叫)你|我会(准时|按时)?(提醒|叫)你/
+  ];
+  var CLAIM_ASK = /记一下|记下|记上|记着|记住|记到|记进|帮我记|存一下|存下|存起来|存成|保存|收藏|提醒|闹钟|叫我|喊我|日程|日历|备忘|笔记|待办|安排|加到|加进|添加|删掉|删除|取消|设个|定个|设一个|定一个/;
+  function claimsDone(reply, ask) {
+    reply = String(reply || ''); if (!reply || !CLAIM_ASK.test(String(ask || ''))) return false;
+    return CLAIM_RE.some(function (re) { return re.test(reply); });
+  }
+  var CLAIM_NUDGE = '【系统核对】你刚才的回答里说已经记下 / 存好 / 设好了，但这一轮你没有成功调用任何保存或设置的工具，所以实际上什么都没有保存。' +
+    '如果确实需要保存或设置，现在就调用对应的工具真正去做，做完再回答；如果不需要，就把回答重新写一遍，不要说已经保存或设置好了。（这条是 App 自动发的核对，回答里不要提到它。）';
+  var CLAIM_NOTE = '\n\n（说明：App 核对过，这次并没有真的保存或设置成功。需要的话请再说一次，或者在 App 里手动添加。）';
+  var CLAIM_NOTE_NT = '\n\n（说明：这次并没有真的保存或设置——当前模型没法调用 App 的工具。需要的话请在 App 里手动添加，或者换一个支持工具的模型。）';
+
   // 聊天：支持流式输出（一边生成一边显示），同时读取思考过程
   // opt（可选）：{ tools:[{name,description,params}], runTool(name,args)→{content,log}, onTool(log), systemNoTools }
   // 模型要用工具时：在手机上执行工具，把结果交回去，再接着生成，最多 4 轮
@@ -10520,10 +10601,20 @@
               piece = dl.content || '';
               tpiece = dl.reasoning_content || dl.reasoning || '';
               (dl.tool_calls || []).forEach(function (tc) {
-                var k = tc.index != null ? tc.index : calls.length;
+                // 5.17：有的中转站不给 index、或者每一块都重发 id 和完整的工具名，不能把名字拼成 save_notesave_note
+                var k = tc.index;
+                if (k == null) {
+                  var fn_ = tc.function && tc.function.name, byId = -1;
+                  calls.forEach(function (x, i) { if (x && tc.id && x.id === tc.id) byId = i; });
+                  k = byId >= 0 ? byId : (!tc.id && !fn_ && calls.length) ? calls.length - 1 : calls.length;
+                }
                 var c = calls[k] || (calls[k] = { id: '', name: '', args: '' });
                 if (tc.id) c.id = tc.id;
-                if (tc.function) { if (tc.function.name) c.name += tc.function.name; if (tc.function.arguments) c.args += tc.function.arguments; }
+                if (tc.function) {
+                  var nm_ = tc.function.name;
+                  if (nm_ && nm_ !== c.name) c.name = c.name && nm_.indexOf(c.name) === 0 ? nm_ : c.name + nm_;
+                  if (tc.function.arguments) c.args += typeof tc.function.arguments === 'string' ? tc.function.arguments : JSON.stringify(tc.function.arguments);
+                }
               });
             }
             if (piece || tpiece) { text += piece; think += tpiece; emit(); }
@@ -10556,8 +10647,20 @@
               } catch (e) {}
             }
             if (anth) blocks.forEach(function (bk) {
-              if (bk && bk.type === 'tool_use') { if (!bk.input) { try { bk.input = bk.json ? JSON.parse(bk.json) : {}; } catch (e) { bk.input = {}; } } calls.push({ id: bk.id, name: bk.name, input: bk.input }); }
+              if (bk && bk.type === 'tool_use') {
+                var bad_ = false;
+                if (!bk.input) { var pj_ = toolArgs(bk.json); bk.input = pj_ || {}; bad_ = !pj_; }
+                calls.push({ id: bk.id, name: bk.name, input: bk.input, bad: bad_, raw: bad_ ? bk.json : '' });
+              }
             });
+            // 5.17：模型没走正式的工具接口、把调用写成了 <tool_call>{…}</tool_call> 文字（一些开源模型 / 中转会这样）→ 照样执行
+            if (!anth && !calls.length && body.tools && /<tool_call>/.test(text)) {
+              text = text.replace(/<tool_call>\s*([\s\S]*?)\s*<\/tool_call>/g, function (_, js) {
+                var o_ = toolArgs(js);
+                if (o_ && o_.name) { var a_ = o_.arguments != null ? o_.arguments : o_.parameters; calls.push({ id: 'call_t' + calls.length, name: String(o_.name), args: typeof a_ === 'string' ? a_ : JSON.stringify(a_ || {}) }); return ''; }
+                return _;
+              }).trim();
+            }
             calls = calls.filter(function (c) { return c && c.name; });
             if (!text && !calls.length && streamErr) reject({ status: 0, msg: streamErr });
             else resolve({ text: text, think: think, calls: calls, blocks: blocks.filter(Boolean) });
@@ -10576,45 +10679,85 @@
     // 一次请求；这家不认识工具或思考参数就记住、去掉后重试
     function attempt(key, conv, pre, useTools) {
       var body = build(conv, useTools);
-      return once(key, body, pre).then(function (res) { if (useTools && !cfg.toolsOk) { cfg.toolsOk = true; saveProviders(); } res.useTools = useTools; return res; }, function (err) {
+      return once(key, body, pre).then(function (res) { if (useTools) toolsMark(cfg, model, true); res.useTools = useTools; return res; }, function (err) {
         var bad = err.status === 400 || err.status === 422;
-        if (bad && useTools && !cfg.toolsOk) {
-          // 去掉工具再试；成功了才认定这家不支持工具
+        // 5.17：先怀疑思考参数（这家不认 reasoning_effort / thinking），去掉它、工具照带再试；
+        // 以前是先去掉工具，一次思考参数报错就把这家永久标成「不支持工具」，之后 Amor 只能嘴上说「记下了」
+        if (bad && (body.reasoning_effort || body.thinking)) {
+          if (anth) cfg.noThink = true; else cfg.noEffort = true;
+          saveProviders();
+          return attempt(key, conv, pre, useTools);
+        }
+        if (bad && useTools && !toolsOkFor(cfg, model)) {
+          // 去掉工具再试；成功了才认定这个模型不支持工具（只记这个模型，一天后再试）
           if (opt.onNoTools) opt.onNoTools();
           // 不支持工具时，给调用方一个机会先替模型做点事（比如把消息里的链接打开），结果拼进 system
           return Promise.resolve(opt.beforeNoTools ? opt.beforeNoTools() : '').then(function (extra) {
             if (extra) opt.systemNoTools = (opt.systemNoTools || system) + extra;
             return attempt(key, conv, pre, false);
-          }).then(function (res) { cfg.noTools = true; saveProviders(); return res; });
-        }
-        if (bad && (body.reasoning_effort || body.thinking)) {
-          if (anth) cfg.noThink = true; else cfg.noEffort = true;
-          saveProviders();
-          return once(key, build(conv, useTools), pre).then(function (res) { res.useTools = useTools; return res; });
+          }).then(function (res) { toolsMark(cfg, model, false); return res; });
         }
         throw err;
       });
     }
+    // 5.17：交回模型之前先检查一遍——参数解析不了、必填项缺了，就别拿空参数去执行
+    function toolDef(n) { return tlist().filter(function (t) { return t.name === n; })[0] || null; }
+    function precheck(c, args) {
+      if (c.bad || args == null) return '参数不是完整的 JSON（可能被截断了），这次没有执行。请重新调用一次，参数写完整。';
+      var d = toolDef(c.name); if (!d) return '';
+      var miss = ((d.params && d.params.required) || []).filter(function (k) { return args[k] == null; });
+      return miss.length ? '缺少必填参数 ' + miss.join('、') + '，这次没有执行。补全后再调用。' : '';
+    }
+    function runOne(c, round) {
+      var args = c.input; if (!args) args = toolArgs(c.args || '{}');
+      if (round > 6) return Promise.resolve({ c: c, content: '已经调用好几轮了，这次没有执行。请根据已有的结果直接回答；还没做成的事要照实告诉对方没做成。', fail: true });
+      var pc = precheck(c, args);
+      if (pc) return Promise.resolve({ c: c, content: pc, fail: true });
+      var r;
+      try { r = opt.runTool(c.name, args || {}); } catch (e) { r = Promise.reject(e); }
+      return Promise.resolve(r).then(function (r) {
+        r = r || { content: '没有叫「' + c.name + '」的工具，什么都没有执行。', fail: true };
+        if (r.log && opt.onTool) opt.onTool(r.log);
+        return { c: c, content: r.content, fail: !!r.fail || !r.log || !!r.log.err, write: TOOL_WRITE.test(c.name) || !!(r.log && r.log.write) };
+      }, function (e) {
+        if (e && e.stopped) throw e;
+        var m = (e && (e.msg || e.message)) || '出错了';
+        if (opt.onTool) opt.onTool({ tool: 'fail', q: toolLabel(c.name), err: m, hits: [] });
+        return { c: c, content: '工具出错了，这次没有完成：' + m + '。照实告诉对方没做成，不要说已经做好了。', fail: true };
+      });
+    }
+    var gd = opt.claimGuard || null, wrote = false, nudged = false;
     return withKeyFix(cfg, function (key) {
       var conv = msgs.slice(), pre = { text: '', think: '' }, round = 0;
-      var canTools = !!(tlist().length && !cfg.noTools);
-      if (tlist().length && cfg.noTools && opt.onNoTools) opt.onNoTools();
+      var canTools = !!(tlist().length && !toolsOffFor(cfg, model));
+      if (tlist().length && !canTools && opt.onNoTools) opt.onNoTools();
       function step(useTools) {
         return attempt(key, conv, pre, useTools).then(function (res) {
           var text = pre.text + (pre.text && res.text && !/\n$/.test(pre.text) ? '\n\n' : '') + res.text;
           var think = pre.think + (pre.think && res.think ? '\n\n' : '') + res.think;
-          if (!res.calls.length || !res.useTools || !opt.runTool) return { text: text, think: think };
+          if (!res.calls.length || !res.useTools || !opt.runTool) {
+            // 5.17 核对：嘴上说「记下了 / 设好了」，这一轮却没有任何一次保存或设置成功
+            if (gd && !wrote && claimsDone(res.text, gd.ask)) {
+              if (res.useTools && gd.nudge && !nudged && opt.runTool) {
+                nudged = true;
+                if (opt.onTool) opt.onTool({ tool: 'guard', q: '她说已经做好了，但没有真的保存，已让她重做', hits: [] });
+                if (anth) conv.push({ role: 'assistant', content: res.blocks.filter(function (bk) { return bk.type !== 'text' || bk.text; }).map(function (bk) { return bk.type === 'thinking' ? { type: 'thinking', thinking: bk.thinking || '', signature: bk.signature || '' } : bk; }) });
+                else conv.push({ role: 'assistant', content: res.text || '' });
+                conv.push({ role: 'user', content: CLAIM_NUDGE });
+                pre = { text: pre.text, think: think };
+                if (opt.onRestart) opt.onRestart(pre.text);
+                return step(true);
+              }
+              var note = res.useTools ? CLAIM_NOTE : CLAIM_NOTE_NT;
+              if (opt.onTool) opt.onTool({ tool: 'fail', q: '保存 / 设置', err: res.useTools ? '她说已经做好了，但其实没有调用工具' : '这个模型这次没法调用工具', hits: [] });
+              text += note; onDelta(text, think);
+            }
+            return { text: text, think: think };
+          }
           round++;
-          // 工具可以是同步的（记忆、日程），也可以是异步的（联网搜索），统一等它们都好了再继续
-          return Promise.all(res.calls.map(function (c) {
-            var args = c.input; if (!args) { try { args = JSON.parse(c.args || '{}'); } catch (e) { args = {}; } }
-            var r = round > 6 ? { content: '已经查了好几轮了，请根据已有的信息直接回答。' } : opt.runTool(c.name, args || {});
-            return Promise.resolve(r).then(function (r) {
-              r = r || { content: '没有这个工具。' };
-              if (r.log && opt.onTool) opt.onTool(r.log);
-              return { c: c, content: r.content };
-            });
-          })).then(function (outs) {
+          // 工具可以是同步的（记忆、日程），也可以是异步的（联网搜索），统一等它们都好了再继续；一个出错不连累别的
+          return Promise.all(res.calls.map(function (c) { return runOne(c, round); })).then(function (outs) {
+            if (outs.some(function (o) { return o.write && !o.fail; })) wrote = true;
             if (chat.stopped) throw { stopped: true, msg: '已停止' };
           if (anth) {
             conv.push({ role: 'assistant', content: res.blocks.map(function (bk) {
@@ -10624,7 +10767,7 @@
             }).filter(function (bk) { return bk.type !== 'text' || bk.text; }) });
             conv.push({ role: 'user', content: outs.map(function (o) { return { type: 'tool_result', tool_use_id: o.c.id, content: o.content }; }) });
           } else {
-            var am = { role: 'assistant', content: res.text || '', tool_calls: outs.map(function (o, i) { return { id: o.c.id || 'call_' + round + '_' + i, type: 'function', function: { name: o.c.name, arguments: o.c.args || JSON.stringify(o.c.input || {}) } }; }) };
+            var am = { role: 'assistant', content: res.text || '', tool_calls: outs.map(function (o, i) { return { id: o.c.id || 'call_' + round + '_' + i, type: 'function', function: { name: o.c.name, arguments: JSON.stringify(o.c.input || toolArgs(o.c.args) || {}) } }; }) };   // 交回去的必须是合法 JSON（重复两遍的参数原样发回去，有的家会 400）
             if (res.think) am.reasoning_content = res.think;
             conv.push(am);
             outs.forEach(function (o, i) { conv.push({ role: 'tool', tool_call_id: am.tool_calls[i].id, content: o.content }); });
@@ -11529,7 +11672,7 @@
     if (arts_.length) { var la_ = arts_[arts_.length - 1]; bits.push((la_.done ? '写了作品' : '正在写作品') + '「' + la_.title + '」'); ics.push('pencil'); }
     var webs = L.filter(function (l) { return l.tool === 'web'; }), ev = L.filter(function (l) { return l.tool === 'event'; }),
       al = L.filter(function (l) { return l.tool === 'alarm'; }), rm = L.filter(function (l) { return l.tool === 'remind'; }),
-      rc = L.filter(function (l) { return !/^(remind|rlist|rcancel|event|elist|edel|alarm|web|fetch|gh|note|nsearch|nread|doc|mcp|mcpc|skill)$/.test(l.tool); }),
+      rc = L.filter(function (l) { return !/^(remind|rlist|rcancel|event|elist|edel|alarm|web|fetch|gh|note|nsearch|nread|doc|mcp|mcpc|skill|fail|guard)$/.test(l.tool); }),
       nsv = L.filter(function (l) { return l.tool === 'note'; }), nrd = L.filter(function (l) { return l.tool === 'nsearch' || l.tool === 'nread'; }),
       fe = L.filter(function (l) { return l.tool === 'fetch' && !l.err && !l.pending; }), gs = L.filter(function (l) { return l.tool === 'gh'; });
     if (webs.length) { var wq = webs[0].q.length > 9 ? webs[0].q.slice(0, 8) + '…' : webs[0].q; bits.push('查了“' + wq + '”' + (webs.length > 1 ? '等 ' + webs.length + ' 次' : '') + (sources && sources.length ? '，看了 ' + sources.length + ' 个网页' : '')); ics.push('globe'); }
@@ -11552,6 +11695,8 @@
     var ed = L.filter(function (l) { return l.tool === 'edel'; });
     if (ev.length || ed.length) { bits.push(ed.length ? '改了日程' : '记进了日程' + (ev[0].q && !al.length && !rm.length ? '「' + ev[0].q + '」' : '')); ics.push(ev.length ? 'pen' : 'trash'); }
     if (al.length || rm.length) { bits.push((bits.length ? '' : '帮你') + '定了' + (al.length && rm.length ? '闹钟和提醒' : al.length ? (al.length > 1 ? ' ' + al.length + ' 个' : '') + '闹钟' : (rm.length > 1 ? ' ' + rm.length + ' 个' : '') + '提醒')); ics.push(al.length ? 'alarm' : 'bell'); if (al.length && rm.length) ics.push('bell'); }
+    var fl_ = L.filter(function (l) { return l.tool === 'fail'; });   // 5.17：没做成的要在摘要里看得见
+    if (fl_.length) { bits.push(fl_[fl_.length - 1].q + ' 没成功'); ics.push('pencil'); }
     var s = bits.join('，');
     if (!s && reasoning && asst.showThink) {
       var ps = thinkSegs(String(reasoning)).filter(function (x) { return x.code == null; }).map(function (x) { return x.t; }).join('\n').split(/\n+|(?<=[。！？!?])\s*/).map(function (x) { return x.replace(/^[#*\-\d.\s]+/, '').replace(/\*\*/g, '').trim(); }).filter(function (x) { return x.length > 3; });
@@ -11654,6 +11799,8 @@
     if (t === 'remind') return { ic: 'pencil', title: '设提醒', detail: '提醒 › ' + (lg.file || (lg.at ? remindLabel(lg.at) : lg.q)), diff: lg.diff || [['+', lg.q]] };
     if (t === 'rcancel') return { ic: 'pencil', title: '取消提醒', detail: '提醒 › ' + (lg.file || lg.q), diff: lg.diff || [['-', lg.q]] };
     if (t === 'rlist') return { ic: 'read', title: '查看提醒', detail: '还有 ' + lg.q, body: lines };
+    if (t === 'fail') return { ic: 'pencil', title: lg.q + ' 没成功', detail: '', note: lg.err || '', plain: true };   // 5.17
+    if (t === 'guard') return { ic: 'find', title: '核对了一下', detail: '', note: lg.q, plain: true };
     var title = { search: '搜索过去的对话', recent: '浏览最近的对话', read: '读以前的对话', auto: '翻看过去的对话' }[t] || '查阅过去的对话';
     var hits = lg.hits || [];
     return { ic: t === 'read' ? 'read' : 'find', title: title, open: true, plain: t === 'read',
@@ -12561,7 +12708,7 @@
     if (k === 'note') {
       var cv = curConv(); if (!cv || !cv.msgs.length) return;
       var n = convAsNote(cv); chat.pop = ''; renderSheet();
-      toastAct('已存进笔记「' + (noteTitleOf(n).length > 10 ? noteTitleOf(n).slice(0, 9) + '…' : noteTitleOf(n)) + '」', '打开', function () { closeChat(); setTimeout(function () { noteOpen(n.id); }, 250); });
+      if (n) toastAct('已存进笔记「' + (noteTitleOf(n).length > 10 ? noteTitleOf(n).slice(0, 9) + '…' : noteTitleOf(n)) + '」', '打开', function () { closeChat(); setTimeout(function () { noteOpen(n.id); }, 250); });
     }
   }
 
@@ -13771,7 +13918,8 @@
     var h = '\n\n【内部参谋 · 只有你看得到】\n你刚才已经想过一遍，下面是你的' + (G.a1.draft ? '初稿' : '初稿思路') + '。';
     if (G.solo) h += '你的搭档 ' + GEM_NAME + ' 这次没有回应，就按你自己的思路，把回答写完整：对照' + name + '的每一条要求，一项都不要漏。';
     else h += '你的双子星搭档 ' + GEM_NAME + ' 帮你补充了下面这些（查漏、点子、按框架补全的细节）。吸收她的补充（不合适的可以不用），' + name + '提的每一项要求都要写到，然后直接写给' + name + '的正式回答。';
-    h += '正文由你来写，用你自己的口吻；不要提到 ' + GEM_NAME + '、参谋、初稿这些内部过程，也不要说“根据补充”。\n\n你的' + (G.a1.draft ? '初稿' : '初稿思路') + '：\n' + (gemCut(G.a1.think, 5000) || '（空）');
+    h += '正文由你来写，用你自己的口吻；不要提到 ' + GEM_NAME + '、参谋、初稿这些内部过程，也不要说“根据补充”。';
+    h += '注意：前面打草稿时还没有真的保存或设置任何东西（笔记、日程、闹钟、提醒、文件都没动）。对方要你记 / 存 / 设的，这一步调用工具真正去做，做成了再说做好了。\n\n你的' + (G.a1.draft ? '初稿' : '初稿思路') + '：\n' + (gemCut(G.a1.think, 5000) || '（空）');
     if (!G.solo) {
       h += '\n\n' + GEM_NAME + ' 的补充：\n' + (G.b.raw || '').trim();
       var forms = gemParse(G.b.raw).secs.filter(function (x) { return gemStyle(x.how) === 'fields'; });
@@ -14191,8 +14339,9 @@
     chat.lastQ = text; chat.draft = ''; chat.err = ''; chat.busy = true; chat.sentAt = Date.now(); chat.fresh = 1; chat.partial = ''; chat.partialThink = '';
     chat.stopped = false; chat.thinkMs = 0; chat.xhr = null; chat.procLine = '';
     typerReset();
-    var useWeb = webReady(), preWeb = useWeb && !!rm.p.noTools && WEB_ASK.test(text);
-    var useFetch = fetchReady(), preUrl = useFetch && !!rm.p.noTools && (URL_IN.exec(text) || [])[0];
+    var noT_ = toolsOffFor(rm.p, rm.id);   // 5.17：「不支持工具」按模型记
+    var useWeb = webReady(), preWeb = useWeb && noT_ && WEB_ASK.test(text);
+    var useFetch = fetchReady(), preUrl = useFetch && noT_ && (URL_IN.exec(text) || [])[0];
     chat.sources = null; chat.phase = preWeb ? 'search' : ''; chat.pop = ''; chat.recall = null;
     chat.anchorSend = true;
     var gemPick = (chat.gemPick || []).filter(function (id) { return (asst.gem.cards || []).some(function (c) { return c.id === id; }); });
@@ -14212,11 +14361,14 @@
     if (conv.notif) system += '\n\n（这段对话是' + (name || '用户') + '点开你推送的一条提醒开始的，提醒内容是：「' + conv.notif + '」。接着这个话题自然地聊，不用再重复提醒。）';
     system += calPrompt() + emoRule() + artRule();
     var systemNoTools = null, useRemind = nativeOk() && nt.on;
-    if (useRecall || useRemind) systemNoTools = system + rclFb.text +
-      (useRemind ? '\n\n（现在没法设手机提醒，如果被要求提醒，就坦白说这次设不了，请对方稍后再试。）' : '');
+    // 5.17：长期记忆关着时，她记不到下次——别让她说「我记住了」
+    if (!mem.on || !mem.auto) system += '\n\n【记忆】长期记忆现在' + (mem.on ? '没开自动整理' : '关着') + '：对方让你“记住”什么，这次聊完你就不记得了，照实说；要长期留着的内容，可以建议存成笔记。';
+    // 5.17：手机提醒用不了时也要说清楚，不然她会顺口答应「到时候提醒你」
+    if (!useRemind) system += '\n\n【提醒】这台设备上现在设不了手机提醒（' + (nativeOk() ? '通知总开关关着，在 设置 › 通知 里打开' : '不是安装版 App') + '）。对方让你到点提醒时，照实说设不了；不要说“到时候提醒你”“我会叫你”。';
+    systemNoTools = system + rclFb.text +
+      '\n\n【这次用不了工具】这次你没法直接操作 App：存笔记、记日程、定闹钟、设提醒、做或改文件都做不了。对方要你做这些时，照实说这次做不了，请 TA 在 App 里自己添加，或者换一个支持工具的模型；绝对不要说已经记下 / 存好 / 设好了。';
     if (useRecall) system += recallRule();
     if (useRemind) system += remindRule();
-    if (!systemNoTools) systemNoTools = system;
     system += calRule() + noteRule() + docRule() + connRule();
     var pjs = projById(conv.project); if (pjs) system += '\n\n【项目「' + pjs.name + '」】这段对话属于' + (name || '用户') + '的这个项目。' + (pjs.desc ? '项目说明（每次回答都要照着做）：\n' + pjs.desc : '');
     if (chat.noteCtx) { var nc_ = noteById(chat.noteCtx); chat.noteCtx = '';
@@ -14281,10 +14433,24 @@
       if (gemOn) G = chat.gem = { stage: 1, t0: Date.now(), a1: { think: '', ms: 0 }, b: { raw: '', ms: 0 }, rmB: resolveGem(), pick: gemPick };
       if (chat.open) renderSheet();
       function mkOpt(stage, sysNT) { return {
-        tools: function () { return (useRecall ? RECALL_TOOLS : []).concat(useRemind ? REMIND_TOOLS : []).concat(CAL_TOOLS).concat(NOTE_TOOLS).concat(DOC_TOOLS).concat(useWeb ? WEB_TOOLS : []).concat(useFetch ? FETCH_TOOLS : []).concat(connTools()); },
+        tools: function () {
+          var all_ = (useRecall ? RECALL_TOOLS : []).concat(useRemind ? REMIND_TOOLS : []).concat(CAL_TOOLS).concat(NOTE_TOOLS).concat(DOC_TOOLS).concat(useWeb ? WEB_TOOLS : []).concat(useFetch ? FETCH_TOOLS : []).concat(connTools());
+          // 5.17 双子星第一步只是打草稿：会改东西的工具留到正式回答那一步再用（不然要么存两遍，要么正式回答以为没存、嘴上说存了）
+          return stage === 1 ? all_.filter(function (t) { return !TOOL_WRITE.test(t.name) && !cnIsWrite(t.name); }) : all_;
+        },
+        claimGuard: stage === 1 ? null : { ask: text, nudge: !liveRead && !VM.on },
+        onRestart: function (keep) { chat.partial = keep || ''; typer.shown = Math.min(typer.shown, chat.partial.length); paintPartial(); },
         think: vFast_ ? 0 : undefined,
         runTool: function (n, a) {
-          var go_ = function () { return runConnTool(n, a, conv) || runDocTool(n, a, conv) || runWebTool(n, a) || runFetchTool(n, a) || runCalTool(n, a) || runNoteTool(n, a) || runRemindTool(n, a, conv) || runRecallTool(n, a, conv.id); };
+          var go_ = function () {
+            var r_ = runConnTool(n, a, conv) || runDocTool(n, a, conv) || runWebTool(n, a) || runFetchTool(n, a) || runCalTool(n, a) || runNoteTool(n, a) || runRemindTool(n, a, conv) || runRecallTool(n, a, conv.id);
+            if (!/^(pdf_edit|pdf_create|sheet_edit|sheet_create)$/.test(n)) return r_;
+            // 5.17：做好 / 改好的文件要等它真的写进手机再说「做好了」；没写进去就照实说
+            return Promise.resolve(r_).then(function (r) {
+              if (!r || !r.log || r.log.err || !r.log.file) return r;
+              return Files.wait(r.log.file).then(function (ok) { if (!ok) r.content += '\n（注意：文件没能存进手机，这次打开 App 期间能看，关掉 App 后可能会丢；请对方先点「保存到手机」。）'; return r; });
+            });
+          };
           // 5.6：提前想的时候，会改东西的工具（提醒、日程、闹钟、笔记）等你真说完再执行；撤回了就不执行
           if (specRun_ && (/^(set_reminder|cancel_reminder|add_event|delete_event|set_alarm|save_note|pdf_edit|pdf_create|sheet_edit|sheet_create|install_skill|connect_mcp)$/.test(n) || cnIsWrite(n))) return VM.specGate().then(go_);
           return go_();
@@ -14425,6 +14591,9 @@
   document.addEventListener('click', function () { setTimeout(navSync, 0); setTimeout(navSync, 380); });
   setInterval(navSync, 700);
 
+  // 测试用：工具调用的端到端测试从这里开聊天、看笔记 / 日程 / 供应商状态
+  window.__amorT = { open: function (q) { openChat(q); }, chat: chat, asst: asst, mem: mem,
+    notes: function () { return notes; }, cal: function () { return cal; }, convs: function () { return chats; }, prov: function (id) { return prov(id); } };
   if (Object.keys(DATA).length) dbState = 'ready';
   refreshAll(false);
   document.addEventListener('visibilitychange', function () { if (!document.hidden) { refreshAll(false); notifySync(); } });

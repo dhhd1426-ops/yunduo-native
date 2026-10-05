@@ -1771,10 +1771,13 @@
   body.has-dock #main { padding-bottom: calc(130px + var(--sab, env(safe-area-inset-bottom, 0px))); }
   .dock { bottom: calc(14px + var(--sab, env(safe-area-inset-bottom, 0px))); }
   .pl-fab, .note-fab { bottom: calc(24px + var(--sab, env(safe-area-inset-bottom, 0px))); } .nb-fab { bottom: calc(26px + var(--sab, env(safe-area-inset-bottom, 0px))); }
-  .w-menu { position: absolute; top: calc(6px + var(--sat, env(safe-area-inset-top, 0px))); right: 14px; z-index: 6; width: 46px; height: 46px; border: 0; border-radius: 23px; display: grid; place-items: center;
-    background: rgba(0, 0, 0, .18); color: #fff; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  /* 5.16.2 三条杠贴到右上角（方案 C）：去掉圆底只留线 + 阴影；点按范围仍是 46×46，离屏幕右边约 8px（right = 8 − main 的左右内边距） */
+  .w-menu { position: absolute; top: -4px; right: -12px; z-index: 6; width: 46px; height: 46px; border: 0; border-radius: 23px; display: grid; place-items: center;
+    background: transparent; color: #fff; filter: drop-shadow(0 1px 3px rgba(0,0,0,.5)); -webkit-tap-highlight-color: transparent; }
+  @media (max-width: 380px) { .w-menu { right: -6px; } }
+  @media (min-width: 720px) { .w-menu { right: -24px; } }
   .w-menu:active { transform: scale(.92); }
-  .w-first { position: relative; } .wallv .w-date { padding-right: 46px; white-space: nowrap; }
+  .w-first { position: relative; } .wallv .w-date { white-space: nowrap; }
   body.paging .dock { opacity: .4; transition: opacity .2s; }
   .sub-head [data-ui="back-home"] + h1 { font-size: 17px; }
   /* 5.11.1 磨砂玻璃界面：聊天窗、抽屉半透明 + 背景模糊，后面的动态壁纸在动 */

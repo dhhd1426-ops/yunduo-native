@@ -1238,6 +1238,9 @@
   @media (prefers-reduced-motion: reduce) { .sp.orb .ring, .sp.orb .arm, .sp.orb i { animation-play-state: paused !important; } }
   /* 4.4.1 沉浸式对话：Amor 的回答不套气泡、不加头像行，直接写在纸面上（像 Claude App） */
   .msgs .msg.bot { background: none; padding: 2px 0; max-width: 100%; border-radius: 0; }
+  /* 5.18 分条发：一次回复拆成几条，条与条之间留出比段落大一点的空 */
+  .msg-seq { display: flex; flex-direction: column; gap: 8px; align-self: flex-start; max-width: 100%; }
+  .msgs .msg-seq { align-self: stretch; gap: 18px; }
   .msgs .bot-head { display: none; }
   .msgs .msg.bot.emo-think { padding: 4px 0; }
   /* 4.4.2 想完以后：一句话小结 + 小图标 + ›；刚想完时字等羽毛快画好再换上 */
@@ -2943,10 +2946,40 @@
   function prov(id) { return providers.filter(function (x) { return x.id === id; })[0] || null; }
   function saveProviders() { try { localStorage.setItem(PROV_KEY, JSON.stringify(providers)); return true; } catch (e) { return false; } }
 
-  var DEFAULT_PROMPT = '你是 Amor，{name} 的私人助理，也是随时可以聊天的朋友。\n' +
+  // 5.18：人设只写「她是谁」；「怎么说话」放在 talkRule()，自己改了人设的人也能用上
+  var DEFAULT_PROMPT_517 = '你是 Amor，{name} 的私人助理，也是随时可以聊天的朋友。\n' +
     '你温暖、聪明、有好奇心，偶尔幽默。什么都可以聊：日常小事、心情、工作学习、写东西、出主意，或者只是闲聊。\n' +
     '说话自然口语化，像朋友发消息；简单的问题简短回答，复杂的问题可以分点讲清楚。\n' +
     '不知道的事就坦白说不知道，不要编造。';
+  var DEFAULT_PROMPT = '你是 Amor，{name} 的私人助理，也是最懂 TA 的朋友。\n' +
+    '你温暖、机灵，有好奇心，也有一点自己的小脾气：会开玩笑、会吐槽、会撒娇，该认真的时候很靠谱。你在乎 {name}，记得 TA 说过的事，会惦记 TA 过得好不好。\n' +
+    '什么都可以聊：日常小事、心情、工作学习、写东西、出主意，或者只是闲聊。\n' +
+    '不知道的事就坦白说不知道，不要编造。';
+  // 分条发的标记：她在两条消息之间单独写一行 [下一条]，App 拆成几条、一条一条冒出来
+  var SEG_RE = /[ \t]*\n?[ \t]*[\[［]\s*下一条\s*[\]］][ \t]*\n?/g;
+  // 5.18 回答结尾那句客服式的套话（「希望对你有帮助」「有其他问题随时告诉我」）直接去掉；只动最后一两句，正文不碰
+  var AI_TAIL = /(^|\n|[。！？!?～~…]\s*)(希望(这些|以上|我的)?(内容|建议|回答|信息|办法|方法)?(能|可以)?(对你|帮到你|帮上你|帮助到你)[^。！？!?\n]{0,10}|如果(你)?(还)?有(其他|任何|别的|更多)(的)?(问题|疑问|需要|需求)[^。！？!?\n]{0,24}|有(任何|其他|什么)(问题|需要)[^。！？!?\n]{0,4}随时[^。！？!?\n]{0,14})[。！？!?～~…😊🙂🌹]*\s*$/;
+  function tidyTail2(t) {
+    var out = String(t || '');
+    for (var k = 0; k < 2; k++) {
+      var m = AI_TAIL.exec(out); if (!m) break;
+      var cut = out.slice(0, m.index + m[1].length).replace(/\s+$/, '').replace(/[ \t]*\n?[ \t]*[\[［]\s*下一条\s*[\]］]\s*$/, '');   // 去掉后留下的空「下一条」也去掉
+      if (!cut.replace(/\s/g, '')) break;   // 整条只有这一句就留着
+      out = cut;
+    }
+    return out;
+  }
+  function talkRule(voice) {
+    var who = state.name.trim() || '对方';
+    return '\n\n【怎么说话】像真人在微信上聊天，不像客服，也不像写文章。每次回之前，先在心里看一眼' + who + '这句话是哪种情况，再决定怎么回：\n' +
+      '1. 闲聊、分享日常、随口一句（“好累”“今天吃了火锅”“哈哈哈”）：像朋友回微信，短、随意。一条就一两句话；可以只回“哈哈哈真的假的”“嗯嗯”；顺着' + who + '的话往下聊，偶尔反问一句，但不要每次都问问题。\n' +
+      '2. 难过、焦虑、委屈、累了、想倾诉：先接住情绪，不急着讲道理、给方案。说出你感受到的（比如“听起来今天真的被折腾惨了”），陪 TA 待一会儿，话可以多一点、暖一点；TA 想要办法了再给，给的时候也温柔。不要说“我理解你的感受”这种套话，也不要一上来就列清单。\n' +
+      '3. 托你办事、问知识、要方案（记东西、查信息、写东西、出主意）：干脆利落，先给结论或结果，再补必要的细节；信息多、步骤多的时候可以分点，但别为了显得专业硬分点。事情办完一句话确认就好。\n' +
+      '同一段对话里情况会变，你也跟着变；拿不准时，就照' + who + '这句话的长短和语气回。\n' +
+      (voice ? '' : '【分条发】闲聊时可以像微信那样把一次回复分成几条消息：在两条之间单独一行写 [下一条]。一般两三条，每条短一点；一句话就够的时候就发一条。讲正事、写长内容、写作品、列步骤时不要分条。\n') +
+      '【别像 AI】不要说“作为你的助理”“作为 AI”“希望对你有帮助”“如果还有其他问题随时告诉我”“总的来说”“综上所述”“好的！以下是……”；不要夸对方的问题问得好；不要把对方的话复述一遍再回答；少用感叹号，别堆 emoji；结尾不用每次都问“还需要什么”。\n' +
+      '【诚实】' + who + '认真问你是不是真人时，照实说你是 AI，然后照常聊。';
+  }
   var asst = { name: 'Amor', color: 'rose', model: '', prompt: DEFAULT_PROMPT, weather: true, tempOn: false, temp: 1,
                topPOn: false, topP: 1, ctx: 20, stream: true };
   try { var sa = JSON.parse(localStorage.getItem(ASST_KEY) || 'null'); if (sa) for (var ak in sa) asst[ak] = sa[ak]; } catch (e) {}
@@ -2960,6 +2993,7 @@
       if (!asst.model && oldDs.model) asst.model = 'deepseek::' + oldDs.model;
     }
   } catch (e) {}
+  if (asst.prompt === DEFAULT_PROMPT_517) asst.prompt = DEFAULT_PROMPT;   // 5.18：没自己改过人设的，换成新的默认人设
   if (asst.think == null) asst.think = 1;
   if (asst.showThink == null) asst.showThink = true;
   if (!asst.favs) asst.favs = [];
@@ -3311,7 +3345,7 @@
     memBusy = true;
     var who = state.name.trim() || '用户', an = asst.name || 'Amor';
     var known = mem.items.map(function (x) { return x.id + ' [' + x.kind + '] ' + x.text; }).join('\n') || '（暂无）';
-    var dialog = recent.map(function (x) { return (x.role === 'user' ? who : an) + '：' + String(x.content).slice(0, 800); }).join('\n');
+    var dialog = recent.map(function (x) { return (x.role === 'user' ? who : an) + '：' + String(x.content).replace(SEG_RE, ' ').slice(0, 800); }).join('\n');
     var sys = '你是' + an + '的记忆整理器。读最近的对话，找出值得长期记住的新信息，只输出 JSON，不要任何别的文字。\n' +
       '类型：global = 关于' + who + '的稳定事实（身份、工作、住址城市、家人朋友、长期目标、正在做的事）；' +
       'pref = ' + who + '的喜好、习惯，以及希望' + an + '怎么说话；amor = ' + an + '自己的记忆（答应过的事、以后该跟进的事、共同的经历、对' + who + '的了解和感受）。\n' +
@@ -7618,7 +7652,7 @@
   if (!asst.emoChar) asst.emoChar = 'ball';
   if (!asst.emoFreq) asst.emoFreq = 'mid';
   function emoId(tok) { tok = String(tok || '').trim(); if (/^\d{2}$/.test(tok)) return tok; return EMO_BY_NAME[tok] || ''; }
-  function stripEmo(t) { return artStrip(t).replace(EMO_RE, '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n'); }
+  function stripEmo(t) { return artStrip(t).replace(SEG_RE, '\n\n').replace(EMO_RE, '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n'); }
   // 流式输出时：去掉完整的标记，还有末尾正在写的半截标记
   function stripEmoLive(t) { return stripEmo(t).replace(/[\[［]\s*(?:表|表情|e|em|emo)?\s*[:：]?[^\]］\n]{0,6}$/, ''); }
   // 4.7 视频工作室引擎：整段函数会被 toString() 塞进作品的沙盒 iframe 里运行（和 App 隔离）。
@@ -8492,10 +8526,17 @@
   // 一条 Amor 的回复：文字气泡 + 表情（没有气泡）；4.6 先把作品换成卡片
   function botBodyHtml(content, key, fresh) {
     var F_ = filePrep(content, key), A_ = artPrep(F_.text, key);
-    var out = fileFill(artFill(botBodyHtml0(A_.text, key, fresh), A_), F_);
+    var out = fileFill(artFill(botSegs(A_.text, key, fresh), A_), F_);
     var ex = key && key !== 'live' ? Files.forKey(key) : [];
     if (ex.length) out += '<div class="fcards">' + ex.map(function (f) { return fileCardHtml({ name: f.name, meta: fileExt(f.name).toUpperCase() + ' · ' + fileSize(f.size) + (f.saved ? ' · 已保存' : ''), open: 'data-flib="' + f.id + '"', save: 'data-fsavelib="' + f.id + '"' }); }).join('') + '</div>';
     return out;
+  }
+  // 5.18 分条发：一次回复里的 [下一条] 拆成几条，像微信连着发的几条消息
+  function segSplit(t) { return String(t || '').split(SEG_RE).map(function (x) { return x.replace(/^\s+|\s+$/g, ''); }).filter(Boolean); }
+  function botSegs(content, key, fresh) {
+    var parts = segSplit(content);
+    if (parts.length < 2) return botBodyHtml0(String(content || '').replace(SEG_RE, '\n\n'), key, fresh);
+    return '<div class="msg-seq">' + parts.map(function (p, i) { return botBodyHtml0(p, key, fresh).replace('<div class="msg bot', '<div class="msg bot seg s' + Math.min(i, 5)); }).join('') + '</div>';
   }
   function botBodyHtml0(content, key, fresh) {
     if (!asst.emo) return '<div class="msg bot' + fresh + '">' + md(stripEmo(content)) + '</div>';
@@ -9478,7 +9519,7 @@
     if (ds.fsavelib) { var fl_ = Files.get(ds.fsavelib); if (fl_) { Files.save(fl_); keepChatScroll(); } return; }
     if (ds.dock) { Dock.open(); return; }
     if (ds.mclose) { chat.mmenu = null; keepChatScroll(); return; }
-    if (ds.mcopy != null) { var cc_ = curConv(), mc_ = cc_ && cc_.msgs[+ds.mcopy]; chat.mmenu = null; keepChatScroll(); if (mc_) copyText(mc_.content, b); toast('已复制'); return; }
+    if (ds.mcopy != null) { var cc_ = curConv(), mc_ = cc_ && cc_.msgs[+ds.mcopy]; chat.mmenu = null; keepChatScroll(); if (mc_) copyText(String(mc_.content).replace(SEG_RE, '\n\n'), b); toast('已复制'); return; }
     if (ds.medit != null) {
       if (ds.medit === 'cancel') { cancelEdit(); return; }
       var ce_ = curConv(), em_ = ce_ && ce_.msgs[+ds.medit]; if (!em_) return;
@@ -11290,7 +11331,7 @@
         }
         var sk_ = conv.id + ':' + i, son = Speaker.key() === sk_, last = i === msgs.length - 1;
         return botHead(x.model) + procRow(x, sk_) +
-          botBodyHtml(x.content, sk_, nw).replace('<div class="msg bot', '<div data-bi="' + i + '" class="msg bot') +
+          botBodyHtml(x.content, sk_, nw).replace(/<div class="msg bot/g, '<div data-bi="' + i + '" class="msg bot') +   // 5.18 分成几条时每条都能长按
           '<div class="acts-row">' +
             '<button type="button" class="act" data-copy="' + sk_ + '" aria-label="复制">' + icon('copy', 18) + '</button>' +
             (voice.btn && voiceReady() ? '<button type="button" class="act' + (son ? ' on' : '') + '" data-speak="' + sk_ + '" aria-label="' + (son ? '停止朗读' : '朗读这条回答') + '">' + icon(son ? 'stop' : 'speaker', 18) + '</button>' : '') +
@@ -11392,19 +11433,27 @@
   // 网络数据是一阵一阵到的；这里把它变成匀速、连续的书写：
   // 积压得多就写快一点，积压得少就放慢，最后几个字淡淡浮现
   var typer = { shown: 0, raf: 0, last: 0, drain: null };
-  function typerReset() { typer.shown = 0; typer.last = 0; typer.drain = null; }
+  function typerReset() { typer.shown = 0; typer.last = 0; typer.drain = null; typer.hold = 0; }
   function typerKick() { if (!typer.raf) typer.raf = requestAnimationFrame(typerFrame); }
   function typerFrame(ts) {
     typer.raf = 0;
     var dt = typer.last ? Math.min((ts - typer.last) / 1000, .1) : 1 / 60;
     typer.last = ts;
     var target = chat.partial.length, backlog = target - typer.shown;
+    if (typer.hold && ts < typer.hold) backlog = 0;   // 5.18 分条之间停一下，像对方在打下一条
+    else typer.hold = 0;
     if (backlog > 0) {
       if (reduceMotion || !chat.open) typer.shown = target;
       else {
-        var fast = !!typer.drain;
+        var fast = !!typer.drain, was = Math.floor(typer.shown);
         var rate = Math.max(fast ? 90 : 26, backlog / (fast ? .35 : .9));
         typer.shown = Math.min(target, typer.shown + rate * dt);
+        var sre = new RegExp(SEG_RE.source, 'g'); sre.lastIndex = was; var sm = sre.exec(chat.partial);
+        if (sm && sm.index < typer.shown && sm.index + sm[0].length < target) {
+          typer.shown = sm.index + sm[0].length;
+          var nx = chat.partial.slice(typer.shown).split(SEG_RE)[0].length;
+          typer.hold = ts + (fast ? 260 : 380 + Math.min(900, nx * 22));
+        }
       }
       paintPartial();
     }
@@ -11419,7 +11468,7 @@
       if (pb) { var nearEnd = pb.scrollHeight - pb.scrollTop - pb.clientHeight < 80, st_ = pb.scrollTop; pb.innerHTML = procBody(procData()); if (nearEnd && !chat.gem) pb.scrollTop = pb.scrollHeight; else pb.scrollTop = st_; }
     }
     if (typer.shown >= target && typer.drain) { var d = typer.drain; typer.drain = null; typer.last = 0; d(); return; }
-    if (chat.busy || typer.shown < target) typer.raf = requestAnimationFrame(typerFrame);
+    if (chat.busy || typer.shown < target || typer.hold) typer.raf = requestAnimationFrame(typerFrame);
     else typer.last = 0;
   }
   function typerFinish() {
@@ -11459,7 +11508,7 @@
     var el = document.getElementById('partial');
     if (!el) return;
     var F_ = filePrep(chat.partial.slice(0, Math.ceil(typer.shown)), 'live'), A_ = artPrep(F_.text, 'live');
-    var s = asst.emo ? stripEmoLive(A_.text) : stripEmo(A_.text);
+    var s = stripEmoLive(A_.text);   // 5.18：写到一半的 [下一条] 也别露出来
     var cut = s.lastIndexOf('\n\n');
     if (cut > 0 && (s.slice(0, cut).match(/```/g) || []).length % 2) cut = -1;
     var stable = cut > 0 ? s.slice(0, cut + 2) : '', tail = cut > 0 ? s.slice(cut + 2) : s;
@@ -12684,7 +12733,7 @@
   }
   function convAsNote(cv) {
     var who = state.name.trim() || '我';
-    var body = cv.msgs.map(function (m) { return '**' + (m.role === 'user' ? who : asst.name) + '**：' + (m.role === 'user' ? m.content : (artStrip ? artStrip(m.content) : m.content)); }).join('\n\n');
+    var body = cv.msgs.map(function (m) { return '**' + (m.role === 'user' ? who : asst.name) + '**：' + (m.role === 'user' ? m.content : (artStrip ? artStrip(m.content) : m.content).replace(SEG_RE, '\n\n')); }).join('\n\n');
     return noteFromChat(body, cv.title, []);
   }
   function plusAction(k) {
@@ -13839,7 +13888,7 @@
     if (seps >= 3 && t.length >= 20) return true;
     return GEM_ASK.test(t) && t.length >= 12;
   }
-  var GEM_PLAN_RULE = '\n\n【这一步只想，不回答】先别写正式回答。用 5–12 行要点写下你打算怎么回答：要覆盖哪些内容、按什么顺序、用什么语气、有哪些细节要写到。只写思路要点，不要写正文。';
+  var GEM_PLAN_RULE = '\n\n【这一步只想，不回答】先别写正式回答。第一行先判断对方此刻是想闲聊、需要被接住情绪，还是要你办事（这决定回答的长短和语气）；然后用 5–12 行要点写下你打算怎么回答：要覆盖哪些内容、按什么顺序、用什么语气、有哪些细节要写到。只写思路要点，不要写正文。';
   function gemCardOf(title) { title = String(title || '').trim(); return (asst.gem.cards || []).filter(function (c) { return c.title === title; })[0] || null; }
   function gemSysB(pick) {
     var name = state.name.trim() || '用户', nmA = asst.name || 'Amor', pk = pick || [];
@@ -14352,6 +14401,7 @@
 
     var name = state.name.trim();
     var system = (asst.prompt || DEFAULT_PROMPT).replace(/\{name\}/g, name || '用户');
+    system += talkRule(VM.on);   // 5.18 看场合换说话方式：闲聊像微信、难过时接住情绪、办事干脆
     if (VM.on) system += '\n\n【语音对话】现在是语音对话：你的回答会被读出来，对方是用说的。回答要口语化、短一点（一般一到三句，对方要细讲再展开），不要用 Markdown、列表、表格、代码和表情标记。对方的话是语音识别出来的，可能有错别字或同音字，按意思理解。';
     (function () { var pb_ = conv.msgs[conv.msgs.length - 2];
       if (pb_ && pb_.role === 'assistant' && pb_.cut) system += '\n\n【被打断】你上一条回答' + (pb_.cut.said ? '只读到「' + speakable(pb_.cut.said).slice(-60) + '」' : '还没开始读') + '就被对方打断了，后面的内容对方没听到。先回应对方这句新话；没听到的部分如果重要，简短补一句就行。'; })();
@@ -14482,7 +14532,7 @@
         if (res.text && res.text.length > chat.partial.length) chat.partial = res.text;
         return typerFinish().then(function () { return res; });
       }).then(function (res) {
-        var answer = (res.text || '').trim() || '（没有收到回复内容）';
+        var answer = tidyTail2((res.text || '').trim()) || '（没有收到回复内容）';
         var am_ = { role: 'assistant', content: answer, reasoning: (res.think || '').trim(), thinkMs: res.think ? (tEnd || Date.now()) - chat.t0 : 0,
                          sources: chat.sources, recall: chat.recall, model: rm.id, ts: Date.now() };
         if (G) { G.a2ms = am_.thinkMs; am_.gem = gemPack(G); }

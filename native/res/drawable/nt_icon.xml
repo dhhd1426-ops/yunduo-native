@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 状态栏小图标（单色）：一朵云。常驻通知和“系统样式”兜底时用 -->
+<!-- 状态栏小图标（单色）：启动动画里的纸带「A」（几何同 www/fonts/launch.js）。常驻通知、闹钟和“系统样式”兜底时用 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
-    <path android:fillColor="#FFFFFFFF"
-        android:pathData="M7.5,19C4.46,19 2,16.76 2,14C2,11.52 3.99,9.46 6.6,9.07C7.54,6.67 9.84,5 12.5,5C15.87,5 18.62,7.66 18.78,11.01C20.63,11.36 22,12.93 22,14.8C22,17.12 20.12,19 17.8,19Z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M7.42,14.5 L16.42,14.5 L17,16.83 L6.83,16.83Z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M4.75,22 L9.08,22 L13.92,2 L10.25,2Z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M10.25,2 L13.92,2 L19.25,22 L14.92,22Z" />
 </vector>

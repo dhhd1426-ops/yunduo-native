@@ -3912,8 +3912,10 @@
   var NT_KEY = 'cloud-weather-notify-v1';
   var nt = { on: true, eye: { on: true, min: 45 }, water: { on: true, every: 120, from: 9, to: 21 }, move: { on: true, every: 90 },
     sleep: { on: false, at: '23:30' }, morning: { on: true, at: '07:30' }, alert: { on: true }, miss: { on: true, days: 3 }, memo: { on: true },
-    quiet: { from: 23, to: 7 }, lockFull: true, island: false, aiCopy: true, maxPerDay: 8, copy: null, seenAlarms: [], style: 'letter', reminders: [], keep: true };
+    quiet: { from: 23, to: 7 }, lockFull: true, island: false, aiCopy: true, maxPerDay: 8, copy: null, seenAlarms: [], style: 'chat', reminders: [], keep: true };
   try { var sn = JSON.parse(localStorage.getItem(NT_KEY) || 'null'); if (sn) for (var nk in sn) nt[nk] = sn[nk]; } catch (e) {}
+  // 5.17.1：通知默认改成「对话」样式（左边 Amor 的 A 头像）；以前的默认「信笺」迁移一次，选过「系统样式」的不动
+  if (!nt.styleV) { if (!nt.style || nt.style === 'letter') nt.style = 'chat'; nt.styleV = 2; try { localStorage.setItem(NT_KEY, JSON.stringify(nt)); } catch (e) {} }
   function saveNt() { try { localStorage.setItem(NT_KEY, JSON.stringify(nt)); return true; } catch (e) { return false; } }
   function nativeOk() { try { return !!(window.AmorNative && AmorNative.version && AmorNative.version() >= 1); } catch (e) { return false; } }
   function nInfo() { try { return nativeOk() ? JSON.parse(AmorNative.info() || '{}') : null; } catch (e) { return null; } }
@@ -4113,20 +4115,27 @@
     return keep.sort(function (a, b) { return a.t - b.t; });
   }
 
-  // 状态栏小图标（白色云朵，系统只看透明度）和 Amor 头像，画成 PNG 交给原生层
+  // 状态栏小图标和 Amor 头像，画成 PNG 交给原生层。5.17.1 起都是启动动画里那个纸带「A」（几何同 fonts/launch.js）：
+  // 小图标 = 白色 A 剪影（系统只看透明度，再按主题色着色）；头像 = 黑底圆 + 红色纸带 A
+  var NT_A = { L: [[14, 240], [66, 240], [124, 0], [80, 0]], R: [[80, 0], [124, 0], [188, 240], [136, 240]], B: [[46, 150], [154, 150], [161, 178], [39, 178]] };
   var ntImgs = null;
   function ntImages() {
-    var key = asst.color + '|' + initialOf(asst.name);
+    var key = 'A1';
     if (ntImgs && ntImgs.key === key) return ntImgs;
+    function poly(g, p) { g.beginPath(); p.forEach(function (q, i) { if (i) g.lineTo(q[0], q[1]); else g.moveTo(q[0], q[1]); }); g.closePath(); }
+    function place(g, size, h) { var k = h / 240; g.translate((size - 174 * k) / 2 - 14 * k, (size - h) / 2); g.scale(k, k); }
     try {
       var c = document.createElement('canvas'); c.width = c.height = 96; var g = c.getContext('2d'); g.fillStyle = '#fff';
-      [[0.33, 0.58, 0.16], [0.52, 0.46, 0.21], [0.70, 0.58, 0.15]].forEach(function (e) { g.beginPath(); g.arc(96 * e[0], 96 * e[1], 96 * e[2], 0, 7); g.fill(); });
-      g.beginPath(); if (g.roundRect) g.roundRect(96 * 0.17, 96 * 0.55, 96 * 0.68, 96 * 0.19, 96 * 0.09); else g.rect(96 * 0.17, 96 * 0.55, 96 * 0.68, 96 * 0.19); g.fill();
+      g.save(); place(g, 96, 80); [NT_A.B, NT_A.L, NT_A.R].forEach(function (p) { poly(g, p); g.fill(); }); g.restore();
       var icon = c.toDataURL('image/png');
       var a = document.createElement('canvas'); a.width = a.height = 192; var h = a.getContext('2d');
-      h.fillStyle = COLORS[asst.color] || COLORS.rose; h.beginPath(); h.arc(96, 96, 96, 0, 7); h.fill();
-      h.fillStyle = '#faf4f0'; h.font = '500 104px "Cormorant Garamond", "Noto Serif SC", serif'; h.textAlign = 'center'; h.textBaseline = 'middle';
-      h.fillText(initialOf(asst.name), 96, 104);
+      h.fillStyle = '#0e0f13'; h.beginPath(); h.arc(96, 96, 96, 0, 7); h.fill();
+      h.save(); place(h, 192, 112);
+      poly(h, NT_A.B); h.fillStyle = '#a5303d'; h.fill();
+      var gl = h.createLinearGradient(14, 0, 124, 0); gl.addColorStop(0, '#c23c48'); gl.addColorStop(1, '#d84a52'); poly(h, NT_A.L); h.fillStyle = gl; h.fill();
+      poly(h, NT_A.R); h.fillStyle = '#e45a5c'; h.fill();
+      var sh = h.createLinearGradient(0, 0, 0, 120); sh.addColorStop(0, 'rgba(60,0,10,.5)'); sh.addColorStop(1, 'rgba(60,0,10,0)'); poly(h, NT_A.R); h.fillStyle = sh; h.fill();
+      h.restore();
       ntImgs = { key: key, icon: icon, avatar: a.toDataURL('image/png') };
     } catch (e) { ntImgs = { key: key, icon: '', avatar: '' }; }
     return ntImgs;
@@ -4136,7 +4145,7 @@
     var eyeText = [0, 1, 2].map(function (i) { return fill(ntPick('eye', i), { min: nt.eye.min, name: ntName() }); })
       .filter(function (x, i, arr) { return arr.indexOf(x) === i; });
     return { icon: im.icon, avatar: im.avatar, color: parseInt((COLORS[asst.color] || COLORS.rose).slice(1), 16) - 16777216, name: asst.name || 'Amor',
-      lockFull: nt.lockFull, island: nt.island, style: nt.style || 'letter', keep: !!(nt.on && nt.keep !== false),
+      lockFull: nt.lockFull, island: nt.island, style: nt.style || 'chat', keep: !!(nt.on && nt.keep !== false),
       eye: { on: nt.on && nt.eye.on, min: nt.eye.min, from: from, to: to === 0 ? 24 : to, title: '休息一下眼睛', texts: eyeText, short: '望望远处 20 秒',
         island: nt.island ? islandParam('休息一下眼睛', '已经连续看屏幕 ' + nt.eye.min + ' 分钟', '休息眼睛') : '' } };
   }
@@ -4275,7 +4284,7 @@
         sw('keep', nt.keep !== false, '常驻后台 · 通知栏留一条不响的小通知，清后台也不容易被关掉', 'data-ntsw') +
         ntSel('quiet.from', hours(20, 24).map(function (h) { return [h[0] % 24, h[1]]; }), '免打扰 从') + ntSel('quiet.to', hours(5, 10), '免打扰 到') +
         ntSel('maxPerDay', [[4, '4 条'], [6, '6 条'], [8, '8 条'], [12, '12 条']], '每天最多', '气象预警和用眼提醒不算') +
-        ntSel('style', [['letter', '信笺（小巧）'], ['system', '系统样式']], '通知样式', '信笺：一行排版，衬线字，细线进度') +
+        ntSel('style', [['chat', '对话'], ['letter', '信笺'], ['system', '系统样式']], '通知样式', nt.style === 'letter' ? '信笺：一行排版，衬线字，细线进度' : nt.style === 'system' ? '系统样式：手机自带的通知排版' : '对话：左边是 Amor 的头像，像她发来的消息') +
         sw('lockFull', nt.lockFull, '锁屏时显示完整内容', 'data-ntsw') +
         sw('aiCopy', nt.aiCopy, esc(an) + ' 每天写新的提醒文案（多用一点额度）', 'data-ntsw') +
         sw('island', nt.island, '小米超级岛（需小米审核通过才会上岛）', 'data-ntsw') +

@@ -5,6 +5,10 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Person;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.os.Build;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -118,16 +122,19 @@ final class Notif {
             Bitmap av = bitmap(cfg.optString("avatar", ""));
             b.setContentTitle(title);
             b.setContentText(item.optString("short", text));
+            // 5.17.1 对话样式（默认）：Amor 发来的一条消息，左边是她的 A 头像；做不了时退回下面的样式
+            String style = cfg.optString("style", "chat");
+            boolean chat = !plain && "chat".equals(style) && chatStyle(c, b, item, cfg, av, title, text, now);
             // 信笺样式：系统外框里放我们自己的一行排版（没有大头像、按钮做成小胶囊）；出错就用系统标准样式
-            boolean letter = !plain && "letter".equals(cfg.optString("style", "letter")) && letterViews(c, b, item, cfg, id);
-            if (!letter) {
+            boolean letter = !chat && !plain && "letter".equals(style) && letterViews(c, b, item, cfg, id);
+            if (!letter && !chat) {
                 if (av != null) b.setLargeIcon(av);
                 b.setStyle(new Notification.BigTextStyle().bigText(text));
             }
             b.setAutoCancel(true);
             b.setShowWhen(true);
             b.setWhen(now);
-            b.setCategory(Notification.CATEGORY_REMINDER);
+            if (!chat) b.setCategory(Notification.CATEGORY_REMINDER);
             b.setColor(cfg.optInt("color", 0xFFA0505D));
             // 不设 setGroup：部分小米系统上“有分组但没有分组摘要”的通知会不显示
             b.setVisibility(cfg.optBoolean("lockFull", true) ? Notification.VISIBILITY_PUBLIC : Notification.VISIBILITY_PRIVATE);
@@ -162,7 +169,7 @@ final class Notif {
             Notification n = b.build();
             if (cfg.optBoolean("island", false) && island.length() > 0) n.extras.putString("miui.focus.param", island);
             m.notify(id, n);
-            Store.log(c, "posted", kind + (letter ? "" : " plain"));
+            Store.log(c, "posted", kind + (chat ? " chat" : letter ? "" : " plain"));
             verify(c, id, item, letter);
             return true;
         } catch (Throwable t) {
@@ -209,6 +216,40 @@ final class Notif {
             }, 1500);
         } catch (Throwable t) {
             Store.err(c, "verify", t);
+        }
+    }
+
+    /**
+     * 对话样式：MessagingStyle，发消息的人是 Amor（头像 = 网页画的黑底红 A）。
+     * Android 11+ 要挂一个长期快捷方式（shortcut）才算“对话”，系统才把头像放在左边；没有头像或版本太低就不用这个样式。
+     */
+    private static boolean chatStyle(Context c, Notification.Builder b, JSONObject item, JSONObject cfg, Bitmap av, String title, String text, long now) {
+        if (Build.VERSION.SDK_INT < 30 || av == null) return false;
+        try {
+            String name = cfg.optString("name", "Amor");
+            Icon face = Icon.createWithBitmap(av);
+            Person amor = new Person.Builder().setName(name).setKey("amor").setIcon(face).setImportant(true).build();
+            ShortcutManager sm = c.getSystemService(ShortcutManager.class);
+            if (sm != null) {
+                Intent si = new Intent(c, MainActivity.class).setAction(Intent.ACTION_VIEW);
+                ShortcutInfo sc = new ShortcutInfo.Builder(c, "amor").setShortLabel(name).setLongLabel("和 " + name + " 聊聊")
+                        .setIcon(face).setIntent(si).setLongLived(true).setPerson(amor).build();
+                sm.pushDynamicShortcut(sc);
+                b.setShortcutId("amor");
+            }
+            String body = text;
+            if (title.length() > 0 && !title.equals(name) && !text.startsWith(title)) body = text.length() > 0 ? title + "\n" + text : title;
+            Person me = new Person.Builder().setName("我").setKey("me").build();
+            Notification.MessagingStyle ms = new Notification.MessagingStyle(me);
+            ms.setGroupConversation(false);
+            ms.addMessage(new Notification.MessagingStyle.Message(body, now, amor));
+            b.setStyle(ms);
+            b.setLargeIcon(av);
+            b.setCategory(Notification.CATEGORY_MESSAGE);
+            return true;
+        } catch (Throwable t) {
+            Store.err(c, "chat", t);
+            return false;
         }
     }
 

@@ -5089,6 +5089,19 @@
     delete walls.paper; delete walls.grain; delete walls.preview;   // 5.11 纸质纹理、5.1 胶片颗粒都去掉了；预览不跨启动保留
     if (!walls.cur || !walls.list.some(function (w) { return w.id === walls.cur; })) walls.cur = 'builtin';
   })();
+  // 5.17.4 壁纸里还原不了、被跳过的部分：记在这张壁纸上（详情里一直写着），刚导入的那次再提示一句
+  function wallWarnSave(w, warn) {
+    var wr = w && wallById(w.id); if (!wr || wr.builtin) return;
+    var list = (warn || []).map(function (x) { return String(x).split(/[：·]/)[0].trim(); }).filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+    var was = JSON.stringify(wr.warn || []);
+    if (list.length) wr.warn = list.slice(0, 12); else delete wr.warn;
+    if (JSON.stringify(wr.warn || []) !== was) saveWalls();
+    if (list.length && wr.at && Date.now() - wr.at < 120000 && !wr.warnTold) { wr.warnTold = 1; saveWalls(); try { toast('壁纸换好了，有 ' + list.length + ' 处暂时还原不了，已跳过，其余照常显示'); } catch (e) {} }
+  }
+  function wallWarnHtml(e) {
+    if (!e || !e.warn || !e.warn.length) return '';
+    return '<p class="hint w-warn">这张壁纸有 ' + e.warn.length + ' 处暂时还原不了，已跳过（' + esc(e.warn.slice(0, 3).join('、')) + (e.warn.length > 3 ? ' 等' : '') + '），其余照常显示。</p>';
+  }
   function saveWalls() {
     var j = JSON.stringify(walls);
     try { localStorage.setItem(WALL_KEY, j); return true; } catch (e) {}
@@ -5378,7 +5391,7 @@
         R = [new WallScene.Renderer(back, sc, parts[0], Object.assign({ clear: true }, opt)), new WallScene.Renderer(front, sc, parts[1], opt)];
         return Promise.all(R.map(function (r) { return r.load(); })).then(function () {
           if (tok !== loadTok) return;
-          var warn = R[0].warn.concat(R[1].warn); if (warn.length) window.__wallWarn = warn;
+          var warn = R[0].warn.concat(R[1].warn); if (warn.length) window.__wallWarn = warn; wallWarnSave(w, warn);
           root.classList.add('ready', 'gl'); audNeed = R.some(function (r) { return r.usesAudio(); }); WallAudio.want(audNeed && G.audio); tilt(); draw(); if (!document.body.classList.contains('wall-home')) snap(); kick(); xfadeEnd();
           setTimeout(function () { if (tok === loadTok && document.body.classList.contains('wall-home')) autoAlign(w); }, 400);
         });
@@ -5400,7 +5413,7 @@
         WK.postMessage({ t: 'load', tok: tok, buf: data, back: ob, front: of_, w: cw, h: ch, opt: o2 }, transfer);
       }).then(function (d) {
         if (tok !== loadTok) return;
-        if (d.warn && d.warn.length) window.__wallWarn = d.warn;
+        if (d.warn && d.warn.length) window.__wallWarn = d.warn; wallWarnSave(w, d.warn || []);
         R.forEach(function (r, i) { r.ready = true; r.S = d.S; r.layers = (d.kinds[i] || []).map(function (k) { var a = k.split(':'); return { kind: a[0], fx: a[1] != null ? new Array(+a[1]) : null }; }); });
         R.fg = d.fg;
         root.classList.add('ready', 'gl'); sceneMotion = !!d.motion; audNeed = d.audio; WallAudio.want(audNeed && G.audio); tilt(); draw(); if (!document.body.classList.contains('wall-home')) snap(); kick(); xfadeEnd();
@@ -6364,7 +6377,7 @@
       '</div>';
     var home = '<div class="w-grp"><h4>首页</h4><div class="w-cb"><span>手写时间放在</span><div class="seg">' + [['auto', '自动'], ['l', '左边'], ['c', '中间'], ['r', '右边']].map(function (x) { return '<button type="button" data-walign="' + x[0] + '" aria-pressed="' + ((e.align || 'auto') === x[0]) + '">' + x[1] + '</button>'; }).join('') + '</div></div>' +
       '<div class="w-cb"><span>按天气自动换</span><div class="chips">' + W_TAGS.map(function (x) { var on = (e.tags || []).indexOf(x[0]) >= 0; return '<button type="button" class="chip" data-wtag="' + x[0] + '" aria-pressed="' + on + '">' + x[1] + '</button>'; }).join('') + '</div></div><p class="hint">标了天气的几张会随天气、昼夜轮换；你手动选一张没标的，就一直用它。</p></div>';
-    var end = '<div class="w-grp"><button type="button" class="w-link" data-wresetall="' + e.id + '">重置壁纸设置</button>' +
+    var end = '<div class="w-grp">' + wallWarnHtml(e) + '<button type="button" class="w-link" data-wresetall="' + e.id + '">重置壁纸设置</button>' +
       (e.builtin ? '' : wallui.del === e.id ? '<button type="button" class="btn danger w-del" data-wdelok="' + e.id + '">确认删除这张壁纸</button>' : '<button type="button" class="btn ghost w-del" data-wdel="' + e.id + '">删除这张壁纸</button>') + '</div>';
     return '<section class="view wdv">' +
       '<div class="wd-top"><button type="button" class="icon-btn" data-wclose="1" aria-label="返回">' + icon('back', 22) + '</button><h1>' + esc(e.name) + '</h1>' +

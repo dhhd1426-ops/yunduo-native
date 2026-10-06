@@ -107,7 +107,16 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
     else if (fmt === 7) px = dxt(data, w, h, 1);
     else if (fmt === 8) { px = new Uint8Array(w * h * 4); for (var i = 0, n = w * h; i < n; i++) { px[i * 4] = data[i * 2]; px[i * 4 + 1] = data[i * 2 + 1]; px[i * 4 + 3] = 255; } }
     else if (fmt === 9) { px = new Uint8Array(w * h * 4); for (var k = 0, m = w * h; k < m; k++) { px[k * 4] = px[k * 4 + 1] = px[k * 4 + 2] = data[k]; px[k * 4 + 3] = 255; } }
-    else return Promise.reject(new Error('贴图格式 ' + fmt + ' 暂不支持'));
+    // 5.17.4 格式 5：WE 自带预设素材（比如 presets/fern1）用的，按 DXT5 的块结构解（透明度是那半块，颜色一般再由着色特效盖掉）
+    else if (fmt === 5) px = dxt(data, w, h, 5);
+    else {
+      // 不认识的编号：按每个像素占多少字节猜（4 = RGBA，1 = DXT5 一类，0.5 = DXT1），猜不出才算失败（这一层会被跳过，不连累别的层）
+      var bpp = data.length / (Math.ceil(w / 4) * 4 * Math.ceil(h / 4) * 4);
+      if (data.length === w * h * 4) px = data;
+      else if (bpp === 1) px = dxt(data, w, h, 5);
+      else if (bpp === .5) px = dxt(data, w, h, 1);
+      else return Promise.reject(new Error('贴图格式 ' + fmt + ' 暂不支持'));
+    }
     // 贴图可能被补到 2 的幂：裁回图片本身的大小
     iw = iw || w; ih = ih || h;
     if (iw < w || ih < h) { var cut = new Uint8Array(iw * ih * 4); for (var y = 0; y < ih; y++) cut.set(px.subarray(y * w * 4, y * w * 4 + iw * 4), y * iw * 4); px = cut; w = iw; h = ih; }
@@ -190,6 +199,17 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
     ' else if (mode == 24 || mode == 26) r = ydSetLum(B, ydLum(A)); else if (mode == 25) r = mix(vec3(ydLum(A)), A, clamp(length(B - vec3(ydLum(B))) * 2.0, 0.0, 1.0)); else if (mode == 27) r = ydSetLum(A, ydLum(B));',
     ' return mix(A, r, o); }'
   ].join('\n') + '\n';
+  // 5.17.4 common_composite.h（模糊 blur_combine 等最后一步用）：模糊结果怎么和原画面合——0 正常 / 1 混合（按 BLENDMODE）/ 2 垫在下面 / 3 镂空；COMPOSITEMONO = 转黑白
+  var COMPOSITE = [
+    '#ifndef COMPOSITE', '#define COMPOSITE 0', '#endif', '#ifndef COMPOSITEMONO', '#define COMPOSITEMONO 0', '#endif', '#ifndef BLENDMODE', '#define BLENDMODE 0', '#endif',
+    'vec2 ApplyCompositeOffset(vec2 c, vec2 r){ return c; }',
+    'vec4 ApplyComposite(vec4 A, vec4 B){',
+    '#if COMPOSITEMONO', ' B.rgb = vec3(dot(B.rgb, vec3(0.299, 0.587, 0.114)));', '#endif',
+    '#if COMPOSITE == 1', ' return vec4(ApplyBlending(BLENDMODE, A.rgb, B.rgb, B.a), A.a);',
+    '#elif COMPOSITE == 2', ' return vec4(mix(B.rgb, A.rgb, A.a), max(A.a, B.a));',
+    '#elif COMPOSITE == 3', ' return vec4(B.rgb, B.a * A.a);',
+    '#else', ' return B;', '#endif', '}'
+  ].join('\n') + '\n';
   function scan(src) {                          // 找出 [COMBO] 默认值 和 带注释的 uniform
     var combos = {}, unis = [];
     src.replace(/\/\/\s*\[COMBO\]\s*(\{.*\})/g, function (m, j) { try { var o = JSON.parse(j); if (o.combo) combos[o.combo] = o.default | 0; } catch (e) {} return m; });
@@ -241,7 +261,8 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
     var re = /uniform\s+sampler2D\s+g_Texture\d[^\n]*\n/g, m, i = 0;
     while ((m = re.exec(src))) i = m.index + m[0].length;
     if (!i) { var f = src.search(/\n[\w]+\s+\w+\s*\([^;{]*\)\s*\{/); i = f < 0 ? src.search(/void\s+main\s*\(/) : f + 1; }
-    return HEAD + d + src.slice(0, i) + LIB + (/common_blending/.test(src0) ? BLEND : '') + (isFrag ? helpers : '') + src.slice(i);
+    var comp = /common_composite/.test(src0);
+    return HEAD + d + src.slice(0, i) + LIB + (/common_blending/.test(src0) || comp ? BLEND : '') + (comp ? COMPOSITE : '') + (isFrag ? helpers : '') + src.slice(i);
   }
 
   var BUILTIN = { 'util/white': [255, 255, 255, 255], 'util/black': [0, 0, 0, 255], 'util/noflow': [127, 127, 0, 255], 'util/clearalpha': [0, 0, 0, 0] };
@@ -297,9 +318,9 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
       }
       if (!o.image) return;
       if (/util\/solidlayer/.test(o.image)) L.kind = 'solid';
-      else if (/util\/(composelayer|fullscreenlayer)/.test(o.image)) {   // 合成层：把下面已经画好的画面抓过来再加特效
+      else if (/util\/(composelayer|fullscreenlayer|projectlayer)/.test(o.image)) {   // 合成层：把下面已经画好的画面抓过来再加特效（5.17.4：projectlayer 是新版 WE 对「全景合成层」的叫法）
         if (!o.copybackground) return;
-        L.kind = 'capture'; L.full = /fullscreen/.test(o.image);
+        L.kind = 'capture'; L.full = /fullscreen|projectlayer/.test(o.image);
       } else {
         var model = J(files, o.image); if (!model) return;
         var mat = J(files, model.material); if (!mat || !mat.passes) return;
@@ -502,6 +523,25 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
     for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) { var dx = (x + .5) / n * 2 - 1, dy = (y + .5) / n * 2 - 1, r = Math.min(1, Math.sqrt(dx * dx + dy * dy)), a = Math.pow(1 - r, 2.2), i = (y * n + x) * 4; px[i] = px[i + 1] = px[i + 2] = 255; px[i + 3] = Math.round(a * 255); }
     return (this.texCache['particle/halo'] = this.upload({ w: n, h: n, iw: n, ih: n, data: px }, false));
   };
+  // 5.17.4 壁纸包里没带的 WE 自带素材（WE 安装目录里才有，创意工坊作品默认对方装了 WE）：按名字生成近似的替代贴图。
+  // 以前一律用圆光点顶替——雨丝（particle/nature/rain1，800–1600 像素、叠加混合）就变成满屏白雾 / 一根根亮竖条。
+  Renderer.prototype.stand = function (name) {
+    var k = String(name || '').toLowerCase();
+    if (k.indexOf('particle/') !== 0) return null;          // 只替粒子用的；别的缺了照旧（特效那边有各自的默认值）
+    var key = 'stand:' + (/normal/.test(k) ? 'normal' : /rain|streak/.test(k) ? 'rain' : /drop/.test(k) ? 'drop' : /fog|cloud|smoke|mist/.test(k) ? 'fog' : 'halo');
+    if (key === 'stand:halo') return this.halo();
+    if (this.texCache[key]) return this.texCache[key];
+    if (key === 'stand:normal') return (this.texCache[key] = this.tex1([128, 128, 255, 255]));   // 平面法线：折射不扭曲
+    var n = 128, px = new Uint8Array(n * n * 4), x, y, i, a;
+    for (y = 0; y < n; y++) for (x = 0; x < n; x++) {
+      var u = (x + .5) / n - .5, v = (y + .5) / n - .5;
+      if (key === 'stand:rain') a = Math.exp(-u * u / (2 * .006 * .006)) * Math.pow(Math.max(0, 1 - Math.abs(v) * 2), .6);          // 细长雨丝，两头渐隐
+      else if (key === 'stand:drop') a = Math.exp(-u * u / (2 * .02 * .02)) * Math.pow(Math.max(0, 1 - Math.abs(v) * 3.2), .8);     // 短水滴痕
+      else { var r = Math.sqrt(u * u + v * v) * 2; a = .55 * Math.pow(Math.max(0, 1 - r), 1.6); }                                    // 大而淡的雾团
+      i = (y * n + x) * 4; px[i] = px[i + 1] = px[i + 2] = 255; px[i + 3] = Math.round(Math.min(1, a) * 255);
+    }
+    return (this.texCache[key] = this.upload({ w: n, h: n, iw: n, ih: n, data: px }, false));
+  };
   Renderer.prototype.loadTex = function (name) {
     var self = this;
     if (name === 'util/noise' || name === 'util/perlin_256') {
@@ -514,7 +554,7 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
     }
     if (name === 'particle/halo') return Promise.resolve(this.halo());
     if (BUILTIN[name]) return Promise.resolve(this.texCache[name] || (this.texCache[name] = this.tex1(BUILTIN[name])));
-    var p = 'materials/' + name + '.tex'; if (!this.scene.files[p]) return Promise.resolve(null);
+    var p = 'materials/' + name + '.tex'; if (!this.scene.files[p]) return Promise.resolve(this.stand(name));
     if (this.texCache[p]) return Promise.resolve(this.texCache[p]);
     return (this.texCache[p] = assetPool.run(function () { return readAsset(self.scene.files[p]).then(function (b) { return readTexBg(b); }).then(function (t) { return (self.texCache[p] = self.upload(t, false)); }); }));
   };
@@ -570,12 +610,17 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
       return pr.then(function () {
         if (self.disposed) throw new Error('wallpaper replaced');
         if (L.kind === 'solid') { L.gtex = self.white; if (!L.size) L.size = [1, 1]; return; }
-        if (L.kind === 'particle') { L.sys = new PSys(L, self.props); return self.loadTex(L.ptex).then(function (T) { L.gtex = T || self.halo(); }); }
+        if (L.kind === 'particle') { L.sys = new PSys(L, self.props); return self.loadTex(L.ptex).catch(function (err) { warn.push(L.name + '（粒子贴图）：' + String(err && err.message || err).slice(0, 120)); return null; }).then(function (T) { L.gtex = T || self.halo(); }); }
         if (L.kind === 'capture') { L.gtex = { t: null, w: 1, h: 1, iw: L.size[0], ih: L.size[1], crop: [0, 0, 1, 1] }; L.fx = []; compileFx(L); return; }
         return assetPool.run(function () { return readAsset(self.scene.files[L.tex]).then(function (b) { return readTexBg(b, true); }).then(function (t) {
           L.gtex = self.upload(t, !L.effects.length, 0);
           if (!L.size) L.size = [t.iw, t.ih];
         }); }).then(function () { L.fx = []; compileFx(L); });
+      }).catch(function (err) {
+        // 5.17.4 一层坏了只跳过这一层：以前任何一层出错整个场景就停在那儿，后面的人物、前景全都不画（还会让后台线程整个退回主线程）
+        if (self.disposed) throw err;
+        warn.push(L.name + '：' + String(err && err.message || err).slice(0, 120));
+        L.drop = 1; L.gtex = null; L.fx = [];
       }).then(function () { return new Promise(function (r) { setTimeout(r, 0); }); });   // 每层之间让一下主线程
     }, Promise.resolve()).then(function () { return Promise.all(fxAll); }).then(function () { self.ready = true; return self; });
   };

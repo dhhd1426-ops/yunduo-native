@@ -3057,9 +3057,26 @@
   var chats = [];
   try { chats = JSON.parse(localStorage.getItem(CHAT_KEY) || '[]') || []; } catch (e) { chats = []; }
   // 全局记忆要能翻到以前所有的对话，所以尽量多存；手机存储满了再逐步减少
+  // 5.17.2：聊天记录不能把存储占满——否则壁纸、设置这些小东西就存不进去了（以前会悄悄失败，下次打开又变回旧的）。
+  // 存完隔一阵试写一块 400KB 的空位，写不进就少存一档；别的设置存不进时也可以叫 chatsMakeRoom() 让出位置
+  var chatCap = 300, chatProbeAt = 0, CHAT_CAPS = [300, 200, 120, 60, 30];
+  function chatRoomOk() {
+    try { localStorage.setItem('__room', new Array(200001).join('x')); localStorage.removeItem('__room'); return true; } catch (e) { try { localStorage.removeItem('__room'); } catch (e2) {} return false; }
+  }
   function saveChats() {
-    var caps = [300, 200, 120, 60];
-    for (var i = 0; i < caps.length; i++) { try { localStorage.setItem(CHAT_KEY, JSON.stringify(chats.slice(0, caps[i]))); return; } catch (e) {} }
+    var caps = CHAT_CAPS.filter(function (c) { return c <= chatCap; }), probe = Date.now() - chatProbeAt > 60000;
+    for (var i = 0; i < caps.length; i++) {
+      try { localStorage.setItem(CHAT_KEY, JSON.stringify(chats.slice(0, caps[i]))); } catch (e) { continue; }
+      chatCap = caps[i];
+      if (!probe || chats.length <= caps[i + 1] || i === caps.length - 1) return;
+      chatProbeAt = Date.now();
+      if (chatRoomOk()) return;
+    }
+  }
+  function chatsMakeRoom() {
+    var next = CHAT_CAPS.filter(function (c) { return c < Math.min(chatCap, chats.length); })[0];
+    if (!next) return false;
+    try { localStorage.setItem(CHAT_KEY, JSON.stringify(chats.slice(0, next))); chatCap = next; return true; } catch (e) { return false; }
   }
 
   /* ---------- 3.6 记忆模块：全局记忆 / 偏好 / Amor 的记忆 / 时间感知（只存在这台手机上） ---------- */
@@ -5030,7 +5047,14 @@
     delete walls.paper; delete walls.grain; delete walls.preview;   // 5.11 纸质纹理、5.1 胶片颗粒都去掉了；预览不跨启动保留
     if (!walls.cur || !walls.list.some(function (w) { return w.id === walls.cur; })) walls.cur = 'builtin';
   })();
-  function saveWalls() { try { localStorage.setItem(WALL_KEY, JSON.stringify(walls)); } catch (e) {} }
+  function saveWalls() {
+    var j = JSON.stringify(walls);
+    try { localStorage.setItem(WALL_KEY, j); return true; } catch (e) {}
+    // 5.17.2：存储满了——先让最旧的聊天记录让出位置再存；还是不行就说一声（以前悄悄失败，下次打开又回到自带那张）
+    while (chatsMakeRoom()) { try { localStorage.setItem(WALL_KEY, j); return true; } catch (e) {} }
+    if (!saveWalls.warned) { saveWalls.warned = true; try { toast('手机给云朵天气的存储满了，壁纸设置没存上'); } catch (e) {} }
+    return false;
+  }
   try { wallPlTick('open'); } catch (e) {}   // 5.11 轮播「每次打开」：在第一次画首页之前就换好（Wall 还没建好时只改 walls.cur）
   var wallui = { busy: false, del: '', edit: '', alert: false };
   var WALL_MEM = {};                     // 没有原生层时（浏览器测试）导入的文件只在内存里
@@ -5052,7 +5076,10 @@
       var night = key.indexOf('night|') === 0, tag = key.split('|')[1];
       var hit = (night && walls.list.filter(function (w) { return (w.tags || []).indexOf('night') >= 0; })[0]) ||
         walls.list.filter(function (w) { return (w.tags || []).indexOf(tag) >= 0; })[0];
-      if (walls.wxKey && hit) walls.cur = hit.id;        // 第一次（刚升级）只记下现在的天气，不抢你选的
+      // 第一次（刚升级）只记下现在的天气，不抢你选的。5.17.2：只在「标了天气的壁纸」之间换——你手动选的这张没标天气，就一直用它
+      //（自带那张的标签可能是很早以前给 Balloon 标的，以前每天早上从夜里变白天时会把你导入的壁纸换回自带）
+      var curW = wallById(walls.cur);
+      if (walls.wxKey && hit && curW && (curW.tags || []).length) walls.cur = hit.id;
       walls.wxKey = key; saveWalls();
     }
     return wallById(walls.cur) || wallById('builtin') || walls.list[0];
@@ -6294,7 +6321,7 @@
       '<div class="w-cb"><span>帧率</span>' + sg('fps', [[0, '默认'], [24, '24'], [30, '30'], [60, '60']]) + '</div>' +
       '</div>';
     var home = '<div class="w-grp"><h4>首页</h4><div class="w-cb"><span>手写时间放在</span><div class="seg">' + [['auto', '自动'], ['l', '左边'], ['c', '中间'], ['r', '右边']].map(function (x) { return '<button type="button" data-walign="' + x[0] + '" aria-pressed="' + ((e.align || 'auto') === x[0]) + '">' + x[1] + '</button>'; }).join('') + '</div></div>' +
-      '<div class="w-cb"><span>按天气自动换</span><div class="chips">' + W_TAGS.map(function (x) { var on = (e.tags || []).indexOf(x[0]) >= 0; return '<button type="button" class="chip" data-wtag="' + x[0] + '" aria-pressed="' + on + '">' + x[1] + '</button>'; }).join('') + '</div></div></div>';
+      '<div class="w-cb"><span>按天气自动换</span><div class="chips">' + W_TAGS.map(function (x) { var on = (e.tags || []).indexOf(x[0]) >= 0; return '<button type="button" class="chip" data-wtag="' + x[0] + '" aria-pressed="' + on + '">' + x[1] + '</button>'; }).join('') + '</div></div><p class="hint">标了天气的几张会随天气、昼夜轮换；你手动选一张没标的，就一直用它。</p></div>';
     var end = '<div class="w-grp"><button type="button" class="w-link" data-wresetall="' + e.id + '">重置壁纸设置</button>' +
       (e.builtin ? '' : wallui.del === e.id ? '<button type="button" class="btn danger w-del" data-wdelok="' + e.id + '">确认删除这张壁纸</button>' : '<button type="button" class="btn ghost w-del" data-wdel="' + e.id + '">删除这张壁纸</button>') + '</div>';
     return '<section class="view wdv">' +

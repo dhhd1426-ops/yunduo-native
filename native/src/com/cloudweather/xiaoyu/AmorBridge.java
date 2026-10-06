@@ -284,6 +284,38 @@ public class AmorBridge {
     }
 
     /* ---------- 4.7 文件：网页分块写入 → 保存到下载 / 分享 / 用其它应用打开 ---------- */
+    /* ---------- 5.17.3 大块数据存成 App 文件（Kv：files/kv/<名字>），网页的聊天记录不再挤网页存储 ---------- */
+    @JavascriptInterface
+    public void kvBegin(String key) {
+        try { Kv.begin(key); } catch (Throwable t) { Store.err(app, "kvBegin", t); }
+    }
+
+    @JavascriptInterface
+    public void kvAppend(String key, String chunk) {
+        try { Kv.append(key, chunk); } catch (Throwable t) { Store.err(app, "kvAppend", t); }
+    }
+
+    /** sync = true：写完才返回，返回值就是写没写成（第一次搬家用）；false：交给后台线程写。 */
+    @JavascriptInterface
+    public boolean kvCommit(String key, boolean sync) {
+        try { return Kv.commit(Kv.dir(app), key, sync); } catch (Throwable t) { Store.err(app, "kvCommit", t); return false; }
+    }
+
+    @JavascriptInterface
+    public int kvLen(String key) {
+        try { return Kv.len(Kv.dir(app), key); } catch (Throwable t) { Store.err(app, "kvLen", t); return -1; }
+    }
+
+    @JavascriptInterface
+    public String kvRead(String key, int off, int n) {
+        try { return Kv.read(key, off, n); } catch (Throwable t) { Store.err(app, "kvRead", t); return ""; }
+    }
+
+    @JavascriptInterface
+    public boolean kvDel(String key) {
+        try { return Kv.del(Kv.dir(app), key); } catch (Throwable t) { Store.err(app, "kvDel", t); return false; }
+    }
+
     @JavascriptInterface
     public String fileBegin(String name, String mime) {
         try { return AmorFiles.begin(app, name, mime); } catch (Throwable t) { Store.err(app, "fileBegin", t); return ""; }

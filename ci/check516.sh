@@ -4,6 +4,11 @@ mkdir -p out/check516/java
 curl -fsSL https://repo.maven.apache.org/maven2/org/json/json/20240303/json-20240303.jar -o out/check516/json.jar
 javac -encoding UTF-8 -cp out/check516/json.jar -d out/check516/java native/src/com/cloudweather/xiaoyu/WallPackage.java tests/native/WallPackageTest.java
 java -Xmx64m -cp out/check516/java:out/check516/json.jar com.cloudweather.xiaoyu.WallPackageTest out/check516/package app/www/walls/default.mpkg > out/check516/package.log
+# 5.17.3 Kv（聊天记录存成 App 文件）：普通 JVM 上测核心逻辑，Context 用一个空壳
+mkdir -p out/check516/kv/stub/android/content out/check516/kv/out
+echo 'package android.content; public abstract class Context { public abstract java.io.File getFilesDir(); }' > out/check516/kv/stub/android/content/Context.java
+javac -encoding UTF-8 -source 8 -target 8 -Xlint:-options -d out/check516/kv/out out/check516/kv/stub/android/content/Context.java native/src/com/cloudweather/xiaoyu/Kv.java tests/native/KvTest.java
+java -Dstdout.encoding=UTF-8 -cp out/check516/kv/out com.cloudweather.xiaoyu.KvTest | tee out/check516/kv.log
 node - <<'NODE' | tee out/check516/runtime.log
 const {FramePipe,Clock,AssetPool}=require('./app/www/fonts/wall-runtime');
 const sent=[]; const p=new FramePipe(x=>sent.push(x)); for(let i=0;i<200;i++)p.push({t:'draw',i});

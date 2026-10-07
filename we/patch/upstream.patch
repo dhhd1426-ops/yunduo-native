@@ -1,3 +1,44 @@
+diff --git a/src/SceneWallpaper.cpp b/src/SceneWallpaper.cpp
+index 82f2d06..9ceeb90 100644
+--- a/src/SceneWallpaper.cpp
++++ b/src/SceneWallpaper.cpp
+@@ -79,6 +79,18 @@ using namespace wallpaper;
+ 
+ namespace
+ {
++// 云朵天气移植：NDK 的 libc++ 还没有 std::atomic<std::shared_ptr<T>>（C++20 P0718），换成带锁的同名接口（只用到 load / store）
++template<typename T>
++class AtomicSharedPtr {
++public:
++    AtomicSharedPtr() = default;
++    AtomicSharedPtr(std::nullptr_t) {}
++    std::shared_ptr<T> load() const { std::lock_guard<std::mutex> lk(m_mu); return m_p; }
++    void store(std::shared_ptr<T> p) { std::lock_guard<std::mutex> lk(m_mu); m_p = std::move(p); }
++private:
++    mutable std::mutex m_mu;
++    std::shared_ptr<T> m_p;
++};
+ template<typename T>
+ void AddMsgCmd(looper::Message& msg, T cmd) {
+     msg.setInt32("cmd", (int32_t)cmd);
+@@ -360,7 +372,7 @@ private:
+     // QML thread (getOrthoSize / getParallaxInfo / drainAnimationEvents).  Every
+     // access goes through .load()/.store() so a reload's re-publish can't tear
+     // the pointer under a concurrent reader.  Shared with the render handler.
+-    std::atomic<std::shared_ptr<Scene>> m_scene;
++    AtomicSharedPtr<Scene> m_scene;
+ 
+     mutable std::mutex                       m_text_scripts_mutex;
+     std::vector<TextScriptInfo>              m_text_scripts;
+@@ -2179,7 +2191,7 @@ private:
+     // queueChildSort / propertyAnimIsPlaying — all called inline, no message
+     // post).  Render-thread methods .load() once into a local `scene` and use
+     // that; the atomic has no operator-> so any missed deref fails to compile.
+-    std::atomic<std::shared_ptr<Scene>> m_scene { nullptr };
++    AtomicSharedPtr<Scene> m_scene { nullptr };
+     float                               m_speed { 1.0f };
+ 
+     std::unique_ptr<vulkan::VulkanRender> m_render;
 diff --git a/src/Vulkan/Device.cpp b/src/Vulkan/Device.cpp
 index 1672f8b..fa2cc5d 100644
 --- a/src/Vulkan/Device.cpp

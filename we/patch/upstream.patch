@@ -1,3 +1,53 @@
+diff --git a/src/Scene/SceneCamera.cpp b/src/Scene/SceneCamera.cpp
+index 73afaad..0cc65d0 100644
+--- a/src/Scene/SceneCamera.cpp
++++ b/src/Scene/SceneCamera.cpp
+@@ -67,10 +67,10 @@ void SceneCamera::CalculateViewProjectionMatrix() {
+         m_viewProjectionMat =
+             Perspective(Radians(m_fov), m_aspect, m_nearClip, m_farClip) * m_viewMat;
+     } else {
+-        double left         = -m_width / 2.0f;
+-        double right        = m_width / 2.0f;
+-        double bottom       = -m_height / 2.0f;
+-        double up           = m_height / 2.0f;
++        double left         = m_ox - m_width / 2.0f;
++        double right        = m_ox + m_width / 2.0f;
++        double bottom       = m_oy - m_height / 2.0f;
++        double up           = m_oy + m_height / 2.0f;
+         m_viewProjectionMat = Ortho(left, right, bottom, up, m_nearClip, m_farClip) * m_viewMat;
+     }
+ 
+diff --git a/src/Scene/include/Scene/SceneCamera.h b/src/Scene/include/Scene/SceneCamera.h
+index ed38745..ab6f38e 100644
+--- a/src/Scene/include/Scene/SceneCamera.h
++++ b/src/Scene/include/Scene/SceneCamera.h
+@@ -58,6 +58,8 @@ public:
+         m_aspect = m_width / m_height;
+     }
+     void SetAspect(double aspect) { m_aspect = aspect; }
++    // 云朵天气移植：正交相机的视口中心偏移（场景单位），用来做「构图」——横版壁纸在竖屏上看左边 / 右边 / 放大
++    void SetOrthoOffset(double x, double y) { m_ox = x; m_oy = y; }
+     void SetFov(double value) { m_fov = value; }
+ 
+     void  AttatchImgEffect(std::shared_ptr<SceneImageEffectLayer> eff) { m_imgEffect = eff; }
+@@ -96,6 +98,8 @@ public:
+         m_eye           = cam.m_eye;
+         m_center        = cam.m_center;
+         m_up_vec        = cam.m_up_vec;
++        m_ox            = cam.m_ox;
++        m_oy            = cam.m_oy;
+     }
+ 
+     void                           LoadPaths(std::vector<CameraPath> paths);
+@@ -114,6 +118,8 @@ public:
+ private:
+     void CalculateViewProjectionMatrix();
+ 
++    double m_ox { 0.0 };
++    double m_oy { 0.0 };
+     double m_width { 1.0f };
+     double m_height { 1.0f };
+     double m_aspect { 16.0f / 9.0f };
 diff --git a/src/SceneWallpaper.cpp b/src/SceneWallpaper.cpp
 index 82f2d06..9ceeb90 100644
 --- a/src/SceneWallpaper.cpp
@@ -39,6 +89,42 @@ index 82f2d06..9ceeb90 100644
      float                               m_speed { 1.0f };
  
      std::unique_ptr<vulkan::VulkanRender> m_render;
+diff --git a/src/Utils/Logging.cpp b/src/Utils/Logging.cpp
+index 6f972c3..6008560 100644
+--- a/src/Utils/Logging.cpp
++++ b/src/Utils/Logging.cpp
+@@ -9,6 +9,9 @@
+ #include <vector>
+ 
+ #include "Sha.hpp"
++#ifdef __ANDROID__
++#include <android/log.h>   // 云朵天气移植：安卓上同时写进 logcat（标签 WE）
++#endif
+ 
+ // DEBUG uses the same file:line-attributed format as ERROR -- it's the same
+ // "here's exactly where this came from" need, just gated off by default
+@@ -91,6 +94,10 @@ void WallpaperLog(int level, const char* file, int line, const char* fmt, ...) {
+         // Overwrites vsnprintf's terminating NUL; fwrite never reads one.
+         stack_buf[line_len - 1] = '\n';
+         std::fwrite(stack_buf, 1, line_len, stderr);
++#ifdef __ANDROID__
++        stack_buf[line_len - 1] = '\0';
++        __android_log_write(level == LOGLEVEL_ERROR ? ANDROID_LOG_ERROR : ANDROID_LOG_INFO, "WE", stack_buf);
++#endif
+     } else {
+         // Diagnostics must not lose their tail -- glslang's multi-error parse
+         // log is the main shader-translation debugging surface and routinely
+@@ -107,6 +114,10 @@ void WallpaperLog(int level, const char* file, int line, const char* fmt, ...) {
+         va_end(args_retry);
+         heap_buf[line_len - 1] = '\n';
+         std::fwrite(heap_buf.data(), 1, line_len, stderr);
++#ifdef __ANDROID__
++        heap_buf[line_len - 1] = '\0';
++        __android_log_write(level == LOGLEVEL_ERROR ? ANDROID_LOG_ERROR : ANDROID_LOG_INFO, "WE", heap_buf.data());
++#endif
+     }
+     std::fflush(stderr);
+     if (auto sink = wallpaper_log_test::getSink()) {
 diff --git a/src/Vulkan/Device.cpp b/src/Vulkan/Device.cpp
 index 1672f8b..fa2cc5d 100644
 --- a/src/Vulkan/Device.cpp
@@ -73,11 +159,56 @@ index 0214801..8b61184 100644
      }
  
      std::vector<VkPipelineShaderStageCreateInfo> shaderStages;
+diff --git a/src/Vulkan/Swapchain.cpp b/src/Vulkan/Swapchain.cpp
+index cd7b0f1..906ea0f 100644
+--- a/src/Vulkan/Swapchain.cpp
++++ b/src/Vulkan/Swapchain.cpp
+@@ -42,6 +42,14 @@ bool querySwapChainSupport(const vvk::PhysicalDevice& gpu, VkSurfaceKHR surface,
+     return true;
+ }
+ 
++// 云朵天气移植：安卓的窗口表面不一定支持 OPAQUE，按表面支持的挑
++VkCompositeAlphaFlagBitsKHR ydCompositeAlpha(const VkSurfaceCapabilitiesKHR& caps) {
++    for (auto f : { VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR, VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR,
++                    VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR, VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR })
++        if (caps.supportedCompositeAlpha & f) return f;
++    return VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
++}
++
+ VkSurfaceFormatKHR chooseSwapSurfaceFormat(std::span<const VkSurfaceFormatKHR> availableFormats) {
+     for (const auto& availableFormat : availableFormats) {
+         if (availableFormat.format == VK_FORMAT_B8G8R8A8_UNORM ||
+@@ -114,7 +122,7 @@ bool Swapchain::Create(Device& device, VkSurfaceKHR surface, VkExtent2D extent,
+              swap.m_target_fps,
+              static_cast<int>(swap.m_present_policy));
+     VkSurfaceTransformFlagBitsKHR preTransform   = surfaceCapabilities.currentTransform;
+-    VkCompositeAlphaFlagBitsKHR   compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
++    VkCompositeAlphaFlagBitsKHR   compositeAlpha = ydCompositeAlpha(surfaceCapabilities);
+ 
+     VkSwapchainCreateInfoKHR sci {
+         .sType            = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
+@@ -188,7 +196,7 @@ bool Swapchain::Recreate(Device& device, VkSurfaceKHR surface, VkExtent2D extent
+         .imageUsage       = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+         .imageSharingMode = VK_SHARING_MODE_EXCLUSIVE,
+         .preTransform     = surfaceCapabilities.currentTransform,
+-        .compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
++        .compositeAlpha   = ydCompositeAlpha(surfaceCapabilities),
+         .presentMode      = m_present_mode,
+         .clipped          = true,
+         .oldSwapchain     = *old_handle,
 diff --git a/src/Vulkan/TextureCache.cpp b/src/Vulkan/TextureCache.cpp
-index fab2b71..1e54f71 100644
+index fab2b71..7a68ea2 100644
 --- a/src/Vulkan/TextureCache.cpp
 +++ b/src/Vulkan/TextureCache.cpp
-@@ -262,9 +262,11 @@ std::optional<ExImageParameters> CreateExImage(uint32_t width, uint32_t height,
+@@ -14,6 +14,7 @@
+ #include "Utils/Hash.h"
+ #include "include/Vulkan/Parameters.hpp"
+ #include "vvk/vulkan_wrapper.hpp"
++#include "yd_bc_decode.hpp"   // 云朵天气移植
+ #include "TexFormatVk.hpp" // ToVkType(TextureFormat) — testable mapping (BC1 1-bit alpha)
+ #include "TextureCacheDetail.hpp" // MEM4: mipOffsets / packedTotalBytes / bytesPerBlockForFormat
+ #include "ImagePayload.h"  // mayReleaseDecodedPayload / releaseDecodedPayload
+@@ -262,9 +263,11 @@ std::optional<ExImageParameters> CreateExImage(uint32_t width, uint32_t height,
                                                   .pNext = NULL,
                                                   .handleTypes =
                                                       VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD_BIT };
@@ -90,7 +221,7 @@ index fab2b71..1e54f71 100644
                       .imageType   = VK_IMAGE_TYPE_2D,
                       .format      = format,
                       .extent      = VkExtent3D { .width = width, .height = height, .depth = 1 },
-@@ -284,7 +286,7 @@ std::optional<ExImageParameters> CreateExImage(uint32_t width, uint32_t height,
+@@ -284,7 +287,7 @@ std::optional<ExImageParameters> CreateExImage(uint32_t width, uint32_t height,
          image.mem_reqs = device.GetImageMemoryRequirements(*image.handle);
  
          if (auto opt = AllocateMemory(
@@ -99,7 +230,7 @@ index fab2b71..1e54f71 100644
              opt.has_value()) {
              image.mem = std::move(opt.value());
          } else
-@@ -310,7 +312,11 @@ std::optional<ExImageParameters> CreateExImage(uint32_t width, uint32_t height,
+@@ -310,7 +313,11 @@ std::optional<ExImageParameters> CreateExImage(uint32_t width, uint32_t height,
              VVK_CHECK_ACT(break, device.CreateImageView(createinfo, image.view));
          }
          // No CreateSampler here — see CreateImage above (MEM5 dedup).
@@ -112,6 +243,54 @@ index fab2b71..1e54f71 100644
  
          return image;
  
+@@ -656,6 +663,26 @@ ImageSlotsRef TextureCache::CreateTex(Image& image) {
+         VkSamplerCreateInfo sampler_info = GenSamplerInfo(sam, (float)mipmap_levels, maxAniso);
+         VkFormat            format       = ToVkType(image.header.format);
+         VkExtent3D          ext { (u32)image_slot.width, (u32)image_slot.height, 1 };
++        // 云朵天气移植：设备不支持 BC1/2/3（手机 GPU 大多如此）→ 上传前在 CPU 上解成 RGBA8
++        std::vector<std::vector<std::uint8_t>> yd_dec;
++        {
++            const int kind = format == VK_FORMAT_BC1_RGBA_UNORM_BLOCK ? 1
++                             : format == VK_FORMAT_BC2_UNORM_BLOCK    ? 2
++                             : format == VK_FORMAT_BC3_UNORM_BLOCK    ? 3
++                                                                      : 0;
++            if (kind) {
++                const char* force = std::getenv("WE_FORCE_BC_DECODE");
++                bool        sampled = (m_device.gpu().GetFormatProperties(format).optimalTilingFeatures &
++                                VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) != 0;
++                if (! sampled || (force && force[0] == '1')) {
++                    for (const auto& mip : image_slot.mipmaps)
++                        yd_dec.push_back(yd_bc::decode(kind, mip.data.get(), (std::size_t)mip.size, mip.width, mip.height));
++                    format = VK_FORMAT_R8G8B8A8_UNORM;
++                    static bool logged = false;
++                    if (! logged) { logged = true; LOG_INFO("BC textures decoded on CPU (device has no BC sampling)"); }
++                }
++            }
++        }
+ 
+         VkSampler shared_sampler = GetOrCreateSampler(sampler_info);
+         if (auto opt = CreateImage(m_device,
+@@ -693,8 +720,8 @@ ImageSlotsRef TextureCache::CreateTex(Image& image) {
+         // detail::mipOffsets rounds each per-mip starting offset up.
+         std::vector<std::size_t> mip_sizes;
+         mip_sizes.reserve(image_slot.mipmaps.size());
+-        for (const auto& mip : image_slot.mipmaps) {
+-            mip_sizes.push_back(mip.size);
++        for (usize j = 0; j < image_slot.mipmaps.size(); j++) {
++            mip_sizes.push_back(yd_dec.empty() ? (std::size_t)image_slot.mipmaps[j].size : yd_dec[j].size());
+         }
+ 
+         const std::size_t blockSize = detail::bytesPerBlockForFormat(format);
+@@ -732,7 +759,8 @@ ImageSlotsRef TextureCache::CreateTex(Image& image) {
+             auto* dst = static_cast<std::uint8_t*>(mapped.data);
+             for (usize j = 0; j < image_slot.mipmaps.size(); j++) {
+                 const auto& image_data = image_slot.mipmaps[j];
+-                memcpy(dst + offsets[j], image_data.data.get(), (u32)image_data.size);
++                if (! yd_dec.empty()) memcpy(dst + offsets[j], yd_dec[j].data(), yd_dec[j].size());
++                else memcpy(dst + offsets[j], image_data.data.get(), (u32)image_data.size);
+             }
+             staging.handle.UnMapMemory();
+         }
 diff --git a/src/Vulkan/include/vvk/vulkan_wrapper.hpp b/src/Vulkan/include/vvk/vulkan_wrapper.hpp
 index 2b953ca..b86f25a 100644
 --- a/src/Vulkan/include/vvk/vulkan_wrapper.hpp
@@ -154,19 +333,40 @@ index 2b953ca..b86f25a 100644
      }
  
 diff --git a/src/VulkanRender/VulkanRender.cpp b/src/VulkanRender/VulkanRender.cpp
-index ef2aea0..ca5ca48 100644
+index ef2aea0..c89d436 100644
 --- a/src/VulkanRender/VulkanRender.cpp
 +++ b/src/VulkanRender/VulkanRender.cpp
-@@ -59,7 +59,7 @@
+@@ -59,7 +59,28 @@
  
  using namespace wallpaper::vulkan;
  
 -constexpr uint64_t vk_wait_time { 10u * 1000u * 1000000u };
++namespace
++{
++std::mutex g_yd_view_mu;
++bool       g_yd_view_on { false };
++float      g_yd_view[4] {};
++bool       YdViewGet(float* v) {
++    std::lock_guard<std::mutex> lk(g_yd_view_mu);
++    if (! g_yd_view_on || g_yd_view[2] <= 0 || g_yd_view[3] <= 0) return false;
++    for (int i = 0; i < 4; i++) v[i] = g_yd_view[i];
++    return true;
++}
++} // namespace
++namespace wallpaper
++{
++// 云朵天气移植：设置取景框；w 或 h <= 0 表示恢复默认（居中铺满）
++void YdSetView(float x0, float y0, float w, float h) {
++    std::lock_guard<std::mutex> lk(g_yd_view_mu);
++    g_yd_view_on = w > 0 && h > 0;
++    g_yd_view[0] = x0; g_yd_view[1] = y0; g_yd_view[2] = w; g_yd_view[3] = h;
++}
++} // namespace wallpaper
 +constexpr uint64_t vk_wait_time { 10ull * 1000ull * 1000000ull };   // 云朵天气移植：原写法按 32 位算会溢出成 1.41 秒
  // 2 frames in flight: lets CPU record frame N+1 while GPU executes frame N,
  // collapsing drawFrame wallclock from (CPU + GPU) to max(CPU, GPU) at
  // steady state.  Per-slot resources: command buffer, fence, semaphore pair,
-@@ -93,11 +93,11 @@ constexpr std::array base_inst_exts {
+@@ -93,11 +114,11 @@ constexpr std::array base_inst_exts {
  };
  constexpr std::array base_device_exts {
      Extension { false, VK_EXT_MEMORY_BUDGET_EXTENSION_NAME },
@@ -183,6 +383,23 @@ index ef2aea0..ca5ca48 100644
  };
  
  struct VulkanRender::Impl {
+@@ -1703,6 +1724,16 @@ void VulkanRender::Impl::UpdateCameraFillMode(wallpaper::Scene&   scene,
+         break;
+     case FillMode::ASPECTCROP:
+     default:
++        if (float v[4]; YdViewGet(v)) {
++            // 云朵天气移植：网页那边算好的取景框 [x0, y0, 宽, 高]（场景坐标，y 从下往上，和 WebGL 引擎的 view() 一致）
++            gCam.SetWidth(v[2]);
++            gCam.SetHeight(v[3]);
++            gCam.SetOrthoOffset(v[0] + v[2] / 2.0 - sw / 2.0, v[1] + v[3] / 2.0 - sh / 2.0);
++            gPerCam.SetAspect(fboAspect);
++            gPerCam.SetFov(algorism::CalculatePersperctiveFov(1000.0f, gCam.Height()));
++            break;
++        }
++        gCam.SetOrthoOffset(0, 0);
+         if (fboAspect > sAspect) {
+             // scale height
+             gCam.SetWidth(sw);
 diff --git a/src/WPTexImageHelpers.h b/src/WPTexImageHelpers.h
 index ef13f48..cc5b3a0 100644
 --- a/src/WPTexImageHelpers.h

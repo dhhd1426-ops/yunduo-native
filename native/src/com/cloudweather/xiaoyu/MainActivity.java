@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
     static volatile String oauthUrl;   // 5.8：连接器登录授权的回调
     static final int REQ_FILE = 41, REQ_WALL = 42, REQ_LOC = 43, REQ_WMIC = 46, REQ_CAM = 48;
     private WebView web;
+    private WeWall weWall;             // 5.18 原生 Wallpaper Engine 渲染（WebView 后面的 SurfaceView）
     private ValueCallback<Uri[]> fileCb;
     private GeolocationPermissions.Callback geoCb;
     private String geoOrigin;
@@ -139,7 +140,14 @@ public class MainActivity extends Activity {
         Store.saveLaunch(this, getIntent());
         takeShared(getIntent());
         web.loadUrl("file:///android_asset/index.html");
-        setContentView(web);
+        // 5.18：WebView 下面垫一块 SurfaceView 给原生壁纸渲染（默认藏着，网页要用时才显示）
+        android.widget.FrameLayout rootView = new android.widget.FrameLayout(this);
+        rootView.setBackgroundColor(0xFF0B0F12);
+        android.view.SurfaceView weSurface = new android.view.SurfaceView(this);
+        rootView.addView(weSurface, new android.widget.FrameLayout.LayoutParams(-1, -1));
+        rootView.addView(web, new android.widget.FrameLayout.LayoutParams(-1, -1));
+        try { weWall = new WeWall(this, weSurface); } catch (Throwable t) { Store.err(this, "weWall", t); }
+        setContentView(rootView);
         edgeToEdge();
     }
 
@@ -197,6 +205,13 @@ public class MainActivity extends Activity {
     /** 网页说：现在背后是浅色（要深色图标）还是深色 / 壁纸（白色图标） */
     void setBarIcons(final boolean dark) {
         runOnUiThread(new Runnable() { public void run() { try { if (dark != darkIcons) { darkIcons = dark; applyBars(); } } catch (Throwable t) { Store.err(MainActivity.this, "bars", t); } } });
+    }
+
+    WeWall weWall() { return weWall; }
+
+    /** 5.18 原生壁纸在画时 WebView 要透明，才露得出后面的 SurfaceView */
+    void setWebTransparent(boolean t) {
+        try { if (web != null) web.setBackgroundColor(t ? Color.TRANSPARENT : 0xFF141A2D); } catch (Throwable e) { Store.err(this, "webBg", e); }
     }
 
     boolean hasLoc() {
@@ -332,6 +347,7 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         js("window.__amorResume&&window.__amorResume()");
+        if (weWall != null) weWall.onResume();
         try {
             Scheduler.rescheduleFire(getApplicationContext());   // 被小米“清理后台”强停过的话闹钟已经没了，这里补回来
             KeepService.sync(getApplicationContext());
@@ -345,6 +361,7 @@ public class MainActivity extends Activity {
     protected void onPause() {
         super.onPause();
         js("window.__amorPause&&window.__amorPause()");      // 5.0：动态壁纸在后台停帧
+        if (weWall != null) weWall.onPause();
         if (voice != null) voice.onPause();                    // 切到后台就别再听了
         if (mic != null) mic.stop(true);
         if (viz != null) viz.stop();                           // 5.11：后台不读声音
@@ -352,6 +369,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        if (weWall != null) { try { weWall.stop(); } catch (Throwable t) { Store.err(this, "weStop", t); } }
         if (voice != null) voice.destroy();
         if (mic != null) mic.stop(false);
         if (viz != null) viz.stop();

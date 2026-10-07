@@ -1,10 +1,7 @@
 name: we-native
 # Wallpaper Engine 原生渲染移植（第一步：可行性）——NDK 交叉编译 + 模拟器里离屏渲染一帧
 on:
-  push:
-    branches: [main]
-    paths: ['we/**', '.github/workflows/we.yml']
-  workflow_dispatch:
+  workflow_dispatch:   # 5.18 起原生库在 build.yml 里随 App 一起编、在模拟器里随 App 一起测；这个离屏验证只在手动触发时跑
 permissions:
   contents: write
 jobs:

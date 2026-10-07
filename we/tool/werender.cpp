@@ -11,6 +11,11 @@
 #include "SceneWallpaper.hpp"
 #include "SceneWallpaperSurface.hpp"
 
+namespace wallpaper
+{
+void YdSetView(float x0, float y0, float w, float h);
+}
+
 int main(int argc, char** argv) {
     if (argc < 4) {
         std::fprintf(stderr, "usage: %s <assets> <scene> <out.ppm> [w h [frame]]\n", argv[0]);
@@ -40,6 +45,10 @@ int main(int argc, char** argv) {
     psw->setPropertyString(wallpaper::PROPERTY_ASSETS, assets);
     psw->setPropertyString(wallpaper::PROPERTY_SOURCE, scene);
     psw->setPropertyInt32(wallpaper::PROPERTY_FPS, 30);
+    if (const char* v = std::getenv("WE_VIEW")) {   // 取景框 "x0 y0 宽 高"（场景坐标），测构图用
+        float a[4] {};
+        if (std::sscanf(v, "%f %f %f %f", &a[0], &a[1], &a[2], &a[3]) == 4) wallpaper::YdSetView(a[0], a[1], a[2], a[3]);
+    }
     psw->play();
     psw->requestScreenshotAtFrame(out, (uint64_t)frame);
 

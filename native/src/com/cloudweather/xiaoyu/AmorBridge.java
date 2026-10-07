@@ -366,6 +366,53 @@ public class AmorBridge {
         return Walls.delete(app, path);
     }
 
+    /* ---------- 5.18 原生 Wallpaper Engine 渲染（WeWall / libwe.so） ---------- */
+    /** 这台手机能不能用原生渲染（有 Vulkan、库和基础素材都在）；不能用时 weWhy() 说原因 */
+    @JavascriptInterface
+    public boolean weOk() {
+        try { return act instanceof MainActivity && WeWall.available(app); } catch (Throwable t) { Store.err(app, "weOk", t); return false; }
+    }
+
+    @JavascriptInterface
+    public String weWhy() { return WeWall.why; }
+
+    private interface WeOp { void run(WeWall w); }
+    private void we(final WeOp op) {
+        act.runOnUiThread(new Runnable() { @Override public void run() {
+            try { if (act instanceof MainActivity) { WeWall w = ((MainActivity) act).weWall(); if (w != null) op.run(w); } }
+            catch (Throwable t) { Store.err(app, "we", t); }
+        } });
+    }
+
+    /** 开始画（或换一张）：dir 是壁纸的解包目录（file:// 或绝对路径，只认 files/amor/walls/ 里面的） */
+    @JavascriptInterface
+    public boolean weStart(String dir, final int fps, final float speed) {
+        try {
+            String p = dir.startsWith("file://") ? java.net.URLDecoder.decode(dir.substring(7).replace("+", "%2B"), "UTF-8") : dir;
+            final java.io.File f = new java.io.File(p).getCanonicalFile();
+            if (!f.isDirectory() || !f.getPath().startsWith(Walls.dir(app).getCanonicalPath() + java.io.File.separator)) return false;
+            we(new WeOp() { public void run(WeWall w) { w.start(f.getAbsolutePath(), fps, speed); } });
+            return true;
+        } catch (Throwable t) { Store.err(app, "weStart", t); return false; }
+    }
+
+    @JavascriptInterface
+    public void weStop() { we(new WeOp() { public void run(WeWall w) { w.stop(); } }); }
+
+    /** 取景框（场景坐标，y 从下往上）：x0, y0, 宽, 高；宽或高 <= 0 = 默认居中铺满 */
+    @JavascriptInterface
+    public void weView(final float x0, final float y0, final float w0, final float h0) { we(new WeOp() { public void run(WeWall w) { w.setView(x0, y0, w0, h0); } }); }
+
+    @JavascriptInterface
+    public void wePause(final boolean p) { we(new WeOp() { public void run(WeWall w) { w.setPaused(p); } }); }
+
+    @JavascriptInterface
+    public void weSpeed(final float s) { we(new WeOp() { public void run(WeWall w) { w.setSpeed(s); } }); }
+
+    /** 要一张当前画面：结果回调 window.__weSnap(tag, url) */
+    @JavascriptInterface
+    public void weSnap(final int w0, final int h0, final String tag) { we(new WeOp() { public void run(WeWall w) { w.snap(w0, h0, tag); } }); }
+
     /** 定位权限：granted / denied（没问过也算 denied，网页调 geolocation 时系统会弹框） */
     @JavascriptInterface
     public String locState() {

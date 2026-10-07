@@ -93,3 +93,11 @@ target_include_directories(wescene-renderer PUBLIC ${WSR}/src ${WSR}/src/Swapcha
 # ---------- 离屏验证工具 ----------
 add_executable(werender tool/werender.cpp)
 target_link_libraries(werender PRIVATE wescene-renderer)
+
+# ---------- App 用的 JNI 库 libwe.so（只在安卓编） ----------
+if(ANDROID)
+  add_library(we SHARED jni/we_jni.cpp)
+  target_link_libraries(we PRIVATE wescene-renderer Vulkan::Vulkan android log)
+  # 只导出 JNI 入口，其余符号藏起来（库小一些，也避免和系统库撞名）
+  target_link_options(we PRIVATE -Wl,--exclude-libs,ALL -Wl,--gc-sections)
+endif()

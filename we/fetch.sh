@@ -29,8 +29,9 @@ pin https://github.com/lz4/lz4                       "$DST/lz4"                 
 pin https://github.com/freetype/freetype             "$DST/freetype"                  VER-2-13-3 2>/dev/null || {
   rm -rf "$DST/freetype"; git clone -q --depth 1 --branch VER-2-13-3 https://github.com/freetype/freetype "$DST/freetype"; }
 
-# 移植补丁：推送描述符兼容垫片、可选设备扩展、格式 5 贴图、栅栏等待超时溢出
+# 移植补丁：推送描述符兼容垫片、可选设备扩展、格式 5 贴图、栅栏等待超时溢出、BC 贴图 CPU 解码、取景框、安卓表面透明度、logcat
 if ! git -C "$WSR" diff --quiet; then git -C "$WSR" checkout -q -- .; fi
 git -C "$WSR" apply "$HERE/patch/upstream.patch"
 cp "$HERE/patch/vvk_push_emu.inl" "$WSR/src/Vulkan/include/vvk/vvk_push_emu.inl"
+cp "$HERE/patch/yd_bc_decode.hpp" "$WSR/src/Vulkan/yd_bc_decode.hpp"
 echo "fetched into $DST"

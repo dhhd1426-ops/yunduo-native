@@ -140,6 +140,27 @@ adb shell pm grant $PKG android.permission.RECORD_AUDIO || true
 T --ez viz true; sleep 4
 adb shell run-as $PKG cat shared_prefs/amor.xml | grep -o "viz[^&]*" | head -5 > $O/viz.txt 2>&1 || true
 
+note "11 native Wallpaper Engine renderer (5.18): import the test .mpkg, wait for the first native frame"
+if [ -f testdata/scene.pkg ]; then
+  adb shell input keyevent KEYCODE_WAKEUP; adb shell wm dismiss-keyguard
+  adb shell am start -f 0x30000000 -n $PKG/.MainActivity; sleep 3
+  adb exec-in "run-as $PKG sh -c 'mkdir -p files && cat > files/ci_wall.mpkg'" < testdata/scene.pkg
+  adb logcat -c
+  adb shell am start -a android.intent.action.VIEW -d "file:///data/user/0/$PKG/files/ci_wall.mpkg" -n $PKG/.MainActivity
+  for i in $(seq 1 60); do
+    sleep 5
+    if adb logcat -d -s WE:I | grep -q "first frame"; then echo "first native frame after $((i*5))s" | tee -a $O/steps.txt; break; fi
+  done
+  sleep 8; shot 11-native-wall
+  adb logcat -d -s WE:* > $O/we-log.txt
+  adb shell "run-as $PKG ls -la files/amor/walls" > $O/we-walls.txt 2>&1 || true
+  adb shell input keyevent KEYCODE_HOME; sleep 3
+  adb shell am start -f 0x30000000 -n $PKG/.MainActivity
+  for i in $(seq 1 40); do sleep 5; if adb logcat -d -s WE:I | grep -c "first frame" | grep -q "^[2-9]"; then echo "native frame again after resume $((i*5))s" | tee -a $O/steps.txt; break; fi; done
+  sleep 5; shot 11b-native-resumed
+  adb logcat -d -s WE:* > $O/we-log2.txt
+fi
+
 note "8 collect"
 (adb shell pidof $PKG || echo DEAD) > $O/pid-end.txt
 adb shell run-as $PKG cat shared_prefs/amor.xml > $O/prefs.xml 2>&1 || true

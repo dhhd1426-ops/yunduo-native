@@ -4,6 +4,7 @@ set -euo pipefail
 P=/tmp/pub; rm -rf $P; mkdir -p $P
 cp -r out/emu $P/ 2>/dev/null || true
 cp out/classes.dex out/toolchain.txt out/base.apk $P/ 2>/dev/null || true
+mkdir -p $P/lib/arm64-v8a && cp out/lib/arm64-v8a/libwe.so $P/lib/arm64-v8a/ 2>/dev/null || true   # 5.18 原生 WE 渲染库（正式包只带 arm64）
 cp out/*.log $P/ 2>/dev/null || true
 cp out-compile.log $P/compile.log 2>/dev/null || true
 echo "sha=$GITHUB_SHA run=$GITHUB_RUN_ID job=${JOB_STATUS:-?} at=$(date -u +%FT%TZ)" > $P/RESULT.txt

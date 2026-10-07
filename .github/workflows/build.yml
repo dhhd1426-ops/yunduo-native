@@ -2,23 +2,38 @@ name: native
 on:
   push:
     branches: [main]
-    paths-ignore: ['we/**', '.github/workflows/we.yml']   # WE 移植有自己的流水线
   workflow_dispatch:
 permissions:
   contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@v4
       - name: Compile Java to classes.dex (official SDK d8)
         run: bash ci/compile.sh 2>&1 | tee out-compile.log; test ${PIPESTATUS[0]} -eq 0
+      - name: Native WE renderer libwe.so (NDK; x86_64 for the emulator, arm64-v8a for phones)
+        run: |
+          bash we/fetch.sh $HOME/wesrc > out/we-fetch.log 2>&1 || { tail -30 out/we-fetch.log; exit 1; }
+          NDK=${ANDROID_NDK_LATEST_HOME:-$ANDROID_NDK_HOME}
+          for abi in x86_64 arm64-v8a; do
+            cmake -S we -B build-$abi -G Ninja -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_TOOLCHAIN_FILE=$NDK/build/cmake/android.toolchain.cmake \
+              -DANDROID_ABI=$abi -DANDROID_PLATFORM=26 -DANDROID_STL=c++_static \
+              -DWSR_DIR=$HOME/wesrc/wsr -DLZ4_DIR=$HOME/wesrc/lz4 -DFREETYPE_DIR=$HOME/wesrc/freetype \
+              > out/we-cmake-$abi.log 2>&1 || { tail -50 out/we-cmake-$abi.log; exit 1; }
+            ninja -k 0 -C build-$abi we > out/we-build-$abi.log 2>&1 || { grep -E "error:" out/we-build-$abi.log | sort | uniq | head -60; exit 1; }
+            mkdir -p out/lib/$abi
+            $NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip -o out/lib/$abi/libwe.so build-$abi/libwe.so
+            ls -la out/lib/$abi/libwe.so
+          done
+          git fetch -q --depth 1 origin we-testdata && mkdir -p testdata && git --work-tree=testdata checkout FETCH_HEAD -- . && git reset -q || true
       - name: Build debuggable test APK (throwaway key)
         run: |
           python3 -m pip install --quiet pillow
           mv out-compile.log out/compile.log
-          YD_BASE=$PWD/out/base-debug.apk YD_DEX=$PWD/out/classes.dex python3 app/build.py out/test.apk 2>&1 | tee out/apk.log
+          YD_BASE=$PWD/out/base-debug.apk YD_DEX=$PWD/out/classes.dex YD_LIBS=$PWD/out/lib python3 app/build.py out/test.apk 2>&1 | tee out/apk.log
           python3 app/verify.py out/test.apk 2>&1 | tee out/verify.log | tail -3
       - name: Enable KVM
         run: |

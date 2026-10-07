@@ -52,8 +52,8 @@ def manifest():
     A = True
     root = ('manifest', [
         (False, 'package', T_STRING, PKG),
-        (A, 'versionCode', T_INT_DEC, 86),
-        (A, 'versionName', T_STRING, '5.17.4'),
+        (A, 'versionCode', T_INT_DEC, 87),
+        (A, 'versionName', T_STRING, '5.18'),
     ], [
         ('uses-sdk', [(A, 'minSdkVersion', T_INT_DEC, MIN_SDK), (A, 'targetSdkVersion', T_INT_DEC, 29)], []),
     ] + [('uses-permission', [(A, 'name', T_STRING, 'android.permission.' + p)], []) for p in PERMS] + [
@@ -147,6 +147,24 @@ def main(out_path):
     if os.path.isdir(walls_dir):
         for fn in sorted(os.listdir(walls_dir)):
             entries.append(('assets/walls/' + fn, open(os.path.join(walls_dir, fn), 'rb').read(), fn.endswith('.mpkg')))
+    # 5.18 原生 Wallpaper Engine 渲染：基础素材替身（着色器 / util 贴图 / 粒子贴图，来自仓库 we/assets）放 assets/we/，
+    # 原生库 libwe.so（CI 的 NDK 构建产物）放 lib/<abi>/。清单没写 extractNativeLibs，安装时系统会解出来，所以压缩存放没问题。
+    we_dir = os.path.join(HERE, 'www', 'we')
+    if os.path.isdir(we_dir):
+        for root, _, files in sorted(os.walk(we_dir)):
+            for fn in sorted(files):
+                if fn.endswith('.py'):
+                    continue
+                full = os.path.join(root, fn)
+                rel = os.path.relpath(full, os.path.join(HERE, 'www')).replace(os.sep, '/')
+                entries.append(('assets/' + rel, open(full, 'rb').read(), True))
+    lib_dir = os.environ.get('YD_LIBS') or os.path.join(HERE, 'native', 'lib')
+    if os.path.isdir(lib_dir):
+        for abi in sorted(os.listdir(lib_dir)):
+            so = os.path.join(lib_dir, abi, 'libwe.so')
+            if os.path.isfile(so):
+                entries.append(('lib/%s/libwe.so' % abi, open(so, 'rb').read(), True))
+                print('native lib:', abi, os.path.getsize(so), 'bytes')
     blob, central, eocd = write_zip(entries)
     key, cert, pub = make_key(HERE)
     apk, digest = sign_v2(blob, central, eocd, key, cert, pub)

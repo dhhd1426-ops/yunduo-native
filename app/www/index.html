@@ -2103,6 +2103,11 @@
     opacity: calc(1 - var(--wp) * 1.8); --ink: #f6f3ec; --text: #f6f3ec; --accent: #e08a6a; filter: drop-shadow(0 2px 14px rgba(0,0,0,.35)); }
   #wall.flat #wall-mid { z-index: 3; }
   #wall.media #wall-mid { z-index: 3; }
+  /* 5.18 原生渲染：壁纸画在 WebView 后面的 SurfaceView 上，网页这一层要透出去；只有一层画面，时间放在最上面 */
+  html.we-nat, html.we-nat:has(body.walled), html.we-nat body.walled { background: transparent !important; }
+  html.we-nat #wall { background: transparent; }
+  html.we-nat #wall .wl-c { display: none; }
+  html.we-nat #wall-mid { z-index: 3; }
   .wl-scrim { position: absolute; inset: 0; z-index: 3; pointer-events: none;
     background: linear-gradient(rgba(5,14,17,.46), rgba(5,14,17,0) 24%, rgba(5,14,17,0) 52%, rgba(6,12,14,.5) 76%, rgba(6,12,14,.82)); }
   /* 往上滑：壁纸跟着虚化、变暗，放大一点点 */
@@ -3827,6 +3832,7 @@
       '</div>';
   }
 
+  function wallNatOk() { try { return !!(window.AmorNative && AmorNative.weOk && AmorNative.weOk()); } catch (e) { return false; } }
   function sw(key, on, label, attr) {
     return '<div class="switch-row"><span>' + label + '</span><button type="button" class="switch" role="switch" aria-checked="' + !!on + '" aria-label="' + label + '" ' + (attr || 'data-dsw') + '="' + key + '"><i></i></button></div>';
   }
@@ -5288,6 +5294,88 @@
     function Proxy(S) { this.S = S || [1920, 1080]; this.focus = [.5, .5]; this.zoom = 1; this.align = 'free'; this.pan = 0; this.layers = []; this.ready = false; this.canvas = { width: cw, height: ch }; this.flip = false; this.ca = null; }
     Proxy.prototype.view = WallScene.Renderer.prototype.view;
     function wkSet(o, redraw) { if (!wkMode()) return; o.t = 'set'; o.redraw = !!redraw; WK.postMessage(o); }
+    /* ---------- 5.18 原生 Wallpaper Engine 渲染 ----------
+       导入的 .mpkg 场景壁纸、手机有 Vulkan 时，交给原生层（libwe.so，开源逆向渲染器的安卓移植）画在 WebView 后面的 SurfaceView 上，
+       网页这边变透明。取景（构图 / 放大 / 视差）照样在这边按 view() 算好发过去；虚化图、玻璃、雨的折射用 PixelCopy 拍的画面。
+       原生加载失败 / 超时 / 没有 Vulkan：记下原因，这一张退回网页的 WebGL 引擎。 */
+    var NAT = null, natBad = {}, natAvail = null, natSnapCb = {}, natSnapSeq = 0, natTimer = 0, natImg = null;
+    function natOk() {
+      if (window.__noWeNative || walls.native === false) return false;
+      if (natAvail === null) { try { natAvail = !!(window.AmorNative && AmorNative.weOk && AmorNative.weOk()); } catch (e) { natAvail = false; } }
+      return natAvail;
+    }
+    function natDir(w) { return w && w.kind === 'scene' && !w.builtin && w.pack ? String(w.pack).replace(/\/__yunduo_manifest\.json(\?.*)?$/, '') : ''; }
+    function natWant(w) { return !!natDir(w) && !natBad[w.id] && natOk(); }
+    function natOff() {   // 收掉原生渲染（换成别的壁纸 / 关掉壁纸 / 失败）
+      if (!NAT) return;
+      NAT = null; natImg = null; clearInterval(natTimer); natTimer = 0;
+      try { AmorNative.weStop(); } catch (e) {}
+      if (root) root.classList.remove('native'); document.documentElement.classList.remove('we-nat');
+    }
+    function natSnap(W, H, cb) {
+      if (!NAT || !NAT.ready) { cb(null); return; }
+      var tag = 's' + (++natSnapSeq); natSnapCb[tag] = cb;
+      setTimeout(function () { if (natSnapCb[tag]) { delete natSnapCb[tag]; cb(null); } }, 3000);
+      try { AmorNative.weSnap(Math.round(W), Math.round(H), tag); } catch (e) { delete natSnapCb[tag]; cb(null); }
+    }
+    window.__weSnap = function (tag, url) {
+      var cb = natSnapCb[tag]; if (!cb) return; delete natSnapCb[tag];
+      if (!url) { cb(null); return; }
+      var im = new Image(); im.onload = function () { cb(im); }; im.onerror = function () { cb(null); }; im.src = url;
+    };
+    function natView() {
+      if (!NAT || !NAT.ready || !R[0]) return;
+      sizeC(null); var r = R[0]; r.canvas = { width: cw, height: ch }; r.pan = tiltX + panX;
+      var v = r.view(), key = v.map(function (x) { return x.toFixed(2); }).join(',');
+      if (key === NAT.vk) return; NAT.vk = key;
+      try { AmorNative.weView(v[0], v[1], v[2], v[3]); } catch (e) {}
+    }
+    // 玻璃 / 雨要用的画面：原生模式下每隔一会儿拍一张小图（玻璃本来就是模糊的，晚一点看不出来）
+    function natRefresh() {
+      if (!NAT || !NAT.ready || !running() || !(glOn || rainBusy())) return;
+      var W = Math.max(64, Math.round(innerWidth / 3)), H = Math.max(64, Math.round(innerHeight / 3));
+      natSnap(W, H, function (im) { if (!im || !NAT) return; natImg = im; glassMain(); });
+    }
+    function natFail(w, tok, why) {
+      natBad[w.id] = String(why || 'fail'); window.__weErr = natBad[w.id];
+      var cb = NAT && NAT.done; natOff();
+      if (tok === loadTok) { var p = load2(w, tok); if (cb) Promise.resolve(p).then(cb, cb); }
+    }
+    // 之前用过后台线程模式：玻璃 / 雨的画布已经交给 Worker 了，主线程画不了——换两块新的（Worker 下次用时会收到新画布）
+    function natFresh() {
+      if (!root) return;
+      var g0 = root.querySelector('.wl-glass');
+      if (g0 && g0.__off) { var g1 = document.createElement('canvas'); g1.className = 'wl-glass'; g0.parentNode.replaceChild(g1, g0); glC = g1; glSent = false; glOn = false; glKey = ''; glClip = ''; glMainX = null; if (wkMode()) WK.postMessage({ t: 'glass', on: false }); }
+      var r0 = root.querySelector('.wl-rain');
+      if (r0 && r0.__off) { var r1 = document.createElement('canvas'); r1.className = 'wl-rain'; r0.parentNode.replaceChild(r1, r0); rainC = r1; rainSent = false; rainOn = false; rainSz = ''; RN = null; if (wkMode()) WK.postMessage({ t: 'rain', on: false, cut: true }); }
+    }
+    function loadNat(w, tok) {
+      natFresh();
+      var dir = natDir(w), keep = NAT && NAT.ready;
+      NAT = { id: w.id, tok: tok, ready: false, vk: '', run: null, keep: keep };
+      root.classList.add('native'); document.documentElement.classList.add('we-nat');
+      var ok = false; try { ok = AmorNative.weStart(dir, G.fps || walls.fps || 30, Math.max(0, G.rate) / 100); } catch (e) {}
+      if (!ok) { natFail(w, tok, 'start'); return Promise.resolve(); }
+      if (!natTimer) natTimer = setInterval(natRefresh, 1500);
+      return new Promise(function (done) { if (NAT && NAT.tok === tok) NAT.done = done; else done(); });
+    }
+    window.__weState = function (st, info) {
+      if (!NAT) return;
+      var w = wallById(NAT.id);
+      if (st === 'loading') { root.classList.remove('ready'); return; }   // 退到后台回来：表面重建、重新加载那几秒先垫缩略图
+      if (st === 'fail') { if (w) natFail(w, NAT.tok, info); else natOff(); return; }
+      if (st !== 'ready' || !w) return;
+      var p = String(info || '').split('|')[0].split(','), S = [+p[0] > 0 ? +p[0] : 1920, +p[1] > 0 ? +p[1] : 1080];
+      var first = !NAT.ready; NAT.ready = true; NAT.vk = ''; NAT.run = null;
+      if (first) {
+        var cov = G.align === 'cover';
+        R = [new Proxy(S)]; var r = R[0]; r.ready = true; r.focus = cov ? (w.focus0 || [.5, .5]).slice() : w.focus || [.5, .5]; r.zoom = cov ? 1 : w.zoom || 1; r.flip = G.flip; r.align = G.align; r.native = true;
+        window.__wallWarn = null; wallWarnSave(w, []);
+      }
+      natView(); root.classList.add('ready'); sceneMotion = false; audNeed = false; WallAudio.want(false); tilt();
+      if (!document.body.classList.contains('wall-home')) snap(); kick(); xfadeEnd();
+      var cb = NAT.done; NAT.done = null; if (cb) cb();
+    };
     var loadTok = 0, fitT = 0, scrollP = 0, wasHome = false, reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     function dom() {
       if (root) return;
@@ -5307,7 +5395,8 @@
       });
     }
     function sizeC(c) { var d = Math.min(2, window.devicePixelRatio || 1); cw = Math.round(innerWidth * d); ch = Math.round(innerHeight * d); if (c && !c.__off) { c.width = cw; c.height = ch; } }
-    function clear() {
+    function clear(keepNat) {
+      if (!keepNat) natOff(); else if (NAT) NAT.ready = false;
       framePipe.reset(); clock.pause(); sceneMotion = false;
       if (media) { if (media.pause) media.pause(); media.removeAttribute('src'); if (media.load) media.load(); }
       if (mediaUrl) { URL.revokeObjectURL(mediaUrl); mediaUrl = ''; }
@@ -5333,6 +5422,12 @@
     }
     function snap() {
       if (!R.length || !root) return false;
+      if (NAT) {
+        if (!NAT.ready) return false; if (snapPend) return true; snapPend = true;
+        var Wn = Math.max(256, Math.round(innerWidth / 2)), Hn = Math.max(256, Math.round(Wn * innerHeight / innerWidth));
+        natSnap(Wn, Hn, function (im) { snapPend = false; if (im) { try { snapPaint([im], Wn, Hn); } catch (e) {} } });
+        return true;
+      }
       if (wkMode()) {
         if (snapPend) return true; snapPend = true;
         var W0 = Math.max(256, Math.round(innerWidth / 2)), H0 = Math.max(256, Math.round(W0 * innerHeight / innerWidth));
@@ -5355,7 +5450,7 @@
     function xfadeStart() {
       var c = root.querySelector('.wl-xf'); if (!c) return;
       clearTimeout(xfT); c.classList.remove('on', 'out');
-      if (!R.length || !root.classList.contains('ready') || !root.classList.contains('live')) return;
+      if (!R.length || !root.classList.contains('ready') || !root.classList.contains('live') || NAT) return;
       if (wkMode()) {   // 后台模式：向 Worker 要一张旧画面（在换壁纸的消息之前处理，拿到的一定是旧的）
         return Promise.race([wkAsk({ t: 'snap', w: cw, h: ch }), new Promise(function (r) { setTimeout(r, 300); })]).then(function (d) {
           if (!d || !d.bmp) return; try { c.width = cw; c.height = ch; var x = c.getContext('2d'); x.clearRect(0, 0, cw, ch); x.drawImage(d.bmp, 0, 0); c.classList.add('on'); d.bmp.close && d.bmp.close(); } catch (e) {} });
@@ -5372,10 +5467,11 @@
       return load2(w, tok);
     }
     function load2(w, tok) {
-      clear(); root.classList.remove('ready'); scene = null; audNeed = false; WallAudio.want(false);
+      clear(natWant(w) && !!NAT); root.classList.remove('ready'); scene = null; audNeed = false; WallAudio.want(false);
       document.body.style.setProperty('--wtint', w.tint || '#0e2a30');
       var ph = root.querySelector('.wl-ph'); ph.style.backgroundImage = w.thumb ? 'url(' + w.thumb + ')' : ''; ph.style.backgroundPosition = ((w.focus || [.5])[0] * 100) + '% 50%';   // 解码时先垫缩略图
       if (w.mediaPath || ((w.kind === 'image' || w.kind === 'video') && w.path)) return showMedia(w, w.mediaPath || w.path, !!w.mediaPath);
+      if (natWant(w)) return loadNat(w, tok);
       return bytes(w).then(function (buf) {
         if (tok !== loadTok) return;
         if (w.kind === 'image' || w.kind === 'video') return showMedia(w, new Blob([buf], { type: w.mime || '' }));
@@ -5453,6 +5549,11 @@
       wtime = clock.step(now_, paused || document.hidden ? 0 : G.rate / 100); // 可见时间推进；恢复时不补画后台经过的时间
       var t = wtime;
       R.forEach(function (r) { r.pan = tiltX + panX; });
+      if (NAT) {   // 原生在自己画：这边只同步取景框，雨的折射用最近拍的画面
+        natView();
+        if (RN && rainBusy() && natImg) { try { RN.frame(function (x, W, H) { x.drawImage(natImg, 0, 0, W, H); }); } catch (e) { window.__rainErr = String(e && e.message || e); RN = null; } }
+        return;
+      }
       if (wkMode() && R.length) {   // 后台模式：算好这一帧的参数发过去（水波 / 水光束按画布像素）
         var rt0 = rip ? (now_ - rip.at) / 1000 : -1; if (rip && rt0 > 2.4) rip = null;
         var k0 = cw / innerWidth, rp = rip && rt0 >= 0 ? [rip.x * k0, ch - rip.y * k0, rip.speed * rt0 * k0, rt0] : null, sf = null;
@@ -5560,8 +5661,8 @@
       var W = Math.max(64, Math.round(innerWidth / 4)), H = Math.max(64, Math.round(innerHeight / 4)), key = W + 'x' + H + cx.f;
       if (!glOn || key !== glKey) {
         glOn = true; glKey = key; glC.classList.add('on');
-        if (wkMode()) { var m = { t: 'glass', on: true, w: W, h: H, f: cx.f }; if (!glSent) { try { var oc = glC.transferControlToOffscreen(); glC.__off = true; m.canvas = oc; glSent = true; WK.postMessage(m, [oc]); } catch (e) {} } else WK.postMessage(m); }
-        else if (!glC.__off) { glC.width = W; glC.height = H; glMainX = glC.getContext('2d'); glMainX.__f = cx.f; }
+        if (wkMode() && !NAT) { var m = { t: 'glass', on: true, w: W, h: H, f: cx.f }; if (!glSent) { try { var oc = glC.transferControlToOffscreen(); glC.__off = true; m.canvas = oc; glSent = true; WK.postMessage(m, [oc]); } catch (e) {} } else WK.postMessage(m); }
+        else if (!glC.__off) { glC.width = W; glC.height = H; glMainX = glC.getContext('2d'); glMainX.__f = cx.f; if (NAT) natRefresh(); }
       }
       var d = '';
       Array.prototype.forEach.call(document.querySelectorAll(cx.sel), function (el) {
@@ -5580,6 +5681,7 @@
     function glassMain() {   // 主线程模式：自己画模糊图
       if (!glOn || wkMode() || !glMainX || !R.length) return;
       var W = glC.width, H = glC.height, m = .012; glMainX.filter = 'none'; glMainX.clearRect(0, 0, W, H); glMainX.filter = glMainX.__f;
+      if (NAT) { if (natImg) try { glMainX.drawImage(natImg, -W * m, -H * m, W * (1 + 2 * m), H * (1 + 2 * m)); } catch (e) {} return; }
       try { glMainX.drawImage(back, -W * m, -H * m, W * (1 + 2 * m), H * (1 + 2 * m)); glMainX.drawImage(front, -W * m, -H * m, W * (1 + 2 * m), H * (1 + 2 * m)); } catch (e) {}
     }
     var glRaf = 0;   // 一帧里可能来好几次 scroll：合成一次
@@ -5601,7 +5703,7 @@
       var cut = !want && !root.classList.contains('live');   // 离开有壁纸动的页面：直接停，不淡出（省下切页那一下的活）
       rainOn = want; rainSz = sz; rainOffAt = want || cut ? 0 : performance.now();
       root.classList.toggle('rain', want);
-      if (wkUse && wk()) {
+      if (wkUse && !NAT && wk()) {
         var m = { t: 'rain', on: want, w: w, h: h, k: d, cut: cut };
         if (!rainSent) { try { var oc = rainC.transferControlToOffscreen(); rainC.__off = true; m.canvas = oc; rainSent = true; WK.postMessage(m, [oc]); } catch (e) { window.__rainErr = String(e && e.message || e); } }
         else WK.postMessage(m);
@@ -5659,7 +5761,7 @@
     var idleSig = '';
     function idle() {
       if (rainBusy()) { idleSig = ''; return false; }
-      if (G.rate > 0 && sceneMotion || audNeed && G.audio || rip || (window.Launch && Launch.active && Launch.active())) { idleSig = ''; return false; }
+      if (!NAT && (G.rate > 0 && sceneMotion || audNeed && G.audio || rip || (window.Launch && Launch.active && Launch.active()))) { idleSig = ''; return false; }
       var sig = (tiltX + panX).toFixed(4) + '|' + (R[0] ? R[0].focus + '|' + R[0].zoom : '');
       if (sig === idleSig) return true; idleSig = sig; return false;
     }
@@ -5673,7 +5775,7 @@
       }   // 上滑过 4 成：虚化图整个盖住了，不用画
       raf = requestAnimationFrame(frame);
     }
-    function kick() { WallAudio.tick(); if (!running()) { if (raf) cancelAnimationFrame(raf); raf = 0; framePipe.discard(); clock.pause(); } else if (!raf) raf = requestAnimationFrame(frame); if (media && media.play) { if (running() || (!R.length && walls.dyn && !paused && !document.hidden && !reduce && G.rate > 0 && root.classList.contains('live'))) media.play().catch(function () {}); else media.pause(); } }
+    function kick() { if (NAT && NAT.ready) { var nr = !!running(); if (nr !== NAT.run) { NAT.run = nr; try { AmorNative.wePause(!nr); } catch (e) {} if (nr) natRefresh(); } } WallAudio.tick(); if (!running()) { if (raf) cancelAnimationFrame(raf); raf = 0; framePipe.discard(); clock.pause(); } else if (!raf) raf = requestAnimationFrame(frame); if (media && media.play) { if (running() || (!R.length && walls.dyn && !paused && !document.hidden && !reduce && G.rate > 0 && root.classList.contains('live'))) media.play().catch(function () {}); else media.pause(); } }
     // 每次 render 之后：决定显示 / 虚化 / 隐藏，以及要不要换一张
     function sync() {
       var w = wallPick(); dom();
@@ -5724,7 +5826,9 @@
     $main.addEventListener('scroll', function () { if (!scrRaf && document.body.classList.contains('wall-home')) scrRaf = requestAnimationFrame(function () { scrRaf = 0; onScroll(); }); }, { passive: true });
     window.addEventListener('resize', function () {
       if (root) rainSync();
-      if (!root || !R.length) return; sizeC(back); sizeC(front);
+      if (!root || !R.length) return;
+      if (NAT) { if (NAT) NAT.vk = ''; natView(); return; }
+      sizeC(back); sizeC(front);
       if (wkMode()) { R.forEach(function (r) { r.canvas = { width: cw, height: ch }; }); WK.postMessage({ t: 'size', w: cw, h: ch }); draw(); return; }
       R.forEach(function (r) { r.canvas = r === R[0] ? back : front; }); draw(); });
     document.addEventListener('visibilitychange', kick);
@@ -5806,11 +5910,12 @@
         R.forEach(function (r) { r.flip = G.flip; r.ca = genCA(G); r.align = G.align; if (G.align === 'cover') { r.focus = (w.focus0 || [.5, .5]).slice(); r.zoom = 1; } else { r.focus = w.focus || [.5, .5]; r.zoom = w.zoom || 1; } });
         idleSig = ''; if (R.length) wkSet({ flip: R[0].flip, ca: R[0].ca, align: R[0].align, focus: R[0].focus, zoom: R[0].zoom });
         WallAudio.want(audNeed && G.audio); mediaGen(); tilt(); if (R.length) draw(); kick();
+        if (NAT) { try { AmorNative.weSpeed(Math.max(0, G.rate) / 100); } catch (e) {} }
       },
       pan: function (dx) { var n = G.motion === 'scroll' ? -dx / innerWidth * .06 : 0; if (n === panX) return; panX = n; if (R.length) draw(); },
       gen: function () { return G; },
       worker: function () { return !!wkMode(); },
-      state: function () { return { id: curId, worker: !!wkMode(), framePending: framePipe.pending ? 1 : 0, frameQueued: framePipe.next ? 1 : 0, frameSubmitted: framePipe.submitted, frameCoalesced: framePipe.coalesced, sceneMotion: sceneMotion, wkErr: window.__wallWkErr || '', layers: R.map(function (r) { return r.layers.length; }), kinds: R.map(function (r) { return r.layers.map(function (L) { return L.kind + (L.fx ? ':' + L.fx.length : ''); }); }), running: !!raf, rain: rainOn, rainMode: rainOn ? (RN ? 'main' : rainSent ? 'worker' : '') : '', rainErr: window.__rainErr || '', err: window.__wallErr || '', warn: window.__wallWarn || null, audio: WallAudio.need() }; } };
+      state: function () { return { id: curId, native: NAT ? (NAT.ready ? 'ready' : 'loading') : '', nativeBad: natBad[curId] || '', worker: !!wkMode(), framePending: framePipe.pending ? 1 : 0, frameQueued: framePipe.next ? 1 : 0, frameSubmitted: framePipe.submitted, frameCoalesced: framePipe.coalesced, sceneMotion: sceneMotion, wkErr: window.__wallWkErr || '', layers: R.map(function (r) { return r.layers.length; }), kinds: R.map(function (r) { return r.layers.map(function (L) { return L.kind + (L.fx ? ':' + L.fx.length : ''); }); }), running: !!raf, rain: rainOn, rainMode: rainOn ? (RN ? 'main' : rainSent ? 'worker' : '') : '', rainErr: window.__rainErr || '', err: window.__wallErr || '', warn: window.__wallWarn || null, audio: WallAudio.need() }; } };
   })();
 
   window.__Wall = Wall;   // 测试用
@@ -6350,6 +6455,7 @@
       '<p class="hint">纸带写出的 A，镜头钻进笔画化成光束，再落到首页。轻点可以跳过；壁纸会趁这两秒在后台准备好。</p></div>';
     h += '<div class="panel"><h2>首页 <em>Home</em></h2>' +
       sw('dyn', walls.dyn, '动态效果（关掉只显示一张静止的画面，更省电）', 'data-wsw') +
+      (wallNatOk() ? sw('native', walls.native !== false, '原生渲染：导入的动态壁纸用手机的 Vulkan 直接画，效果和电脑上的 Wallpaper Engine 一致（景深和颜色调节只在网页引擎里有）', 'data-wsw') : '') +
       sw('depth', walls.depth, '景深：时间藏在画面里的人物、物件后面', 'data-wsw') +
       sw('wxfx', walls.wxfx, '下雨时屏幕上有雨水：雨点打在玻璃上溅开，顺着屏幕流下', 'data-wsw') +
       '<p class="hint">壁纸只在首页动；切到别的页面、打开聊天、锁屏或退到后台时停下来。</p></div>' +
@@ -6483,7 +6589,7 @@
     if (g('data-wadjust')) { walls.cur = g('data-wadjust'); delete walls.preview; wallui.adjFrom = g('data-wadjust'); wallui.edit = ''; saveWalls(); state.tab = 'today'; state.sub = ''; render({ top: true }); setTimeout(function () { Wall.adjust(true); }, 60); return; }
     if (g('data-wdel')) { wallui.del = g('data-wdel'); keepScroll(); return; }
     if (g('data-wdelok')) { wallui.edit = ''; wallui.del = ''; wallRemove(g('data-wdelok')); toast('已删除'); return; }
-    if (g('data-wsw')) { var key = g('data-wsw'); walls[key] = key === 'audio' ? walls.audio === false : !walls[key]; saveWalls(); if (key === 'audio') WallAudio.retry(); Wall.sync(); keepScroll(); return; }
+    if (g('data-wsw')) { var key = g('data-wsw'); walls[key] = key === 'audio' || key === 'native' ? walls[key] === false : !walls[key]; saveWalls(); if (key === 'audio') WallAudio.retry(); if (key === 'native') Wall.reload(); else Wall.sync(); keepScroll(); return; }
     if (g('data-wfps')) { walls.fps = +g('data-wfps'); saveWalls(); keepScroll(); return; }
     if (g('data-wreset')) { var rw = wallById(g('data-wreset')); if (rw) { rw.focus = (rw.focus0 || [.5, .5]).slice(); rw.zoom = 1; rw.fitted = 0; rw.alignAuto = ''; saveWalls(); Wall.reload(); toast('已还原，回首页时会重新自动构图'); } keepScroll(); return; }
     if (g('data-wui')) { walls.ui = g('data-wui'); saveWalls(); Wall.sync(); keepScroll(); return; }

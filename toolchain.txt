@@ -1,0 +1,3 @@
+ndk=/usr/local/lib/android/sdk/ndk/29.0.14206865
+-rwxr-xr-x 1 runner runner 6519232 Oct  7 02:03 build-x86_64/werender
+-rwxr-xr-x 1 runner runner 6060576 Oct  7 02:04 build-arm64-v8a/werender

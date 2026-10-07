@@ -33,6 +33,7 @@ jobs:
               -DWSR_DIR=$HOME/wesrc/wsr -DLZ4_DIR=$HOME/wesrc/lz4 -DFREETYPE_DIR=$HOME/wesrc/freetype \
               > out/we/cmake-$abi.log 2>&1 || { tail -50 out/we/cmake-$abi.log; exit 1; }
             ninja -k 0 -C build-$abi werender > out/we/build-$abi.log 2>&1 || { grep -E "error:" out/we/build-$abi.log | sort | uniq | head -60; exit 1; }
+            cp build-$abi/werender build-$abi/werender.sym   # 留一份带符号的，崩溃时把 tombstone 地址翻成函数名
             $NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip build-$abi/werender   # NDK 默认带 -g，不剥掉有上百 MB
             ls -la build-$abi/werender | tee -a out/we/toolchain.txt
           done
@@ -51,6 +52,14 @@ jobs:
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: bash we/ci/emu-run.sh
+      - name: Symbolize crash (if any)
+        if: always()
+        run: |
+          NDK=${ANDROID_NDK_LATEST_HOME:-$ANDROID_NDK_HOME}
+          f=out/we/logcat.txt; [ -f $f ] || exit 0
+          grep -oE '#[0-9]+ pc [0-9a-f]+ +/data/local/tmp/we/werender' $f | awk '{print "0x"$3}' > /tmp/pcs || true
+          [ -s /tmp/pcs ] && $NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-addr2line -f -C -i -e build-x86_64/werender.sym $(cat /tmp/pcs) > out/we/crash-symbols.txt 2>&1 || true
+          cat out/we/crash-symbols.txt 2>/dev/null | head -60
       - name: Publish to ci-we
         if: always()
         env:

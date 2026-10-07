@@ -14,5 +14,5 @@ adb shell chmod 755 /data/local/tmp/we/werender
 timeout 1600 adb shell "cd /data/local/tmp/we && WE_CACHE=/data/local/tmp/we/cache WE_TIMEOUT=1500 ./werender assets scene/scene.json out.ppm 360 640 30" > $OUT/run.log 2>&1
 echo "exit=$?" >> $OUT/run.log
 adb pull /data/local/tmp/we/out.ppm $OUT/out.ppm || true
-adb logcat -d -t 400 > $OUT/logcat.txt 2>&1 || true
+adb logcat -d -t 1500 > $OUT/logcat.txt 2>&1 || true
 exit 0

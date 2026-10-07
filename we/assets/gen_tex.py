@@ -48,7 +48,6 @@ tex('util/black', solid([0, 0, 0, 255]))
 tex('util/clearalpha', solid([0, 0, 0, 0]))
 tex('util/noflow', solid([127, 127, 0, 255]))          # 流动贴图：(0.5, 0.5) = 不动
 tex('util/flatnormal', solid([128, 128, 255, 255]))    # 平的法线
-tex('util/noise', np.dstack([rng.integers(0, 256, (256, 256, 3)), np.full((256, 256), 255)]), flags=0)
 
 
 def smooth_noise(n, octaves, seed):
@@ -72,6 +71,11 @@ def smooth_noise(n, octaves, seed):
 
 
 pn = smooth_noise(256, 5, 7) * 255
+# util/noise：平滑、可平铺的三通道噪声（WE 的特效拿它做扰动，比如 foliagesway 的「噪声」模式；
+# 以前是逐像素白噪声，放大采样后扰动一块一块的，头发上出现阶梯状方块）
+nz = [smooth_noise(256, 4, s0) for s0 in (21, 22, 23)]
+nz = [(c - c.min()) / max(1e-6, c.max() - c.min()) * 255 for c in nz]
+tex('util/noise', np.dstack(nz + [np.full((256, 256), 255.0)]), flags=0)
 tex('util/perlin_256', np.dstack([pn, pn, pn, np.full_like(pn, 255)]), flags=0)
 
 # ---------- 粒子 ----------

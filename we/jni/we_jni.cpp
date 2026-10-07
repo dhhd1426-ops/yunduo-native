@@ -57,7 +57,8 @@ JNIEXPORT jlong JNICALL Java_com_cloudweather_xiaoyu_WeNative_nCreate(JNIEnv* en
     setenv("HOME", cache.c_str(), 1);
     setenv("XDG_CONFIG_HOME", (cache + "/config").c_str(), 1);
     setenv("XDG_CACHE_HOME", (cache + "/xdg").c_str(), 1);
-    setenv("WE_NO_AUDIO", "1", 1);   // 壁纸声音先不放：不开音频设备、不建声音流
+    setenv("WE_NO_AUDIO", "1", 1);
+    setenv("WEKDE_MSAA", "1", 1);    // 手机上不开多重采样：省带宽，也避开部分手机 GPU 在多重采样解析处的花块   // 壁纸声音先不放：不开音频设备、不建声音流
 
     auto* hd   = new Handle();
     hd->window = ANativeWindow_fromSurface(env, surface);

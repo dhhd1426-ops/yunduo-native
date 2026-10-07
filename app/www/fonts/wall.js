@@ -55,6 +55,62 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
 
   /* ---------- DXT（BC1/2/3）软解 ---------- */
   function c565(c) { return [(c >> 11 & 31) * 255 / 31 | 0, (c >> 5 & 63) * 255 / 63 | 0, (c & 31) * 255 / 31 | 0]; }
+  // 5.18.1 格式 5 = 手机版 WE 导出的 ETC2 RGBA8（ETC2 颜色块 + EAC 透明度块，各 8 字节）。以前当 DXT5 解，出来是一块块的方块。
+  var ETC_MOD = [[2, 8], [5, 17], [9, 29], [13, 42], [18, 60], [24, 80], [33, 106], [47, 183]];
+  var ETC_DIST = [3, 6, 11, 16, 23, 32, 41, 64];
+  var EAC_TAB = [[-3, -6, -9, -15, 2, 5, 8, 14], [-3, -7, -10, -13, 2, 6, 9, 12], [-2, -5, -8, -13, 1, 4, 7, 12], [-2, -4, -6, -13, 1, 3, 5, 12],
+    [-3, -6, -8, -12, 2, 5, 7, 11], [-3, -7, -9, -11, 2, 6, 8, 10], [-4, -7, -8, -11, 3, 6, 7, 10], [-3, -5, -8, -11, 2, 4, 7, 10],
+    [-2, -6, -8, -10, 1, 5, 7, 9], [-2, -5, -8, -10, 1, 4, 7, 9], [-2, -4, -8, -10, 1, 3, 7, 9], [-2, -5, -7, -10, 1, 4, 6, 9],
+    [-3, -4, -7, -10, 2, 3, 6, 9], [-1, -2, -3, -10, 0, 1, 2, 9], [-4, -6, -8, -9, 3, 5, 7, 8], [-3, -5, -7, -9, 2, 4, 6, 8]];
+  function etc2(src, w, h) {
+    var out = new Uint8Array(w * h * 4), bw = Math.ceil(w / 4), bh = Math.ceil(h / 4), c = new Int32Array(64), a = new Uint8Array(16);
+    function cl(v) { return v < 0 ? 0 : v > 255 ? 255 : v; }
+    function e4(v) { return v << 4 | v; } function e5(v) { return v << 3 | v >> 2; } function e6(v) { return v << 2 | v >> 4; } function e7(v) { return v << 1 | v >> 6; }
+    for (var by = 0; by < bh; by++) for (var bx = 0; bx < bw; bx++) {
+      var o = (by * bw + bx) * 16; if (o + 16 > src.length) return out;
+      // EAC 透明度：基值、倍数、表号，48 位索引（列优先，像素 i = x*4+y）
+      var base = src[o], mul = src[o + 1] >> 4, tab = EAC_TAB[src[o + 1] & 15], hiA = (src[o + 2] << 16 | src[o + 3] << 8 | src[o + 4]) >>> 0, loA = (src[o + 5] << 16 | src[o + 6] << 8 | src[o + 7]) >>> 0, i, x, y;
+      for (i = 0; i < 16; i++) { var sh = 45 - 3 * i, idx = sh >= 24 ? (hiA >>> (sh - 24)) & 7 : sh >= 21 ? ((hiA << (24 - sh)) | (loA >>> sh)) & 7 : (loA >>> sh) & 7; a[i] = cl(base + tab[idx] * (mul || 1)); }
+      // ETC2 颜色
+      var p = o + 8, b0 = src[p], b1 = src[p + 1], b2 = src[p + 2], b3 = src[p + 3], hi = (src[p + 4] << 8 | src[p + 5]), lo = (src[p + 6] << 8 | src[p + 7]);
+      var diff = b3 & 2, flip = b3 & 1, mode = 0, r1, g1, b_1, r2, g2, b_2;
+      if (!diff) { r1 = e4(b0 >> 4); r2 = e4(b0 & 15); g1 = e4(b1 >> 4); g2 = e4(b1 & 15); b_1 = e4(b2 >> 4); b_2 = e4(b2 & 15); }
+      else {
+        var R = b0 >> 3, dR = (b0 & 7) << 29 >> 29, G = b1 >> 3, dG = (b1 & 7) << 29 >> 29, B = b2 >> 3, dB = (b2 & 7) << 29 >> 29;
+        if (R + dR < 0 || R + dR > 31) mode = 1; else if (G + dG < 0 || G + dG > 31) mode = 2; else if (B + dB < 0 || B + dB > 31) mode = 3;
+        else { r1 = e5(R); r2 = e5(R + dR); g1 = e5(G); g2 = e5(G + dG); b_1 = e5(B); b_2 = e5(B + dB); }
+      }
+      if (mode === 0) {
+        var cw1 = ETC_MOD[b3 >> 5], cw2 = ETC_MOD[(b3 >> 2) & 7];
+        for (i = 0; i < 16; i++) {
+          x = i >> 2; y = i & 3; var s2 = flip ? y >= 2 : x >= 2, cw = s2 ? cw2 : cw1, k = ((hi >> i) & 1) << 1 | ((lo >> i) & 1), m = k === 0 ? cw[0] : k === 1 ? cw[1] : k === 2 ? -cw[0] : -cw[1];
+          c[i * 4] = cl((s2 ? r2 : r1) + m); c[i * 4 + 1] = cl((s2 ? g2 : g1) + m); c[i * 4 + 2] = cl((s2 ? b_2 : b_1) + m);
+        }
+      } else if (mode === 1 || mode === 2) {
+        var P = [], d;
+        if (mode === 1) {   // T
+          r1 = e4(((b0 >> 3) & 3) << 2 | (b0 & 3)); g1 = e4(b1 >> 4); b_1 = e4(b1 & 15); r2 = e4(b2 >> 4); g2 = e4(b2 & 15); b_2 = e4(b3 >> 4);
+          d = ETC_DIST[((b3 >> 2) & 3) << 1 | (b3 & 1)];
+          P = [[r1, g1, b_1], [r2 + d, g2 + d, b_2 + d], [r2, g2, b_2], [r2 - d, g2 - d, b_2 - d]];
+        } else {            // H
+          var R1 = (b0 >> 3) & 15, G1 = (b0 & 7) << 1 | ((b1 >> 4) & 1), B1 = (b1 & 8) | (b1 & 3) << 1 | b2 >> 7, R2 = (b2 >> 3) & 15, G2 = (b2 & 7) << 1 | b3 >> 7, B2 = (b3 >> 3) & 15;
+          var v1 = R1 << 8 | G1 << 4 | B1, v2 = R2 << 8 | G2 << 4 | B2;
+          d = ETC_DIST[(b3 & 4) | (b3 & 1) << 1 | (v1 >= v2 ? 1 : 0)];
+          r1 = e4(R1); g1 = e4(G1); b_1 = e4(B1); r2 = e4(R2); g2 = e4(G2); b_2 = e4(B2);
+          P = [[r1 + d, g1 + d, b_1 + d], [r1 - d, g1 - d, b_1 - d], [r2 + d, g2 + d, b_2 + d], [r2 - d, g2 - d, b_2 - d]];
+        }
+        for (i = 0; i < 16; i++) { var q = P[((hi >> i) & 1) << 1 | ((lo >> i) & 1)]; c[i * 4] = cl(q[0]); c[i * 4 + 1] = cl(q[1]); c[i * 4 + 2] = cl(q[2]); }
+      } else {              // 平面模式
+        var RO = e6((b0 >> 1) & 63), GO = e7((b0 & 1) << 6 | (b1 >> 1) & 63), BO = e6((b1 & 1) << 5 | (b2 & 0x18) | (b2 & 3) << 1 | b3 >> 7);
+        var RHf = e6(((b3 >> 2) & 31) << 1 | (b3 & 1)), GH = e7(src[p + 4] >> 1), BH = e6((src[p + 4] & 1) << 5 | src[p + 5] >> 3);
+        var RV = e6((src[p + 5] & 7) << 3 | src[p + 6] >> 5), GV = e7((src[p + 6] & 31) << 2 | src[p + 7] >> 6), BV = e6(src[p + 7] & 63);
+        for (i = 0; i < 16; i++) { x = i >> 2; y = i & 3;
+          c[i * 4] = cl((x * (RHf - RO) + y * (RV - RO) + 4 * RO + 2) >> 2); c[i * 4 + 1] = cl((x * (GH - GO) + y * (GV - GO) + 4 * GO + 2) >> 2); c[i * 4 + 2] = cl((x * (BH - BO) + y * (BV - BO) + 4 * BO + 2) >> 2); }
+      }
+      for (i = 0; i < 16; i++) { x = bx * 4 + (i >> 2); y = by * 4 + (i & 3); if (x >= w || y >= h) continue; var t = (y * w + x) * 4; out[t] = c[i * 4]; out[t + 1] = c[i * 4 + 1]; out[t + 2] = c[i * 4 + 2]; out[t + 3] = a[i]; }
+    }
+    return out;
+  }
   function dxt(src, w, h, kind) {
     var out = new Uint8Array(w * h * 4), bw = Math.ceil(w / 4), bh = Math.ceil(h / 4), p = 0, bs = kind === 1 ? 8 : 16;
     for (var by = 0; by < bh; by++) for (var bx = 0; bx < bw; bx++, p += bs) {
@@ -107,8 +163,8 @@ function __wallFactory() {   // 5.12 写成具名函数：后台线程（Offscre
     else if (fmt === 7) px = dxt(data, w, h, 1);
     else if (fmt === 8) { px = new Uint8Array(w * h * 4); for (var i = 0, n = w * h; i < n; i++) { px[i * 4] = data[i * 2]; px[i * 4 + 1] = data[i * 2 + 1]; px[i * 4 + 3] = 255; } }
     else if (fmt === 9) { px = new Uint8Array(w * h * 4); for (var k = 0, m = w * h; k < m; k++) { px[k * 4] = px[k * 4 + 1] = px[k * 4 + 2] = data[k]; px[k * 4 + 3] = 255; } }
-    // 5.17.4 格式 5：WE 自带预设素材（比如 presets/fern1）用的，按 DXT5 的块结构解（透明度是那半块，颜色一般再由着色特效盖掉）
-    else if (fmt === 5) px = dxt(data, w, h, 5);
+    // 5.18.1 格式 5：手机版 WE 导出的 ETC2 RGBA8（之前按 DXT5 解，蕨类等预设素材成了一块块方块）
+    else if (fmt === 5) px = etc2(data, w, h);
     else {
       // 不认识的编号：按每个像素占多少字节猜（4 = RGBA，1 = DXT5 一类，0.5 = DXT1），猜不出才算失败（这一层会被跳过，不连累别的层）
       var bpp = data.length / (Math.ceil(w / 4) * 4 * Math.ceil(h / 4) * 4);

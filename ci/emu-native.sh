@@ -41,6 +41,14 @@ for i in $(seq 1 24); do
   if grep -q "first frame" $O/we-log-resume-$i.txt && [ "$(grep -c 'first frame' $O/we-log-resume-$i.txt)" -ge 2 ]; then note "native frame again after $((i*5))s"; break; fi
 done
 sleep 10; shot 3-resumed
+note "rotate to landscape (like unfolding a foldable: surface transform 90°)"
+A shell settings put system accelerometer_rotation 0
+A shell settings put system user_rotation 1
+for i in $(seq 1 24); do sleep 5; n=$(B logcat -d -s WE:I | grep -c "first frame"); if [ "${n:-0}" -ge 3 ]; then note "native frame after rotation $((i*5))s"; break; fi; done
+sleep 8; shot 4-landscape
+A logcat -d -s 'WeWall:*' > $O/wewall-rotate.txt
+A shell settings put system user_rotation 0
+sleep 15; shot 5-portrait-again
 note "settings page (blur snapshot behind)"
 A shell input swipe 300 1200 300 1200 10; sleep 2
 note "collect"

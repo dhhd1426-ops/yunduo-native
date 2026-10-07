@@ -47,6 +47,13 @@ final class WeWall implements SurfaceHolder.Callback {
         act = a; sv = v;
         sv.getHolder().addCallback(this);
         sv.setVisibility(View.GONE);
+        // 折叠屏展开 / 合上、转屏：窗口尺寸变了就按新尺寸重设渲染分辨率（表面跟着变，surfaceChanged 里重建渲染器）
+        View parent = sv.getParent() instanceof View ? (View) sv.getParent() : sv;
+        parent.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            public void onLayoutChange(View v, int l, int t, int r, int b, int ol, int ot, int or, int ob) {
+                if ((r - l != or - ol || b - t != ob - ot) && sv.getVisibility() == View.VISIBLE) sizeSurface();
+            }
+        });
     }
 
     /** 这台手机能不能用原生渲染：有 Vulkan、库加载得上、包里带了基础素材 */
@@ -140,12 +147,21 @@ final class WeWall implements SurfaceHolder.Callback {
     boolean active() { return src != null; }
 
     /** 渲染分辨率：长边不超过 1920（高刷大屏手机上全分辨率跑模糊特效太费电），SurfaceView 自己放大铺满 */
+    private int fixW = 0, fixH = 0;
     private void sizeSurface() {
-        DisplayMetrics m = new DisplayMetrics();
-        act.getWindowManager().getDefaultDisplay().getRealMetrics(m);
-        int W = m.widthPixels, H = m.heightPixels;
+        View parent = sv.getParent() instanceof View ? (View) sv.getParent() : null;
+        int W = parent != null ? parent.getWidth() : 0, H = parent != null ? parent.getHeight() : 0;
+        if (W <= 0 || H <= 0) {   // 还没排版：按整块屏幕
+            DisplayMetrics m = new DisplayMetrics();
+            act.getWindowManager().getDefaultDisplay().getRealMetrics(m);
+            W = m.widthPixels; H = m.heightPixels;
+        }
         float k = Math.min(1f, 1920f / Math.max(W, H));
-        sv.getHolder().setFixedSize(Math.max(64, Math.round(W * k)), Math.max(64, Math.round(H * k)));
+        int fw = Math.max(64, Math.round(W * k)), fh = Math.max(64, Math.round(H * k));
+        if (fw == fixW && fh == fixH) return;
+        fixW = fw; fixH = fh;
+        android.util.Log.i("WeWall", "surface size " + fw + "x" + fh + " (window " + W + "x" + H + ")");
+        sv.getHolder().setFixedSize(fw, fh);
     }
 
     private void ensure() {

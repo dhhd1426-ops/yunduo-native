@@ -20,7 +20,7 @@ jobs:
           for abi in x86_64 arm64-v8a; do
             cmake -S we -B build-$abi -G Ninja -DCMAKE_BUILD_TYPE=Release \
               -DCMAKE_TOOLCHAIN_FILE=$NDK/build/cmake/android.toolchain.cmake \
-              -DANDROID_ABI=$abi -DANDROID_PLATFORM=26 -DANDROID_STL=c++_static \
+              -DANDROID_ABI=$abi -DANDROID_PLATFORM=29 -DANDROID_STL=c++_static \
               -DWSR_DIR=$HOME/wesrc/wsr -DLZ4_DIR=$HOME/wesrc/lz4 -DFREETYPE_DIR=$HOME/wesrc/freetype \
               > out/we-cmake-$abi.log 2>&1 || { tail -50 out/we-cmake-$abi.log; exit 1; }
             ninja -k 0 -C build-$abi we > out/we-build-$abi.log 2>&1 || { grep -E "error:" out/we-build-$abi.log | sort | uniq | head -60; exit 1; }

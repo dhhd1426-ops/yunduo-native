@@ -55,7 +55,7 @@ final class WeWall implements SurfaceHolder.Callback {
         avail = -1;
         try {
             PackageManager pm = c.getPackageManager();
-            if (Build.VERSION.SDK_INT < 26 || !pm.hasSystemFeature(PackageManager.FEATURE_VULKAN_HARDWARE_LEVEL)) { why = "no vulkan"; return false; }
+            if (Build.VERSION.SDK_INT < 29 || !pm.hasSystemFeature(PackageManager.FEATURE_VULKAN_HARDWARE_LEVEL)) { why = "no vulkan"; return false; }
             String[] probe = c.getAssets().list("we/shaders");
             if (probe == null || probe.length == 0) { why = "no assets"; return false; }
             if (!WeNative.load()) { why = "lib: " + WeNative.loadErr; return false; }

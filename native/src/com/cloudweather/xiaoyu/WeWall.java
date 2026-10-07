@@ -130,6 +130,7 @@ final class WeWall implements SurfaceHolder.Callback {
     }
 
     void setPaused(boolean p) {
+        if (p != paused) android.util.Log.i("WeWall", "paused=" + p);
         paused = p;
         if (h != 0) { if (p) WeNative.nPause(h); else WeNative.nPlay(h); }
     }
@@ -151,6 +152,7 @@ final class WeWall implements SurfaceHolder.Callback {
         if (src == null || !assetsOk || !surfaceOk) return;
         if (h == 0) {
             h = WeNative.nCreate(sv.getHolder().getSurface(), assetsDir().getAbsolutePath(), cacheDir().getAbsolutePath(), sw, sh, fps);
+            android.util.Log.i("WeWall", "create " + sw + "x" + sh + " h=" + h + " web=" + act.getWindow().getDecorView().getWidth());
             if (h == 0) { fail("create"); return; }
             if (view != null) WeNative.nView(h, view[0], view[1], view[2], view[3]);
         }
@@ -168,7 +170,7 @@ final class WeWall implements SurfaceHolder.Callback {
             if (h == 0 || src == null) return;
             int s = WeNative.nState(h);
             if (s == 1) {
-                if (!reported) { reported = true; everReady = true; String info = WeNative.nInfo(h); act.js("window.__weState&&window.__weState('ready'," + q(info) + ")"); }
+                if (!reported) { reported = true; everReady = true; String info = WeNative.nInfo(h); android.util.Log.i("WeWall", "ready " + info + " visible=" + (sv.getVisibility() == View.VISIBLE) + " paused=" + paused); act.js("window.__weState&&window.__weState('ready'," + q(info) + ")"); }
                 return;
             }
             if (s < 0) { String info = WeNative.nInfo(h); fail(info.substring(Math.max(0, info.indexOf('|') + 1))); return; }

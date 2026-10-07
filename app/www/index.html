@@ -5329,6 +5329,7 @@
       var v = r.view(), key = v.map(function (x) { return x.toFixed(2); }).join(',');
       if (key === NAT.vk) return; NAT.vk = key;
       try { AmorNative.weView(v[0], v[1], v[2], v[3]); } catch (e) {}
+      if (window.console) console.info('[we] view ' + key + ' S=' + r.S.join('x') + ' canvas=' + cw + 'x' + ch);
     }
     // 玻璃 / 雨要用的画面：原生模式下每隔一会儿拍一张小图（玻璃本来就是模糊的，晚一点看不出来）
     function natRefresh() {
@@ -5364,6 +5365,7 @@
       var w = wallById(NAT.id);
       if (st === 'loading') { root.classList.remove('ready'); return; }   // 退到后台回来：表面重建、重新加载那几秒先垫缩略图
       if (st === 'fail') { if (w) natFail(w, NAT.tok, info); else natOff(); return; }
+      if (window.console) console.info('[we] state ' + st + ' ' + info);
       if (st !== 'ready' || !w) return;
       var p = String(info || '').split('|')[0].split(','), S = [+p[0] > 0 ? +p[0] : 1920, +p[1] > 0 ? +p[1] : 1080];
       var first = !NAT.ready; NAT.ready = true; NAT.vk = ''; NAT.run = null;

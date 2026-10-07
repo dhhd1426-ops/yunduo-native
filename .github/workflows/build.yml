@@ -8,7 +8,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 100
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - name: Compile Java to classes.dex (official SDK d8)
@@ -35,6 +35,32 @@ jobs:
           mv out-compile.log out/compile.log
           YD_BASE=$PWD/out/base-debug.apk YD_DEX=$PWD/out/classes.dex YD_LIBS=$PWD/out/lib python3 app/build.py out/test.apk 2>&1 | tee out/apk.log
           python3 app/verify.py out/test.apk 2>&1 | tee out/verify.log | tail -3
+      - name: Hand the build to the emulator jobs
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: |
+            out/
+            testdata/
+            !out/check516/web
+            !out/classes
+            !out/gen
+          retention-days: 3
+      - name: Publish results to ci-out (build failed)
+        if: failure()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JOB_STATUS: ${{ job.status }}
+        run: bash ci/publish.sh
+  emu:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: build
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -55,3 +81,39 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JOB_STATUS: ${{ job.status }}
         run: bash ci/publish.sh
+  guest:
+    # 5.18 原生壁纸专项：-gpu guest 时 Vulkan 画的画面在截屏里看得到（-gpu swiftshader_indirect 下合成在宿主机 GPU 上，看不到客户机里 Vulkan 画的东西）
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: build
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Native wallpaper on a software-composited emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          emulator-options: -no-window -gpu guest -noaudio -no-boot-anim -camera-back none
+          script: bash ci/emu-native.sh
+      - name: Publish to ci-guest
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          P=/tmp/pubg; rm -rf $P; mkdir -p $P; cp -r out/guest/. $P/ 2>/dev/null || true
+          echo "sha=$GITHUB_SHA run=$GITHUB_RUN_ID job=$JOB_STATUS at=$(date -u +%FT%TZ)" > $P/RESULT.txt
+          cd $P && git init -q && git checkout -q -b ci-guest
+          git -c user.name=ci -c user.email=ci@users.noreply.github.com add -A
+          git -c user.name=ci -c user.email=ci@users.noreply.github.com commit -qm "guest $GITHUB_SHA"
+          git push -qf "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci-guest

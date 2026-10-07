@@ -156,6 +156,9 @@ if [ -f testdata/scene.pkg ]; then
   done
   echo "11 shot" >> $O/steps.txt
   sleep 8; timeout 30 adb exec-out screencap -p > $O/11-native-wall.png
+  sleep 20; timeout 30 adb exec-out screencap -p > $O/11a-native-wall-later.png
+  A shell dumpsys SurfaceFlinger > $O/we-sf.txt 2>&1
+  A logcat -d | grep -E "chromium|WeWall|\[we\]" | tail -200 > $O/we-console.txt
   echo "11 log" >> $O/steps.txt
   A logcat -d -s 'WE:*' > $O/we-log.txt
   A shell "run-as $PKG ls -la files/amor/walls" > $O/we-walls.txt 2>&1

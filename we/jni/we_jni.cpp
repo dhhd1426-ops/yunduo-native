@@ -7,6 +7,9 @@
 #include <vulkan/vulkan_android.h>
 
 #include <atomic>
+#include <chrono>
+#include <condition_variable>
+#include <thread>
 #include <cstdlib>
 #include <memory>
 #include <mutex>
@@ -54,6 +57,7 @@ JNIEXPORT jlong JNICALL Java_com_cloudweather_xiaoyu_WeNative_nCreate(JNIEnv* en
     setenv("HOME", cache.c_str(), 1);
     setenv("XDG_CONFIG_HOME", (cache + "/config").c_str(), 1);
     setenv("XDG_CACHE_HOME", (cache + "/xdg").c_str(), 1);
+    setenv("WE_NO_AUDIO", "1", 1);   // 壁纸声音先不放：不开音频设备、不建声音流
 
     auto* hd   = new Handle();
     hd->window = ANativeWindow_fromSurface(env, surface);
@@ -160,10 +164,33 @@ JNIEXPORT void JNICALL Java_com_cloudweather_xiaoyu_WeNative_nMouse(JNIEnv*, jcl
 JNIEXPORT void JNICALL Java_com_cloudweather_xiaoyu_WeNative_nDestroy(JNIEnv*, jclass, jlong h) {
     if (! h) return;
     Handle* hd = H(h);
-    hd->sw.reset();   // 析构里同步停掉主循环和渲染线程
-    if (hd->window) ANativeWindow_release(hd->window);
-    delete hd;
-    LOGI("destroyed");
+    // 收尾放到单独线程做，主线程最多等 5 秒：渲染线程先停（不再碰窗口表面），万一主循环卡住也不让界面 ANR
+    struct Done {
+        std::mutex              mu;
+        std::condition_variable cv;
+        bool                    done { false };
+    };
+    auto        st = std::make_shared<Done>();
+    std::thread t([hd, st]() {
+        hd->sw.reset();   // 析构里停掉渲染线程和主循环
+        if (hd->window) ANativeWindow_release(hd->window);
+        delete hd;
+        {
+            std::lock_guard<std::mutex> lk(st->mu);
+            st->done = true;
+        }
+        st->cv.notify_all();
+        LOGI("destroyed");
+    });
+    std::unique_lock<std::mutex> lk(st->mu);
+    if (st->cv.wait_for(lk, std::chrono::seconds(5), [&] { return st->done; })) {
+        lk.unlock();
+        t.join();
+    } else {
+        lk.unlock();
+        LOGE("destroy still running after 5s; detached");
+        t.detach();
+    }
 }
 
 } // extern "C"

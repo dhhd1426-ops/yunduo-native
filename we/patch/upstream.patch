@@ -1,3 +1,21 @@
+diff --git a/src/Audio/SoundManager.cpp b/src/Audio/SoundManager.cpp
+index ab3029f..199507d 100644
+--- a/src/Audio/SoundManager.cpp
++++ b/src/Audio/SoundManager.cpp
+@@ -1,3 +1,4 @@
++#include <cstdlib>
+ #include "Audio/SoundManager.h"
+ #include "Audio/AudioAnalyzer.h"
+ #define WEK_MINIAUDIO_IMPL
+@@ -101,6 +102,8 @@ void SoundManager::Test(std::shared_ptr<fs::IBinaryStream> stream) {
+     auto           decoder = std::make_unique<miniaudio::Decoder<BStreamWrapper>>(std::move(sw));
+ }
+ bool SoundManager::Init() {
++    // 云朵天气移植：App 里壁纸静音、也不做随声音动 → 设 WE_NO_AUDIO 时根本不开音频设备（省电，安卓上不占 AAudio）
++    if (const char* na = std::getenv("WE_NO_AUDIO"); na && na[0] == '1') return false;
+     // Init unconditionally — even when muted we need the device alive so
+     // the data callback runs and feeds the spectrum analyzer.  The mute
+     // flag is honored at output-mix time inside miniaudio::Device.
 diff --git a/src/Scene/SceneCamera.cpp b/src/Scene/SceneCamera.cpp
 index 73afaad..0cc65d0 100644
 --- a/src/Scene/SceneCamera.cpp
@@ -400,6 +418,38 @@ index ef2aea0..c89d436 100644
          if (fboAspect > sAspect) {
              // scale height
              gCam.SetWidth(sw);
+diff --git a/src/WPSoundParser.cpp b/src/WPSoundParser.cpp
+index 8450d66..be83d08 100644
+--- a/src/WPSoundParser.cpp
++++ b/src/WPSoundParser.cpp
+@@ -1,3 +1,4 @@
++#include <cstdlib>
+ #include "WPSoundParser.hpp"
+ #include "WPSoundHelpers.h"
+ #include "Audio/SoundManager.h"
+@@ -226,6 +227,22 @@ WPSoundStream* WPSoundParser::Parse(const wpscene::WPSoundObject& obj, fs::VFS&
+         LOG_INFO("sound '%s': skipped (no tracks)", obj.name.c_str());
+         return nullptr;
+     }
++    // 云朵天气移植：不放声音时不建声音流；另外包里没带的音频文件先剔掉——全都缺时以前会每 0.1 秒重试一次（空转耗电）
++    if (const char* na = std::getenv("WE_NO_AUDIO"); na && na[0] == '1') return nullptr;
++    {
++        std::vector<std::string> have;
++        for (const auto& f : obj.sound)
++            if (vfs.Contains("/assets/" + f)) have.push_back(f);
++        if (have.empty()) {
++            LOG_INFO("sound '%s': skipped (no track files in package)", obj.name.c_str());
++            return nullptr;
++        }
++        if (have.size() != obj.sound.size()) {
++            auto o2  = obj;
++            o2.sound = have;
++            return Parse(o2, vfs, sm);
++        }
++    }
+ 
+     LOG_INFO("sound '%s': volume=%.3f hasScript=%d mode=%s startsilent=%d files=%zu",
+              obj.name.c_str(),
 diff --git a/src/WPTexImageHelpers.h b/src/WPTexImageHelpers.h
 index ef13f48..cc5b3a0 100644
 --- a/src/WPTexImageHelpers.h

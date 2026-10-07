@@ -51,7 +51,7 @@ final class WeWall implements SurfaceHolder.Callback {
         View parent = sv.getParent() instanceof View ? (View) sv.getParent() : sv;
         parent.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             public void onLayoutChange(View v, int l, int t, int r, int b, int ol, int ot, int or, int ob) {
-                if ((r - l != or - ol || b - t != ob - ot) && sv.getVisibility() == View.VISIBLE) sizeSurface();
+                if ((r - l != or - ol || b - t != ob - ot) && sv.getVisibility() == View.VISIBLE) ui.post(remake);
             }
         });
     }
@@ -147,6 +147,22 @@ final class WeWall implements SurfaceHolder.Callback {
     boolean active() { return src != null; }
 
     /** 渲染分辨率：长边不超过 1920（高刷大屏手机上全分辨率跑模糊特效太费电），SurfaceView 自己放大铺满 */
+    // 窗口尺寸变了：同一块表面上直接重建渲染器会报 VK_ERROR_NATIVE_WINDOW_IN_USE（旧连接还没断干净），
+    // 所以把 SurfaceView 先藏再显示，换一块全新的表面（和退到后台再回来走同一条路）
+    private final Runnable remake = new Runnable() {
+        public void run() {
+            if (sv.getVisibility() != View.VISIBLE) return;
+            View parent = sv.getParent() instanceof View ? (View) sv.getParent() : null;
+            int W = parent != null ? parent.getWidth() : 0, H = parent != null ? parent.getHeight() : 0;
+            float k = W > 0 && H > 0 ? Math.min(1f, 1920f / Math.max(W, H)) : 1f;
+            if (!forceRemake && Math.round(W * k) == fixW && Math.round(H * k) == fixH) return;
+            forceRemake = false;
+            sv.setVisibility(View.GONE);
+            sizeSurface();
+            sv.setVisibility(View.VISIBLE);
+        }
+    };
+    private boolean forceRemake = false;
     private int fixW = 0, fixH = 0;
     private void sizeSurface() {
         View parent = sv.getParent() instanceof View ? (View) sv.getParent() : null;
@@ -239,9 +255,9 @@ final class WeWall implements SurfaceHolder.Callback {
     @Override public void surfaceCreated(SurfaceHolder holder) { }
 
     @Override public void surfaceChanged(SurfaceHolder holder, int format, int w, int hh) {
-        boolean resized = surfaceOk && (w != sw || hh != sh);
+        boolean resized = surfaceOk && h != 0 && (w != sw || hh != sh);
         surfaceOk = true; sw = w; sh = hh;
-        if (resized) { destroy(); reported = false; }
+        if (resized) { forceRemake = true; fixW = fixH = 0; ui.post(remake); return; }   // 同一块表面改了尺寸：换新表面再建（见 remake）
         ensure();
     }
 

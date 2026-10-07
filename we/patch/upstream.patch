@@ -73,6 +73,45 @@ index 0214801..8b61184 100644
      }
  
      std::vector<VkPipelineShaderStageCreateInfo> shaderStages;
+diff --git a/src/Vulkan/TextureCache.cpp b/src/Vulkan/TextureCache.cpp
+index fab2b71..1e54f71 100644
+--- a/src/Vulkan/TextureCache.cpp
++++ b/src/Vulkan/TextureCache.cpp
+@@ -262,9 +262,11 @@ std::optional<ExImageParameters> CreateExImage(uint32_t width, uint32_t height,
+                                                  .pNext = NULL,
+                                                  .handleTypes =
+                                                      VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD_BIT };
++        // 云朵天气移植：设备没开外部内存扩展（安卓上用不到跨进程共享）就建普通图像，不导出 fd
++        const bool can_export = device.Dispatch().vkGetMemoryFdKHR != nullptr;
+         VkImageCreateInfo          info {
+                      .sType       = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
+-                     .pNext       = &ex_info,
++                     .pNext       = can_export ? &ex_info : nullptr,
+                      .imageType   = VK_IMAGE_TYPE_2D,
+                      .format      = format,
+                      .extent      = VkExtent3D { .width = width, .height = height, .depth = 1 },
+@@ -284,7 +286,7 @@ std::optional<ExImageParameters> CreateExImage(uint32_t width, uint32_t height,
+         image.mem_reqs = device.GetImageMemoryRequirements(*image.handle);
+ 
+         if (auto opt = AllocateMemory(
+-                device, gpu, image.mem_reqs, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &ex_mem_info);
++                device, gpu, image.mem_reqs, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, can_export ? &ex_mem_info : nullptr);
+             opt.has_value()) {
+             image.mem = std::move(opt.value());
+         } else
+@@ -310,7 +312,11 @@ std::optional<ExImageParameters> CreateExImage(uint32_t width, uint32_t height,
+             VVK_CHECK_ACT(break, device.CreateImageView(createinfo, image.view));
+         }
+         // No CreateSampler here — see CreateImage above (MEM5 dedup).
+-        VVK_CHECK_ACT(break, image.mem.GetMemoryFdKHR(&image.fd));
++        if (can_export) {
++            VVK_CHECK_ACT(break, image.mem.GetMemoryFdKHR(&image.fd));
++        } else {
++            image.fd = -1;
++        }
+ 
+         return image;
+ 
 diff --git a/src/Vulkan/include/vvk/vulkan_wrapper.hpp b/src/Vulkan/include/vvk/vulkan_wrapper.hpp
 index 2b953ca..b86f25a 100644
 --- a/src/Vulkan/include/vvk/vulkan_wrapper.hpp

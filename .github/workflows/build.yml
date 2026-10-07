@@ -2,6 +2,7 @@ name: native
 on:
   push:
     branches: [main]
+    paths-ignore: ['we/**', '.github/workflows/we.yml']   # WE 移植有自己的流水线
   workflow_dispatch:
 permissions:
   contents: write

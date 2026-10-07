@@ -1,0 +1,14 @@
+10-07 14:01:28.244   519  2542 I ActivityTaskManager: START u0 {act=android.intent.action.VIEW dat=file:///... flg=0x10000000 cmp=com.cloudweather.xiaoyu/.MainActivity} with LAUNCH_SINGLE_TASK from uid 2000 (BAL_ALLOW_PERMISSION) result code=3
+10-07 14:01:28.253   837   874 D WindowManagerShell: onActivityRestartAttempt: ComponentInfo{com.cloudweather.xiaoyu/com.cloudweather.xiaoyu.MainActivity}
+10-07 14:01:29.764  6287  6287 I WE      : create 320x640 fps=30 assets=/data/user/0/com.cloudweather.xiaoyu/files/we/assets
+10-07 14:01:29.765  6287  6287 I WE      : load /data/user/0/com.cloudweather.xiaoyu/files/amor/walls/1791381688437_ci_wall.mpkg.assets
+10-07 14:01:29.772  6287  6840 I WE      : INFO source: /data/user/0/com.cloudweather.xiaoyu/files/amor/walls/1791381688437_ci_wall.mpkg.assets
+10-07 14:01:29.792  6287  6841 D vulkan  : searching for layers in '/data/app/~~cdb6nSNDiQAKFmci83V_zA==/com.cloudweather.xiaoyu-j0qONH-m1pdSi-EUQrC01g==/lib/x86_64'
+10-07 14:01:29.792  6287  6841 D vulkan  : searching for layers in '/data/app/~~cdb6nSNDiQAKFmci83V_zA==/com.cloudweather.xiaoyu-j0qONH-m1pdSi-EUQrC01g==/base.apk!/lib/x86_64'
+10-07 14:01:29.975  6287  6840 I WE      : INFO loading scene: /data/user/0/com.cloudweather.xiaoyu/files/amor/walls/1791381688437_ci_wall.mpkg.assets
+10-07 14:01:29.976  6287  6840 E WE      : ERROR CBinaryStream.h:65 can't open: /data/user/0/com.cloudweather.xiaoyu/files/amor/walls/1791381688437_ci_wall.mpkg.assets/scene.pkg
+10-07 14:01:29.976  6287  6840 I WE      : INFO load pkg file /data/user/0/com.cloudweather.xiaoyu/files/amor/walls/1791381688437_ci_wall.mpkg.assets/scene.pkg failed, trying alternate pkg names
+10-07 14:01:29.977  6287  6840 I WE      : INFO falling back to physical dir: /data/user/0/com.cloudweather.xiaoyu/files/amor/walls/1791381688437_ci_wall.mpkg.assets
+10-07 14:01:29.977  6287  6840 I WE      : INFO cache folder: /data/user/0/com.cloudweather.xiaoyu/cache/we
+10-07 14:01:29.977  6287  6840 I WE      : INFO Loaded user property defaults from /data/user/0/com.cloudweather.xiaoyu/files/amor/walls/1791381688437_ci_wall.mpkg.assets/project.json
+10-07 14:01:47.641  6287  6840 I WE      : INFO Wrote 1 active bindings to /data/user/0/com.cloudweather.xiaoyu/cache/we/config/wekde/wallpaper/1791381688437_ci_wall.mpkg.assets_bindings.json

@@ -1,0 +1,638 @@
+ZIP
+  OK   all CRCs valid
+  OK   res/mipmap-xxxhdpi-v4/ic_launcher.png stored and 4-byte aligned (offset 60856)
+  OK   resources.arsc stored and 4-byte aligned (offset 69960)
+  OK   assets/fonts/LAME-LICENSE.txt stored and 4-byte aligned (offset 564040)
+  OK   assets/fonts/api-motion.css stored and 4-byte aligned (offset 564524)
+  OK   assets/fonts/api-motion.js stored and 4-byte aligned (offset 569088)
+  OK   assets/fonts/docpdf.js stored and 4-byte aligned (offset 588668)
+  OK   assets/fonts/docs.js stored and 4-byte aligned (offset 619960)
+  OK   assets/fonts/ear.js stored and 4-byte aligned (offset 663764)
+  OK   assets/fonts/fox-lie-body.webp stored and 4-byte aligned (offset 675120)
+  OK   assets/fonts/fox-lie-head.webp stored and 4-byte aligned (offset 686216)
+  OK   assets/fonts/lame.min.js stored and 4-byte aligned (offset 688520)
+  OK   assets/fonts/launch.js stored and 4-byte aligned (offset 844616)
+  OK   assets/fonts/mcp.js stored and 4-byte aligned (offset 854816)
+  OK   assets/fonts/pinyin.js stored and 4-byte aligned (offset 869220)
+  OK   assets/fonts/reply-lora-italic.woff stored and 4-byte aligned (offset 936552)
+  OK   assets/fonts/reply-lora.woff stored and 4-byte aligned (offset 969444)
+  OK   assets/fonts/reply-serif-sc.woff stored and 4-byte aligned (offset 999400)
+  OK   assets/fonts/script-glyphs.js stored and 4-byte aligned (offset 4216856)
+  OK   assets/fonts/sw-motion.css stored and 4-byte aligned (offset 4428156)
+  OK   assets/fonts/sw-motion.js stored and 4-byte aligned (offset 4431116)
+  OK   assets/fonts/wall-runtime.js stored and 4-byte aligned (offset 4439252)
+  OK   assets/fonts/wall.js stored and 4-byte aligned (offset 4441692)
+  OK   assets/walls/default-thumb.jpg stored and 4-byte aligned (offset 8062600)
+APK SIGNATURE SCHEME v2
+  OK   signing block magic before central directory
+  OK   block size fields match
+  OK   pairs fill the block exactly
+  OK   v2 block present
+  OK   algorithm RSA PKCS#1 v1.5 SHA-256
+  OK   content digest matches
+  OK   RSA signature over signed data verifies
+  OK   certificate key equals signer public key
+DEX
+  OK   magic dex 038
+  OK   adler32 checksum
+  OK   sha1 signature
+  OK   size/header/endian
+  OK   data section reaches end of file
+  OK   1589 strings sorted
+  OK   260 types sorted
+  OK   proto shorty CI matches (C <- ['I'])
+  OK   proto shorty DD matches (D <- ['D'])
+  OK   proto shorty DDD matches (D <- ['D', 'D'])
+  OK   proto shorty FFF matches (F <- ['F', 'F'])
+  OK   proto shorty I matches (I <- [])
+  OK   proto shorty IF matches (I <- ['F'])
+  OK   proto shorty II matches (I <- ['I'])
+  OK   proto shorty III matches (I <- ['I', 'I'])
+  OK   proto shorty IIII matches (I <- ['I', 'I', 'I'])
+  OK   proto shorty IJ matches (I <- ['J'])
+  OK   proto shorty ILII matches (I <- ['Landroid/content/Intent;', 'I', 'I'])
+  OK   proto shorty ILIZZ matches (I <- ['Landroid/media/audiofx/Visualizer$OnDataCaptureListener;', 'I', 'Z', 'Z'])
+  OK   proto shorty ILLLL matches (I <- ['Landroid/net/Uri;', 'Landroid/content/ContentValues;', 'Ljava/lang/String;', '[Ljava/lang/String;'])
+  OK   proto shorty ILLL matches (I <- ['Landroid/net/Uri;', 'Ljava/lang/String;', '[Ljava/lang/String;'])
+  OK   proto shorty IL matches (I <- ['Landroid/speech/tts/UtteranceProgressListener;'])
+  OK   proto shorty IL matches (I <- ['Lcom/cloudweather/xiaoyu/Mic;'])
+  OK   proto shorty IL matches (I <- ['Lcom/cloudweather/xiaoyu/Voice;'])
+  OK   proto shorty IL matches (I <- ['Lcom/cloudweather/xiaoyu/WeWall;'])
+  OK   proto shorty ILL matches (I <- ['Ljava/io/File;', 'Ljava/lang/String;'])
+  OK   proto shorty ILILL matches (I <- ['Ljava/lang/CharSequence;', 'I', 'Landroid/os/Bundle;', 'Ljava/lang/String;'])
+  OK   proto shorty IL matches (I <- ['Ljava/lang/String;'])
+  OK   proto shorty ILI matches (I <- ['Ljava/lang/String;', 'I'])
+  OK   proto shorty ILL matches (I <- ['Ljava/lang/String;', 'Ljava/lang/String;'])
+  OK   proto shorty IL matches (I <- ['Ljava/util/Locale;'])
+  OK   proto shorty IZ matches (I <- ['Z'])
+  OK   proto shorty IL matches (I <- ['[B'])
+  OK   proto shorty ILII matches (I <- ['[B', 'I', 'I'])
+  OK   proto shorty ILII matches (I <- ['[S', 'I', 'I'])
+  OK   proto shorty J matches (J <- [])
+  OK   proto shorty JD matches (J <- ['D'])
+  OK   proto shorty JI matches (J <- ['I'])
+  OK   proto shorty JJJ matches (J <- ['J', 'J'])
+  OK   proto shorty JLLJ matches (J <- ['Landroid/content/Context;', 'Ljava/lang/String;', 'J'])
+  OK   proto shorty JLLLIII matches (J <- ['Landroid/view/Surface;', 'Ljava/lang/String;', 'Ljava/lang/String;', 'I', 'I', 'I'])
+  OK   proto shorty JL matches (J <- ['Lcom/cloudweather/xiaoyu/AlarmService;'])
+  OK   proto shorty JL matches (J <- ['Lcom/cloudweather/xiaoyu/WeWall;'])
+  OK   proto shorty JL matches (J <- ['Ljava/io/RandomAccessFile;'])
+  OK   proto shorty JL matches (J <- ['Ljava/lang/String;'])
+  OK   proto shorty JLJ matches (J <- ['Ljava/lang/String;', 'J'])
+  OK   proto shorty JLJ matches (J <- ['Lorg/json/JSONObject;', 'J'])
+  OK   proto shorty LL matches (Landroid/app/Activity; <- ['Lcom/cloudweather/xiaoyu/AmorBridge;'])
+  OK   proto shorty LL matches (Landroid/app/AlarmManager; <- ['Landroid/content/Context;'])
+  OK   proto shorty L matches (Landroid/app/Notification$Action; <- [])
+  OK   proto shorty LL matches (Landroid/app/Notification$BigTextStyle; <- ['Ljava/lang/CharSequence;'])
+  OK   proto shorty LI matches (Landroid/app/Notification$Builder; <- ['I'])
+  OK   proto shorty LJ matches (Landroid/app/Notification$Builder; <- ['J'])
+  OK   proto shorty LL matches (Landroid/app/Notification$Builder; <- ['Landroid/app/Notification$Action;'])
+  OK   proto shorty LL matches (Landroid/app/Notification$Builder; <- ['Landroid/app/Notification$Style;'])
+  OK   proto shorty LL matches (Landroid/app/Notification$Builder; <- ['Landroid/app/PendingIntent;'])
+  OK   proto shorty LLZ matches (Landroid/app/Notification$Builder; <- ['Landroid/app/PendingIntent;', 'Z'])
+  OK   proto shorty LL matches (Landroid/app/Notification$Builder; <- ['Landroid/graphics/Bitmap;'])
+  OK   proto shorty LL matches (Landroid/app/Notification$Builder; <- ['Landroid/graphics/drawable/Icon;'])
+  OK   proto shorty LL matches (Landroid/app/Notification$Builder; <- ['Landroid/os/Bundle;'])
+  OK   proto shorty LL matches (Landroid/app/Notification$Builder; <- ['Landroid/widget/RemoteViews;'])
+  OK   proto shorty LL matches (Landroid/app/Notification$Builder; <- ['Ljava/lang/CharSequence;'])
+  OK   proto shorty LL matches (Landroid/app/Notification$Builder; <- ['Ljava/lang/String;'])
+  OK   proto shorty LZ matches (Landroid/app/Notification$Builder; <- ['Z'])
+  OK   proto shorty LL matches (Landroid/app/Notification$MessagingStyle; <- ['Landroid/app/Notification$MessagingStyle$Message;'])
+  OK   proto shorty LL matches (Landroid/app/Notification$MessagingStyle; <- ['Ljava/lang/CharSequence;'])
+  OK   proto shorty LZ matches (Landroid/app/Notification$MessagingStyle; <- ['Z'])
+  OK   proto shorty L matches (Landroid/app/Notification; <- [])
+  OK   proto shorty LL matches (Landroid/app/Notification; <- ['Landroid/content/Context;'])
+  OK   proto shorty LL matches (Landroid/app/Notification; <- ['Lorg/json/JSONObject;'])
+  OK   proto shorty LL matches (Landroid/app/NotificationChannel; <- ['Ljava/lang/String;'])
+  OK   proto shorty LL matches (Landroid/app/NotificationManager; <- ['Landroid/content/Context;'])
+  OK   proto shorty LL matches (Landroid/app/PendingIntent; <- ['Landroid/content/Context;'])
+  OK   proto shorty LLILI matches (Landroid/app/PendingIntent; <- ['Landroid/content/Context;', 'I', 'Landroid/content/Intent;', 'I'])
+  OK   proto shorty LLIL matches (Landroid/app/PendingIntent; <- ['Landroid/content/Context;', 'I', 'Lorg/json/JSONObject;'])
+  OK   proto shorty LLIZ matches (Landroid/app/PendingIntent; <- ['Landroid/content/Context;', 'I', 'Z'])
+  OK   proto shorty LLLI matches (Landroid/app/PendingIntent; <- ['Landroid/content/Context;', 'Ljava/lang/String;', 'I'])
+  OK   proto shorty LLLIL matches (Landroid/app/PendingIntent; <- ['Landroid/content/Context;', 'Ljava/lang/String;', 'I', 'Lorg/json/JSONObject;'])
+  OK   proto shorty LL matches (Landroid/app/Person$Builder; <- ['Landroid/graphics/drawable/Icon;'])
+  OK   proto shorty LL matches (Landroid/app/Person$Builder; <- ['Ljava/lang/CharSequence;'])
+  OK   proto shorty LL matches (Landroid/app/Person$Builder; <- ['Ljava/lang/String;'])
+  OK   proto shorty LZ matches (Landroid/app/Person$Builder; <- ['Z'])
+  OK   proto shorty L matches (Landroid/app/Person; <- [])
+  OK   proto shorty LI matches (Landroid/content/ClipData$Item; <- ['I'])
+  OK   proto shorty L matches (Landroid/content/ClipData; <- [])
+  OK   proto shorty LL matches (Landroid/content/ComponentName; <- ['Landroid/content/Intent;'])
+  OK   proto shorty LL matches (Landroid/content/ComponentName; <- ['Landroid/content/pm/PackageManager;'])
+  OK   proto shorty L matches (Landroid/content/ContentResolver; <- [])
+  OK   proto shorty L matches (Landroid/content/Context; <- [])
+  OK   proto shorty LL matches (Landroid/content/Context; <- ['Lcom/cloudweather/xiaoyu/AmorBridge;'])
+  OK   proto shorty L matches (Landroid/content/Intent; <- [])
+  OK   proto shorty LI matches (Landroid/content/Intent; <- ['I'])
+  OK   proto shorty LL matches (Landroid/content/Intent; <- ['Landroid/content/ComponentName;'])
+  OK   proto shorty LLL matches (Landroid/content/Intent; <- ['Landroid/content/Intent;', 'Ljava/lang/CharSequence;'])
+  OK   proto shorty LLL matches (Landroid/content/Intent; <- ['Landroid/net/Uri;', 'Ljava/lang/String;'])
+  OK   proto shorty LL matches (Landroid/content/Intent; <- ['Ljava/lang/String;'])
+  OK   proto shorty LLI matches (Landroid/content/Intent; <- ['Ljava/lang/String;', 'I'])
+  OK   proto shorty LLJ matches (Landroid/content/Intent; <- ['Ljava/lang/String;', 'J'])
+  OK   proto shorty LLL matches (Landroid/content/Intent; <- ['Ljava/lang/String;', 'Landroid/os/Parcelable;'])
+  OK   proto shorty LLL matches (Landroid/content/Intent; <- ['Ljava/lang/String;', 'Ljava/lang/String;'])
+  OK   proto shorty LLZ matches (Landroid/content/Intent; <- ['Ljava/lang/String;', 'Z'])
+  OK   proto shorty L matches (Landroid/content/SharedPreferences$Editor; <- [])
+  OK   proto shorty LL matches (Landroid/content/SharedPreferences$Editor; <- ['Ljava/lang/String;'])
+  OK   proto shorty LLJ matches (Landroid/content/SharedPreferences$Editor; <- ['Ljava/lang/String;', 'J'])
+  OK   proto shorty LLL matches (Landroid/content/SharedPreferences$Editor; <- ['Ljava/lang/String;', 'Ljava/lang/String;'])
+  OK   proto shorty LL matches (Landroid/content/SharedPreferences; <- ['Landroid/content/Context;'])
+  OK   proto shorty LLI matches (Landroid/content/SharedPreferences; <- ['Ljava/lang/String;', 'I'])
+  OK   proto shorty L matches (Landroid/content/pm/ApplicationInfo; <- [])
+  OK   proto shorty LLI matches (Landroid/content/pm/PackageInfo; <- ['Ljava/lang/String;', 'I'])
+  OK   proto shorty L matches (Landroid/content/pm/PackageManager; <- [])
+  OK   proto shorty LL matches (Landroid/content/pm/ShortcutInfo$Builder; <- ['Landroid/app/Person;'])
+  OK   proto shorty LL matches (Landroid/content/pm/ShortcutInfo$Builder; <- ['Landroid/content/Intent;'])
+  OK   proto shorty LL matches (Landroid/content/pm/ShortcutInfo$Builder; <- ['Landroid/graphics/drawable/Icon;'])
+  OK   proto shorty LL matches (Landroid/content/pm/ShortcutInfo$Builder; <- ['Ljava/lang/CharSequence;'])
+  OK   proto shorty LZ matches (Landroid/content/pm/ShortcutInfo$Builder; <- ['Z'])
+  OK   proto shorty L matches (Landroid/content/pm/ShortcutInfo; <- [])
+  OK   proto shorty L matches (Landroid/content/res/AssetManager; <- [])
+  OK   proto shorty L matches (Landroid/content/res/Resources; <- [])
+  OK   proto shorty LLLLLL matches (Landroid/database/Cursor; <- ['Landroid/net/Uri;', '[Ljava/lang/String;', 'Ljava/lang/String;', '[Ljava/lang/String;', 'Ljava/lang/String;'])
+  OK   proto shorty LIIL matches (Landroid/graphics/Bitmap; <- ['I', 'I', 'Landroid/graphics/Bitmap$Config;'])
+  OK   proto shorty LL matches (Landroid/graphics/Bitmap; <- ['Ljava/lang/String;'])
+  OK   proto shorty LLII matches (Landroid/graphics/Bitmap; <- ['[B', 'I', 'I'])
+  OK   proto shorty LI matches (Landroid/graphics/Insets; <- ['I'])
+  OK   proto shorty LLI matches (Landroid/graphics/drawable/Icon; <- ['Landroid/content/Context;', 'I'])
+  OK   proto shorty LL matches (Landroid/graphics/drawable/Icon; <- ['Landroid/graphics/Bitmap;'])
+  OK   proto shorty LI matches (Landroid/media/AudioAttributes$Builder; <- ['I'])
+  OK   proto shorty L matches (Landroid/media/AudioAttributes; <- [])
+  OK   proto shorty LL matches (Landroid/media/MediaPlayer; <- ['Lcom/cloudweather/xiaoyu/AlarmService;'])
+  OK   proto shorty LI matches (Landroid/media/audiofx/AcousticEchoCanceler; <- ['I'])
+  OK   proto shorty LI matches (Landroid/media/audiofx/NoiseSuppressor; <- ['I'])
+  OK   proto shorty L matches (Landroid/net/Uri; <- [])
+  OK   proto shorty LI matches (Landroid/net/Uri; <- ['I'])
+  OK   proto shorty LLI matches (Landroid/net/Uri; <- ['Landroid/content/Context;', 'I'])
+  OK   proto shorty LLLLL matches (Landroid/net/Uri; <- ['Landroid/content/Context;', 'Ljava/lang/String;', 'Ljava/lang/String;', 'Ljava/lang/String;'])
+  OK   proto shorty LLL matches (Landroid/net/Uri; <- ['Landroid/net/Uri;', 'Landroid/content/ContentValues;'])
+  OK   proto shorty LL matches (Landroid/net/Uri; <- ['Lcom/cloudweather/xiaoyu/MainActivity;'])
+  OK   proto shorty LLL matches (Landroid/net/Uri; <- ['Lcom/cloudweather/xiaoyu/MainActivity;', 'Landroid/net/Uri;'])
+  OK   proto shorty LL matches (Landroid/net/Uri; <- ['Ljava/io/File;'])
+  OK   proto shorty LL matches (Landroid/net/Uri; <- ['Ljava/lang/String;'])
+  OK   proto shorty LL matches (Landroid/os/Handler; <- ['Lcom/cloudweather/xiaoyu/AlarmService;'])
+  OK   proto shorty LL matches (Landroid/os/Handler; <- ['Lcom/cloudweather/xiaoyu/WeWall;'])
+  OK   proto shorty LL matches (Landroid/os/IBinder; <- ['Landroid/content/Intent;'])
+  OK   proto shorty L matches (Landroid/os/Looper; <- [])
+  OK   proto shorty LL matches (Landroid/os/Parcelable; <- ['Ljava/lang/String;'])
+  OK   proto shorty LIL matches (Landroid/os/PowerManager$WakeLock; <- ['I', 'Ljava/lang/String;'])
+  OK   proto shorty LLI matches (Landroid/os/VibrationEffect; <- ['[J', 'I'])
+  OK   proto shorty LL matches (Landroid/speech/SpeechRecognizer; <- ['Landroid/content/Context;'])
+  OK   proto shorty LL matches (Landroid/speech/SpeechRecognizer; <- ['Lcom/cloudweather/xiaoyu/Voice;'])
+  OK   proto shorty LL matches (Landroid/speech/tts/TextToSpeech; <- ['Lcom/cloudweather/xiaoyu/Voice;'])
+  OK   proto shorty L matches (Landroid/util/DisplayMetrics; <- [])
+  OK   proto shorty L matches (Landroid/view/Display; <- [])
+  OK   proto shorty L matches (Landroid/view/DisplayCutout; <- [])
+  OK   proto shorty L matches (Landroid/view/Surface; <- [])
+  OK   proto shorty L matches (Landroid/view/SurfaceHolder; <- [])
+  OK   proto shorty LL matches (Landroid/view/SurfaceView; <- ['Lcom/cloudweather/xiaoyu/WeWall;'])
+  OK   proto shorty L matches (Landroid/view/View; <- [])
+  OK   proto shorty LI matches (Landroid/view/View; <- ['I'])
+  OK   proto shorty L matches (Landroid/view/ViewGroup$LayoutParams; <- [])
+  OK   proto shorty L matches (Landroid/view/ViewParent; <- [])
+  OK   proto shorty L matches (Landroid/view/Window; <- [])
+  OK   proto shorty LLL matches (Landroid/view/WindowInsets; <- ['Landroid/view/View;', 'Landroid/view/WindowInsets;'])
+  OK   proto shorty L matches (Landroid/view/WindowManager$LayoutParams; <- [])
+  OK   proto shorty L matches (Landroid/view/WindowManager; <- [])
+  OK   proto shorty LLL matches (Landroid/webkit/GeolocationPermissions$Callback; <- ['Lcom/cloudweather/xiaoyu/MainActivity;', 'Landroid/webkit/GeolocationPermissions$Callback;'])
+  OK   proto shorty LL matches (Landroid/webkit/PermissionRequest; <- ['Lcom/cloudweather/xiaoyu/MainActivity;'])
+  OK   proto shorty LLL matches (Landroid/webkit/PermissionRequest; <- ['Lcom/cloudweather/xiaoyu/MainActivity;', 'Landroid/webkit/PermissionRequest;'])
+  OK   proto shorty LL matches (Landroid/webkit/ValueCallback; <- ['Lcom/cloudweather/xiaoyu/MainActivity;'])
+  OK   proto shorty LLL matches (Landroid/webkit/ValueCallback; <- ['Lcom/cloudweather/xiaoyu/MainActivity;', 'Landroid/webkit/ValueCallback;'])
+  OK   proto shorty L matches (Landroid/webkit/WebSettings; <- [])
+  OK   proto shorty LL matches (Landroid/webkit/WebView; <- ['Lcom/cloudweather/xiaoyu/MainActivity;'])
+  OK   proto shorty LL matches (Lcom/cloudweather/xiaoyu/MainActivity; <- ['Lcom/cloudweather/xiaoyu/Mic;'])
+  OK   proto shorty LL matches (Lcom/cloudweather/xiaoyu/MainActivity; <- ['Lcom/cloudweather/xiaoyu/Voice;'])
+  OK   proto shorty LL matches (Lcom/cloudweather/xiaoyu/MainActivity; <- ['Lcom/cloudweather/xiaoyu/WeWall;'])
+  OK   proto shorty L matches (Lcom/cloudweather/xiaoyu/Mic; <- [])
+  OK   proto shorty LL matches (Lcom/cloudweather/xiaoyu/Mic; <- ['Lcom/cloudweather/xiaoyu/AmorBridge;'])
+  OK   proto shorty L matches (Lcom/cloudweather/xiaoyu/Viz; <- [])
+  OK   proto shorty LL matches (Lcom/cloudweather/xiaoyu/Viz; <- ['Lcom/cloudweather/xiaoyu/AmorBridge;'])
+  OK   proto shorty L matches (Lcom/cloudweather/xiaoyu/Voice; <- [])
+  OK   proto shorty LL matches (Lcom/cloudweather/xiaoyu/Voice; <- ['Lcom/cloudweather/xiaoyu/AmorBridge;'])
+  OK   proto shorty L matches (Lcom/cloudweather/xiaoyu/WeWall; <- [])
+  OK   proto shorty L matches (Ljava/io/File; <- [])
+  OK   proto shorty LL matches (Ljava/io/File; <- ['Landroid/content/Context;'])
+  OK   proto shorty LLL matches (Ljava/io/File; <- ['Landroid/content/Context;', 'Ljava/lang/String;'])
+  OK   proto shorty LL matches (Ljava/io/File; <- ['Lcom/cloudweather/xiaoyu/WeWall;'])
+  OK   proto shorty LL matches (Ljava/io/File; <- ['Ljava/io/File;'])
+  OK   proto shorty LL matches (Ljava/io/File; <- ['Ljava/lang/String;'])
+  OK   proto shorty L matches (Ljava/io/FileDescriptor; <- [])
+  OK   proto shorty LL matches (Ljava/io/InputStream; <- ['Landroid/net/Uri;'])
+  OK   proto shorty LL matches (Ljava/io/InputStream; <- ['Ljava/lang/String;'])
+  OK   proto shorty LL matches (Ljava/io/OutputStream; <- ['Landroid/net/Uri;'])
+  OK   proto shorty LZ matches (Ljava/lang/Boolean; <- ['Z'])
+  OK   proto shorty L matches (Ljava/lang/Class; <- [])
+  OK   proto shorty LD matches (Ljava/lang/Double; <- ['D'])
+  OK   proto shorty LI matches (Ljava/lang/Integer; <- ['I'])
+  OK   proto shorty LJ matches (Ljava/lang/Long; <- ['J'])
+  OK   proto shorty L matches (Ljava/lang/Object; <- [])
+  OK   proto shorty LI matches (Ljava/lang/Object; <- ['I'])
+  OK   proto shorty LL matches (Ljava/lang/Object; <- ['Ljava/lang/Class;'])
+  OK   proto shorty LL matches (Ljava/lang/Object; <- ['Ljava/lang/Object;'])
+  OK   proto shorty LLL matches (Ljava/lang/Object; <- ['Ljava/lang/Object;', 'Ljava/lang/Object;'])
+  OK   proto shorty LL matches (Ljava/lang/Object; <- ['Ljava/lang/String;'])
+  OK   proto shorty LL matches (Ljava/lang/Runnable; <- ['Lcom/cloudweather/xiaoyu/WeWall;'])
+  OK   proto shorty L matches (Ljava/lang/String; <- [])
+  OK   proto shorty LI matches (Ljava/lang/String; <- ['I'])
+  OK   proto shorty LII matches (Ljava/lang/String; <- ['I', 'I'])
+  OK   proto shorty LIL matches (Ljava/lang/String; <- ['I', 'Ljava/lang/String;'])
+  OK   proto shorty LJ matches (Ljava/lang/String; <- ['J'])
+  OK   proto shorty LLL matches (Ljava/lang/String; <- ['Landroid/content/ContentResolver;', 'Ljava/lang/String;'])
+  OK   proto shorty LLL matches (Ljava/lang/String; <- ['Landroid/content/Context;', 'Landroid/net/Uri;'])
+  OK   proto shorty LLLL matches (Ljava/lang/String; <- ['Landroid/content/Context;', 'Ljava/lang/String;', 'Ljava/lang/String;'])
+  OK   proto shorty LL matches (Ljava/lang/String; <- ['Landroid/content/Intent;'])
+  OK   proto shorty LLLL matches (Ljava/lang/String; <- ['Landroid/content/Intent;', 'Ljava/lang/String;', 'Landroid/content/Context;'])
+  OK   proto shorty LL matches (Ljava/lang/String; <- ['Landroid/os/Bundle;'])
+  OK   proto shorty LLL matches (Ljava/lang/String; <- ['Lcom/cloudweather/xiaoyu/MainActivity;', 'Ljava/lang/String;'])
+  OK   proto shorty LL matches (Ljava/lang/String; <- ['Lcom/cloudweather/xiaoyu/WeWall;'])
+  OK   proto shorty LL matches (Ljava/lang/String; <- ['Ljava/io/File;'])
+  OK   proto shorty LL matches (Ljava/lang/String; <- ['Ljava/io/RandomAccessFile;'])
+  OK   proto shorty LLL matches (Ljava/lang/String; <- ['Ljava/lang/CharSequence;', 'Ljava/lang/CharSequence;'])
+  OK   proto shorty LL matches (Ljava/lang/String; <- ['Ljava/lang/Object;'])
+  OK   proto shorty LL matches (Ljava/lang/String; <- ['Ljava/lang/String;'])
+  OK   proto shorty LLII matches (Ljava/lang/String; <- ['Ljava/lang/String;', 'I', 'I'])
+  OK   proto shorty LLL matches (Ljava/lang/String; <- ['Ljava/lang/String;', 'Ljava/lang/String;'])
+  OK   proto shorty LL matches (Ljava/lang/String; <- ['Ljava/util/Date;'])
+  OK   proto shorty LL matches (Ljava/lang/String; <- ['Ljava/util/Locale;'])
+  OK   proto shorty LLLL matches (Ljava/lang/String; <- ['Ljava/util/Locale;', 'Ljava/lang/String;', '[Ljava/lang/Object;'])
+  OK   proto shorty LLIII matches (Ljava/lang/String; <- ['[B', 'I', 'I', 'I'])
+  OK   proto shorty LLIL matches (Ljava/lang/String; <- ['[B', 'I', 'Ljava/lang/String;'])
+  OK   proto shorty LC matches (Ljava/lang/StringBuilder; <- ['C'])
+  OK   proto shorty LI matches (Ljava/lang/StringBuilder; <- ['I'])
+  OK   proto shorty LJ matches (Ljava/lang/StringBuilder; <- ['J'])
+  OK   proto shorty LL matches (Ljava/lang/StringBuilder; <- ['Ljava/lang/Object;'])
+  OK   proto shorty LL matches (Ljava/lang/StringBuilder; <- ['Ljava/lang/String;'])
+  OK   proto shorty LZ matches (Ljava/lang/StringBuilder; <- ['Z'])
+  OK   proto shorty LL matches (Ljava/util/ArrayList; <- ['Ljava/lang/String;'])
+  OK   proto shorty L matches (Ljava/util/Calendar; <- [])
+  OK   proto shorty L matches (Ljava/util/Iterator; <- [])
+  OK   proto shorty L matches (Ljava/util/List; <- [])
+  OK   proto shorty LLI matches (Ljava/util/List; <- ['Landroid/content/Intent;', 'I'])
+  OK   proto shorty L matches (Ljava/util/UUID; <- [])
+  OK   proto shorty L matches (Ljava/util/concurrent/ExecutorService; <- [])
+  OK   proto shorty LI matches (Lorg/json/JSONArray; <- ['I'])
+  OK   proto shorty LL matches (Lorg/json/JSONArray; <- ['Landroid/content/Context;'])
+  OK   proto shorty LL matches (Lorg/json/JSONArray; <- ['Ljava/lang/Object;'])
+  OK   proto shorty LL matches (Lorg/json/JSONArray; <- ['Ljava/lang/String;'])
+  OK   proto shorty L matches (Lorg/json/JSONObject; <- [])
+  OK   proto shorty LI matches (Lorg/json/JSONObject; <- ['I'])
+  OK   proto shorty LL matches (Lorg/json/JSONObject; <- ['Landroid/content/Context;'])
+  OK   proto shorty LLIZ matches (Lorg/json/JSONObject; <- ['Landroid/content/Context;', 'I', 'Z'])
+  OK   proto shorty LLL matches (Lorg/json/JSONObject; <- ['Landroid/content/Context;', 'Landroid/net/Uri;'])
+  OK   proto shorty LL matches (Lorg/json/JSONObject; <- ['Ljava/io/File;'])
+  OK   proto shorty LL matches (Lorg/json/JSONObject; <- ['Ljava/lang/String;'])
+  OK   proto shorty LLI matches (Lorg/json/JSONObject; <- ['Ljava/lang/String;', 'I'])
+  OK   proto shorty LLJ matches (Lorg/json/JSONObject; <- ['Ljava/lang/String;', 'J'])
+  OK   proto shorty LLL matches (Lorg/json/JSONObject; <- ['Ljava/lang/String;', 'Ljava/lang/Object;'])
+  OK   proto shorty LLZ matches (Lorg/json/JSONObject; <- ['Ljava/lang/String;', 'Z'])
+  OK   proto shorty V matches (V <- [])
+  OK   proto shorty VF matches (V <- ['F'])
+  OK   proto shorty VFF matches (V <- ['F', 'F'])
+  OK   proto shorty VFFFF matches (V <- ['F', 'F', 'F', 'F'])
+  OK   proto shorty VI matches (V <- ['I'])
+  OK   proto shorty VII matches (V <- ['I', 'I'])
+  OK   proto shorty VIII matches (V <- ['I', 'I', 'I'])
+  OK   proto shorty VIIIII matches (V <- ['I', 'I', 'I', 'I', 'I'])
+  OK   proto shorty VIIIZ matches (V <- ['I', 'I', 'I', 'Z'])
+  OK   proto shorty VIIL matches (V <- ['I', 'I', 'Landroid/content/Intent;'])
+  OK   proto shorty VIIL matches (V <- ['I', 'I', 'Ljava/lang/String;'])
+  OK   proto shorty VIJL matches (V <- ['I', 'J', 'Landroid/app/PendingIntent;'])
+  OK   proto shorty VIL matches (V <- ['I', 'Landroid/app/Notification;'])
+  OK   proto shorty VIL matches (V <- ['I', 'Landroid/app/PendingIntent;'])
+  OK   proto shorty VIL matches (V <- ['I', 'Landroid/content/Intent;'])
+  OK   proto shorty VIL matches (V <- ['I', 'Landroid/os/Bundle;'])
+  OK   proto shorty VIL matches (V <- ['I', 'Ljava/lang/CharSequence;'])
+  OK   proto shorty VILL matches (V <- ['I', '[Ljava/lang/String;', '[I'])
+  OK   proto shorty VJ matches (V <- ['J'])
+  OK   proto shorty VJF matches (V <- ['J', 'F'])
+  OK   proto shorty VJFF matches (V <- ['J', 'F', 'F'])
+  OK   proto shorty VJFFFF matches (V <- ['J', 'F', 'F', 'F', 'F'])
+  OK   proto shorty VJL matches (V <- ['J', 'Landroid/app/PendingIntent;'])
+  OK   proto shorty VJL matches (V <- ['J', 'Ljava/lang/String;'])
+  OK   proto shorty VL matches (V <- ['Landroid/app/Activity;'])
+  OK   proto shorty VLL matches (V <- ['Landroid/app/AlarmManager$AlarmClockInfo;', 'Landroid/app/PendingIntent;'])
+  OK   proto shorty VL matches (V <- ['Landroid/app/NotificationChannel;'])
+  OK   proto shorty VLLLL matches (V <- ['Landroid/app/NotificationManager;', 'Ljava/lang/String;', 'Ljava/lang/String;', 'Ljava/lang/String;'])
+  OK   proto shorty VL matches (V <- ['Landroid/app/PendingIntent;'])
+  OK   proto shorty VL matches (V <- ['Landroid/app/Person;'])
+  OK   proto shorty VL matches (V <- ['Landroid/content/Context;'])
+  OK   proto shorty VLILZ matches (V <- ['Landroid/content/Context;', 'I', 'Lorg/json/JSONObject;', 'Z'])
+  OK   proto shorty VLIZ matches (V <- ['Landroid/content/Context;', 'I', 'Z'])
+  OK   proto shorty VLIZL matches (V <- ['Landroid/content/Context;', 'I', 'Z', 'Lorg/json/JSONObject;'])
+  OK   proto shorty VLL matches (V <- ['Landroid/content/Context;', 'Landroid/content/Intent;'])
+  OK   proto shorty VLL matches (V <- ['Landroid/content/Context;', 'Landroid/net/Uri;'])
+  OK   proto shorty VLL matches (V <- ['Landroid/content/Context;', 'Landroid/speech/tts/TextToSpeech$OnInitListener;'])
+  OK   proto shorty VLL matches (V <- ['Landroid/content/Context;', 'Ljava/io/File;'])
+  OK   proto shorty VLL matches (V <- ['Landroid/content/Context;', 'Ljava/lang/Class;'])
+  OK   proto shorty VLL matches (V <- ['Landroid/content/Context;', 'Ljava/lang/String;'])
+  OK   proto shorty VLLJ matches (V <- ['Landroid/content/Context;', 'Ljava/lang/String;', 'J'])
+  OK   proto shorty VLLL matches (V <- ['Landroid/content/Context;', 'Ljava/lang/String;', 'Ljava/lang/String;'])
+  OK   proto shorty VLLL matches (V <- ['Landroid/content/Context;', 'Ljava/lang/String;', 'Ljava/lang/Throwable;'])
+  OK   proto shorty VLL matches (V <- ['Landroid/content/Context;', 'Lorg/json/JSONObject;'])
+  OK   proto shorty VLZ matches (V <- ['Landroid/content/Context;', 'Z'])
+  OK   proto shorty VL matches (V <- ['Landroid/content/Intent;'])
+  OK   proto shorty VLI matches (V <- ['Landroid/content/Intent;', 'I'])
+  OK   proto shorty VL matches (V <- ['Landroid/content/pm/ShortcutInfo;'])
+  OK   proto shorty VLLL matches (V <- ['Landroid/content/res/AssetManager;', 'Ljava/lang/String;', 'Ljava/io/File;'])
+  OK   proto shorty VLLL matches (V <- ['Landroid/graphics/drawable/Icon;', 'Ljava/lang/CharSequence;', 'Landroid/app/PendingIntent;'])
+  OK   proto shorty VL matches (V <- ['Landroid/media/AudioAttributes;'])
+  OK   proto shorty VLLI matches (V <- ['Landroid/media/audiofx/Visualizer;', '[B', 'I'])
+  OK   proto shorty VL matches (V <- ['Landroid/net/Uri;'])
+  OK   proto shorty VLI matches (V <- ['Landroid/net/Uri;', 'I'])
+  OK   proto shorty VLL matches (V <- ['Landroid/net/Uri;', 'Landroid/media/AudioAttributes;'])
+  OK   proto shorty VL matches (V <- ['Landroid/os/Bundle;'])
+  OK   proto shorty VL matches (V <- ['Landroid/os/Looper;'])
+  OK   proto shorty VLL matches (V <- ['Landroid/os/VibrationEffect;', 'Landroid/media/AudioAttributes;'])
+  OK   proto shorty VL matches (V <- ['Landroid/speech/RecognitionListener;'])
+  OK   proto shorty VL matches (V <- ['Landroid/util/DisplayMetrics;'])
+  OK   proto shorty VL matches (V <- ['Landroid/view/SurfaceHolder$Callback;'])
+  OK   proto shorty VL matches (V <- ['Landroid/view/SurfaceHolder;'])
+  OK   proto shorty VLIII matches (V <- ['Landroid/view/SurfaceHolder;', 'I', 'I', 'I'])
+  OK   proto shorty VLLLL matches (V <- ['Landroid/view/SurfaceView;', 'Landroid/graphics/Bitmap;', 'Landroid/view/PixelCopy$OnPixelCopyFinishedListener;', 'Landroid/os/Handler;'])
+  OK   proto shorty VL matches (V <- ['Landroid/view/View$OnApplyWindowInsetsListener;'])
+  OK   proto shorty VL matches (V <- ['Landroid/view/View$OnLayoutChangeListener;'])
+  OK   proto shorty VL matches (V <- ['Landroid/view/View;'])
+  OK   proto shorty VLIIIIIIII matches (V <- ['Landroid/view/View;', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I'])
+  OK   proto shorty VLL matches (V <- ['Landroid/view/View;', 'Landroid/view/ViewGroup$LayoutParams;'])
+  OK   proto shorty VL matches (V <- ['Landroid/view/ViewGroup$LayoutParams;'])
+  OK   proto shorty VL matches (V <- ['Landroid/view/WindowManager$LayoutParams;'])
+  OK   proto shorty VL matches (V <- ['Landroid/webkit/PermissionRequest;'])
+  OK   proto shorty VL matches (V <- ['Landroid/webkit/WebChromeClient;'])
+  OK   proto shorty VL matches (V <- ['Landroid/webkit/WebViewClient;'])
+  OK   proto shorty VL matches (V <- ['Lcom/cloudweather/xiaoyu/AlarmService;'])
+  OK   proto shorty VL matches (V <- ['Lcom/cloudweather/xiaoyu/AmorBridge$WeOp;'])
+  OK   proto shorty VL matches (V <- ['Lcom/cloudweather/xiaoyu/AmorBridge;'])
+  OK   proto shorty VLF matches (V <- ['Lcom/cloudweather/xiaoyu/AmorBridge;', 'F'])
+  OK   proto shorty VLFFFF matches (V <- ['Lcom/cloudweather/xiaoyu/AmorBridge;', 'F', 'F', 'F', 'F'])
+  OK   proto shorty VLI matches (V <- ['Lcom/cloudweather/xiaoyu/AmorBridge;', 'I'])
+  OK   proto shorty VLIIL matches (V <- ['Lcom/cloudweather/xiaoyu/AmorBridge;', 'I', 'I', 'Ljava/lang/String;'])
+  OK   proto shorty VLL matches (V <- ['Lcom/cloudweather/xiaoyu/AmorBridge;', 'Lcom/cloudweather/xiaoyu/AmorBridge$WeOp;'])
+  OK   proto shorty VLLIF matches (V <- ['Lcom/cloudweather/xiaoyu/AmorBridge;', 'Ljava/io/File;', 'I', 'F'])
+  OK   proto shorty VLL matches (V <- ['Lcom/cloudweather/xiaoyu/AmorBridge;', 'Ljava/lang/Runnable;'])
+  OK   proto shorty VLL matches (V <- ['Lcom/cloudweather/xiaoyu/AmorBridge;', 'Ljava/lang/String;'])
+  OK   proto shorty VLLFL matches (V <- ['Lcom/cloudweather/xiaoyu/AmorBridge;', 'Ljava/lang/String;', 'F', 'Ljava/lang/String;'])
+  OK   proto shorty VLL matches (V <- ['Lcom/cloudweather/xiaoyu/AmorBridge;', 'Lorg/json/JSONObject;'])
+  OK   proto shorty VLZ matches (V <- ['Lcom/cloudweather/xiaoyu/AmorBridge;', 'Z'])
+  OK   proto shorty VLL matches (V <- ['Lcom/cloudweather/xiaoyu/MainActivity$4;', 'Ljava/lang/String;'])
+  OK   proto shorty VL matches (V <- ['Lcom/cloudweather/xiaoyu/MainActivity;'])
+  OK   proto shorty VLLL matches (V <- ['Lcom/cloudweather/xiaoyu/MainActivity;', 'Landroid/content/Context;', 'Landroid/net/Uri;'])
+  OK   proto shorty VLL matches (V <- ['Lcom/cloudweather/xiaoyu/MainActivity;', 'Landroid/view/SurfaceView;'])
+  OK   proto shorty VLL matches (V <- ['Lcom/cloudweather/xiaoyu/MainActivity;', 'Ljava/lang/String;'])
+  OK   proto shorty VLZ matches (V <- ['Lcom/cloudweather/xiaoyu/MainActivity;', 'Z'])
+  OK   proto shorty VL matches (V <- ['Lcom/cloudweather/xiaoyu/Mic$1;'])
+  OK   proto shorty VLL matches (V <- ['Lcom/cloudweather/xiaoyu/Mic$1;', 'Ljava/lang/String;'])
+  OK   proto shorty VLIL matches (V <- ['Lcom/cloudweather/xiaoyu/Mic;', 'I', 'Landroid/media/AudioRecord;'])
+  OK   proto shorty VLLLL matches (V <- ['Lcom/cloudweather/xiaoyu/Mic;', 'Ljava/lang/String;', 'Ljava/lang/String;', 'Ljava/lang/Object;'])
+  OK   proto shorty VL matches (V <- ['Lcom/cloudweather/xiaoyu/RingActivity$Bridge;'])
+  OK   proto shorty VL matches (V <- ['Lcom/cloudweather/xiaoyu/RingActivity;'])
+  OK   proto shorty VLL matches (V <- ['Lcom/cloudweather/xiaoyu/RingActivity;', 'Ljava/lang/String;'])
+  OK   proto shorty VL matches (V <- ['Lcom/cloudweather/xiaoyu/Voice$4;'])
+  OK   proto shorty VL matches (V <- ['Lcom/cloudweather/xiaoyu/Voice;'])
+  OK   proto shorty VLIL matches (V <- ['Lcom/cloudweather/xiaoyu/Voice;', 'I', 'Ljava/lang/String;'])
+  OK   proto shorty VLL matches (V <- ['Lcom/cloudweather/xiaoyu/Voice;', 'Landroid/speech/SpeechRecognizer;'])
+  OK   proto shorty VLLIL matches (V <- ['Lcom/cloudweather/xiaoyu/Voice;', 'Landroid/speech/SpeechRecognizer;', 'I', 'Ljava/lang/String;'])
+  OK   proto shorty VLLI matches (V <- ['Lcom/cloudweather/xiaoyu/Voice;', 'Ljava/lang/String;', 'I'])
+  OK   proto shorty VLLJ matches (V <- ['Lcom/cloudweather/xiaoyu/Voice;', 'Ljava/lang/String;', 'J'])
+  OK   proto shorty VLLL matches (V <- ['Lcom/cloudweather/xiaoyu/Voice;', 'Ljava/lang/String;', 'Ljava/lang/String;'])
+  OK   proto shorty VLLLL matches (V <- ['Lcom/cloudweather/xiaoyu/Voice;', 'Ljava/lang/String;', 'Ljava/lang/String;', 'Ljava/lang/Object;'])
+  OK   proto shorty VLL matches (V <- ['Lcom/cloudweather/xiaoyu/Voice;', 'Lorg/json/JSONObject;'])
+  OK   proto shorty VLL matches (V <- ['Lcom/cloudweather/xiaoyu/WeWall$2;', 'Ljava/lang/String;'])
+  OK   proto shorty VL matches (V <- ['Lcom/cloudweather/xiaoyu/WeWall;'])
+  OK   proto shorty VLLL matches (V <- ['Lcom/cloudweather/xiaoyu/WeWall;', 'Landroid/content/Context;', 'Ljava/io/File;'])
+  OK   proto shorty VLL matches (V <- ['Lcom/cloudweather/xiaoyu/WeWall;', 'Ljava/lang/String;'])
+  OK   proto shorty VLLL matches (V <- ['Lcom/cloudweather/xiaoyu/WeWall;', 'Ljava/lang/String;', 'Landroid/graphics/Bitmap;'])
+  OK   proto shorty VL matches (V <- ['Ljava/io/File;'])
+  OK   proto shorty VLL matches (V <- ['Ljava/io/File;', 'Ljava/lang/String;'])
+  OK   proto shorty VLLLJ matches (V <- ['Ljava/io/File;', 'Ljava/lang/String;', 'Ljava/lang/String;', 'J'])
+  OK   proto shorty VLL matches (V <- ['Ljava/io/InputStream;', 'Ljava/io/OutputStream;'])
+  OK   proto shorty VLJL matches (V <- ['Ljava/lang/CharSequence;', 'J', 'Landroid/app/Person;'])
+  OK   proto shorty VL matches (V <- ['Ljava/lang/Object;'])
+  OK   proto shorty VLILII matches (V <- ['Ljava/lang/Object;', 'I', 'Ljava/lang/Object;', 'I', 'I'])
+  OK   proto shorty VLL matches (V <- ['Ljava/lang/Object;', 'Ljava/lang/String;'])
+  OK   proto shorty VL matches (V <- ['Ljava/lang/Runnable;'])
+  OK   proto shorty VLL matches (V <- ['Ljava/lang/Runnable;', 'Ljava/lang/String;'])
+  OK   proto shorty VL matches (V <- ['Ljava/lang/String;'])
+  OK   proto shorty VLFL matches (V <- ['Ljava/lang/String;', 'F', 'Ljava/lang/String;'])
+  OK   proto shorty VLI matches (V <- ['Ljava/lang/String;', 'I'])
+  OK   proto shorty VLIF matches (V <- ['Ljava/lang/String;', 'I', 'F'])
+  OK   proto shorty VLJ matches (V <- ['Ljava/lang/String;', 'J'])
+  OK   proto shorty VLJJ matches (V <- ['Ljava/lang/String;', 'J', 'J'])
+  OK   proto shorty VLL matches (V <- ['Ljava/lang/String;', 'Landroid/net/Uri;'])
+  OK   proto shorty VLL matches (V <- ['Ljava/lang/String;', 'Landroid/os/Bundle;'])
+  OK   proto shorty VLL matches (V <- ['Ljava/lang/String;', 'Landroid/os/Parcelable;'])
+  OK   proto shorty VLL matches (V <- ['Ljava/lang/String;', 'Landroid/webkit/GeolocationPermissions$Callback;'])
+  OK   proto shorty VLL matches (V <- ['Ljava/lang/String;', 'Landroid/webkit/ValueCallback;'])
+  OK   proto shorty VLLI matches (V <- ['Ljava/lang/String;', 'Ljava/lang/CharSequence;', 'I'])
+  OK   proto shorty VLL matches (V <- ['Ljava/lang/String;', 'Ljava/lang/Integer;'])
+  OK   proto shorty VLL matches (V <- ['Ljava/lang/String;', 'Ljava/lang/String;'])
+  OK   proto shorty VLLL matches (V <- ['Ljava/lang/String;', 'Ljava/lang/String;', 'Ljava/lang/Object;'])
+  OK   proto shorty VLLLL matches (V <- ['Ljava/lang/String;', 'Ljava/lang/String;', 'Ljava/lang/String;', 'Ljava/lang/String;'])
+  OK   proto shorty VLL matches (V <- ['Ljava/lang/String;', 'Ljava/util/Locale;'])
+  OK   proto shorty VLZ matches (V <- ['Ljava/lang/String;', 'Z'])
+  OK   proto shorty VLZZ matches (V <- ['Ljava/lang/String;', 'Z', 'Z'])
+  OK   proto shorty VL matches (V <- ['Ljava/lang/Throwable;'])
+  OK   proto shorty VL matches (V <- ['Lorg/json/JSONObject;'])
+  OK   proto shorty VZ matches (V <- ['Z'])
+  OK   proto shorty VL matches (V <- ['[B'])
+  OK   proto shorty VLII matches (V <- ['[B', 'I', 'I'])
+  OK   proto shorty VLIIL matches (V <- ['[B', 'I', 'I', 'Ljava/lang/String;'])
+  OK   proto shorty VLIIL matches (V <- ['[B', 'I', 'I', 'Ljava/nio/charset/Charset;'])
+  OK   proto shorty VLL matches (V <- ['[B', 'Ljava/lang/String;'])
+  OK   proto shorty VLL matches (V <- ['[B', 'Ljava/nio/charset/Charset;'])
+  OK   proto shorty VLF matches (V <- ['[F', 'F'])
+  OK   proto shorty VL matches (V <- ['[Ljava/lang/String;'])
+  OK   proto shorty VLI matches (V <- ['[Ljava/lang/String;', 'I'])
+  OK   proto shorty Z matches (Z <- [])
+  OK   proto shorty ZC matches (Z <- ['C'])
+  OK   proto shorty ZI matches (Z <- ['I'])
+  OK   proto shorty ZII matches (Z <- ['I', 'I'])
+  OK   proto shorty ZJ matches (Z <- ['J'])
+  OK   proto shorty ZLLLLZ matches (Z <- ['Landroid/app/Activity;', 'Landroid/content/Context;', 'Ljava/lang/String;', 'Ljava/lang/String;', 'Z'])
+  OK   proto shorty ZL matches (Z <- ['Landroid/content/Context;'])
+  OK   proto shorty ZLLLLI matches (Z <- ['Landroid/content/Context;', 'Landroid/app/Notification$Builder;', 'Lorg/json/JSONObject;', 'Lorg/json/JSONObject;', 'I'])
+  OK   proto shorty ZLLLLLLLJ matches (Z <- ['Landroid/content/Context;', 'Landroid/app/Notification$Builder;', 'Lorg/json/JSONObject;', 'Lorg/json/JSONObject;', 'Landroid/graphics/Bitmap;', 'Ljava/lang/String;', 'Ljava/lang/String;', 'J'])
+  OK   proto shorty ZLL matches (Z <- ['Landroid/content/Context;', 'Landroid/content/Intent;'])
+  OK   proto shorty ZLL matches (Z <- ['Landroid/content/Context;', 'Ljava/lang/String;'])
+  OK   proto shorty ZLL matches (Z <- ['Landroid/content/Context;', 'Lorg/json/JSONObject;'])
+  OK   proto shorty ZL matches (Z <- ['Landroid/content/Intent;'])
+  OK   proto shorty ZLIL matches (Z <- ['Landroid/graphics/Bitmap$CompressFormat;', 'I', 'Ljava/io/OutputStream;'])
+  OK   proto shorty ZLLL matches (Z <- ['Landroid/webkit/WebView;', 'Landroid/webkit/ValueCallback;', 'Landroid/webkit/WebChromeClient$FileChooserParams;'])
+  OK   proto shorty ZL matches (Z <- ['Lcom/cloudweather/xiaoyu/MainActivity;'])
+  OK   proto shorty ZLZ matches (Z <- ['Lcom/cloudweather/xiaoyu/MainActivity;', 'Z'])
+  OK   proto shorty ZL matches (Z <- ['Lcom/cloudweather/xiaoyu/Mic;'])
+  OK   proto shorty ZL matches (Z <- ['Lcom/cloudweather/xiaoyu/Voice;'])
+  OK   proto shorty ZLZ matches (Z <- ['Lcom/cloudweather/xiaoyu/Voice;', 'Z'])
+  OK   proto shorty ZL matches (Z <- ['Lcom/cloudweather/xiaoyu/WeWall;'])
+  OK   proto shorty ZLZ matches (Z <- ['Lcom/cloudweather/xiaoyu/WeWall;', 'Z'])
+  OK   proto shorty ZL matches (Z <- ['Ljava/io/File;'])
+  OK   proto shorty ZLL matches (Z <- ['Ljava/io/File;', 'Ljava/lang/String;'])
+  OK   proto shorty ZLLLJ matches (Z <- ['Ljava/io/File;', 'Ljava/lang/String;', 'Ljava/lang/String;', 'J'])
+  OK   proto shorty ZLLZ matches (Z <- ['Ljava/io/File;', 'Ljava/lang/String;', 'Z'])
+  OK   proto shorty ZL matches (Z <- ['Ljava/lang/CharSequence;'])
+  OK   proto shorty ZL matches (Z <- ['Ljava/lang/Object;'])
+  OK   proto shorty ZL matches (Z <- ['Ljava/lang/Runnable;'])
+  OK   proto shorty ZLJ matches (Z <- ['Ljava/lang/Runnable;', 'J'])
+  OK   proto shorty ZL matches (Z <- ['Ljava/lang/String;'])
+  OK   proto shorty ZLI matches (Z <- ['Ljava/lang/String;', 'I'])
+  OK   proto shorty ZLIF matches (Z <- ['Ljava/lang/String;', 'I', 'F'])
+  OK   proto shorty ZLL matches (Z <- ['Ljava/lang/String;', 'Ljava/lang/String;'])
+  OK   proto shorty ZLLL matches (Z <- ['Ljava/lang/String;', 'Ljava/lang/String;', 'Ljava/lang/String;'])
+  OK   proto shorty ZLZ matches (Z <- ['Ljava/lang/String;', 'Z'])
+  OK   proto shorty ZZ matches (Z <- ['Z'])
+  OK   proto shorty L matches ([B <- [])
+  OK   proto shorty LL matches ([B <- ['Ljava/lang/String;'])
+  OK   proto shorty LLI matches ([B <- ['Ljava/lang/String;', 'I'])
+  OK   proto shorty LL matches ([B <- ['Ljava/nio/charset/Charset;'])
+  OK   proto shorty L matches ([I <- [])
+  OK   proto shorty L matches ([Landroid/service/notification/StatusBarNotification; <- [])
+  OK   proto shorty L matches ([Ljava/io/File; <- [])
+  OK   proto shorty L matches ([Ljava/lang/StackTraceElement; <- [])
+  OK   proto shorty L matches ([Ljava/lang/String; <- [])
+  OK   proto shorty LL matches ([Ljava/lang/String; <- ['Ljava/lang/String;'])
+  OK   protos sorted
+  OK   1047 methods sorted
+    class Lcom/cloudweather/xiaoyu/AlarmService$1; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AlarmService$2; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AlarmService; extends Landroid/app/Service;
+    class Lcom/cloudweather/xiaoyu/Alarms; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$WeOp; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$10; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$11; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$12; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$13; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$14; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$15; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$16; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$17; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$18; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$19; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$1; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$20; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$21; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$22; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$2; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$3; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$4; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$5; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$6; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$7; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$8; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge$9; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorBridge; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorFiles; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/AmorReceiver; extends Landroid/content/BroadcastReceiver;
+    class Lcom/cloudweather/xiaoyu/KeepService; extends Landroid/app/Service;
+    class Lcom/cloudweather/xiaoyu/Kv$1; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/Kv; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/MainActivity$1; extends Landroid/webkit/WebChromeClient;
+    class Lcom/cloudweather/xiaoyu/MainActivity$2; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/MainActivity$3; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/MainActivity$4$1; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/MainActivity$4; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/MainActivity; extends Landroid/app/Activity;
+    class Lcom/cloudweather/xiaoyu/Mic$1$1; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/Mic$1$2; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/Mic$1; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/Mic; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/Notif$1; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/Notif; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/R$color; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/R$drawable; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/R$id; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/R$layout; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/R$mipmap; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/R; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/RingActivity$Bridge$1; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/RingActivity$Bridge$2; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/RingActivity$Bridge$3; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/RingActivity$Bridge; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/RingActivity; extends Landroid/app/Activity;
+    class Lcom/cloudweather/xiaoyu/Scheduler; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/Store; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/Viz; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/Voice$1; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/Voice$2; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/Voice$3; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/Voice$4$1; extends Landroid/speech/tts/UtteranceProgressListener;
+    class Lcom/cloudweather/xiaoyu/Voice$4; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/Voice$5; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/Voice; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/WallPackage$Entry; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/WallPackage; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/Walls; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/WeNative; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/WeWall$1; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/WeWall$2$1; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/WeWall$2; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/WeWall$3; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/WeWall$4; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/WeWall$5; extends Ljava/lang/Object;
+    class Lcom/cloudweather/xiaoyu/WeWall; extends Ljava/lang/Object;
+  OK   MainActivity present
+  OK   AmorReceiver present
+MANIFEST
+  OK   xml chunk header
+    <manifest android:versionCode="88"[0x101021b] android:versionName="5.18.1"[0x101021c] android:compileSdkVersion="36"[0x1010572] android:compileSdkVersionCodename="16"[0x1010573] package="com.cloudweather.xiaoyu"[-] platformBuildVersionCode="36"[-] platformBuildVersionName="16"[-]>
+      <uses-sdk android:minSdkVersion="26"[0x101020c] android:targetSdkVersion="29"[0x1010270]>
+      <uses-permission android:name="android.permission.INTERNET"[0x1010003]>
+      <uses-permission android:name="android.permission.POST_NOTIFICATIONS"[0x1010003]>
+      <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"[0x1010003]>
+      <uses-permission android:name="android.permission.VIBRATE"[0x1010003]>
+      <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"[0x1010003]>
+      <uses-permission android:name="android.permission.FOREGROUND_SERVICE"[0x1010003]>
+      <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"[0x1010003]>
+      <uses-permission android:name="android.permission.WAKE_LOCK"[0x1010003]>
+      <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"[0x1010003]>
+      <uses-permission android:name="android.permission.RECORD_AUDIO"[0x1010003]>
+      <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"[0x1010003]>
+      <application android:label="云朵天气"[0x1010001] android:icon="0x7f050000"[0x1010002] android:debuggable="true"[0x101000f] android:allowBackup="true"[0x1010280] android:extractNativeLibs="true"[0x10104ea]>
+        <activity android:label="云朵天气"[0x1010001] android:name=".MainActivity"[0x1010003] android:exported="true"[0x1010010] android:launchMode="2"[0x101001d] android:configChanges="0xda0"[0x101001f]>
+          <intent-filter >
+            <action android:name="android.intent.action.MAIN"[0x1010003]>
+            <category android:name="android.intent.category.LAUNCHER"[0x1010003]>
+          <intent-filter >
+            <action android:name="android.intent.action.VIEW"[0x1010003]>
+            <category android:name="android.intent.category.DEFAULT"[0x1010003]>
+            <category android:name="android.intent.category.BROWSABLE"[0x1010003]>
+            <data android:scheme="com.cloudweather.xiaoyu"[0x1010027] android:host="oauth"[0x1010028]>
+          <intent-filter >
+            <action android:name="android.intent.action.VIEW"[0x1010003]>
+            <category android:name="android.intent.category.DEFAULT"[0x1010003]>
+            <category android:name="android.intent.category.BROWSABLE"[0x1010003]>
+            <data android:mimeType="application/octet-stream"[0x1010026] android:scheme="content"[0x1010027]>
+            <data android:mimeType="application/octet-stream"[0x1010026] android:scheme="file"[0x1010027]>
+          <intent-filter >
+            <action android:name="android.intent.action.VIEW"[0x1010003]>
+            <category android:name="android.intent.category.DEFAULT"[0x1010003]>
+            <data android:mimeType="application/x-mpkg"[0x1010026] android:scheme="content"[0x1010027]>
+          <intent-filter >
+            <action android:name="android.intent.action.SEND"[0x1010003]>
+            <category android:name="android.intent.category.DEFAULT"[0x1010003]>
+            <data android:mimeType="application/octet-stream"[0x1010026]>
+        <service android:name=".KeepService"[0x1010003] android:exported="false"[0x1010010]>
+        <service android:name=".AlarmService"[0x1010003] android:exported="false"[0x1010010]>
+        <activity android:name=".RingActivity"[0x1010003] android:exported="false"[0x1010010] android:taskAffinity="com.cloudweather.xiaoyu.ring"[0x1010012] android:excludeFromRecents="true"[0x1010017] android:launchMode="3"[0x101001d] android:configChanges="0xda0"[0x101001f] android:showWhenLocked="true"[0x1010569] android:turnScreenOn="true"[0x101056a]>
+        <receiver android:name=".AmorReceiver"[0x1010003] android:exported="true"[0x1010010]>
+          <intent-filter >
+            <action android:name="android.intent.action.BOOT_COMPLETED"[0x1010003]>
+            <action android:name="android.intent.action.MY_PACKAGE_REPLACED"[0x1010003]>
+            <action android:name="android.intent.action.TIME_SET"[0x1010003]>
+            <action android:name="android.intent.action.TIMEZONE_CHANGED"[0x1010003]>
+            <action android:name="android.intent.action.QUICKBOOT_POWERON"[0x1010003]>
+  OK   elements balanced
+RESOURCES
+  OK   table header
+  OK   package com.cloudweather.xiaoyu id 0x7f
+  OK       0x7f020000 drawable/nt_bar -> res/drawable/nt_bar.xml exists
+  OK       0x7f020001 drawable/nt_icon -> res/drawable/nt_icon.xml exists
+  OK       0x7f020002 drawable/nt_pill_fill -> res/drawable/nt_pill_fill.xml exists
+  OK       0x7f020003 drawable/nt_pill_line -> res/drawable/nt_pill_line.xml exists
+  OK       0x7f020004 drawable/nt_ring -> res/drawable/nt_ring.xml exists
+  OK       0x7f040000 layout/nt_big -> res/layout/nt_big.xml exists
+  OK       0x7f040001 layout/nt_small -> res/layout/nt_small.xml exists
+  OK       0x7f050000 mipmap/ic_launcher -> res/mipmap-xxxhdpi-v4/ic_launcher.png exists
+  OK   30 resource entries
+ALL CHECKS PASSED

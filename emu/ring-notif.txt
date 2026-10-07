@@ -1,0 +1,6 @@
+  Notification List:
+    NotificationRecord(0x0b4a1595: pkg=com.cloudweather.xiaoyu user=UserHandle{0} id=8 tag=null importance=4 key=0|com.cloudweather.xiaoyu|8|null|10192: Notification(channel=alarm shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0xe2 color=0xffa0505d category=alarm actions=2 vis=PUBLIC))
+      uid=10192 userId=0
+      opPkg=com.cloudweather.xiaoyu
+      icon=Icon(typ=RESOURCE pkg=com.cloudweather.xiaoyu id=0x7f020001)
+      flags=0xe2

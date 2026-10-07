@@ -1,0 +1,200 @@
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s1638 = 2.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s1639 = 1.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s163a = 2.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s163b = 1.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = mix((((s1635 * webgl_2f27714d501639e9) * webgl_c3656765f0d2fe50) + ((webgl_2f27714d501639e9 * webgl_2f27714d501639e9) * (s1636 - (s1637 * webgl_c3656765f0d2fe50)))), ((sqrt(webgl_2f27714d501639e9) * ((s1638 * webgl_c3656765f0d2fe50) - s1639)) + ((s163a * webgl_2f27714d501639e9) * (s163b - webgl_c3656765f0d2fe50))), step(0.5, webgl_c3656765f0d2fe50)));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     else
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     if ((webgl_6eb4903d91c7f71e == 11))
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s163c = 2.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s163d = 1.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s163e = 2.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s163f = 1.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s1640 = 1.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = mix(((s163c * webgl_2f27714d501639e9) * webgl_c3656765f0d2fe50), (s163d - ((s163e * (s163f - webgl_2f27714d501639e9)) * (s1640 - webgl_c3656765f0d2fe50))), step(0.5, webgl_c3656765f0d2fe50)));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     else
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     if ((webgl_6eb4903d91c7f71e == 12))
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s1641 = 2.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s1642 = 2.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s1643 = 0.5;
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = mix(webgl_ca9cde6b34212e2c(webgl_2f27714d501639e9, (s1641 * webgl_c3656765f0d2fe50)), webgl_4e4221d71ac57d1d(webgl_2f27714d501639e9, (s1642 * (webgl_c3656765f0d2fe50 - s1643))), step(0.5, webgl_c3656765f0d2fe50)));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     else
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     if ((webgl_6eb4903d91c7f71e == 13))
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s1644 = 2.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s1645 = 1.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = clamp(((webgl_2f27714d501639e9 + (s1644 * webgl_c3656765f0d2fe50)) - s1645), 0.0, 1.0));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     else
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     if ((webgl_6eb4903d91c7f71e == 14))
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s1646 = 2.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s1647 = 2.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s1648 = 0.5;
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = mix(min(webgl_2f27714d501639e9, (s1646 * webgl_c3656765f0d2fe50)), max(webgl_2f27714d501639e9, (s1647 * (webgl_c3656765f0d2fe50 - s1648))), step(0.5, webgl_c3656765f0d2fe50)));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     else
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     if ((webgl_6eb4903d91c7f71e == 15))
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = step(1.0, (webgl_2f27714d501639e9 + webgl_c3656765f0d2fe50)));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     else
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     if ((webgl_6eb4903d91c7f71e == 16))
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = abs((webgl_2f27714d501639e9 - webgl_c3656765f0d2fe50)));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     else
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     if ((webgl_6eb4903d91c7f71e == 17))
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s1649 = 2.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = ((webgl_2f27714d501639e9 + webgl_c3656765f0d2fe50) - ((s1649 * webgl_2f27714d501639e9) * webgl_c3656765f0d2fe50)));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     else
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     if ((webgl_6eb4903d91c7f71e == 18))
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = max((webgl_2f27714d501639e9 - webgl_c3656765f0d2fe50), 0.0));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     else
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     if ((webgl_6eb4903d91c7f71e == 19))
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s164a = 1.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = mix(min(((webgl_2f27714d501639e9 * webgl_2f27714d501639e9) / max((s164a - webgl_c3656765f0d2fe50), 9.9999997e-05)), 1.0), vec3(1.0, 1.0, 1.0), step(vec3(0.99989998, 0.99989998, 0.99989998), webgl_c3656765f0d2fe50)));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     else
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     if ((webgl_6eb4903d91c7f71e == 20))
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s164b = 1.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = mix(min(((webgl_c3656765f0d2fe50 * webgl_c3656765f0d2fe50) / max((s164b - webgl_2f27714d501639e9), 9.9999997e-05)), 1.0), vec3(1.0, 1.0, 1.0), step(vec3(0.99989998, 0.99989998, 0.99989998), webgl_2f27714d501639e9)));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     else
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     if ((webgl_6eb4903d91c7f71e == 21))
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s164c = 1.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = ((min(webgl_2f27714d501639e9, webgl_c3656765f0d2fe50) - max(webgl_2f27714d501639e9, webgl_c3656765f0d2fe50)) + s164c));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     else
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     if ((webgl_6eb4903d91c7f71e == 22))
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s164d = 0.5;
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = ((webgl_2f27714d501639e9 + webgl_c3656765f0d2fe50) * s164d));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     else
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     if ((webgl_6eb4903d91c7f71e == 23))
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s164e = 1.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s164f = 1.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = (s164e - abs(((s164f - webgl_2f27714d501639e9) - webgl_c3656765f0d2fe50))));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     else
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     if (((webgl_6eb4903d91c7f71e == 24) || (webgl_6eb4903d91c7f71e == 26)))
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = webgl_93838d8f96ada637(webgl_c3656765f0d2fe50, webgl_8b0a90d7d6f0c74(webgl_2f27714d501639e9)));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     else
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     if ((webgl_6eb4903d91c7f71e == 25))
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     const highp float s1650 = 2.0;
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = mix(vec3(webgl_8b0a90d7d6f0c74(webgl_2f27714d501639e9)), webgl_2f27714d501639e9, clamp((length((webgl_c3656765f0d2fe50 - vec3(webgl_8b0a90d7d6f0c74(webgl_c3656765f0d2fe50)))) * s1650), 0.0, 1.0)));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     else
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     if ((webgl_6eb4903d91c7f71e == 27))
+10-07 14:01:29.081  6287  6353 E chromium:                     {
+10-07 14:01:29.081  6287  6353 E chromium:                     (webgl_8f212d831e847c86 = webgl_93838d8f96ada637(webgl_2f27714d501639e9, webgl_8b0a90d7d6f0c74(webgl_c3656765f0d2fe50)));
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                     }
+10-07 14:01:29.081  6287  6353 E chromium:                   }
+10-07 14:01:29.081  6287  6353 E chromium:                 }
+10-07 14:01:29.081  6287  6353 E chromium:               }
+10-07 14:01:29.081  6287  6353 E chromium:             }
+10-07 14:01:29.081  6287  6353 E chromium:           }
+10-07 14:01:29.081  6287  6353 E chromium:         }
+10-07 14:01:29.081  6287  6353 E chromium:       }
+10-07 14:01:29.081  6287  6353 E chromium:     }
+10-07 14:01:29.081  6287  6353 E chromium:   }
+10-07 14:01:29.081  6287  6353 E chromium:   return mix(webgl_2f27714d501639e9, webgl_8f212d831e847c86, webgl_1b762d38f3915415);
+10-07 14:01:29.081  6287  6353 E chromium: }
+10-07 14:01:29.081  6287  6353 E chromium: uniform highp vec4 webgl_f34eac66cdeb495f;
+10-07 14:01:29.081  6287  6353 E chromium: highp vec4 webgl_97484c339e56b9fc(in highp vec2 webgl_758cdc8b0df6c2a9){
+10-07 14:01:29.081  6287  6353 E chromium:   return texture2D(webgl_808d1ee17e70a4e0, ((webgl_758cdc8b0df6c2a9 - webgl_f34eac66cdeb495f.xy) / webgl_f34eac66cdeb495f.zw));
+10-07 14:01:29.081  6287  6353 E chromium: }
+10-07 14:01:29.081  6287  6353 E chromium: uniform highp vec4 webgl_cf4c7c53c3255dbe;
+10-07 14:01:29.081  6287  6353 E chromium: highp vec4 webgl_2ce32b92322f195b(in highp vec2 webgl_758cdc8b0df6c2a9){
+10-07 14:01:29.081  6287  6353 E chromium:   return texture2D(webgl_99e2b3a01467f325, ((webgl_758cdc8b0df6c2a9 - webgl_cf4c7c53c3255dbe.xy) / webgl_cf4c7c53c3255dbe.zw));
+10-07 14:01:29.081  6287  6353 E chromium: }
+10-07 14:01:29.081  6287  6353 E chromium: uniform highp vec4 webgl_231a395629e4cd23;
+10-07 14:01:29.081  6287  6353 E chromium: highp vec4 webgl_1a8cd183d99c71(in highp vec2 webgl_758cdc8b0df6c2a9){
+10-07 14:01:29.082  6287  6353 E chromium:   return texture2D(webgl_5e0decf9e4360ab, ((webgl_758cdc8b0df6c2a9 - webgl_231a395629e4cd23.xy) / webgl_231a395629e4cd23.zw));
+10-07 14:01:29.082  6287  6353 E chromium: }
+10-07 14:01:29.082  6287  6353 E chromium: uniform highp float webgl_f38b48b442b5fd12;
+10-07 14:01:29.082  6287  6353 E chromium: uniform highp float webgl_955b4e2ba6c56ab1;
+10-07 14:01:29.082  6287  6353 E chromium: uniform highp float webgl_c8f30cd95096c4a1;
+10-07 14:01:29.082  6287  6353 E chromium: uniform highp float webgl_f19b2f42e86ac605;
+10-07 14:01:29.082  6287  6353 E chromium: uniform highp vec2 webgl_952f5f610b248591;
+10-07 14:01:29.082  6287  6353 E chromium: uniform highp float webgl_84a0ef9abda24d55;
+10-07 14:01:29.082  6287  6353 E chromium: uniform highp float webgl_33efae47a3b6d54a;
+10-07 14:01:29.082  6287  6353 E chromium: uniform highp float webgl_2176d6d3c5b7f6d7;
+10-07 14:01:29.082  6287  6353 E chromium: uniform highp vec3 webgl_301d37ab234ce2af;
+10-07 14:01:29.082  6287  6353 E chromium: uniform highp vec3 webgl_e1c80e6604aed116;
+10-07 14:01:29.082  6287  6353 E chromium: void main(){
+10-07 14:01:29.082  6287  6353 E chromium:   (gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0));
+10-07 14:01:29.082  6287  6353 E chromium:   highp vec4 webgl_c8ee472ca9a8507d = webgl_97484c339e56b9fc(webgl_fc42ec7af5547c0c.xy);
+10-07 14:01:29.082  6287  6353 E chromium:   highp vec4 webgl_107f819175e08d1f = webgl_c8ee472ca9a8507d;
+10-07 14:01:29.082  6287  6353 E chromium:   highp float webgl_a618051d6852256f = 0.0;
+10-07 14:01:29.082  6287  6353 E chromium:   const highp float s1651 = 0.5;
+10-07 14:01:29.082  6287  6353 E chromium:   const highp float s1652 = 0.5;
+10-07 14:01:29.082  6287  6353 E chromium:   (webgl_a618051d6852256f = (smoothstep(webgl_952f5f610b248591.x, webgl_952f5f610b248591.y, ((sin(((webgl_f38b48b442b5fd12 * webgl_955b4e2ba6c56ab1) + webgl_c8f30cd95096c4a1)) * s1651) + s1652)) * webgl_f19b2f42e86ac605));
+10-07 14:01:29.082  6287  6353 E chromium:   const highp float s1653 = 0.083333328;
+10-07 14:01:29.082  6287  6353 E chromium:   const highp float s1654 = 0.027777771;
+10-07 14:01:29.082  6287  6353 E chromium:   highp float webgl_3fa1431d3f134338 = (webgl_2ce32b92322f195b((vec2((webgl_f38b48b442b5fd12 * s1653), (webgl_f38b48b442b5fd12 * s1654)) * webgl_84a0ef9abda24d55)).x * webgl_33efae47a3b6d54a);
+10-07 14:01:29.082  6287  6353 E chromium:   (webgl_a618051d6852256f += webgl_3fa1431d3f134338);
+10-07 14:01:29.082  6287  6353 E chromium:   (webgl_a618051d6852256f = pow(webgl_a618051d6852256f, webgl_2176d6d3c5b7f6d7));
+10-07 14:01:29.082  6287  6353 E chromium:   (webgl_107f819175e08d1f.xyz = webgl_e2488963f51dab23(9, (webgl_107f819175e08d1f.xyz * webgl_301d37ab234ce2af), (webgl_107f819175e08d1f.xyz * webgl_e1c80e6604aed116), webgl_a618051d6852256f));
+10-07 14:01:29.082  6287  6353 E chromium:   highp float webgl_65346d926a273b23 = webgl_1a8cd183d99c71(webgl_fc42ec7af5547c0c.zw).x;
+10-07 14:01:29.082  6287  6353 E chromium:   (webgl_107f819175e08d1f = mix(webgl_c8ee472ca9a8507d, webgl_107f819175e08d1f, webgl_65346d926a273b23));
+10-07 14:01:29.082  6287  6353 E chromium:   (gl_FragColor = vec4(max(vec3(0.0, 0.0, 0.0), webgl_107f819175e08d1f.xyz), webgl_107f819175e08d1f.w));
+10-07 14:01:29.082  6287  6353 E chromium: }
+10-07 14:01:29.082  6287  6353 E chromium: 
+10-07 14:01:29.082  6287  6353 E chromium: --info-log--
+10-07 14:01:29.082  6287  6353 E chromium: ERROR: 0:205: '-' : memory exhausted 
+10-07 14:01:29.082  6287  6353 E chromium: 
+10-07 14:01:29.334  6287  6287 I WeWall  : surface size 320x640 (window 320x640)
+10-07 14:01:29.764  6287  6287 I WeWall  : create 320x640 h=123446984101296 web=320
+10-07 14:01:48.979  6287  6287 I WeWall  : ready 3840,2160| visible=true paused=false
+10-07 14:01:48.985  6287  6287 I chromium: [INFO:CONSOLE(5368)] "[we] state ready 3840,2160|", source: file:///android_asset/index.html (5368)
+10-07 14:01:48.991  6287  6287 I chromium: [INFO:CONSOLE(5332)] "[we] view 1380.00,0.00,1080.00,2160.00 S=3840x2160 canvas=320x640", source: file:///android_asset/index.html (5332)
+10-07 14:01:48.995  6287  6287 I WeWall  : paused=true

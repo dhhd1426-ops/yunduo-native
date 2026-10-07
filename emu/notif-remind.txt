@@ -1,0 +1,4 @@
+    NotificationRecord(0x02e227b9: pkg=com.cloudweather.xiaoyu user=UserHandle{0} id=71234 tag=null importance=4 key=0|com.cloudweather.xiaoyu|71234|null|10192: Notification(channel=amor shortcut=amor contentView=null vibrate=null sound=null defaults=0x0 flags=0x10 color=0xffa0505d category=msg actions=3 vis=PUBLIC))
+      uid=10192 userId=0
+      opPkg=com.cloudweather.xiaoyu
+      icon=Icon(typ=BITMAP size=48x48)

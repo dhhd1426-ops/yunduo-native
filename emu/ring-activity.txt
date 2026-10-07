@@ -1,0 +1,8 @@
+    mLastPausedActivity: ActivityRecord{d2499bf u0 com.cloudweather.xiaoyu/.RingActivity t10}
+    topResumedActivity=ActivityRecord{d2499bf u0 com.cloudweather.xiaoyu/.RingActivity t10}
+    * Hist  #0: ActivityRecord{d2499bf u0 com.cloudweather.xiaoyu/.RingActivity t10}
+      Intent { flg=0x10840000 cmp=com.cloudweather.xiaoyu/.RingActivity }
+      mActivityComponent=com.cloudweather.xiaoyu/.RingActivity
+      windows=[Window{a68579a u0 com.cloudweather.xiaoyu/com.cloudweather.xiaoyu.RingActivity}]
+    Resumed: ActivityRecord{d2499bf u0 com.cloudweather.xiaoyu/.RingActivity t10}
+  ResumedActivity: ActivityRecord{d2499bf u0 com.cloudweather.xiaoyu/.RingActivity t10}

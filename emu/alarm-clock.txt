@@ -1,0 +1,78 @@
+Current Alarm Manager state:
+  Next non-wakeup alarm: +2s920ms = 204455 = 2026-10-07 14:00:39.174
+  Next wakeup alarm: +12s213ms = 213748 = 2026-10-07 14:00:48.467
+  Next kernel non-wakeup alarm: +2s919ms
+  Next kernel wakeup alarm: +12s212ms
+  App ids requesting SCHEDULE_EXACT_ALARM: {2000, 10118, 10119, 10126, 10130, 10132, 10152, 10192}
+  Last OP_SCHEDULE_EXACT_ALARM: [2000:default, u0a118:default, u0a119:allow, u0a126:default, u0a130:default, u0a132:default, u0a152:default]
+  Next alarm clock information: 
+    RTC #1: Alarm{4bf8bf1 type 1 origWhen 1791338580000 whenElapsed 204455 com.android.systemui}
+      tag=*alarm*:lock_screen_next_alarm
+    RTC #2: Alarm{11d7657 type 1 origWhen 1791338580000 whenElapsed 204457 com.android.systemui}
+      tag=*alarm*:lock_screen_next_alarm
+    ELAPSED #3: Alarm{32ff62d type 3 origWhen 210023 whenElapsed 210023 com.google.android.gms}
+      tag=*alarm*:com.google.android.gms.common.operation.LOG_CORE_ANALYTICS
+    ELAPSED_WAKEUP #4: Alarm{4af41b0 type 2 origWhen 213748 whenElapsed 213748 com.google.android.gms}
+      tag=*walarm*:com.google.android.intent.action.GCM_RECONNECT
+    ELAPSED #5: Alarm{e1ad94f type 3 origWhen 216621 whenElapsed 216621 com.google.android.gms}
+      tag=*alarm*:com.google.android.gms.vision.DEPENDENCY
+    ELAPSED #6: Alarm{328d0ba type 3 origWhen 225281 whenElapsed 225281 android}
+      tag=*alarm*:TIME_TICK
+      listener=com.android.server.alarm.AlarmManagerService$3@64cbe7d
+    ELAPSED #7: Alarm{1d5bb6b type 3 origWhen 249082 whenElapsed 249082 com.google.android.gms}
+      tag=*alarm*:com.google.android.gms.gcm.ACTION_CHECK_QUEUE
+    ELAPSED #8: Alarm{6fa5361 type 3 origWhen 261942 whenElapsed 261942 android}
+      tag=*alarm*:*job.delay*
+    ELAPSED_WAKEUP #9: Alarm{c033e86 type 2 origWhen 289101 whenElapsed 289101 android}
+      tag=*walarm*:*job.deadline*
+    ELAPSED #10: Alarm{c12a347 type 3 origWhen 300000 whenElapsed 300000 com.google.android.gms}
+      tag=*alarm*:com.google.android.gms.platformconfigurator.POST_BOOT
+    RTC_WAKEUP #11: Alarm{9c4bd12 type 0 origWhen 1791381780000 whenElapsed 345281 com.cloudweather.xiaoyu}
+      tag=*walarm*:com.cloudweather.xiaoyu.ALARM
+      Alarm clock:
+    ELAPSED #12: Alarm{f1ca0a5 type 3 origWhen 360316 whenElapsed 360316 com.google.android.gms}
+      tag=*alarm*:com.google.android.gms.icing.proxy.ACTION_MAYBE_UPDATE_CONTACTS
+    RTC #13: Alarm{50ab43f type 1 origWhen 1791381924768 whenElapsed 490049 com.cloudweather.xiaoyu}
+      tag=*alarm*:com.cloudweather.xiaoyu.EYE
+    ELAPSED_WAKEUP #14: Alarm{c5b7007 type 2 origWhen 631236 whenElapsed 631236 android}
+      tag=*walarm*:DeviceIdleController.motion
+    ELAPSED_WAKEUP #15: Alarm{38bea55 type 2 origWhen 652195 whenElapsed 652195 com.google.android.gms}
+      tag=*walarm*:com.google.android.gms.gcm.HEARTBEAT_ALARM
+      whenElapsed=+1m38s465ms maxWhenElapsed=+3m27s262ms
+      operation=PendingIntent{1995774: PendingIntentRecord{ea7c49d com.google.android.gms/com.google.android.gms.platformconfigurator startService}}
+    RTC_WAKEUP #11: Alarm{9c4bd12 type 0 origWhen 1791381780000 whenElapsed 345281 com.cloudweather.xiaoyu}
+      tag=*walarm*:com.cloudweather.xiaoyu.ALARM
+      type=RTC_WAKEUP origWhen=2026-10-07 14:03:00.000 window=0 exactAllowReason=compat repeatInterval=0 count=0 flags=0x3
+      policyWhenElapsed: requester=+2m23s746ms app_standby=-2s93ms device_idle=-- battery_saver=-- tare=-2s93ms
+      whenElapsed=+2m23s746ms maxWhenElapsed=+2m23s746ms
+      Alarm clock:
+        triggerTime=2026-10-07 14:03:00.000
+        showIntent=PendingIntent{84c2ce3: PendingIntentRecord{8ae76e0 com.cloudweather.xiaoyu startActivity}}
+      operation=PendingIntent{bc10d99: PendingIntentRecord{ad985e com.cloudweather.xiaoyu broadcastIntent}}
+      idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=false, android:broadcast.temporaryAppAllowlistReasonCode=302, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=0, android:broadcast.flags=8}]
+--
+      whenElapsed=+16h48m51s639ms maxWhenElapsed=+17h48m51s639ms
+      operation=PendingIntent{894d7ca: PendingIntentRecord{b6e822e com.google.android.gms/com.google.android.gms.location_base broadcastIntent}}
+    RTC_WAKEUP #39: Alarm{15b9d3b type 0 origWhen 1791444600000 whenElapsed 63165281 com.cloudweather.xiaoyu}
+      tag=*walarm*:com.cloudweather.xiaoyu.ALARM
+      type=RTC_WAKEUP origWhen=2026-10-08 07:30:00.000 window=0 exactAllowReason=compat repeatInterval=0 count=0 flags=0x3
+      policyWhenElapsed: requester=+17h29m23s746ms app_standby=-2s89ms device_idle=-- battery_saver=-- tare=-2s89ms
+      whenElapsed=+17h29m23s746ms maxWhenElapsed=+17h29m23s746ms
+      Alarm clock:
+        triggerTime=2026-10-08 07:30:00.000
+        showIntent=PendingIntent{48c1c58: PendingIntentRecord{8ae76e0 com.cloudweather.xiaoyu startActivity}}
+      operation=PendingIntent{45b11b1: PendingIntentRecord{a10a696 com.cloudweather.xiaoyu broadcastIntent}}
+      idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=false, android:broadcast.temporaryAppAllowlistReasonCode=302, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=0, android:broadcast.flags=8}]
+--
+  Temporary Quota Reserves:
+  
+  Next wake from idle: Alarm{9c4bd12 type 0 origWhen 1791381780000 whenElapsed 345281 com.cloudweather.xiaoyu}
+    tag=*walarm*:com.cloudweather.xiaoyu.ALARM
+    type=RTC_WAKEUP origWhen=2026-10-07 14:03:00.000 window=0 exactAllowReason=compat repeatInterval=0 count=0 flags=0x3
+    policyWhenElapsed: requester=+2m23s746ms app_standby=-2s93ms device_idle=-- battery_saver=-- tare=-2s93ms
+    whenElapsed=+2m23s746ms maxWhenElapsed=+2m23s746ms
+    Alarm clock:
+      triggerTime=2026-10-07 14:03:00.000
+      showIntent=PendingIntent{84c2ce3: PendingIntentRecord{8ae76e0 com.cloudweather.xiaoyu startActivity}}
+    operation=PendingIntent{bc10d99: PendingIntentRecord{ad985e com.cloudweather.xiaoyu broadcastIntent}}
+    idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=false, android:broadcast.temporaryAppAllowlistReasonCode=302, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=0, android:broadcast.flags=8}]

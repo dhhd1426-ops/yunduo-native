@@ -1,0 +1,5 @@
+dex: /home/runner/work/yunduo-native/yunduo-native/out/classes.dex 112080 bytes 
+base: /home/runner/work/yunduo-native/yunduo-native/out/base-debug.apk 10 entries
+native lib: arm64-v8a 5975560 bytes
+native lib: x86_64 6462024 bytes
+wrote out/test.apk 17088885 bytes; v2 digest 9755aed8f351b83b

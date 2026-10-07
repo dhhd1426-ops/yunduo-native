@@ -1,0 +1,19 @@
+== 1 launch
+== 2 config + plan (two reminders in 20s / 35s)
+expand at 
+== 3 DONE button on 101
+== 4 SNOOZE with 0 min → fires again ~1s later
+== 5 eye: screen in use for 60 min → tick → reminder
+== 5b Amor-set reminder in 8s while app is in foreground (skipFg=false)
+== 6 lock screen with notifications
+== 7a open from notification while app is running (NEW_TASK|SINGLE_TOP, like the real PendingIntent)
+== 7b open from notification when app was killed (cold start, splash plays first)
+== 7c keep-alive service
+== 9 alarm: setAlarmClock + ring on the lock screen + snooze + ring while in use + dismiss
+== 10 viz: Visualizer on the global output (wallpaper follows the music)
+== 11 native Wallpaper Engine renderer (5.18): import the test .mpkg, wait for the first native frame
+first native frame after 25s
+11 shot
+11 log
+11 done
+== 8 collect

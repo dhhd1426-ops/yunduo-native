@@ -20,7 +20,15 @@ sleep 40; shot 0-launch
 note "import"
 timeout 120 adb exec-in "run-as $PKG sh -c 'mkdir -p files && cat > files/ci_wall.mpkg'" < testdata/scene.pkg
 A shell am start -a android.intent.action.VIEW -d "file:///data/user/0/$PKG/files/ci_wall.mpkg" -n $PKG/.MainActivity
-for i in $(seq 1 90); do sleep 5; if [ "$(first)" -ge 1 ]; then note "first native frame after $((i*5))s"; break; fi; done
+for i in $(seq 1 90); do
+  sleep 5
+  if [ "$(first)" -ge 1 ]; then note "first native frame after $((i*5))s"; break; fi
+  # 慢的模拟器上第一次打开的页面可能还没接住导入：60 秒还没开始画就再送一次
+  if [ $i = 12 ] || [ $i = 36 ]; then
+    A logcat -d -s 'WeWall:*' | grep -q create || { note "re-send import"; A shell am start -a android.intent.action.VIEW -d "file:///data/user/0/$PKG/files/ci_wall.mpkg" -n $PKG/.MainActivity; }
+  fi
+done
+A shell "run-as $PKG ls -la files files/amor/walls" > $O/files.txt 2>&1
 sleep 10; shot 1-native
 A shell dumpsys meminfo $PKG > $O/mem-1-native.txt 2>&1; A shell cat /proc/meminfo > $O/sysmem-1.txt
 sleep 30; shot 2-native-30s

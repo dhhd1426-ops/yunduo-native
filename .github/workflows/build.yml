@@ -8,7 +8,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 75
+    timeout-minutes: 100
     steps:
       - uses: actions/checkout@v4
       - name: Compile Java to classes.dex (official SDK d8)

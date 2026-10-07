@@ -144,7 +144,7 @@ index 6f972c3..6008560 100644
      std::fflush(stderr);
      if (auto sink = wallpaper_log_test::getSink()) {
 diff --git a/src/Vulkan/Device.cpp b/src/Vulkan/Device.cpp
-index 1672f8b..fa2cc5d 100644
+index 1672f8b..9a2e4f2 100644
 --- a/src/Vulkan/Device.cpp
 +++ b/src/Vulkan/Device.cpp
 @@ -227,6 +227,7 @@ bool Device::Create(Instance& inst, std::span<const Extension> exts, VkExtent2D
@@ -155,8 +155,16 @@ index 1672f8b..fa2cc5d 100644
      {
          VmaAllocatorCreateInfo allocatorInfo = {};
          allocatorInfo.vulkanApiVersion       = WP_VULKAN_VERSION;
+@@ -302,6 +303,7 @@ std::array<Device::HeapBudget, VK_MAX_MEMORY_HEAPS> Device::GetHeapBudgets() con
+ 
+ void Device::Destroy() {
+     VVK_CHECK(m_device.WaitIdle());
++    vvk::pde::shutdown(&m_device.Dispatch());   // 云朵天气移植：推送描述符垫片的池子跟着设备一起还掉
+     // Persist pipeline cache before its Handle dtor destroys it.  WaitIdle()
+     // above ensures no driver thread is still touching the cache.  Failures
+     // here are non-fatal — worst case we recompile on next launch.
 diff --git a/src/Vulkan/GraphicsPipeline.cpp b/src/Vulkan/GraphicsPipeline.cpp
-index 0214801..8b61184 100644
+index 0214801..b5ad081 100644
 --- a/src/Vulkan/GraphicsPipeline.cpp
 +++ b/src/Vulkan/GraphicsPipeline.cpp
 @@ -175,7 +175,7 @@ bool GraphicsPipeline::create(const Device& device, vvk::RenderPass& pass,
@@ -164,7 +172,7 @@ index 0214801..8b61184 100644
          };
          VkDescriptorSetLayoutCreateFlags flags {};
 -        if (info.push_descriptor) flags |= VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR;
-+        if (info.push_descriptor && ! vvk::pde::active()) flags |= VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR;
++        if (info.push_descriptor && ! vvk::pde::active(&device.handle().Dispatch())) flags |= VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR;
  
          create_info.bindingCount = (u32)info.bindings.size();
          create_info.pBindings    = info.bindings.data();
@@ -173,7 +181,7 @@ index 0214801..8b61184 100644
          LOG_DEBUG("GraphicsPipeline::create: setLayoutCount=%zu", layouts.size());
          VVK_CHECK(device.handle().CreatePipelineLayout(ci, pipeline.layout));
 +        for (size_t i = 0; i < m_descriptor_set_infos.size() && i < layouts.size(); i++)
-+            if (m_descriptor_set_infos[i].push_descriptor) vvk::pde::registerLayout(*pipeline.layout, (uint32_t)i, layouts[i]);
++            if (m_descriptor_set_infos[i].push_descriptor) vvk::pde::registerLayout(&device.handle().Dispatch(), *pipeline.layout, (uint32_t)i, layouts[i]);
      }
  
      std::vector<VkPipelineShaderStageCreateInfo> shaderStages;
@@ -310,7 +318,7 @@ index fab2b71..7a68ea2 100644
              staging.handle.UnMapMemory();
          }
 diff --git a/src/Vulkan/include/vvk/vulkan_wrapper.hpp b/src/Vulkan/include/vvk/vulkan_wrapper.hpp
-index 2b953ca..b86f25a 100644
+index 2b953ca..3903266 100644
 --- a/src/Vulkan/include/vvk/vulkan_wrapper.hpp
 +++ b/src/Vulkan/include/vvk/vulkan_wrapper.hpp
 @@ -8,6 +8,9 @@
@@ -338,7 +346,7 @@ index 2b953ca..b86f25a 100644
  
  public:
      VkResult Begin(const VkCommandBufferBeginInfo& begin_info) const {
-+        pde::onBegin();
++        pde::onBegin(dld);
          return dld->vkBeginCommandBuffer(handle, &begin_info);
      }
  
@@ -346,7 +354,7 @@ index 2b953ca..b86f25a 100644
      void PushDescriptorSetKHR(VkPipelineBindPoint bind_point, VkPipelineLayout layout, uint32_t set,
                                Span<const VkWriteDescriptorSet> wsets) const noexcept {
          assert(wsets[0].sType == VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET);
-+        if (pde::active()) { pde::push(handle, bind_point, layout, set, (uint32_t)wsets.size(), wsets.data()); return; }
++        if (pde::active(dld)) { pde::push(dld, handle, bind_point, layout, set, (uint32_t)wsets.size(), wsets.data()); return; }
          dld->vkCmdPushDescriptorSetKHR(handle, bind_point, layout, set, wsets.size(), wsets.data());
      }
  

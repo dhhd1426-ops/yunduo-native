@@ -31,15 +31,15 @@ int main(int argc, char** argv) {
     if (! std::getenv("XDG_CONFIG_HOME")) setenv("XDG_CONFIG_HOME", (cache + "/config").c_str(), 1);
     if (! std::getenv("XDG_CACHE_HOME")) setenv("XDG_CACHE_HOME", (cache + "/xdg").c_str(), 1);
 
+    auto run = [&](const std::string& outPath) -> bool {
     wallpaper::RenderInitInfo info;
     info.offscreen     = true;
     info.deterministic = true;   // 固定步长：每次跑出来同一帧
     info.width         = (uint16_t)w;
     info.height        = (uint16_t)h;
 
-    std::atomic<int> failed { 0 };
     auto* psw = new wallpaper::SceneWallpaper();
-    if (! psw->init()) { std::fprintf(stderr, "init failed\n"); return 3; }
+    if (! psw->init()) { std::fprintf(stderr, "init failed\n"); return false; }
     psw->initVulkan(info);
     psw->setPropertyString(wallpaper::PROPERTY_CACHE_PATH, cache);
     psw->setPropertyString(wallpaper::PROPERTY_ASSETS, assets);
@@ -50,20 +50,31 @@ int main(int argc, char** argv) {
         if (std::sscanf(v, "%f %f %f %f", &a[0], &a[1], &a[2], &a[3]) == 4) wallpaper::YdSetView(a[0], a[1], a[2], a[3]);
     }
     psw->play();
-    psw->requestScreenshotAtFrame(out, (uint64_t)frame);
-
+    psw->requestScreenshotAtFrame(outPath, (uint64_t)frame);
     auto t0 = std::chrono::steady_clock::now();
+    bool ok = true;
     while (! psw->screenshotDone()) {
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
         double s = std::chrono::duration<double>(std::chrono::steady_clock::now() - t0).count();
         if (s > (std::getenv("WE_TIMEOUT") ? std::atof(std::getenv("WE_TIMEOUT")) : 600.0)) {
             std::fprintf(stderr, "timeout waiting for frame %d\n", frame);
-            failed = 1;
+            ok = false;
             break;
         }
     }
-    std::printf("%s %s after %.1fs\n", failed ? "FAIL" : "OK", out.c_str(),
+    std::printf("%s %s after %.1fs\n", ok ? "OK" : "FAIL", outPath.c_str(),
                 std::chrono::duration<double>(std::chrono::steady_clock::now() - t0).count());
     std::fflush(stdout);
+    if (std::getenv("WE_TWICE")) {   // 测「销毁再建」：同一进程里收掉再来一次（App 退到后台回来就是这样）
+        auto td = std::chrono::steady_clock::now();
+        delete psw;
+        std::printf("destroyed in %.2fs\n", std::chrono::duration<double>(std::chrono::steady_clock::now() - td).count());
+        std::fflush(stdout);
+    }
+    return ok;
+    };
+    bool ok = run(out);
+    if (ok && std::getenv("WE_TWICE")) ok = run(out + ".2.ppm");
+    int failed = ok ? 0 : 1;
     std::_Exit(failed ? 5 : 0);   // 渲染线程还在跑：直接退出，不走析构
 }

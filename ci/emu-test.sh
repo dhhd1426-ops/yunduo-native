@@ -162,15 +162,7 @@ if [ -f testdata/scene.pkg ]; then
   echo "11 log" >> $O/steps.txt
   A logcat -d -s 'WE:*' > $O/we-log.txt
   A shell "run-as $PKG ls -la files/amor/walls" > $O/we-walls.txt 2>&1
-  echo "11 home" >> $O/steps.txt
-  A shell input keyevent KEYCODE_HOME; sleep 4
-  A logcat -d -s 'WE:*' > $O/we-log-home.txt
-  echo "11 back" >> $O/steps.txt
-  A shell am start -f 0x30000000 -n $PKG/.MainActivity
-  for i in $(seq 1 30); do sleep 5; n=$(A logcat -d -s WE:I | grep -c "first frame"); if [ "${n:-0}" -ge 2 ]; then echo "native frame again after resume $((i*5))s" | tee -a $O/steps.txt; break; fi; done
-  sleep 5; timeout 30 adb exec-out screencap -p > $O/11b-native-resumed.png
-  A logcat -d -s 'WE:*' > $O/we-log2.txt
-  A shell dumpsys activity processes | grep -iE "anr|not responding" | head -5 > $O/we-anr.txt
+  # 退到后台再回来的测试在 guest 那个任务里做（这里的模拟器回来后容易被软件渲染拖垮，后面的收尾就跑不完）
   echo "11 done" >> $O/steps.txt
 fi
 

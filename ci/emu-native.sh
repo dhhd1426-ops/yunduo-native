@@ -22,6 +22,7 @@ timeout 120 adb exec-in "run-as $PKG sh -c 'mkdir -p files && cat > files/ci_wal
 A shell am start -a android.intent.action.VIEW -d "file:///data/user/0/$PKG/files/ci_wall.mpkg" -n $PKG/.MainActivity
 for i in $(seq 1 90); do sleep 5; if [ "$(first)" -ge 1 ]; then note "first native frame after $((i*5))s"; break; fi; done
 sleep 10; shot 1-native
+A shell dumpsys meminfo $PKG > $O/mem-1-native.txt 2>&1; A shell cat /proc/meminfo > $O/sysmem-1.txt
 sleep 30; shot 2-native-30s
 A shell dumpsys SurfaceFlinger > $O/sf.txt 2>&1
 A logcat -d -s 'WE:*' 'WeWall:*' > $O/we-log.txt
@@ -29,9 +30,16 @@ A logcat -d | grep -E "\[we\]|WeWall|AndroidRuntime|FATAL" | tail -200 > $O/cons
 note "background"
 A shell input keyevent KEYCODE_HOME; sleep 10
 A logcat -d -s 'WE:*' 'WeWall:*' > $O/we-log-home.txt
+A shell dumpsys meminfo $PKG > $O/mem-2-home.txt 2>&1; A shell cat /proc/meminfo > $O/sysmem-2.txt
 note "resume"
 A shell am start -f 0x30000000 -n $PKG/.MainActivity
-for i in $(seq 1 60); do sleep 5; if [ "$(first)" -ge 2 ]; then note "native frame again after $((i*5))s"; break; fi; done
+B() { timeout 12 adb "$@"; }
+for i in $(seq 1 24); do
+  sleep 5
+  B shell cat /proc/meminfo 2>/dev/null | head -3 | tr '\n' ' ' >> $O/sysmem-resume.txt; echo >> $O/sysmem-resume.txt
+  B logcat -d -s 'WE:*' 'WeWall:*' > $O/we-log-resume-$i.txt 2>/dev/null
+  if grep -q "first frame" $O/we-log-resume-$i.txt && [ "$(grep -c 'first frame' $O/we-log-resume-$i.txt)" -ge 2 ]; then note "native frame again after $((i*5))s"; break; fi
+done
 sleep 10; shot 3-resumed
 note "settings page (blur snapshot behind)"
 A shell input swipe 300 1200 300 1200 10; sleep 2

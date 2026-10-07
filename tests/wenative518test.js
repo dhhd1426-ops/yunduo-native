@@ -34,7 +34,7 @@ function mock(mode) {   // mode: 'ok' | 'fail' | 'none'
       takeWall() { const s = pend; pend = ''; return s; }, wallDelete() { return true; },
       weOk() { return ${mode !== 'none'}; }, weWhy() { return 'mock'; },
       weStart(dir, fps, speed) { L.calls.push(['start', dir, fps, speed]);
-        setTimeout(() => { ${mode === 'fail' ? "window.__weState('fail', 'VK_ERROR_INITIALIZATION_FAILED')" : "window.__weState('ready', '1920,1080|')"}; }, 300); return true; },
+        setTimeout(() => { ${mode === 'fail' ? "window.__weState('fail', 'vk-init-error')" : "window.__weState('ready', '1920,1080|')"}; }, 300); return true; },
       weStop() { L.calls.push(['stop']); },
       weView(x, y, w, h) { L.views.push([x, y, w, h]); },
       wePause(p) { L.pauses.push(p); },
@@ -96,7 +96,7 @@ async function importOne(p) {
     await importOne(p);
     await p.waitForFunction(() => document.querySelector('#wall.ready') && __Wall.state().layers[0] > 0, null, { timeout: 60000 }).catch(() => {});
     const st = await p.evaluate(() => ({ s: __Wall.state(), nat: document.documentElement.classList.contains('we-nat'), L: window.__we, ready: document.querySelector('#wall').classList.contains('ready') }));
-    ok('② 原生失败：记下原因、退回 WebGL 照常显示', st.s.nativeBad === 'VK_ERROR_INITIALIZATION_FAILED' && !st.s.native && st.s.layers[0] > 0 && st.ready && !st.nat, st);
+    ok('② 原生失败：记下原因、退回 WebGL 照常显示', st.s.nativeBad === 'vk-init-error' && !st.s.native && st.s.layers[0] > 0 && st.ready && !st.nat, st);
     ok('② 失败后收掉了原生（weStop）', st.L.calls.some(c => c[0] === 'stop'), st.L.calls);
     ok('② 无页面错误', !errs.length, errs); await ctx.close(); }
   // ③ 手机不支持：不出开关，直接 WebGL

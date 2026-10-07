@@ -20,6 +20,12 @@ int main(int argc, char** argv) {
     int w = argc > 5 ? std::atoi(argv[4]) : 1080, h = argc > 5 ? std::atoi(argv[5]) : 2400;
     int frame = argc > 6 ? std::atoi(argv[6]) : 90;
 
+    // 安卓 shell 下没有 HOME：渲染器的配置 / 管线缓存目录会落到只读的 "/.config"，统一指到缓存目录
+    std::string cache = std::getenv("WE_CACHE") ? std::getenv("WE_CACHE") : "/tmp/we-cache";
+    if (! std::getenv("HOME") || ! std::getenv("HOME")[0]) setenv("HOME", cache.c_str(), 1);
+    if (! std::getenv("XDG_CONFIG_HOME")) setenv("XDG_CONFIG_HOME", (cache + "/config").c_str(), 1);
+    if (! std::getenv("XDG_CACHE_HOME")) setenv("XDG_CACHE_HOME", (cache + "/xdg").c_str(), 1);
+
     wallpaper::RenderInitInfo info;
     info.offscreen     = true;
     info.deterministic = true;   // 固定步长：每次跑出来同一帧
@@ -30,7 +36,7 @@ int main(int argc, char** argv) {
     auto* psw = new wallpaper::SceneWallpaper();
     if (! psw->init()) { std::fprintf(stderr, "init failed\n"); return 3; }
     psw->initVulkan(info);
-    psw->setPropertyString(wallpaper::PROPERTY_CACHE_PATH, std::getenv("WE_CACHE") ? std::getenv("WE_CACHE") : "/tmp/we-cache");
+    psw->setPropertyString(wallpaper::PROPERTY_CACHE_PATH, cache);
     psw->setPropertyString(wallpaper::PROPERTY_ASSETS, assets);
     psw->setPropertyString(wallpaper::PROPERTY_SOURCE, scene);
     psw->setPropertyInt32(wallpaper::PROPERTY_FPS, 30);

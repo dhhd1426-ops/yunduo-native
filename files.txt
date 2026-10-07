@@ -1,0 +1,16 @@
++ timeout 60 adb shell 'run-as com.cloudweather.xiaoyu ls -la files files/amor/walls'
+files:
+total 16060
+drwxrwx--x 5 u0_a192 u0_a192     4096 2026-10-07 13:58 .
+drwx------ 8 u0_a192 u0_a192     4096 2026-10-07 13:57 ..
+drwx------ 3 u0_a192 u0_a192     4096 2026-10-07 13:58 amor
+-rw-rw-rw- 1 u0_a192 u0_a192 16397040 2026-10-07 13:58 ci_wall.mpkg
+drwx------ 2 u0_a192 u0_a192     4096 2026-10-07 13:57 kv
+drwx------ 3 u0_a192 u0_a192     4096 2026-10-07 13:58 we
+
+files/amor/walls:
+total 16044
+drwx------ 3 u0_a192 u0_a192     4096 2026-10-07 13:58 .
+drwx------ 3 u0_a192 u0_a192     4096 2026-10-07 13:58 ..
+-rw------- 1 u0_a192 u0_a192 16397040 2026-10-07 13:58 1791381508867_ci_wall.mpkg
+drwx------ 7 u0_a192 u0_a192     4096 2026-10-07 13:58 1791381508867_ci_wall.mpkg.assets

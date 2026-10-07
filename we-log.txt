@@ -1,0 +1,1477 @@
+--------- beginning of main
+10-07 13:58:30.978  3552  3552 I WeWall  : surface size 320x640 (window 320x640)
+10-07 13:58:31.354  3552  3552 I WE      : INFO frame pacing: fps=15 refresh=0 mHz snap=no period=66.6667 ms
+10-07 13:58:31.356  3552  3552 I WE      : INFO frame pacing: fps=15 refresh=0 mHz snap=no period=66.6667 ms
+10-07 13:58:31.356  3552  3552 I WE      : create 320x640 fps=30 assets=/data/user/0/com.cloudweather.xiaoyu/files/we/assets
+10-07 13:58:31.357  3552  3552 I WeWall  : create 320x640 h=133086733679088 web=320
+10-07 13:58:31.357  3552  3552 I WE      : load /data/user/0/com.cloudweather.xiaoyu/files/amor/walls/1791381508867_ci_wall.mpkg.assets
+10-07 13:58:31.375  3552  5042 I WE      : INFO main looper started
+10-07 13:58:31.375  3552  5042 I WE      : INFO frame pacing: fps=30 refresh=0 mHz snap=no period=33.3333 ms
+10-07 13:58:31.376  3552  5042 I WE      : INFO source: /data/user/0/com.cloudweather.xiaoyu/files/amor/walls/1791381508867_ci_wall.mpkg.assets
+10-07 13:58:31.376  3552  5043 I WE      : INFO render looper started
+10-07 13:58:31.380  3552  5043 E WE      : ERROR VulkanRender.cpp:1002 too small swapchain image size: 320x640
+10-07 13:58:31.506  3552  5043 I WE      : INFO vulkan device: llvmpipe (LLVM 21.0.0, 256 bits)
+10-07 13:58:31.525  3552  5043 I WE      : INFO Anisotropic filtering enabled (max 16)
+10-07 13:58:31.525  3552  5043 I WE      : INFO Geometry shader feature enabled
+10-07 13:58:31.525  3552  5043 I WE      : INFO D32_SFLOAT optimal-tiling sampled-image support: yes
+10-07 13:58:31.562  3552  5043 I WE      : INFO swapchain present mode = FIFO on 60Hz output for fps 30 (policy=0)
+10-07 13:58:31.571  3552  5043 I WE      : INFO push descriptor: emulated with pooled descriptor sets
+10-07 13:58:31.571  3552  5043 I WE      : INFO VMA: VK_EXT_memory_budget not supported (allocator-internal bookkeeping only)
+10-07 13:58:31.576  3552  5043 I WE      : INFO new buffer block(0x79099b811410), size: 2097152, index: 0 / 1
+10-07 13:58:31.588  3552  5043 I WE      : INFO new buffer block(0x79099b811bf0), size: 2097152, index: 0 / 1
+10-07 13:58:31.589  3552  5042 I WE      : INFO loading scene: /data/user/0/com.cloudweather.xiaoyu/files/amor/walls/1791381508867_ci_wall.mpkg.assets
+10-07 13:58:31.730  3552  5042 I WE      : INFO Audio spectrum: AudioBus Process thread started (60Hz)
+10-07 13:58:31.730  3552  5042 I WE      : INFO Audio spectrum: shared AudioBus (playback tap)
+10-07 13:58:31.730  3552  5042 E WE      : ERROR CBinaryStream.h:65 can't open: /data/user/0/com.cloudweather.xiaoyu/files/amor/walls/1791381508867_ci_wall.mpkg.assets/scene.pkg
+10-07 13:58:31.730  3552  5042 I WE      : INFO load pkg file /data/user/0/com.cloudweather.xiaoyu/files/amor/walls/1791381508867_ci_wall.mpkg.assets/scene.pkg failed, trying alternate pkg names
+10-07 13:58:31.730  3552  5042 I WE      : INFO falling back to physical dir: /data/user/0/com.cloudweather.xiaoyu/files/amor/walls/1791381508867_ci_wall.mpkg.assets
+10-07 13:58:31.730  3552  5042 I WE      : INFO cache folder: /data/user/0/com.cloudweather.xiaoyu/cache/we
+10-07 13:58:31.730  3552  5042 I WE      : INFO Loaded scene from /assets/scene.json
+10-07 13:58:31.730  3552  5042 I WE      : INFO User property: schemecolor = "0 0 0"
+10-07 13:58:31.730  3552  5042 I WE      : INFO Loaded user property defaults from /data/user/0/com.cloudweather.xiaoyu/files/amor/walls/1791381508867_ci_wall.mpkg.assets/project.json
+10-07 13:58:31.762  3552  5042 I WE      : INFO read json "angles" not a key at FromJson(WPImageObject.cpp:455)
+10-07 13:58:31.762  3552  5042 I WE      : INFO read json "angles" not a key at FromJson(WPImageObject.cpp:455)
+10-07 13:58:31.764  3552  5042 I WE      : INFO read json "angles" not a key at FromJson(WPImageObject.cpp:455)
+10-07 13:58:31.764  3552  5042 I WE      : INFO read json "scale" not a key at FromJson(WPImageObject.cpp:456)
+10-07 13:58:31.765  3552  5042 I WE      : INFO read json "scale" not a key at FromJson(WPParticleObject.cpp:250)
+10-07 13:58:31.767  3552  5042 I WE      : INFO read json "angles" not a key at FromJson(WPImageObject.cpp:455)
+10-07 13:58:31.767  3552  5042 I WE      : INFO read json "angles" not a key at FromJson(WPImageObject.cpp:455)
+10-07 13:58:31.767  3552  5042 I WE      : INFO read json "angles" not a key at FromJson(WPImageObject.cpp:455)
+10-07 13:58:31.768  3552  5042 I WE      : INFO read json "angles" not a key at FromJson(WPImageObject.cpp:455)
+10-07 13:58:31.768  3552  5042 I WE      : INFO read json "scale" not a key at FromJson(WPImageObject.cpp:456)
+10-07 13:58:31.769  3552  5042 I WE      : INFO read json "angles" not a key at FromJson(WPImageObject.cpp:455)
+10-07 13:58:31.769  3552  5042 I WE      : INFO read json "scale" not a key at FromJson(WPImageObject.cpp:456)
+10-07 13:58:31.769  3552  5042 I WE      : INFO read json "angles" not a key at FromJson(WPImageObject.cpp:455)
+10-07 13:58:31.769  3552  5042 I WE      : INFO read json "scale" not a key at FromJson(WPImageObject.cpp:456)
+10-07 13:58:31.769  3552  5042 I WE      : INFO read json "angles" not a key at FromJson(WPImageObject.cpp:455)
+10-07 13:58:31.769  3552  5042 I WE      : INFO read json "scale" not a key at FromJson(WPImageObject.cpp:456)
+10-07 13:58:31.770  3552  5042 I WE      : INFO read json "angles" not a key at FromJson(WPImageObject.cpp:455)
+10-07 13:58:31.770  3552  5042 I WE      : INFO read json "scale" not a key at FromJson(WPImageObject.cpp:456)
+10-07 13:58:31.771  3552  5042 I WE      : INFO read json "scale" not a key at FromJson(WPImageObject.cpp:456)
+10-07 13:58:31.772  3552  5042 I WE      : INFO Scene ortho: 3840x2160 (auto=0) clearColor=(0.700,0.700,0.700)
+10-07 13:58:31.772  3552  5042 I WE      : INFO Global camera: 3840x2160 at (1920.0, 1080.0) zoom=1.000
+10-07 13:58:31.772  3552  5042 I WE      : INFO MSAA requested: x1 (2D scene, auto=0)
+10-07 13:58:31.773  3552  5042 I WE      : INFO ParseImageObj: id=1291 name='GUWEIZ-artist-art-девушка-art-6085703мин' image='models/GUWEIZ-artist-art-девушка-art-6085703мин.json' visible=1 size=(1920,1080) fullscreen=0 origin=(1920.0,1080.0)
+10-07 13:58:31.774  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:31.774  3552  5042 I WE      : INFO TEXHDR 'GUWEIZ-artist-art-девушка-art-6085703мин' sprite=0 tex=1920x1080 map=1920x1080 mipmap_larger=0 frames=0
+10-07 13:58:33.499  3552  5042 I WE      : INFO POS id=1291 name='GUWEIZ-artist-art-девушка-art-6085703мин' world=(1920.0,1080.0) parent=-1 attach='' local=(1920.0,1080.0) size=(1920,1080) autosize=0 puppet=''
+10-07 13:58:33.499  3552  5042 I WE      : INFO   ParseImageObj id=1291 completed, added to scene graph
+10-07 13:58:33.499  3552  5042 I WE      : INFO ParseImageObj: id=18 name='GUWEIZ-artist-art-девушка-art-6085703мин' image='models/GUWEIZ-artist-art-девушка-art-6085703мин.json' visible=1 size=(1920,1080) fullscreen=0 origin=(1920.0,1080.0)
+10-07 13:58:33.499  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:33.522  3552  5042 I WE      : INFO POS id=18 name='GUWEIZ-artist-art-девушка-art-6085703мин' world=(1920.0,1080.0) parent=-1 attach='' local=(1920.0,1080.0) size=(1920,1080) autosize=0 puppet=''
+10-07 13:58:33.523  3552  5042 I WE      : INFO   ParseImageObj id=18 completed, added to scene graph
+10-07 13:58:33.523  3552  5042 I WE      : INFO particle 'Birds' renderer='sprite'
+10-07 13:58:33.523  3552  5042 I WE      : INFO shader 'genericparticle' vert(1948) frag(1499) geom(0)
+10-07 13:58:33.523  3552  5042 I WE      : INFO TEXHDR 'workshop/2511104820/particle/birdspritesheet1' sprite=1 tex=516x516 map=516x516 mipmap_larger=0 frames=16
+10-07 13:58:33.524  3552  5042 I WE      : INFO TEXHDR 'util/flatnormal' sprite=0 tex=4x4 map=4x4 mipmap_larger=0 frames=0
+10-07 13:58:34.639  3552  5042 I WE      : INFO   constValue: 'ui_editor_properties_overbright' -> 'g_Overbright' = [1.000000]
+10-07 13:58:34.640  3552  5042 I WE      : INFO particle 'Birds' renderer='sprite'
+10-07 13:58:34.640  3552  5042 I WE      : INFO shader 'genericparticle' vert(1948) frag(1499) geom(0)
+10-07 13:58:34.668  3552  5042 I WE      : INFO   constValue: 'ui_editor_properties_overbright' -> 'g_Overbright' = [1.000000]
+10-07 13:58:34.668  3552  5042 I WE      : INFO particle 'Birds' renderer='sprite'
+10-07 13:58:34.668  3552  5042 I WE      : INFO shader 'genericparticle' vert(1948) frag(1499) geom(0)
+10-07 13:58:34.692  3552  5042 I WE      : INFO   constValue: 'ui_editor_properties_overbright' -> 'g_Overbright' = [1.000000]
+10-07 13:58:34.692  3552  5042 I WE      : INFO particle 'Birds' renderer='sprite'
+10-07 13:58:34.692  3552  5042 I WE      : INFO shader 'genericparticle' vert(1948) frag(1499) geom(0)
+10-07 13:58:34.712  3552  5042 I WE      : INFO   constValue: 'ui_editor_properties_overbright' -> 'g_Overbright' = [1.000000]
+10-07 13:58:34.712  3552  5042 I WE      : INFO particle 'Rain downpour' renderer='sprite'
+10-07 13:58:34.713  3552  5042 I WE      : INFO shader 'genericparticle' vert(1948) frag(1499) geom(0)
+10-07 13:58:34.713  3552  5042 I WE      : INFO TEXHDR 'particle/nature/rain1' sprite=0 tex=256x512 map=256x512 mipmap_larger=0 frames=0
+10-07 13:58:35.924  3552  5042 I WE      : INFO   constValue: 'ui_editor_properties_overbright' -> 'g_Overbright' = [1.000000]
+10-07 13:58:35.927  3552  5042 I WE      : INFO particle 'Rain downpour' renderer='sprite'
+10-07 13:58:35.927  3552  5042 I WE      : INFO shader 'genericparticle' vert(1948) frag(1499) geom(0)
+10-07 13:58:36.152  3552  5042 I WE      : INFO   constValue: 'ui_editor_properties_overbright' -> 'g_Overbright' = [1.000000]
+10-07 13:58:36.152  3552  5042 I WE      : INFO ParseImageObj: id=1005 name='Слой полной композиции' image='models/util/projectlayer.json' visible=1 size=(3840,2160) fullscreen=0 origin=(1920.0,1080.0)
+10-07 13:58:36.152  3552  5042 I WE      : INFO shader 'composelayer' vert(436) frag(310) geom(0)
+10-07 13:58:37.004  3552  5042 I WE      : INFO   ParseImageObj id=1005: finalBlend=1 hasEffect=1 isCompose=1 passthrough=0
+10-07 13:58:37.004  3552  5042 I WE      : INFO POS id=1005 name='Слой полной композиции' world=(1920.0,1080.0) parent=-1 attach='' local=(1920.0,1080.0) size=(3840,2160) autosize=0 puppet=''
+10-07 13:58:37.005  3552  5042 I WE      : INFO shader 'effects/blur_downsample4' vert(437) frag(401) geom(0)
+10-07 13:58:37.670  3552  5042 I WE      : INFO shader 'effects/blur_gaussian' vert(2635) frag(1690) geom(0)
+10-07 13:58:38.514  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [0.840000,0.840000]
+10-07 13:58:38.514  3552  5042 I WE      : INFO shader 'effects/blur_gaussian' vert(2635) frag(1690) geom(0)
+10-07 13:58:39.196  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [0.840000,0.840000]
+10-07 13:58:39.205  3552  5042 I WE      : INFO shader 'effects/blur_combine' vert(452) frag(1602) geom(0)
+10-07 13:58:40.362  3552  5042 I WE      : INFO ShaderValue: 'compositecolor' has no matching GLSL uniform (author default, skipped)
+10-07 13:58:40.362  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_blur_title' loaded OK (4 nodes)
+10-07 13:58:40.362  3552  5042 I WE      : INFO   ParseImageObj id=1005: 1 effects loaded, isCompose=1, isOffscreen=0
+10-07 13:58:40.362  3552  5042 I WE      : INFO   ParseImageObj id=1005 completed, added to scene graph
+10-07 13:58:40.362  3552  5042 I WE      : INFO particle 'Rain downpour' renderer='sprite'
+10-07 13:58:40.362  3552  5042 I WE      : INFO shader 'genericparticle' vert(1948) frag(1499) geom(0)
+10-07 13:58:40.413  3552  5042 I WE      : INFO   constValue: 'ui_editor_properties_overbright' -> 'g_Overbright' = [1.000000]
+10-07 13:58:40.413  3552  5042 I WE      : INFO particle 'Rain refractive' renderer='spritetrail'
+10-07 13:58:40.413  3552  5042 I WE      : INFO   rope subdivision=3 for 'Rain refractive'
+10-07 13:58:40.413  3552  5042 I WE      : INFO shader 'genericropeparticle' vert(2106) frag(508) geom(0)
+10-07 13:58:40.413  3552  5042 I WE      : INFO TEXHDR 'particle/drop' sprite=0 tex=32x128 map=32x128 mipmap_larger=0 frames=0
+10-07 13:58:40.413  3552  5042 I WE      : INFO TEXHDR 'particle/drop_normal' sprite=0 tex=32x128 map=32x128 mipmap_larger=0 frames=0
+10-07 13:58:41.824  3552  5042 I WE      : INFO   constValue: 'ui_editor_properties_overbright' -> 'g_Overbright' = [1.000000]
+10-07 13:58:41.828  3552  5042 I WE      : INFO ShaderValue: 'ui_editor_properties_refract_amount' has no matching GLSL uniform (author default, skipped)
+10-07 13:58:41.832  3552  5042 I WE      : INFO particle 'Rain perspective' renderer='spritetrail'
+10-07 13:58:41.832  3552  5042 I WE      : INFO   rope subdivision=3 for 'Rain perspective'
+10-07 13:58:41.833  3552  5042 I WE      : INFO shader 'genericropeparticle' vert(2106) frag(508) geom(0)
+10-07 13:58:43.069  3552  5042 I WE      : INFO particle 'Snow perspective' renderer='sprite'
+10-07 13:58:43.069  3552  5042 I WE      : INFO shader 'genericparticle' vert(1948) frag(1499) geom(0)
+10-07 13:58:43.070  3552  5042 I WE      : INFO TEXHDR 'particle/chromaticdot' sprite=0 tex=64x64 map=64x64 mipmap_larger=0 frames=0
+10-07 13:58:43.106  3552  5042 I WE      : INFO particle 'new_particle_system' renderer='sprite'
+10-07 13:58:43.106  3552  5042 I WE      : INFO shader 'genericparticle' vert(1948) frag(1499) geom(0)
+10-07 13:58:43.107  3552  5042 I WE      : INFO TEXHDR 'particle/капля' sprite=0 tex=121x144 map=121x144 mipmap_larger=0 frames=0
+10-07 13:58:43.108  3552  5042 I WE      : INFO TEXHDR 'particle/normal_pinch_rotate' sprite=0 tex=64x64 map=64x64 mipmap_larger=0 frames=0
+10-07 13:58:44.830  3552  5042 I WE      : INFO   constValue: 'ui_editor_properties_refract_amount' -> 'g_RefractAmount' = [1.000000]
+10-07 13:58:44.832  3552  5042 I WE      : INFO particle 'new_particle_system' renderer='sprite'
+10-07 13:58:44.833  3552  5042 I WE      : INFO shader 'genericparticle' vert(1948) frag(1499) geom(0)
+10-07 13:58:44.858  3552  5042 I WE      : INFO   constValue: 'ui_editor_properties_refract_amount' -> 'g_RefractAmount' = [1.000000]
+10-07 13:58:44.859  3552  5042 I WE      : INFO particle 'Fog 1' renderer='sprite'
+10-07 13:58:44.859  3552  5042 I WE      : INFO shader 'genericparticle' vert(1948) frag(1499) geom(0)
+10-07 13:58:44.859  3552  5042 I WE      : INFO TEXHDR 'particle/fog/fog1' sprite=0 tex=128x128 map=128x128 mipmap_larger=0 frames=0
+10-07 13:58:44.883  3552  5042 I WE      : INFO particle 'Falling debris particles small 1' renderer='sprite'
+10-07 13:58:44.883  3552  5042 I WE      : INFO shader 'genericparticle' vert(1948) frag(1499) geom(0)
+10-07 13:58:44.884  3552  5042 I WE      : INFO TEXHDR 'particle/debris/debris1' sprite=0 tex=64x64 map=64x64 mipmap_larger=0 frames=0
+10-07 13:58:44.912  3552  5042 I WE      : INFO ParseImageObj: id=176 name='Fern' image='models/presets/fern1.json' visible=1 size=(299,512) fullscreen=0 origin=(3966.1,733.5)
+10-07 13:58:44.913  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:44.915  3552  5042 I WE      : INFO TEXHDR 'presets/fern1' sprite=0 tex=300x512 map=299x512 mipmap_larger=1 frames=0
+10-07 13:58:46.537  3552  5042 I WE      : INFO   ParseImageObj id=176: finalBlend=1 hasEffect=1 isCompose=0 passthrough=0
+10-07 13:58:46.537  3552  5042 I WE      : INFO POS id=176 name='Fern' world=(3966.1,733.5) parent=-1 attach='' local=(3966.1,733.5) size=(299,512) autosize=0 puppet=''
+10-07 13:58:46.538  3552  5042 I WE      : INFO shader 'effects/foliagesway' vert(3383) frag(1905) geom(0)
+10-07 13:58:46.540  3552  5042 I WE      : INFO TEXHDR 'util/noise' sprite=0 tex=256x256 map=256x256 mipmap_larger=0 frames=0
+10-07 13:58:47.736  3552  5042 I WE      : INFO   constValue: 'Phase' -> 'g_Phase' = [0.000000]
+10-07 13:58:47.736  3552  5042 I WE      : INFO   constValue: 'ratio' -> 'g_Ratio' = [0.300000]
+10-07 13:58:47.736  3552  5042 I WE      : INFO   constValue: 'scrolldirection' -> 'g_Direction' = [-2.594857]
+10-07 13:58:47.736  3552  5042 I WE      : INFO   constValue: 'Strength' -> 'g_Strength' = [15.000000]
+10-07 13:58:47.736  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.570000]
+10-07 13:58:47.736  3552  5042 I WE      : INFO   constValue: 'Power' -> 'g_Power' = [1.420000]
+10-07 13:58:47.736  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_NoiseScale' = [0.010000]
+10-07 13:58:47.737  3552  5042 I WE      : INFO   constValue: 'speeduv' -> 'g_Speed' = [9.610000]
+10-07 13:58:47.737  3552  5042 I WE      : INFO   constValue: 'Speed' -> 'g_Speed' = [2.270000]
+10-07 13:58:47.737  3552  5042 I WE      : INFO   constValue: 'phase' -> 'g_Phase' = [0.500000]
+10-07 13:58:47.737  3552  5042 I WE      : INFO   constValue: 'power' -> 'g_Power' = [1.000000]
+10-07 13:58:47.737  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_foliage_sway_title' loaded OK (1 nodes)
+10-07 13:58:47.739  3552  5042 I WE      : INFO shader 'effects/tint' vert(492) frag(949) geom(0)
+10-07 13:58:48.656  3552  5042 I WE      : INFO   constValue: 'alpha' -> 'g_BlendAlpha' = [1.000000]
+10-07 13:58:48.656  3552  5042 I WE      : INFO   constValue: 'color' -> 'g_TintColor' = [0.043137,0.043137,0.035294]
+10-07 13:58:48.656  3552  5042 I WE      : INFO   effect[1] 'ui_editor_effect_tint_title' loaded OK (1 nodes)
+10-07 13:58:48.656  3552  5042 I WE      : INFO   ParseImageObj id=176: 2 effects loaded, isCompose=0, isOffscreen=0
+10-07 13:58:48.656  3552  5042 I WE      : INFO   ParseImageObj id=176 completed, added to scene graph
+10-07 13:58:48.656  3552  5042 I WE      : INFO ParseImageObj: id=957 name='Fern' image='models/presets/fern1.json' visible=1 size=(299,512) fullscreen=0 origin=(608.7,1801.6)
+10-07 13:58:48.656  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:48.681  3552  5042 I WE      : INFO   ParseImageObj id=957: finalBlend=1 hasEffect=1 isCompose=0 passthrough=0
+10-07 13:58:48.681  3552  5042 I WE      : INFO POS id=957 name='Fern' world=(608.7,1801.6) parent=-1 attach='' local=(608.7,1801.6) size=(299,512) autosize=0 puppet=''
+10-07 13:58:48.681  3552  5042 I WE      : INFO shader 'effects/foliagesway' vert(3383) frag(1905) geom(0)
+10-07 13:58:48.710  3552  5042 I WE      : INFO   constValue: 'Phase' -> 'g_Phase' = [0.000000]
+10-07 13:58:48.710  3552  5042 I WE      : INFO   constValue: 'ratio' -> 'g_Ratio' = [0.300000]
+10-07 13:58:48.710  3552  5042 I WE      : INFO   constValue: 'scrolldirection' -> 'g_Direction' = [0.900484]
+10-07 13:58:48.710  3552  5042 I WE      : INFO   constValue: 'Strength' -> 'g_Strength' = [15.000000]
+10-07 13:58:48.710  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.570000]
+10-07 13:58:48.710  3552  5042 I WE      : INFO   constValue: 'Power' -> 'g_Power' = [1.420000]
+10-07 13:58:48.710  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_NoiseScale' = [0.000000]
+10-07 13:58:48.710  3552  5042 I WE      : INFO   constValue: 'speeduv' -> 'g_Speed' = [9.610000]
+10-07 13:58:48.710  3552  5042 I WE      : INFO   constValue: 'Speed' -> 'g_Speed' = [2.270000]
+10-07 13:58:48.710  3552  5042 I WE      : INFO   constValue: 'phase' -> 'g_Phase' = [0.500000]
+10-07 13:58:48.710  3552  5042 I WE      : INFO   constValue: 'power' -> 'g_Power' = [1.000000]
+10-07 13:58:48.710  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_foliage_sway_title' loaded OK (1 nodes)
+10-07 13:58:48.710  3552  5042 I WE      : INFO shader 'effects/tint' vert(492) frag(949) geom(0)
+10-07 13:58:48.733  3552  5042 I WE      : INFO   constValue: 'alpha' -> 'g_BlendAlpha' = [1.000000]
+10-07 13:58:48.733  3552  5042 I WE      : INFO   constValue: 'color' -> 'g_TintColor' = [0.043137,0.043137,0.035294]
+10-07 13:58:48.733  3552  5042 I WE      : INFO   effect[1] 'ui_editor_effect_tint_title' loaded OK (1 nodes)
+10-07 13:58:48.733  3552  5042 I WE      : INFO   ParseImageObj id=957: 2 effects loaded, isCompose=0, isOffscreen=0
+10-07 13:58:48.733  3552  5042 I WE      : INFO   ParseImageObj id=957 completed, added to scene graph
+10-07 13:58:48.733  3552  5042 I WE      : INFO ParseImageObj: id=976 name='Fern' image='models/presets/fern1.json' visible=1 size=(299,512) fullscreen=0 origin=(3653.7,1077.1)
+10-07 13:58:48.733  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:48.756  3552  5042 I WE      : INFO   ParseImageObj id=976: finalBlend=1 hasEffect=1 isCompose=0 passthrough=0
+10-07 13:58:48.756  3552  5042 I WE      : INFO POS id=976 name='Fern' world=(3653.7,1077.1) parent=-1 attach='' local=(3653.7,1077.1) size=(299,512) autosize=0 puppet=''
+10-07 13:58:48.756  3552  5042 I WE      : INFO shader 'effects/foliagesway' vert(3383) frag(1905) geom(0)
+10-07 13:58:48.787  3552  5042 I WE      : INFO   constValue: 'Phase' -> 'g_Phase' = [0.000000]
+10-07 13:58:48.787  3552  5042 I WE      : INFO   constValue: 'ratio' -> 'g_Ratio' = [0.300000]
+10-07 13:58:48.788  3552  5042 I WE      : INFO   constValue: 'scrolldirection' -> 'g_Direction' = [1.404200]
+10-07 13:58:48.788  3552  5042 I WE      : INFO   constValue: 'Strength' -> 'g_Strength' = [15.000000]
+10-07 13:58:48.789  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.570000]
+10-07 13:58:48.789  3552  5042 I WE      : INFO   constValue: 'Power' -> 'g_Power' = [1.420000]
+10-07 13:58:48.789  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_NoiseScale' = [0.000000]
+10-07 13:58:48.789  3552  5042 I WE      : INFO   constValue: 'speeduv' -> 'g_Speed' = [9.610000]
+10-07 13:58:48.789  3552  5042 I WE      : INFO   constValue: 'Speed' -> 'g_Speed' = [2.270000]
+10-07 13:58:48.789  3552  5042 I WE      : INFO   constValue: 'phase' -> 'g_Phase' = [0.500000]
+10-07 13:58:48.790  3552  5042 I WE      : INFO   constValue: 'power' -> 'g_Power' = [1.000000]
+10-07 13:58:48.790  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_foliage_sway_title' loaded OK (1 nodes)
+10-07 13:58:48.791  3552  5042 I WE      : INFO shader 'effects/tint' vert(492) frag(949) geom(0)
+10-07 13:58:48.816  3552  5042 I WE      : INFO   constValue: 'alpha' -> 'g_BlendAlpha' = [1.000000]
+10-07 13:58:48.816  3552  5042 I WE      : INFO   constValue: 'color' -> 'g_TintColor' = [0.145098,0.141176,0.121569]
+10-07 13:58:48.817  3552  5042 I WE      : INFO   effect[1] 'ui_editor_effect_tint_title' loaded OK (1 nodes)
+10-07 13:58:48.817  3552  5042 I WE      : INFO   ParseImageObj id=976: 2 effects loaded, isCompose=0, isOffscreen=0
+10-07 13:58:48.817  3552  5042 I WE      : INFO   ParseImageObj id=976 completed, added to scene graph
+10-07 13:58:48.817  3552  5042 I WE      : INFO ParseImageObj: id=36 name='кусты' image='models/кусты.json' visible=1 size=(1920,1080) fullscreen=0 origin=(1920.0,1080.0)
+10-07 13:58:48.817  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:48.834  3552  5042 I WE      : INFO TEXHDR 'кусты' sprite=0 tex=1920x1080 map=1920x1080 mipmap_larger=0 frames=0
+10-07 13:58:48.874  3552  5042 I WE      : INFO   ParseImageObj id=36: finalBlend=1 hasEffect=1 isCompose=0 passthrough=0
+10-07 13:58:48.874  3552  5042 I WE      : INFO POS id=36 name='кусты' world=(1920.0,1080.0) parent=-1 attach='' local=(1920.0,1080.0) size=(1920,1080) autosize=0 puppet=''
+10-07 13:58:48.874  3552  5042 I WE      : INFO shader 'effects/foliagesway' vert(3383) frag(1905) geom(0)
+10-07 13:58:48.875  3552  5042 I WE      : INFO TEXHDR 'masks/foliagesway_mask_92185f47' sprite=0 tex=960x540 map=960x540 mipmap_larger=0 frames=0
+10-07 13:58:50.522  3552  5042 I WE      : INFO   constValue: 'phase' -> 'g_Phase' = [0.870000]
+10-07 13:58:50.522  3552  5042 I WE      : INFO   constValue: 'power' -> 'g_Power' = [1.000000]
+10-07 13:58:50.522  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_NoiseScale' = [0.020000]
+10-07 13:58:50.522  3552  5042 I WE      : INFO   constValue: 'speeduv' -> 'g_Speed' = [8.340000]
+10-07 13:58:50.522  3552  5042 I WE      : INFO   constValue: 'ratio' -> 'g_Ratio' = [1.560000]
+10-07 13:58:50.522  3552  5042 I WE      : INFO   constValue: 'scrolldirection' -> 'g_Direction' = [-1.410034]
+10-07 13:58:50.522  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.400000]
+10-07 13:58:50.522  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_foliage_sway_title' loaded OK (1 nodes)
+10-07 13:58:50.522  3552  5042 I WE      : INFO   ParseImageObj id=36: 1 effects loaded, isCompose=0, isOffscreen=0
+10-07 13:58:50.522  3552  5042 I WE      : INFO   ParseImageObj id=36 completed, added to scene graph
+10-07 13:58:50.522  3552  5042 I WE      : INFO particle 'new_particle_system' renderer='sprite'
+10-07 13:58:50.522  3552  5042 I WE      : INFO shader 'genericparticle' vert(1948) frag(1499) geom(0)
+10-07 13:58:50.543  3552  5042 I WE      : INFO   constValue: 'ui_editor_properties_refract_amount' -> 'g_RefractAmount' = [1.000000]
+10-07 13:58:50.543  3552  5042 I WE      : INFO particle 'new_particle_system' renderer='sprite'
+10-07 13:58:50.543  3552  5042 I WE      : INFO shader 'genericparticle' vert(1948) frag(1499) geom(0)
+10-07 13:58:50.567  3552  5042 I WE      : INFO   constValue: 'ui_editor_properties_refract_amount' -> 'g_RefractAmount' = [1.000000]
+10-07 13:58:50.567  3552  5042 I WE      : INFO ParseImageObj: id=775 name='нитка' image='models/нитка.json' visible=1 size=(678,636) fullscreen=0 origin=(2175.2,1446.3)
+10-07 13:58:50.567  3552  5042 I WE      : INFO   mdl 'models/нитка_puppet.mdl' vert bounds: X=[-276.0, 291.0] (w=567.0) Y=[-235.0, 273.0] (h=508.0) UV=[0.093-0.929, 0.071-0.869] n=241
+10-07 13:58:50.567  3552  5042 I WE      : INFO   mdl 'models/нитка_puppet.mdl': reading 6 bones
+10-07 13:58:50.567  3552  5042 I WE      : INFO     bone[0] '' parent=-1 trans=(226.2, 218.6, 0.0)
+10-07 13:58:50.567  3552  5042 I WE      : INFO     bone[1] '' parent=0 trans=(-60.8, -89.8, 0.0)
+10-07 13:58:50.567  3552  5042 I WE      : INFO     bone[2] '' parent=1 trans=(-62.3, -110.0, 0.0)
+10-07 13:58:50.567  3552  5042 I WE      : INFO     bone[3] '' parent=2 trans=(-112.9, -84.0, 0.0)
+10-07 13:58:50.567  3552  5042 I WE      : INFO     bone[4] '' parent=3 trans=(-124.5, -60.8, 0.0)
+10-07 13:58:50.567  3552  5042 I WE      : INFO     bone[5] '' parent=4 trans=(-75.3, -56.5, 0.0)
+10-07 13:58:50.567  3552  5042 I WE      : INFO   anim[0]: id=1040 name='Анимация 1' length=16
+10-07 13:58:50.567  3552  5042 I WE      : INFO mdl: anim 1040 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:58:50.568  3552  5042 I WE      : INFO   anim[1]: id=1877 name='Анимация 2' length=16
+10-07 13:58:50.568  3552  5042 I WE      : INFO mdl: anim 1877 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:58:50.568  3552  5042 I WE      : INFO read puppet: mdlv: 17, nmdls: 2, mdla: 4, bones: 6, anims: 2
+10-07 13:58:50.568  3552  5042 I WE      : INFO MDL bounds id=775 name='нитка' x=[-276.0,291.0] y=[-235.0,273.0] span=(567,508) scene_size=(678,636) ratio=(1.20,1.25) attachments=0
+10-07 13:58:50.568  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:50.571  3552  5042 I WE      : INFO TEXHDR 'нитка' sprite=0 tex=678x636 map=678x636 mipmap_larger=0 frames=0
+10-07 13:58:50.590  3552  5042 I WE      : INFO   ParseImageObj id=775: finalBlend=1 hasEffect=1 isCompose=0 passthrough=0
+10-07 13:58:50.591  3552  5042 I WE      : INFO POS id=775 name='нитка' world=(2175.2,1446.3) parent=-1 attach='' local=(2175.2,1446.3) size=(678,636) autosize=0 puppet='models/нитка_puppet.mdl'
+10-07 13:58:50.591  3552  5042 I WE      : INFO shader 'effects/waterwaves' vert(1612) frag(1869) geom(0)
+10-07 13:58:50.591  3552  5042 I WE      : INFO TEXHDR 'masks/waterwaves_mask_803c2518' sprite=0 tex=339x318 map=339x318 mipmap_larger=0 frames=0
+10-07 13:58:50.593  3552  5042 I WE      : INFO TEXHDR 'util/black' sprite=0 tex=4x4 map=4x4 mipmap_larger=0 frames=0
+10-07 13:58:52.444  3552  5042 I WE      : INFO   constValue: 'direction' -> 'g_Direction' = [-2.800614]
+10-07 13:58:52.444  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [5.370000]
+10-07 13:58:52.444  3552  5042 I WE      : INFO   constValue: 'perspective' -> 'g_Perspective' = [0.000000]
+10-07 13:58:52.444  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [3.830000]
+10-07 13:58:52.444  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.320000]
+10-07 13:58:52.444  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_water_waves_title' loaded OK (1 nodes)
+10-07 13:58:52.444  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:53.315  3552  5042 I WE      : INFO puppet layer prepared: 1 scene layers, 2 mdl anims, total_blend=1.00
+10-07 13:58:53.315  3552  5042 I WE      : INFO   scene layer[0]: id=1040 blend=1.00 rate=1.00 visible=1 additive=1
+10-07 13:58:53.315  3552  5042 I WE      : INFO   effect[1] '' loaded OK (1 nodes)
+10-07 13:58:53.315  3552  5042 I WE      : INFO   ParseImageObj id=775: 2 effects loaded, isCompose=0, isOffscreen=0
+10-07 13:58:53.315  3552  5042 I WE      : INFO   ParseImageObj id=775 completed, added to scene graph
+10-07 13:58:53.315  3552  5042 I WE      : INFO ParseImageObj: id=28 name='девка 2' image='models/девка 2.json' visible=1 size=(1279,1761) fullscreen=0 origin=(2574.5,860.3)
+10-07 13:58:53.319  3552  5042 I WE      : INFO   mdl 'models/девка 2_puppet.mdl' vert bounds: X=[-597.5, 636.5] (w=1234.0) Y=[-937.5, 877.5] (h=1815.0) UV=[0.033-0.998, 0.002-1.032] n=388
+10-07 13:58:53.319  3552  5042 I WE      : INFO   mdl 'models/девка 2_puppet.mdl': reading 15 bones
+10-07 13:58:53.319  3552  5042 I WE      : INFO     bone[0] '' parent=-1 trans=(-402.5, -32.7, 0.0)
+10-07 13:58:53.319  3552  5042 I WE      : INFO     bone[1] '' parent=0 trans=(137.7, 313.3, 0.0)
+10-07 13:58:53.319  3552  5042 I WE      : INFO     bone[2] '' parent=1 trans=(194.4, -29.7, 0.0)
+10-07 13:58:53.319  3552  5042 I WE      : INFO     bone[3] '' parent=2 trans=(83.7, -132.3, 0.0)
+10-07 13:58:53.319  3552  5042 I WE      : INFO     bone[4] '' parent=3 trans=(62.1, -162.0, 0.0)
+10-07 13:58:53.319  3552  5042 I WE      : INFO     bone[5] '' parent=4 trans=(113.4, -137.7, 0.0)
+10-07 13:58:53.319  3552  5042 I WE      : INFO     bone[6] '' parent=5 trans=(153.9, -113.4, 0.0)
+10-07 13:58:53.319  3552  5042 I WE      : INFO     bone[7] '' parent=6 trans=(89.1, -113.4, 0.0)
+10-07 13:58:53.320  3552  5042 I WE      : INFO     bone[8] '' parent=7 trans=(-13.5, -183.6, 0.0)
+10-07 13:58:53.320  3552  5042 I WE      : INFO     bone[9] '' parent=8 trans=(-50.2, -196.0, 0.0)
+10-07 13:58:53.320  3552  5042 I WE      : INFO     bone[10] '' parent=9 trans=(-67.5, -140.4, 0.0)
+10-07 13:58:53.320  3552  5042 I WE      : INFO     bone[11] '' parent=2 trans=(-56.5, 137.5, 0.0)
+10-07 13:58:53.320  3552  5042 I WE      : INFO     bone[12] '' parent=11 trans=(-49.4, 49.7, 0.0)
+10-07 13:58:53.320  3552  5042 I WE      : INFO     bone[13] '' parent=12 trans=(-23.2, 79.2, 0.0)
+10-07 13:58:53.320  3552  5042 I WE      : INFO     bone[14] '' parent=13 trans=(-94.4, 244.5, 0.0)
+10-07 13:58:53.320  3552  5042 I WE      : INFO   anim[0]: id=2917 name='Анимация 1' length=25
+10-07 13:58:53.320  3552  5042 I WE      : INFO mdl: anim 2917 declares 25 frame(s) but bone track 0 stores 26 — playback clamps into the stored frames
+10-07 13:58:53.320  3552  5042 I WE      : INFO   anim[1]: id=2964 name='Анимация 2' length=10
+10-07 13:58:53.320  3552  5042 I WE      : INFO mdl: anim 2964 declares 10 frame(s) but bone track 0 stores 11 — playback clamps into the stored frames
+10-07 13:58:53.320  3552  5042 I WE      : INFO read puppet: mdlv: 17, nmdls: 2, mdla: 4, bones: 15, anims: 2
+10-07 13:58:53.321  3552  5042 I WE      : INFO MDL bounds id=28 name='девка 2' x=[-597.5,636.5] y=[-937.5,877.5] span=(1234,1815) scene_size=(1279,1761) ratio=(1.04,0.97) attachments=0
+10-07 13:58:53.321  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:53.322  3552  5042 I WE      : INFO TEXHDR 'девка 2' sprite=0 tex=1279x1761 map=1279x1761 mipmap_larger=0 frames=0
+10-07 13:58:53.372  3552  5042 I WE      : INFO   ParseImageObj id=28: finalBlend=1 hasEffect=1 isCompose=0 passthrough=0
+10-07 13:58:53.373  3552  5042 I WE      : INFO POS id=28 name='девка 2' world=(2574.5,860.3) parent=-1 attach='' local=(2574.5,860.3) size=(1279,1761) autosize=0 puppet='models/девка 2_puppet.mdl'
+10-07 13:58:53.374  3552  5042 I WE      : INFO shader 'effects/waterwaves' vert(1612) frag(1869) geom(0)
+10-07 13:58:53.375  3552  5042 I WE      : INFO TEXHDR 'masks/waterwaves_mask_0afc93e4' sprite=0 tex=639x880 map=639x880 mipmap_larger=0 frames=0
+10-07 13:58:53.408  3552  5042 I WE      : INFO   constValue: 'direction' -> 'g_Direction' = [-2.560213]
+10-07 13:58:53.409  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [6.930000]
+10-07 13:58:53.409  3552  5042 I WE      : INFO   constValue: 'perspective' -> 'g_Perspective' = [0.000000]
+10-07 13:58:53.409  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [11.460000]
+10-07 13:58:53.409  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.140000]
+10-07 13:58:53.409  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_water_waves_title' loaded OK (1 nodes)
+10-07 13:58:53.410  3552  5042 I WE      : INFO shader 'effects/waterwaves' vert(1612) frag(1869) geom(0)
+10-07 13:58:53.410  3552  5042 I WE      : INFO TEXHDR 'masks/waterwaves_mask_f37a1950' sprite=0 tex=639x880 map=639x880 mipmap_larger=0 frames=0
+10-07 13:58:53.440  3552  5042 I WE      : INFO   constValue: 'direction' -> 'g_Direction' = [-2.874462]
+10-07 13:58:53.440  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [11.550000]
+10-07 13:58:53.441  3552  5042 I WE      : INFO   constValue: 'perspective' -> 'g_Perspective' = [0.000000]
+10-07 13:58:53.441  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [56.419998]
+10-07 13:58:53.441  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.100000]
+10-07 13:58:53.441  3552  5042 I WE      : INFO   effect[1] 'ui_editor_effect_water_waves_title' loaded OK (1 nodes)
+10-07 13:58:53.442  3552  5042 I WE      : INFO shader 'effects/shake' vert(3268) frag(3007) geom(0)
+10-07 13:58:53.442  3552  5042 I WE      : INFO TEXHDR 'masks/shake_mask_1007a06f' sprite=0 tex=639x880 map=639x880 mipmap_larger=0 frames=0
+10-07 13:58:53.445  3552  5042 I WE      : INFO TEXHDR 'util/white' sprite=0 tex=4x4 map=4x4 mipmap_larger=0 frames=0
+10-07 13:58:54.489  3552  5042 I WE      : INFO   constValue: 'bounds' -> 'g_Bounds' = [0.000000,1.000000]
+10-07 13:58:54.489  3552  5042 I WE      : INFO   constValue: 'friction' -> 'g_Friction' = [1.000000,1.000000]
+10-07 13:58:54.489  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [2.020000]
+10-07 13:58:54.489  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Amp' = [0.120000]
+10-07 13:58:54.489  3552  5042 I WE      : INFO   effect[2] 'ui_editor_effect_shake_title' loaded OK (1 nodes)
+10-07 13:58:54.490  3552  5042 I WE      : INFO shader 'effects/waterflow' vert(449) frag(2103) geom(0)
+10-07 13:58:54.490  3552  5042 I WE      : INFO TEXHDR 'masks/waterflow_mask_499e456d' sprite=0 tex=639x880 map=639x880 mipmap_larger=0 frames=0
+10-07 13:58:54.491  3552  5042 I WE      : INFO TEXHDR 'effects/waterflowphase' sprite=0 tex=32x32 map=32x32 mipmap_larger=0 frames=0
+10-07 13:58:56.058  3552  5042 I WE      : INFO   constValue: 'phasescale' -> 'g_FlowPhaseScale' = [0.010000]
+10-07 13:58:56.058  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_FlowSpeed' = [0.240000]
+10-07 13:58:56.058  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_FlowAmp' = [1.000000]
+10-07 13:58:56.058  3552  5042 I WE      : INFO   effect[3] 'ui_editor_effect_water_flow_title' loaded OK (1 nodes)
+10-07 13:58:56.058  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:57.460  3552  5042 I WE      : INFO puppet layer prepared: 2 scene layers, 2 mdl anims, total_blend=0.00
+10-07 13:58:57.460  3552  5042 I WE      : INFO   scene layer[0]: id=2917 blend=1.00 rate=2.00 visible=0 additive=1
+10-07 13:58:57.461  3552  5042 I WE      : INFO   scene layer[1]: id=2964 blend=1.30 rate=0.84 visible=0 additive=1
+10-07 13:58:57.461  3552  5042 I WE      : INFO   effect[4] '' loaded OK (1 nodes)
+10-07 13:58:57.461  3552  5042 I WE      : INFO   ParseImageObj id=28: 5 effects loaded, isCompose=0, isOffscreen=0
+10-07 13:58:57.461  3552  5042 I WE      : INFO   ParseImageObj id=28 completed, added to scene graph
+10-07 13:58:57.461  3552  5042 I WE      : INFO ParseImageObj: id=1616 name='нитка' image='models/нитка.json' visible=1 size=(678,636) fullscreen=0 origin=(1445.5,1700.6)
+10-07 13:58:57.461  3552  5042 I WE      : INFO   mdl 'models/нитка_puppet.mdl' vert bounds: X=[-276.0, 291.0] (w=567.0) Y=[-235.0, 273.0] (h=508.0) UV=[0.093-0.929, 0.071-0.869] n=241
+10-07 13:58:57.461  3552  5042 I WE      : INFO   mdl 'models/нитка_puppet.mdl': reading 6 bones
+10-07 13:58:57.461  3552  5042 I WE      : INFO     bone[0] '' parent=-1 trans=(226.2, 218.6, 0.0)
+10-07 13:58:57.462  3552  5042 I WE      : INFO     bone[1] '' parent=0 trans=(-60.8, -89.8, 0.0)
+10-07 13:58:57.462  3552  5042 I WE      : INFO     bone[2] '' parent=1 trans=(-62.3, -110.0, 0.0)
+10-07 13:58:57.462  3552  5042 I WE      : INFO     bone[3] '' parent=2 trans=(-112.9, -84.0, 0.0)
+10-07 13:58:57.462  3552  5042 I WE      : INFO     bone[4] '' parent=3 trans=(-124.5, -60.8, 0.0)
+10-07 13:58:57.462  3552  5042 I WE      : INFO     bone[5] '' parent=4 trans=(-75.3, -56.5, 0.0)
+10-07 13:58:57.462  3552  5042 I WE      : INFO   anim[0]: id=1040 name='Анимация 1' length=16
+10-07 13:58:57.462  3552  5042 I WE      : INFO mdl: anim 1040 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:58:57.462  3552  5042 I WE      : INFO   anim[1]: id=1877 name='Анимация 2' length=16
+10-07 13:58:57.462  3552  5042 I WE      : INFO mdl: anim 1877 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:58:57.462  3552  5042 I WE      : INFO read puppet: mdlv: 17, nmdls: 2, mdla: 4, bones: 6, anims: 2
+10-07 13:58:57.462  3552  5042 I WE      : INFO MDL bounds id=1616 name='нитка' x=[-276.0,291.0] y=[-235.0,273.0] span=(567,508) scene_size=(678,636) ratio=(1.20,1.25) attachments=0
+10-07 13:58:57.462  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:57.494  3552  5042 I WE      : INFO   ParseImageObj id=1616: finalBlend=1 hasEffect=1 isCompose=0 passthrough=0
+10-07 13:58:57.494  3552  5042 I WE      : INFO POS id=1616 name='нитка' world=(1445.5,1700.6) parent=-1 attach='' local=(1445.5,1700.6) size=(678,636) autosize=0 puppet='models/нитка_puppet.mdl'
+10-07 13:58:57.494  3552  5042 I WE      : INFO shader 'effects/waterwaves' vert(1612) frag(1869) geom(0)
+10-07 13:58:57.528  3552  5042 I WE      : INFO   constValue: 'direction' -> 'g_Direction' = [-2.214297]
+10-07 13:58:57.528  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [5.000000]
+10-07 13:58:57.528  3552  5042 I WE      : INFO   constValue: 'perspective' -> 'g_Perspective' = [0.000000]
+10-07 13:58:57.528  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [3.830000]
+10-07 13:58:57.529  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.320000]
+10-07 13:58:57.529  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_water_waves_title' loaded OK (1 nodes)
+10-07 13:58:57.529  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:57.555  3552  5042 I WE      : INFO puppet layer prepared: 1 scene layers, 2 mdl anims, total_blend=1.00
+10-07 13:58:57.556  3552  5042 I WE      : INFO   scene layer[0]: id=1040 blend=1.00 rate=1.00 visible=1 additive=1
+10-07 13:58:57.556  3552  5042 I WE      : INFO   effect[1] '' loaded OK (1 nodes)
+10-07 13:58:57.556  3552  5042 I WE      : INFO   ParseImageObj id=1616: 2 effects loaded, isCompose=0, isOffscreen=0
+10-07 13:58:57.556  3552  5042 I WE      : INFO   ParseImageObj id=1616 completed, added to scene graph
+10-07 13:58:57.556  3552  5042 I WE      : INFO ParseImageObj: id=44 name='челка зад' image='models/челка зад.json' visible=1 size=(429,661) fullscreen=0 origin=(1855.9,1657.0)
+10-07 13:58:57.563  3552  5042 I WE      : INFO   mdl 'models/челка зад_puppet.mdl' vert bounds: X=[-177.5, 223.5] (w=401.0) Y=[-311.5, 307.5] (h=619.0) UV=[0.086-1.021, 0.035-0.971] n=334
+10-07 13:58:57.563  3552  5042 I WE      : INFO   mdl 'models/челка зад_puppet.mdl': reading 5 bones
+10-07 13:58:57.564  3552  5042 I WE      : INFO     bone[0] '' parent=-1 trans=(111.4, 249.4, 0.0)
+10-07 13:58:57.564  3552  5042 I WE      : INFO     bone[1] '' parent=0 trans=(-28.8, -118.8, 0.0)
+10-07 13:58:57.564  3552  5042 I WE      : INFO     bone[2] '' parent=1 trans=(-36.4, -116.9, 0.0)
+10-07 13:58:57.564  3552  5042 I WE      : INFO     bone[3] '' parent=2 trans=(-42.2, -107.3, 0.0)
+10-07 13:58:57.564  3552  5042 I WE      : INFO     bone[4] '' parent=3 trans=(-36.4, -82.4, 0.0)
+10-07 13:58:57.564  3552  5042 I WE      : INFO   anim[0]: id=571 name='Анимация 1' length=16
+10-07 13:58:57.564  3552  5042 I WE      : INFO mdl: anim 571 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:58:57.564  3552  5042 I WE      : INFO   anim[1]: id=1256 name='Анимация 2' length=420
+10-07 13:58:57.564  3552  5042 I WE      : INFO mdl: anim 1256 declares 420 frame(s) but bone track 0 stores 421 — playback clamps into the stored frames
+10-07 13:58:57.564  3552  5042 I WE      : INFO read puppet: mdlv: 17, nmdls: 2, mdla: 4, bones: 5, anims: 2
+10-07 13:58:57.564  3552  5042 I WE      : INFO MDL bounds id=44 name='челка зад' x=[-177.5,223.5] y=[-311.5,307.5] span=(401,619) scene_size=(429,661) ratio=(1.07,1.07) attachments=0
+10-07 13:58:57.565  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:57.566  3552  5042 I WE      : INFO TEXHDR 'челка зад' sprite=0 tex=429x661 map=429x661 mipmap_larger=0 frames=0
+10-07 13:58:57.606  3552  5042 I WE      : INFO   ParseImageObj id=44: finalBlend=1 hasEffect=1 isCompose=0 passthrough=0
+10-07 13:58:57.606  3552  5042 I WE      : INFO POS id=44 name='челка зад' world=(1855.9,1657.0) parent=-1 attach='' local=(1855.9,1657.0) size=(429,661) autosize=0 puppet='models/челка зад_puppet.mdl'
+10-07 13:58:57.606  3552  5042 I WE      : INFO shader 'effects/waterwaves' vert(1612) frag(1869) geom(0)
+10-07 13:58:57.607  3552  5042 I WE      : INFO TEXHDR 'masks/waterwaves_mask_728de645' sprite=0 tex=214x330 map=214x330 mipmap_larger=0 frames=0
+10-07 13:58:57.639  3552  5042 I WE      : INFO   constValue: 'direction' -> 'g_Direction' = [-2.745231]
+10-07 13:58:57.640  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [6.290000]
+10-07 13:58:57.640  3552  5042 I WE      : INFO   constValue: 'perspective' -> 'g_Perspective' = [0.000000]
+10-07 13:58:57.640  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [3.830000]
+10-07 13:58:57.640  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.220000]
+10-07 13:58:57.640  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_water_waves_title' loaded OK (1 nodes)
+10-07 13:58:57.640  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:58.794  3552  5042 I WE      : INFO puppet layer prepared: 2 scene layers, 2 mdl anims, total_blend=2.00
+10-07 13:58:58.794  3552  5042 I WE      : INFO   scene layer[0]: id=571 blend=1.00 rate=1.00 visible=1 additive=1
+10-07 13:58:58.794  3552  5042 I WE      : INFO   scene layer[1]: id=1256 blend=1.00 rate=2.00 visible=1 additive=1
+10-07 13:58:58.795  3552  5042 I WE      : INFO   effect[1] '' loaded OK (1 nodes)
+10-07 13:58:58.795  3552  5042 I WE      : INFO   ParseImageObj id=44: 2 effects loaded, isCompose=0, isOffscreen=0
+10-07 13:58:58.795  3552  5042 I WE      : INFO   ParseImageObj id=44 completed, added to scene graph
+10-07 13:58:58.795  3552  5042 I WE      : INFO ParseImageObj: id=1263 name='коса' image='models/коса.json' visible=1 size=(847,1080) fullscreen=0 origin=(1257.3,1657.0)
+10-07 13:58:58.796  3552  5042 I WE      : INFO   mdl 'models/коса_puppet.mdl' vert bounds: X=[-384.5, 397.5] (w=782.0) Y=[-497.0, 534.0] (h=1031.0) UV=[0.046-0.969, 0.006-0.960] n=273
+10-07 13:58:58.796  3552  5042 I WE      : INFO   mdl 'models/коса_puppet.mdl': reading 6 bones
+10-07 13:58:58.797  3552  5042 I WE      : INFO     bone[0] '' parent=-1 trans=(235.7, 390.0, 0.0)
+10-07 13:58:58.797  3552  5042 I WE      : INFO     bone[1] '' parent=0 trans=(-120.2, -175.6, 0.0)
+10-07 13:58:58.797  3552  5042 I WE      : INFO     bone[2] '' parent=1 trans=(-136.4, -168.7, 0.0)
+10-07 13:58:58.797  3552  5042 I WE      : INFO     bone[3] '' parent=2 trans=(-131.7, -104.0, 0.0)
+10-07 13:58:58.797  3552  5042 I WE      : INFO     bone[4] '' parent=3 trans=(-60.1, -164.1, 0.0)
+10-07 13:58:58.797  3552  5042 I WE      : INFO     bone[5] '' parent=4 trans=(2.3, -138.7, 0.0)
+10-07 13:58:58.797  3552  5042 I WE      : INFO   anim[0]: id=1223 name='Анимация 1' length=16
+10-07 13:58:58.797  3552  5042 I WE      : INFO mdl: anim 1223 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:58:58.797  3552  5042 I WE      : INFO   anim[1]: id=2322 name='Анимация 2' length=9
+10-07 13:58:58.797  3552  5042 I WE      : INFO mdl: anim 2322 declares 9 frame(s) but bone track 0 stores 10 — playback clamps into the stored frames
+10-07 13:58:58.797  3552  5042 I WE      : INFO   anim[2]: id=3960 name='Анимация 3' length=420
+10-07 13:58:58.798  3552  5042 I WE      : INFO mdl: anim 3960 declares 420 frame(s) but bone track 0 stores 421 — playback clamps into the stored frames
+10-07 13:58:58.798  3552  5042 I WE      : INFO   anim[3]: id=458 name='Анимация 4' length=16
+10-07 13:58:58.798  3552  5042 I WE      : INFO mdl: anim 458 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:58:58.798  3552  5042 I WE      : INFO read puppet: mdlv: 17, nmdls: 2, mdla: 4, bones: 6, anims: 4
+10-07 13:58:58.798  3552  5042 I WE      : INFO MDL bounds id=1263 name='коса' x=[-384.5,397.5] y=[-497.0,534.0] span=(782,1031) scene_size=(847,1080) ratio=(1.08,1.05) attachments=0
+10-07 13:58:58.798  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:58.798  3552  5042 I WE      : INFO TEXHDR 'коса' sprite=0 tex=847x1080 map=847x1080 mipmap_larger=0 frames=0
+10-07 13:58:58.842  3552  5042 I WE      : INFO   ParseImageObj id=1263: finalBlend=1 hasEffect=1 isCompose=0 passthrough=0
+10-07 13:58:58.842  3552  5042 I WE      : INFO POS id=1263 name='коса' world=(1257.3,1657.0) parent=-1 attach='' local=(1257.3,1657.0) size=(847,1080) autosize=0 puppet='models/коса_puppet.mdl'
+10-07 13:58:58.842  3552  5042 I WE      : INFO shader 'effects/waterwaves' vert(1612) frag(1869) geom(0)
+10-07 13:58:58.846  3552  5042 I WE      : INFO TEXHDR 'masks/waterwaves_mask_9fdadc16' sprite=0 tex=423x540 map=423x540 mipmap_larger=0 frames=0
+10-07 13:58:58.906  3552  5042 I WE      : INFO   constValue: 'direction' -> 'g_Direction' = [-2.111569]
+10-07 13:58:58.908  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [7.320000]
+10-07 13:58:58.908  3552  5042 I WE      : INFO   constValue: 'perspective' -> 'g_Perspective' = [0.000000]
+10-07 13:58:58.908  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [7.640000]
+10-07 13:58:58.908  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.230000]
+10-07 13:58:58.909  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_water_waves_title' loaded OK (1 nodes)
+10-07 13:58:58.910  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:58.986  3552  5042 I WE      : INFO puppet layer prepared: 1 scene layers, 4 mdl anims, total_blend=1.00
+10-07 13:58:58.988  3552  5042 I WE      : INFO   scene layer[0]: id=458 blend=1.00 rate=1.00 visible=1 additive=1
+10-07 13:58:58.990  3552  5042 I WE      : INFO   effect[1] '' loaded OK (1 nodes)
+10-07 13:58:58.990  3552  5042 I WE      : INFO   ParseImageObj id=1263: 2 effects loaded, isCompose=0, isOffscreen=0
+10-07 13:58:58.990  3552  5042 I WE      : INFO   ParseImageObj id=1263 completed, added to scene graph
+10-07 13:58:58.990  3552  5042 I WE      : INFO ParseImageObj: id=126 name='нитка' image='models/нитка.json' visible=1 size=(678,636) fullscreen=0 origin=(1418.4,1638.6)
+10-07 13:58:58.990  3552  5042 I WE      : INFO   mdl 'models/нитка_puppet.mdl' vert bounds: X=[-276.0, 291.0] (w=567.0) Y=[-235.0, 273.0] (h=508.0) UV=[0.093-0.929, 0.071-0.869] n=241
+10-07 13:58:58.991  3552  5042 I WE      : INFO   mdl 'models/нитка_puppet.mdl': reading 6 bones
+10-07 13:58:58.991  3552  5042 I WE      : INFO     bone[0] '' parent=-1 trans=(226.2, 218.6, 0.0)
+10-07 13:58:58.991  3552  5042 I WE      : INFO     bone[1] '' parent=0 trans=(-60.8, -89.8, 0.0)
+10-07 13:58:58.991  3552  5042 I WE      : INFO     bone[2] '' parent=1 trans=(-62.3, -110.0, 0.0)
+10-07 13:58:58.991  3552  5042 I WE      : INFO     bone[3] '' parent=2 trans=(-112.9, -84.0, 0.0)
+10-07 13:58:58.991  3552  5042 I WE      : INFO     bone[4] '' parent=3 trans=(-124.5, -60.8, 0.0)
+10-07 13:58:58.991  3552  5042 I WE      : INFO     bone[5] '' parent=4 trans=(-75.3, -56.5, 0.0)
+10-07 13:58:58.992  3552  5042 I WE      : INFO   anim[0]: id=1040 name='Анимация 1' length=16
+10-07 13:58:58.992  3552  5042 I WE      : INFO mdl: anim 1040 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:58:58.992  3552  5042 I WE      : INFO   anim[1]: id=1877 name='Анимация 2' length=16
+10-07 13:58:58.992  3552  5042 I WE      : INFO mdl: anim 1877 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:58:58.992  3552  5042 I WE      : INFO read puppet: mdlv: 17, nmdls: 2, mdla: 4, bones: 6, anims: 2
+10-07 13:58:58.992  3552  5042 I WE      : INFO MDL bounds id=126 name='нитка' x=[-276.0,291.0] y=[-235.0,273.0] span=(567,508) scene_size=(678,636) ratio=(1.20,1.25) attachments=0
+10-07 13:58:58.992  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:59.052  3552  5042 I WE      : INFO   ParseImageObj id=126: finalBlend=1 hasEffect=1 isCompose=0 passthrough=0
+10-07 13:58:59.052  3552  5042 I WE      : INFO POS id=126 name='нитка' world=(1418.4,1638.6) parent=-1 attach='' local=(1418.4,1638.6) size=(678,636) autosize=0 puppet='models/нитка_puppet.mdl'
+10-07 13:58:59.052  3552  5042 I WE      : INFO shader 'effects/waterwaves' vert(1612) frag(1869) geom(0)
+10-07 13:58:59.109  3552  5042 I WE      : INFO   constValue: 'direction' -> 'g_Direction' = [-2.800614]
+10-07 13:58:59.109  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [5.000000]
+10-07 13:58:59.109  3552  5042 I WE      : INFO   constValue: 'perspective' -> 'g_Perspective' = [0.000000]
+10-07 13:58:59.109  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [3.830000]
+10-07 13:58:59.109  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.320000]
+10-07 13:58:59.109  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_water_waves_title' loaded OK (1 nodes)
+10-07 13:58:59.109  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:59.181  3552  5042 I WE      : INFO puppet layer prepared: 0 scene layers, 2 mdl anims, total_blend=0.00
+10-07 13:58:59.184  3552  5042 I WE      : INFO   effect[1] '' loaded OK (1 nodes)
+10-07 13:58:59.185  3552  5042 I WE      : INFO   ParseImageObj id=126: 2 effects loaded, isCompose=0, isOffscreen=0
+10-07 13:58:59.185  3552  5042 I WE      : INFO   ParseImageObj id=126 completed, added to scene graph
+10-07 13:58:59.185  3552  5042 I WE      : INFO ParseImageObj: id=32 name='коса' image='models/коса.json' visible=1 size=(847,1080) fullscreen=0 origin=(1312.7,1563.4)
+10-07 13:58:59.185  3552  5042 I WE      : INFO   mdl 'models/коса_puppet.mdl' vert bounds: X=[-384.5, 397.5] (w=782.0) Y=[-497.0, 534.0] (h=1031.0) UV=[0.046-0.969, 0.006-0.960] n=273
+10-07 13:58:59.185  3552  5042 I WE      : INFO   mdl 'models/коса_puppet.mdl': reading 6 bones
+10-07 13:58:59.186  3552  5042 I WE      : INFO     bone[0] '' parent=-1 trans=(235.7, 390.0, 0.0)
+10-07 13:58:59.186  3552  5042 I WE      : INFO     bone[1] '' parent=0 trans=(-120.2, -175.6, 0.0)
+10-07 13:58:59.186  3552  5042 I WE      : INFO     bone[2] '' parent=1 trans=(-136.4, -168.7, 0.0)
+10-07 13:58:59.186  3552  5042 I WE      : INFO     bone[3] '' parent=2 trans=(-131.7, -104.0, 0.0)
+10-07 13:58:59.186  3552  5042 I WE      : INFO     bone[4] '' parent=3 trans=(-60.1, -164.1, 0.0)
+10-07 13:58:59.186  3552  5042 I WE      : INFO     bone[5] '' parent=4 trans=(2.3, -138.7, 0.0)
+10-07 13:58:59.186  3552  5042 I WE      : INFO   anim[0]: id=1223 name='Анимация 1' length=16
+10-07 13:58:59.186  3552  5042 I WE      : INFO mdl: anim 1223 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:58:59.186  3552  5042 I WE      : INFO   anim[1]: id=2322 name='Анимация 2' length=9
+10-07 13:58:59.186  3552  5042 I WE      : INFO mdl: anim 2322 declares 9 frame(s) but bone track 0 stores 10 — playback clamps into the stored frames
+10-07 13:58:59.186  3552  5042 I WE      : INFO   anim[2]: id=3960 name='Анимация 3' length=420
+10-07 13:58:59.187  3552  5042 I WE      : INFO mdl: anim 3960 declares 420 frame(s) but bone track 0 stores 421 — playback clamps into the stored frames
+10-07 13:58:59.187  3552  5042 I WE      : INFO   anim[3]: id=458 name='Анимация 4' length=16
+10-07 13:58:59.187  3552  5042 I WE      : INFO mdl: anim 458 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:58:59.188  3552  5042 I WE      : INFO read puppet: mdlv: 17, nmdls: 2, mdla: 4, bones: 6, anims: 4
+10-07 13:58:59.188  3552  5042 I WE      : INFO MDL bounds id=32 name='коса' x=[-384.5,397.5] y=[-497.0,534.0] span=(782,1031) scene_size=(847,1080) ratio=(1.08,1.05) attachments=0
+10-07 13:58:59.188  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:59.290  3552  5042 I WE      : INFO   ParseImageObj id=32: finalBlend=1 hasEffect=1 isCompose=0 passthrough=0
+10-07 13:58:59.292  3552  5042 I WE      : INFO POS id=32 name='коса' world=(1312.7,1563.4) parent=-1 attach='' local=(1312.7,1563.4) size=(847,1080) autosize=0 puppet='models/коса_puppet.mdl'
+10-07 13:58:59.292  3552  5042 I WE      : INFO shader 'effects/waterwaves' vert(1612) frag(1869) geom(0)
+10-07 13:58:59.361  3552  5042 I WE      : INFO   constValue: 'direction' -> 'g_Direction' = [-1.792111]
+10-07 13:58:59.361  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [5.920000]
+10-07 13:58:59.361  3552  5042 I WE      : INFO   constValue: 'perspective' -> 'g_Perspective' = [0.000000]
+10-07 13:58:59.361  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [7.640000]
+10-07 13:58:59.361  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.230000]
+10-07 13:58:59.361  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_water_waves_title' loaded OK (1 nodes)
+10-07 13:58:59.362  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:59.387  3552  5042 I WE      : INFO puppet layer prepared: 3 scene layers, 4 mdl anims, total_blend=3.00
+10-07 13:58:59.387  3552  5042 I WE      : INFO   scene layer[0]: id=2322 blend=1.00 rate=1.29 visible=1 additive=1
+10-07 13:58:59.387  3552  5042 I WE      : INFO   scene layer[1]: id=1223 blend=1.00 rate=1.00 visible=1 additive=1
+10-07 13:58:59.387  3552  5042 I WE      : INFO   scene layer[2]: id=3960 blend=1.00 rate=2.00 visible=1 additive=1
+10-07 13:58:59.387  3552  5042 I WE      : INFO   effect[1] '' loaded OK (1 nodes)
+10-07 13:58:59.387  3552  5042 I WE      : INFO   ParseImageObj id=32: 2 effects loaded, isCompose=0, isOffscreen=0
+10-07 13:58:59.387  3552  5042 I WE      : INFO   ParseImageObj id=32 completed, added to scene graph
+10-07 13:58:59.387  3552  5042 I WE      : INFO ParseImageObj: id=24 name='девка 1' image='models/девка 1.json' visible=1 size=(1575,2160) fullscreen=0 origin=(1557.6,1036.5)
+10-07 13:58:59.389  3552  5042 I WE      : INFO   mdl 'models/девка 1_puppet.mdl' vert bounds: X=[-737.5, 745.5] (w=1483.0) Y=[-1096.0, 1066.0] (h=2162.0) UV=[0.032-0.973, 0.006-1.007] n=602
+10-07 13:58:59.389  3552  5042 I WE      : INFO   mdl 'models/девка 1_puppet.mdl': reading 36 bones
+10-07 13:58:59.389  3552  5042 I WE      : INFO     bone[0] '' parent=-1 trans=(453.2, -1061.9, 0.0)
+10-07 13:58:59.389  3552  5042 I WE      : INFO     bone[1] '' parent=0 trans=(19.2, 125.8, 0.0)
+10-07 13:58:59.389  3552  5042 I WE      : INFO     bone[2] '' parent=1 trans=(-50.5, 120.8, 0.0)
+10-07 13:58:59.389  3552  5042 I WE      : INFO     bone[3] '' parent=2 trans=(-36.1, 140.6, 0.0)
+10-07 13:58:59.389  3552  5042 I WE      : INFO     bone[4] '' parent=3 trans=(7.9, 172.4, 0.0)
+10-07 13:58:59.389  3552  5042 I WE      : INFO     bone[5] '' parent=4 trans=(-101.0, 124.4, 0.0)
+10-07 13:58:59.389  3552  5042 I WE      : INFO     bone[6] '' parent=5 trans=(-46.9, 187.5, 0.0)
+10-07 13:58:59.389  3552  5042 I WE      : INFO     bone[7] '' parent=6 trans=(-45.9, 258.8, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[8] '' parent=7 trans=(-27.0, 117.2, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[9] '' parent=8 trans=(-37.9, 99.2, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[10] '' parent=9 trans=(-262.4, 133.7, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[11] '' parent=9 trans=(192.6, 37.0, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[12] '' parent=10 trans=(-118.0, -288.8, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[13] '' parent=12 trans=(-62.5, -130.9, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[14] '' parent=13 trans=(-48.8, -105.5, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[15] '' parent=14 trans=(192.0, -159.6, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[16] '' parent=15 trans=(209.1, -95.7, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[17] '' parent=16 trans=(74.2, -228.6, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[18] '' parent=9 trans=(10.5, 80.5, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[19] '' parent=18 trans=(-40.6, 63.8, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[20] '' parent=19 trans=(-18.2, 76.2, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[21] '' parent=20 trans=(-22.4, 49.7, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[22] '' parent=21 trans=(179.9, -5.7, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[23] '' parent=22 trans=(54.7, 132.6, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[24] '' parent=23 trans=(44.7, 139.2, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[25] '' parent=24 trans=(-130.4, 172.1, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[26] '' parent=25 trans=(-115.2, -52.2, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[27] '' parent=26 trans=(-31.5, -104.4, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[28] '' parent=27 trans=(-91.7, 136.6, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[29] '' parent=28 trans=(-72.8, 8.7, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[30] '' parent=29 trans=(-79.7, -199.2, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[31] '' parent=30 trans=(-81.4, -142.1, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[32] '' parent=31 trans=(-114.3, -114.3, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[33] '' parent=32 trans=(-123.0, -74.5, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[34] '' parent=33 trans=(-91.8, -84.9, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO     bone[35] '' parent=34 trans=(-31.2, -79.7, 0.0)
+10-07 13:58:59.390  3552  5042 I WE      : INFO   anim[0]: id=391 name='Анимация 1' length=16
+10-07 13:58:59.390  3552  5042 I WE      : INFO mdl: anim 391 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:58:59.390  3552  5042 I WE      : INFO   anim[1]: id=3106 name='Анимация 2' length=420
+10-07 13:58:59.392  3552  5042 I WE      : INFO mdl: anim 3106 declares 420 frame(s) but bone track 0 stores 421 — playback clamps into the stored frames
+10-07 13:58:59.392  3552  5042 I WE      : INFO read puppet: mdlv: 17, nmdls: 2, mdla: 4, bones: 36, anims: 2
+10-07 13:58:59.392  3552  5042 I WE      : INFO MDL bounds id=24 name='девка 1' x=[-737.5,745.5] y=[-1096.0,1066.0] span=(1483,2162) scene_size=(1575,2160) ratio=(1.06,1.00) attachments=0
+10-07 13:58:59.392  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:58:59.393  3552  5042 I WE      : INFO TEXHDR 'девка 1' sprite=0 tex=1575x2160 map=1575x2160 mipmap_larger=0 frames=0
+10-07 13:58:59.413  3552  5042 I WE      : INFO   ParseImageObj id=24: finalBlend=1 hasEffect=1 isCompose=0 passthrough=0
+10-07 13:58:59.414  3552  5042 I WE      : INFO POS id=24 name='девка 1' world=(1557.6,1036.5) parent=-1 attach='' local=(1557.6,1036.5) size=(1575,2160) autosize=0 puppet='models/девка 1_puppet.mdl'
+10-07 13:58:59.419  3552  5042 I WE      : INFO shader 'effects/opacity' vert(449) frag(589) geom(0)
+10-07 13:58:59.419  3552  5042 I WE      : INFO TEXHDR 'masks/opacity_mask_5ccb680c' sprite=0 tex=787x1080 map=787x1080 mipmap_larger=0 frames=0
+10-07 13:58:59.802  3552  5042 I WE      : INFO   constValue: 'alpha' -> 'g_UserAlpha' = [1.000000]
+10-07 13:58:59.802  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_opacity_title' loaded OK (1 nodes)
+10-07 13:58:59.802  3552  5042 I WE      : INFO shader 'effects/waterwaves' vert(1612) frag(1869) geom(0)
+10-07 13:58:59.806  3552  5042 I WE      : INFO TEXHDR 'masks/waterwaves_mask_aa2f1b8e' sprite=0 tex=787x1080 map=787x1080 mipmap_larger=0 frames=0
+10-07 13:58:59.835  3552  5042 I WE      : INFO   constValue: 'direction' -> 'g_Direction' = [1.464061]
+10-07 13:58:59.838  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [2.450000]
+10-07 13:58:59.838  3552  5042 I WE      : INFO   constValue: 'perspective' -> 'g_Perspective' = [0.000000]
+10-07 13:58:59.838  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [0.010000]
+10-07 13:58:59.839  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.070000]
+10-07 13:58:59.839  3552  5042 I WE      : INFO   effect[1] 'ui_editor_effect_water_waves_title' loaded OK (1 nodes)
+10-07 13:58:59.839  3552  5042 I WE      : INFO shader 'effects/waterwaves' vert(1612) frag(1869) geom(0)
+10-07 13:58:59.839  3552  5042 I WE      : INFO TEXHDR 'masks/waterwaves_mask_57b21fbe' sprite=0 tex=787x1080 map=787x1080 mipmap_larger=0 frames=0
+10-07 13:58:59.865  3552  5042 I WE      : INFO   constValue: 'direction' -> 'g_Direction' = [-1.981225]
+10-07 13:58:59.865  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [7.260000]
+10-07 13:58:59.865  3552  5042 I WE      : INFO   constValue: 'perspective' -> 'g_Perspective' = [0.000000]
+10-07 13:58:59.865  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [19.090000]
+10-07 13:58:59.865  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.100000]
+10-07 13:58:59.865  3552  5042 I WE      : INFO   effect[2] 'ui_editor_effect_water_waves_title' loaded OK (1 nodes)
+10-07 13:58:59.865  3552  5042 I WE      : INFO shader 'effects/foliagesway' vert(3383) frag(1905) geom(0)
+10-07 13:58:59.866  3552  5042 I WE      : INFO TEXHDR 'masks/foliagesway_mask_df7c6272' sprite=0 tex=787x1080 map=787x1080 mipmap_larger=0 frames=0
+10-07 13:58:59.999  3552  5042 I WE      : INFO   constValue: 'phase' -> 'g_Phase' = [0.500000]
+10-07 13:58:59.999  3552  5042 I WE      : INFO   constValue: 'power' -> 'g_Power' = [1.000000]
+10-07 13:58:59.999  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_NoiseScale' = [0.000000]
+10-07 13:58:59.999  3552  5042 I WE      : INFO   constValue: 'speeduv' -> 'g_Speed' = [5.720000]
+10-07 13:58:59.999  3552  5042 I WE      : INFO   constValue: 'ratio' -> 'g_Ratio' = [1.480000]
+10-07 13:58:59.999  3552  5042 I WE      : INFO   constValue: 'scrolldirection' -> 'g_Direction' = [2.285888]
+10-07 13:58:59.999  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.400000]
+10-07 13:58:59.999  3552  5042 I WE      : INFO   effect[3] 'ui_editor_effect_foliage_sway_title' loaded OK (1 nodes)
+10-07 13:58:59.999  3552  5042 I WE      : INFO shader 'effects/shake' vert(3268) frag(3007) geom(0)
+10-07 13:59:00.019  3552  5042 I WE      : INFO TEXHDR 'masks/shake_mask_90d0f7af' sprite=0 tex=787x1080 map=787x1080 mipmap_larger=0 frames=0
+10-07 13:59:00.021  3552  5042 I WE      : INFO TEXHDR 'masks/shake_mask_e90950eb' sprite=0 tex=787x1080 map=787x1080 mipmap_larger=0 frames=0
+10-07 13:59:00.022  3552  5042 I WE      : INFO TEXHDR 'masks/shake_mask_20d7f0c4' sprite=0 tex=787x1080 map=787x1080 mipmap_larger=0 frames=0
+10-07 13:59:01.374  3552  5042 I WE      : INFO   constValue: 'bounds' -> 'g_Bounds' = [0.000000,1.000000]
+10-07 13:59:01.374  3552  5042 I WE      : INFO   constValue: 'friction' -> 'g_Friction' = [1.000000,1.000000]
+10-07 13:59:01.374  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [1.430000]
+10-07 13:59:01.374  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Amp' = [0.130000]
+10-07 13:59:01.374  3552  5042 I WE      : INFO   effect[4] 'ui_editor_effect_shake_title' loaded OK (1 nodes)
+10-07 13:59:01.378  3552  5042 I WE      : INFO shader 'effects/waterwaves' vert(1612) frag(1869) geom(0)
+10-07 13:59:01.379  3552  5042 I WE      : INFO TEXHDR 'masks/waterwaves_mask_976468e9' sprite=0 tex=787x1080 map=787x1080 mipmap_larger=0 frames=0
+10-07 13:59:01.486  3552  5042 I WE      : INFO   constValue: 'direction' -> 'g_Direction' = [1.317122]
+10-07 13:59:01.486  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [1.800000]
+10-07 13:59:01.486  3552  5042 I WE      : INFO   constValue: 'perspective' -> 'g_Perspective' = [0.000000]
+10-07 13:59:01.486  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [0.010000]
+10-07 13:59:01.486  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.090000]
+10-07 13:59:01.486  3552  5042 I WE      : INFO   effect[5] 'ui_editor_effect_water_waves_title' loaded OK (1 nodes)
+10-07 13:59:01.487  3552  5042 I WE      : INFO shader 'effects/shake' vert(3268) frag(3007) geom(0)
+10-07 13:59:01.487  3552  5042 I WE      : INFO TEXHDR 'masks/shake_mask_aba32d98' sprite=0 tex=787x1080 map=787x1080 mipmap_larger=0 frames=0
+10-07 13:59:01.515  3552  5042 I WE      : INFO   constValue: 'bounds' -> 'g_Bounds' = [0.000000,1.000000]
+10-07 13:59:01.515  3552  5042 I WE      : INFO   constValue: 'friction' -> 'g_Friction' = [1.000000,1.000000]
+10-07 13:59:01.515  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [2.100000]
+10-07 13:59:01.515  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Amp' = [0.080000]
+10-07 13:59:01.515  3552  5042 I WE      : INFO   effect[6] 'ui_editor_effect_shake_title' loaded OK (1 nodes)
+10-07 13:59:01.516  3552  5042 I WE      : INFO shader 'effects/foliagesway' vert(3383) frag(1905) geom(0)
+10-07 13:59:01.521  3552  5042 I WE      : INFO TEXHDR 'masks/foliagesway_mask_b0e3a554' sprite=0 tex=787x1080 map=787x1080 mipmap_larger=0 frames=0
+10-07 13:59:01.584  3552  5042 I WE      : INFO   constValue: 'phase' -> 'g_Phase' = [0.500000]
+10-07 13:59:01.584  3552  5042 I WE      : INFO   constValue: 'power' -> 'g_Power' = [1.000000]
+10-07 13:59:01.584  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_NoiseScale' = [0.000000]
+10-07 13:59:01.585  3552  5042 I WE      : INFO   constValue: 'speeduv' -> 'g_Speed' = [1.830000]
+10-07 13:59:01.585  3552  5042 I WE      : INFO   constValue: 'ratio' -> 'g_Ratio' = [0.300000]
+10-07 13:59:01.585  3552  5042 I WE      : INFO   constValue: 'scrolldirection' -> 'g_Direction' = [-2.994514]
+10-07 13:59:01.585  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.400000]
+10-07 13:59:01.585  3552  5042 I WE      : INFO   effect[7] 'ui_editor_effect_foliage_sway_title' loaded OK (1 nodes)
+10-07 13:59:01.585  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:59:02.631  3552  5042 I WE      : INFO puppet layer prepared: 2 scene layers, 2 mdl anims, total_blend=2.00
+10-07 13:59:02.631  3552  5042 I WE      : INFO   scene layer[0]: id=391 blend=1.00 rate=1.00 visible=1 additive=1
+10-07 13:59:02.631  3552  5042 I WE      : INFO   scene layer[1]: id=3106 blend=1.00 rate=2.00 visible=1 additive=1
+10-07 13:59:02.632  3552  5042 I WE      : INFO   effect[8] '' loaded OK (1 nodes)
+10-07 13:59:02.632  3552  5042 I WE      : INFO   ParseImageObj id=24: 9 effects loaded, isCompose=0, isOffscreen=0
+10-07 13:59:02.632  3552  5042 I WE      : INFO   ParseImageObj id=24 completed, added to scene graph
+10-07 13:59:02.632  3552  5042 I WE      : INFO ParseImageObj: id=40 name='нитка' image='models/нитка.json' visible=1 size=(678,636) fullscreen=0 origin=(1287.5,1738.0)
+10-07 13:59:02.632  3552  5042 I WE      : INFO   mdl 'models/нитка_puppet.mdl' vert bounds: X=[-276.0, 291.0] (w=567.0) Y=[-235.0, 273.0] (h=508.0) UV=[0.093-0.929, 0.071-0.869] n=241
+10-07 13:59:02.632  3552  5042 I WE      : INFO   mdl 'models/нитка_puppet.mdl': reading 6 bones
+10-07 13:59:02.632  3552  5042 I WE      : INFO     bone[0] '' parent=-1 trans=(226.2, 218.6, 0.0)
+10-07 13:59:02.632  3552  5042 I WE      : INFO     bone[1] '' parent=0 trans=(-60.8, -89.8, 0.0)
+10-07 13:59:02.632  3552  5042 I WE      : INFO     bone[2] '' parent=1 trans=(-62.3, -110.0, 0.0)
+10-07 13:59:02.632  3552  5042 I WE      : INFO     bone[3] '' parent=2 trans=(-112.9, -84.0, 0.0)
+10-07 13:59:02.632  3552  5042 I WE      : INFO     bone[4] '' parent=3 trans=(-124.5, -60.8, 0.0)
+10-07 13:59:02.632  3552  5042 I WE      : INFO     bone[5] '' parent=4 trans=(-75.3, -56.5, 0.0)
+10-07 13:59:02.632  3552  5042 I WE      : INFO   anim[0]: id=1040 name='Анимация 1' length=16
+10-07 13:59:02.632  3552  5042 I WE      : INFO mdl: anim 1040 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:59:02.632  3552  5042 I WE      : INFO   anim[1]: id=1877 name='Анимация 2' length=16
+10-07 13:59:02.632  3552  5042 I WE      : INFO mdl: anim 1877 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:59:02.632  3552  5042 I WE      : INFO read puppet: mdlv: 17, nmdls: 2, mdla: 4, bones: 6, anims: 2
+10-07 13:59:02.632  3552  5042 I WE      : INFO MDL bounds id=40 name='нитка' x=[-276.0,291.0] y=[-235.0,273.0] span=(567,508) scene_size=(678,636) ratio=(1.20,1.25) attachments=0
+10-07 13:59:02.632  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:59:02.664  3552  5042 I WE      : INFO   ParseImageObj id=40: finalBlend=1 hasEffect=1 isCompose=0 passthrough=0
+10-07 13:59:02.664  3552  5042 I WE      : INFO POS id=40 name='нитка' world=(1287.5,1738.0) parent=-1 attach='' local=(1287.5,1738.0) size=(678,636) autosize=0 puppet='models/нитка_puppet.mdl'
+10-07 13:59:02.664  3552  5042 I WE      : INFO shader 'effects/waterwaves' vert(1612) frag(1869) geom(0)
+10-07 13:59:02.692  3552  5042 I WE      : INFO   constValue: 'direction' -> 'g_Direction' = [-2.214297]
+10-07 13:59:02.692  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [5.000000]
+10-07 13:59:02.692  3552  5042 I WE      : INFO   constValue: 'perspective' -> 'g_Perspective' = [0.000000]
+10-07 13:59:02.692  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [3.830000]
+10-07 13:59:02.692  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.320000]
+10-07 13:59:02.692  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_water_waves_title' loaded OK (1 nodes)
+10-07 13:59:02.692  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:59:02.718  3552  5042 I WE      : INFO puppet layer prepared: 1 scene layers, 2 mdl anims, total_blend=1.00
+10-07 13:59:02.718  3552  5042 I WE      : INFO   scene layer[0]: id=1040 blend=1.00 rate=1.00 visible=1 additive=1
+10-07 13:59:02.719  3552  5042 I WE      : INFO   effect[1] '' loaded OK (1 nodes)
+10-07 13:59:02.719  3552  5042 I WE      : INFO   ParseImageObj id=40: 2 effects loaded, isCompose=0, isOffscreen=0
+10-07 13:59:02.719  3552  5042 I WE      : INFO   ParseImageObj id=40 completed, added to scene graph
+10-07 13:59:02.719  3552  5042 I WE      : INFO ParseImageObj: id=1785 name='челка' image='models/челка.json' visible=1 size=(479,609) fullscreen=0 origin=(1698.2,1611.9)
+10-07 13:59:02.720  3552  5042 I WE      : INFO   mdl 'models/челка_puppet.mdl' vert bounds: X=[-152.5, 190.5] (w=343.0) Y=[-234.5, 249.5] (h=484.0) UV=[0.182-0.898, 0.090-0.885] n=203
+10-07 13:59:02.721  3552  5042 I WE      : INFO   mdl 'models/челка_puppet.mdl': reading 3 bones
+10-07 13:59:02.721  3552  5042 I WE      : INFO     bone[0] '' parent=-1 trans=(-7.7, -143.8, 0.0)
+10-07 13:59:02.721  3552  5042 I WE      : INFO     bone[1] '' parent=0 trans=(44.9, 205.6, 0.0)
+10-07 13:59:02.721  3552  5042 I WE      : INFO     bone[2] '' parent=1 trans=(67.3, 136.4, 0.0)
+10-07 13:59:02.721  3552  5042 I WE      : INFO   anim[0]: id=497 name='Анимация 1' length=16
+10-07 13:59:02.721  3552  5042 I WE      : INFO mdl: anim 497 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:59:02.721  3552  5042 I WE      : INFO   anim[1]: id=3341 name='Анимация 2' length=420
+10-07 13:59:02.721  3552  5042 I WE      : INFO mdl: anim 3341 declares 420 frame(s) but bone track 0 stores 421 — playback clamps into the stored frames
+10-07 13:59:02.722  3552  5042 I WE      : INFO read puppet: mdlv: 17, nmdls: 2, mdla: 4, bones: 3, anims: 2
+10-07 13:59:02.722  3552  5042 I WE      : INFO MDL bounds id=1785 name='челка' x=[-152.5,190.5] y=[-234.5,249.5] span=(343,484) scene_size=(479,609) ratio=(1.40,1.26) attachments=0
+10-07 13:59:02.722  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:59:02.722  3552  5042 I WE      : INFO TEXHDR 'челка' sprite=0 tex=479x609 map=479x609 mipmap_larger=0 frames=0
+10-07 13:59:02.746  3552  5042 I WE      : INFO   ParseImageObj id=1785: finalBlend=1 hasEffect=1 isCompose=0 passthrough=0
+10-07 13:59:02.746  3552  5042 I WE      : INFO POS id=1785 name='челка' world=(1698.2,1611.9) parent=-1 attach='' local=(1698.2,1611.9) size=(479,609) autosize=0 puppet='models/челка_puppet.mdl'
+10-07 13:59:02.747  3552  5042 I WE      : INFO shader 'effects/waterwaves' vert(1612) frag(1869) geom(0)
+10-07 13:59:02.748  3552  5042 I WE      : INFO TEXHDR 'masks/waterwaves_mask_c5a13948' sprite=0 tex=239x304 map=239x304 mipmap_larger=0 frames=0
+10-07 13:59:02.788  3552  5042 I WE      : INFO   constValue: 'direction' -> 'g_Direction' = [-2.831243]
+10-07 13:59:02.789  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [6.690000]
+10-07 13:59:02.789  3552  5042 I WE      : INFO   constValue: 'perspective' -> 'g_Perspective' = [0.000000]
+10-07 13:59:02.789  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [3.830000]
+10-07 13:59:02.789  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.260000]
+10-07 13:59:02.789  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_water_waves_title' loaded OK (1 nodes)
+10-07 13:59:02.789  3552  5042 I WE      : INFO shader 'effects/opacity' vert(449) frag(589) geom(0)
+10-07 13:59:02.789  3552  5042 I WE      : INFO TEXHDR 'masks/opacity_mask_cc7e7bfa' sprite=0 tex=239x304 map=239x304 mipmap_larger=0 frames=0
+10-07 13:59:02.804  3552  5042 I WE      : INFO   constValue: 'alpha' -> 'g_UserAlpha' = [1.000000]
+10-07 13:59:02.804  3552  5042 I WE      : INFO   effect[1] 'ui_editor_effect_opacity_title' loaded OK (1 nodes)
+10-07 13:59:02.804  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:59:03.798  3552  5042 I WE      : INFO puppet layer prepared: 2 scene layers, 2 mdl anims, total_blend=2.00
+10-07 13:59:03.799  3552  5042 I WE      : INFO   scene layer[0]: id=497 blend=1.00 rate=1.00 visible=1 additive=1
+10-07 13:59:03.799  3552  5042 I WE      : INFO   scene layer[1]: id=3341 blend=1.00 rate=2.00 visible=1 additive=1
+10-07 13:59:03.799  3552  5042 I WE      : INFO   effect[2] '' loaded OK (1 nodes)
+10-07 13:59:03.799  3552  5042 I WE      : INFO   ParseImageObj id=1785: 3 effects loaded, isCompose=0, isOffscreen=0
+10-07 13:59:03.799  3552  5042 I WE      : INFO   ParseImageObj id=1785 completed, added to scene graph
+10-07 13:59:03.799  3552  5042 I WE      : INFO ParseImageObj: id=1842 name='нитка' image='models/нитка.json' visible=1 size=(678,636) fullscreen=0 origin=(1795.3,1749.5)
+10-07 13:59:03.799  3552  5042 I WE      : INFO   mdl 'models/нитка_puppet.mdl' vert bounds: X=[-276.0, 291.0] (w=567.0) Y=[-235.0, 273.0] (h=508.0) UV=[0.093-0.929, 0.071-0.869] n=241
+10-07 13:59:03.799  3552  5042 I WE      : INFO   mdl 'models/нитка_puppet.mdl': reading 6 bones
+10-07 13:59:03.799  3552  5042 I WE      : INFO     bone[0] '' parent=-1 trans=(226.2, 218.6, 0.0)
+10-07 13:59:03.799  3552  5042 I WE      : INFO     bone[1] '' parent=0 trans=(-60.8, -89.8, 0.0)
+10-07 13:59:03.799  3552  5042 I WE      : INFO     bone[2] '' parent=1 trans=(-62.3, -110.0, 0.0)
+10-07 13:59:03.799  3552  5042 I WE      : INFO     bone[3] '' parent=2 trans=(-112.9, -84.0, 0.0)
+10-07 13:59:03.799  3552  5042 I WE      : INFO     bone[4] '' parent=3 trans=(-124.5, -60.8, 0.0)
+10-07 13:59:03.799  3552  5042 I WE      : INFO     bone[5] '' parent=4 trans=(-75.3, -56.5, 0.0)
+10-07 13:59:03.799  3552  5042 I WE      : INFO   anim[0]: id=1040 name='Анимация 1' length=16
+10-07 13:59:03.799  3552  5042 I WE      : INFO mdl: anim 1040 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:59:03.799  3552  5042 I WE      : INFO   anim[1]: id=1877 name='Анимация 2' length=16
+10-07 13:59:03.799  3552  5042 I WE      : INFO mdl: anim 1877 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:59:03.799  3552  5042 I WE      : INFO read puppet: mdlv: 17, nmdls: 2, mdla: 4, bones: 6, anims: 2
+10-07 13:59:03.799  3552  5042 I WE      : INFO MDL bounds id=1842 name='нитка' x=[-276.0,291.0] y=[-235.0,273.0] span=(567,508) scene_size=(678,636) ratio=(1.20,1.25) attachments=0
+10-07 13:59:03.800  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:59:03.828  3552  5042 I WE      : INFO   ParseImageObj id=1842: finalBlend=1 hasEffect=1 isCompose=0 passthrough=0
+10-07 13:59:03.828  3552  5042 I WE      : INFO POS id=1842 name='нитка' world=(1795.3,1749.5) parent=-1 attach='' local=(1795.3,1749.5) size=(678,636) autosize=0 puppet='models/нитка_puppet.mdl'
+10-07 13:59:03.828  3552  5042 I WE      : INFO shader 'effects/waterwaves' vert(1612) frag(1869) geom(0)
+10-07 13:59:03.860  3552  5042 I WE      : INFO   constValue: 'direction' -> 'g_Direction' = [-2.214297]
+10-07 13:59:03.860  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [5.000000]
+10-07 13:59:03.860  3552  5042 I WE      : INFO   constValue: 'perspective' -> 'g_Perspective' = [0.000000]
+10-07 13:59:03.860  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [3.830000]
+10-07 13:59:03.860  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.320000]
+10-07 13:59:03.860  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_water_waves_title' loaded OK (1 nodes)
+10-07 13:59:03.860  3552  5042 I WE      : INFO shader 'effects/tint' vert(492) frag(949) geom(0)
+10-07 13:59:03.884  3552  5042 I WE      : INFO   constValue: 'alpha' -> 'g_BlendAlpha' = [1.000000]
+10-07 13:59:03.884  3552  5042 I WE      : INFO   constValue: 'color' -> 'g_TintColor' = [0.000000,0.000000,0.000000]
+10-07 13:59:03.884  3552  5042 I WE      : INFO   effect[1] 'ui_editor_effect_tint_title' loaded OK (1 nodes)
+10-07 13:59:03.884  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:59:03.912  3552  5042 I WE      : INFO puppet layer prepared: 1 scene layers, 2 mdl anims, total_blend=1.00
+10-07 13:59:03.926  3552  5042 I WE      : INFO   scene layer[0]: id=1877 blend=1.00 rate=1.00 visible=1 additive=1
+10-07 13:59:03.926  3552  5042 I WE      : INFO   effect[2] '' loaded OK (1 nodes)
+10-07 13:59:03.926  3552  5042 I WE      : INFO   ParseImageObj id=1842: 3 effects loaded, isCompose=0, isOffscreen=0
+10-07 13:59:03.926  3552  5042 I WE      : INFO   ParseImageObj id=1842 completed, added to scene graph
+10-07 13:59:03.926  3552  5042 I WE      : INFO ParseImageObj: id=48 name='челка' image='models/челка.json' visible=1 size=(479,609) fullscreen=0 origin=(1684.8,1640.9)
+10-07 13:59:03.926  3552  5042 I WE      : INFO   mdl 'models/челка_puppet.mdl' vert bounds: X=[-152.5, 190.5] (w=343.0) Y=[-234.5, 249.5] (h=484.0) UV=[0.182-0.898, 0.090-0.885] n=203
+10-07 13:59:03.926  3552  5042 I WE      : INFO   mdl 'models/челка_puppet.mdl': reading 3 bones
+10-07 13:59:03.926  3552  5042 I WE      : INFO     bone[0] '' parent=-1 trans=(-7.7, -143.8, 0.0)
+10-07 13:59:03.926  3552  5042 I WE      : INFO     bone[1] '' parent=0 trans=(44.9, 205.6, 0.0)
+10-07 13:59:03.926  3552  5042 I WE      : INFO     bone[2] '' parent=1 trans=(67.3, 136.4, 0.0)
+10-07 13:59:03.926  3552  5042 I WE      : INFO   anim[0]: id=497 name='Анимация 1' length=16
+10-07 13:59:03.926  3552  5042 I WE      : INFO mdl: anim 497 declares 16 frame(s) but bone track 0 stores 17 — playback clamps into the stored frames
+10-07 13:59:03.926  3552  5042 I WE      : INFO   anim[1]: id=3341 name='Анимация 2' length=420
+10-07 13:59:03.926  3552  5042 I WE      : INFO mdl: anim 3341 declares 420 frame(s) but bone track 0 stores 421 — playback clamps into the stored frames
+10-07 13:59:03.926  3552  5042 I WE      : INFO read puppet: mdlv: 17, nmdls: 2, mdla: 4, bones: 3, anims: 2
+10-07 13:59:03.926  3552  5042 I WE      : INFO MDL bounds id=48 name='челка' x=[-152.5,190.5] y=[-234.5,249.5] span=(343,484) scene_size=(479,609) ratio=(1.40,1.26) attachments=0
+10-07 13:59:03.927  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:59:03.977  3552  5042 I WE      : INFO   ParseImageObj id=48: finalBlend=1 hasEffect=1 isCompose=0 passthrough=0
+10-07 13:59:03.977  3552  5042 I WE      : INFO POS id=48 name='челка' world=(1684.8,1640.9) parent=-1 attach='' local=(1684.8,1640.9) size=(479,609) autosize=0 puppet='models/челка_puppet.mdl'
+10-07 13:59:03.977  3552  5042 I WE      : INFO shader 'effects/waterwaves' vert(1612) frag(1869) geom(0)
+10-07 13:59:04.023  3552  5042 I WE      : INFO   constValue: 'direction' -> 'g_Direction' = [-2.356194]
+10-07 13:59:04.023  3552  5042 I WE      : INFO   constValue: 'speed' -> 'g_Speed' = [6.690000]
+10-07 13:59:04.023  3552  5042 I WE      : INFO   constValue: 'perspective' -> 'g_Perspective' = [0.000000]
+10-07 13:59:04.023  3552  5042 I WE      : INFO   constValue: 'scale' -> 'g_Scale' = [3.830000]
+10-07 13:59:04.023  3552  5042 I WE      : INFO   constValue: 'strength' -> 'g_Strength' = [0.260000]
+10-07 13:59:04.024  3552  5042 I WE      : INFO   effect[0] 'ui_editor_effect_water_waves_title' loaded OK (1 nodes)
+10-07 13:59:04.024  3552  5042 I WE      : INFO shader 'effects/opacity' vert(449) frag(589) geom(0)
+10-07 13:59:04.047  3552  5042 I WE      : INFO   constValue: 'alpha' -> 'g_UserAlpha' = [1.000000]
+10-07 13:59:04.047  3552  5042 I WE      : INFO   effect[1] 'ui_editor_effect_opacity_title' loaded OK (1 nodes)
+10-07 13:59:04.047  3552  5042 I WE      : INFO shader 'genericimage2' vert(1115) frag(965) geom(0)
+10-07 13:59:04.078  3552  5042 I WE      : INFO puppet layer prepared: 2 scene layers, 2 mdl anims, total_blend=2.00
+10-07 13:59:04.078  3552  5042 I WE      : INFO   scene layer[0]: id=497 blend=1.00 rate=1.00 visible=1 additive=1
+10-07 13:59:04.078  3552  5042 I WE      : INFO   scene layer[1]: id=3341 blend=1.00 rate=2.00 visible=1 additive=1
+10-07 13:59:04.078  3552  5042 I WE      : INFO   effect[2] '' loaded OK (1 nodes)
+10-07 13:59:04.078  3552  5042 I WE      : INFO   ParseImageObj id=48: 3 effects loaded, isCompose=0, isOffscreen=0
+10-07 13:59:04.078  3552  5042 I WE      : INFO   ParseImageObj id=48 completed, added to scene graph
+10-07 13:59:04.078  3552  5042 I WE      : INFO ParseImageObj: id=555 name='Слой регулируемой композиции' image='models/util/composelayer.json' visible=1 size=(512,512) fullscreen=0 origin=(524.1,288.6)
+10-07 13:59:04.081  3552  5042 I WE      : INFO shader 'composelayer' vert(436) frag(310) geom(0)
+10-07 13:59:04.111  3552  5042 I WE      : INFO   ParseImageObj id=555: finalBlend=1 hasEffect=1 isCompose=1 passthrough=0
+10-07 13:59:04.111  3552  5042 I WE      : INFO POS id=555 name='Слой регулируемой композиции' world=(524.1,288.6) parent=-1 attach='' local=(524.1,288.6) size=(512,512) autosize=0 puppet=''
+10-07 13:59:04.112  3552  5042 I WE      : INFO shader 'workshop/2084198056/effects/Simple_Audio_Bars' vert(251) frag(11662) geom(0)
+10-07 13:59:04.112  3552  5042 I WE      : INFO user shader uniform: 'u_BarCount' (alias: 'Bar Count')
+10-07 13:59:04.112  3552  5042 I WE      : INFO user shader uniform: 'u_BarBounds' (alias: 'Lower/Upper Bar Bounds')
+10-07 13:59:04.112  3552  5042 I WE      : INFO user shader uniform: 'u_CircleAngles' (alias: 'Circle Start/End Angles')
+10-07 13:59:04.112  3552  5042 I WE      : INFO user shader uniform: 'u_BarColor' (alias: 'Bar Color')
+10-07 13:59:04.112  3552  5042 I WE      : INFO user shader uniform: 'u_BarOpacity' (alias: 'ui_editor_properties_opacity')
+10-07 13:59:04.112  3552  5042 I WE      : INFO user shader uniform: 'u_BarSpacing' (alias: 'Bar Spacing')
+10-07 13:59:04.112  3552  5042 I WE      : INFO user shader uniform: 'u_AASmoothness' (alias: 'Anti-alias blurring')
+10-07 13:59:05.398  3552  5042 I WE      : INFO   constValue: 'Bar Color' -> 'u_BarColor' = [0.192157,0.192157,0.192157]
+10-07 13:59:05.398  3552  5042 I WE      : INFO   constValue: 'Bar Spacing' -> 'u_BarSpacing' = [0.100000]
+10-07 13:59:05.398  3552  5042 I WE      : INFO   constValue: 'ui_editor_properties_opacity' -> 'u_BarOpacity' = [1.000000]
+10-07 13:59:05.398  3552  5042 I WE      : INFO   constValue: 'Bar Count' -> 'u_BarCount' = [32.000000]
+10-07 13:59:05.398  3552  5042 I WE      : INFO   constValue: 'Lower/Upper Bar Bounds' -> 'u_BarBounds' = [0.000000,1.000000]
+10-07 13:59:05.398  3552  5042 I WE      : INFO   effect[0] 'Simple Audio Bars' loaded OK (1 nodes)
+10-07 13:59:05.398  3552  5042 I WE      : INFO   ParseImageObj id=555: 1 effects loaded, isCompose=1, isOffscreen=0
+10-07 13:59:05.398  3552  5042 I WE      : INFO   ParseImageObj id=555 completed, added to scene graph
+10-07 13:59:05.398  3552  5042 I WE      : INFO Shader compilation: 26 unique shaders in 29453 ms
+10-07 13:59:05.399  3552  5042 I WE      : INFO Audio analyzer connected to shader value updater
+10-07 13:59:05.400  3552  5042 I WE      : INFO Wrote 1 active bindings to /data/user/0/com.cloudweather.xiaoyu/cache/we/config/wekde/wallpaper/1791381508867_ci_wall.mpkg.assets_bindings.json
+10-07 13:59:05.400  3552  5042 I WE      : INFO loadScene: 19 named layers for thisScene.getLayer()
+10-07 13:59:05.400  3552  5043 I WE      : INFO HDR content: disabled (scene_hdr=0, host_hdr=0)
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[0]: id=-1 mesh=no
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[1]: id=-1 mesh=no
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[2]: id=-1 mesh=no
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[3]: id=1291 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[4]: id=18 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[5]: id=348 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[6]: id=3000 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[7]: id=830 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[8]: id=1005 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[9]: id=293 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[10]: id=314 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[11]: id=983 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[12]: id=299 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[13]: id=286 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[14]: id=1041 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[15]: id=22527 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[16]: id=22489 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[17]: id=176 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[18]: id=957 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[19]: id=976 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[20]: id=36 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[21]: id=1115 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[22]: id=509 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[23]: id=775 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[24]: id=28 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[25]: id=1616 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[26]: id=44 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[27]: id=1263 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[28]: id=126 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[29]: id=32 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[30]: id=24 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[31]: id=40 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[32]: id=1785 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[33]: id=1842 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[34]: id=48 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO root child[35]: id=555 mesh=yes
+10-07 13:59:05.400  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(1920.0,1080.0,0.0) worldNode_id=1005 world=(1920.000,1080.000,0.000) world_scale=1.0000
+10-07 13:59:05.400  3552  5043 I WE      : INFO   id=1005 eff[0].0: out='_rt__rt_QuarterCompoBuffer1_133082170532296' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465318704]
+10-07 13:59:05.400  3552  5043 I WE      : INFO   id=1005 eff[0].1: out='_rt__rt_QuarterCompoBuffer2_133082170532296' cam='effect' blend=3 texs=[_rt__rt_QuarterCompoBuffer1_133082170532296]
+10-07 13:59:05.400  3552  5043 I WE      : INFO   id=1005 eff[0].2: out='_rt__rt_QuarterCompoBuffer1_133082170532296' cam='effect' blend=3 texs=[_rt__rt_QuarterCompoBuffer2_133082170532296]
+10-07 13:59:05.400  3552  5043 I WE      : INFO   id=1005 eff[0].3: out='_rt_default' cam='' blend=1 texs=[_rt__rt_QuarterCompoBuffer1_133082170532296, (empty), _rt_effect_pingpong_a_133086465318704]
+10-07 13:59:05.400  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(3966.1,733.5,0.0) worldNode_id=176 world=(3966.150,733.458,0.000) world_scale=4.1354
+10-07 13:59:05.400  3552  5043 I WE      : INFO   id=176 eff[0].0: out='_rt_effect_pingpong_b_133086465326768' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465326768, (empty), util/noise]
+10-07 13:59:05.400  3552  5043 I WE      : INFO   id=176 eff[1].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_b_133086465326768]
+10-07 13:59:05.400  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(608.7,1801.6,0.0) worldNode_id=957 world=(608.674,1801.570,0.000) world_scale=2.6509
+10-07 13:59:05.400  3552  5043 I WE      : INFO   id=957 eff[0].0: out='_rt_effect_pingpong_b_133086465300336' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465300336, (empty), util/noise]
+10-07 13:59:05.400  3552  5043 I WE      : INFO   id=957 eff[1].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_b_133086465300336]
+10-07 13:59:05.400  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(3653.7,1077.1,0.0) worldNode_id=976 world=(3653.651,1077.088,0.000) world_scale=1.1295
+10-07 13:59:05.400  3552  5043 I WE      : INFO   id=976 eff[0].0: out='_rt_effect_pingpong_b_133086465314672' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465314672, (empty), util/noise]
+10-07 13:59:05.400  3552  5043 I WE      : INFO   id=976 eff[1].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_b_133086465314672]
+10-07 13:59:05.401  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(1920.0,1080.0,0.0) worldNode_id=36 world=(1920.000,1080.000,0.000) world_scale=2.2278
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=36 eff[0].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_a_133086465286896, masks/foliagesway_mask_92185f47, util/noise]
+10-07 13:59:05.401  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(2175.2,1446.3,0.0) worldNode_id=775 world=(2175.159,1446.348,0.000) world_scale=0.5787
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=775 eff[0].0: out='_rt_effect_pingpong_b_133086465289584' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465289584, masks/waterwaves_mask_803c2518, util/black]
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=775 eff[1].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_b_133086465289584, (empty), (empty)]
+10-07 13:59:05.401  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(2574.5,860.3,0.0) worldNode_id=28 world=(2574.500,860.273,0.000) world_scale=1.0000
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=28 eff[0].0: out='_rt_effect_pingpong_b_133086465294960' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465294960, masks/waterwaves_mask_0afc93e4, util/black]
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=28 eff[1].0: out='_rt_effect_pingpong_a_133086465294960' cam='effect' blend=3 texs=[_rt_effect_pingpong_b_133086465294960, masks/waterwaves_mask_f37a1950, util/black]
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=28 eff[2].0: out='_rt_effect_pingpong_b_133086465294960' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465294960, masks/shake_mask_1007a06f, util/white]
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=28 eff[3].0: out='_rt_effect_pingpong_a_133086465294960' cam='effect' blend=3 texs=[_rt_effect_pingpong_b_133086465294960, masks/waterflow_mask_499e456d, effects/waterflowphase]
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=28 eff[4].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_a_133086465294960, (empty), (empty)]
+10-07 13:59:05.401  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(1445.5,1700.6,0.0) worldNode_id=1616 world=(1445.548,1700.555,0.000) world_scale=0.5110
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=1616 eff[0].0: out='_rt_effect_pingpong_b_133086465293168' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465293168, masks/waterwaves_mask_803c2518, util/black]
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=1616 eff[1].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_b_133086465293168, (empty), (empty)]
+10-07 13:59:05.401  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(1855.9,1657.0,0.0) worldNode_id=44 world=(1855.944,1656.995,0.000) world_scale=1.1088
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=44 eff[0].0: out='_rt_effect_pingpong_b_133086465290032' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465290032, masks/waterwaves_mask_728de645, util/black]
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=44 eff[1].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_b_133086465290032, (empty), (empty)]
+10-07 13:59:05.401  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(1257.3,1657.0,0.0) worldNode_id=1263 world=(1257.265,1657.018,0.000) world_scale=0.7473
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=1263 eff[0].0: out='_rt_effect_pingpong_b_133086465229552' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465229552, masks/waterwaves_mask_9fdadc16, util/black]
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=1263 eff[1].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_b_133086465229552, (empty), (empty)]
+10-07 13:59:05.401  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(1418.4,1638.6,0.0) worldNode_id=126 world=(1418.445,1638.584,0.000) world_scale=1.0000
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=126 eff[0].0: out='_rt_effect_pingpong_b_133086465236272' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465236272, masks/waterwaves_mask_803c2518, util/black]
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=126 eff[1].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_b_133086465236272, (empty), (empty)]
+10-07 13:59:05.401  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(1312.7,1563.4,0.0) worldNode_id=32 world=(1312.746,1563.441,0.000) world_scale=1.0000
+10-07 13:59:05.401  3552  5043 I WE      : INFO   id=32 eff[0].0: out='_rt_effect_pingpong_b_133086465257328' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465257328, masks/waterwaves_mask_9fdadc16, util/black]
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=32 eff[1].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_b_133086465257328, (empty), (empty)]
+10-07 13:59:05.402  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(1557.6,1036.5,0.0) worldNode_id=24 world=(1557.599,1036.546,0.000) world_scale=1.0000
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=24 eff[0].0: out='_rt_effect_pingpong_b_133086465230896' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465230896, masks/opacity_mask_5ccb680c]
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=24 eff[1].0: out='_rt_effect_pingpong_a_133086465230896' cam='effect' blend=3 texs=[_rt_effect_pingpong_b_133086465230896, masks/waterwaves_mask_aa2f1b8e, util/black]
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=24 eff[2].0: out='_rt_effect_pingpong_b_133086465230896' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465230896, masks/waterwaves_mask_57b21fbe, util/black]
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=24 eff[3].0: out='_rt_effect_pingpong_a_133086465230896' cam='effect' blend=3 texs=[_rt_effect_pingpong_b_133086465230896, masks/foliagesway_mask_df7c6272, util/noise]
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=24 eff[4].0: out='_rt_effect_pingpong_b_133086465230896' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465230896, masks/shake_mask_90d0f7af, masks/shake_mask_e90950eb, masks/shake_mask_20d7f0c4]
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=24 eff[5].0: out='_rt_effect_pingpong_a_133086465230896' cam='effect' blend=3 texs=[_rt_effect_pingpong_b_133086465230896, masks/waterwaves_mask_976468e9, util/black]
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=24 eff[6].0: out='_rt_effect_pingpong_b_133086465230896' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465230896, masks/shake_mask_aba32d98, util/white]
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=24 eff[7].0: out='_rt_effect_pingpong_a_133086465230896' cam='effect' blend=3 texs=[_rt_effect_pingpong_b_133086465230896, masks/foliagesway_mask_b0e3a554, util/noise]
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=24 eff[8].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_a_133086465230896, (empty), (empty)]
+10-07 13:59:05.402  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(1287.5,1738.0,0.0) worldNode_id=40 world=(1287.545,1738.038,0.000) world_scale=1.0000
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=40 eff[0].0: out='_rt_effect_pingpong_b_133086465328560' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465328560, masks/waterwaves_mask_803c2518, util/black]
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=40 eff[1].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_b_133086465328560, (empty), (empty)]
+10-07 13:59:05.402  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(1698.2,1611.9,0.0) worldNode_id=1785 world=(1698.188,1611.886,0.000) world_scale=0.6615
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=1785 eff[0].0: out='_rt_effect_pingpong_b_133086465368880' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465368880, masks/waterwaves_mask_c5a13948, util/black]
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=1785 eff[1].0: out='_rt_effect_pingpong_a_133086465368880' cam='effect' blend=3 texs=[_rt_effect_pingpong_b_133086465368880, masks/opacity_mask_cc7e7bfa]
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=1785 eff[2].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_a_133086465368880, (empty), (empty)]
+10-07 13:59:05.402  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(1795.3,1749.5,0.0) worldNode_id=1842 world=(1795.292,1749.450,0.000) world_scale=0.2587
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=1842 eff[0].0: out='_rt_effect_pingpong_b_133086465346480' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465346480, masks/waterwaves_mask_803c2518, util/black]
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=1842 eff[1].0: out='_rt_effect_pingpong_a_133086465346480' cam='effect' blend=3 texs=[_rt_effect_pingpong_b_133086465346480]
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=1842 eff[2].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_a_133086465346480, (empty), (empty)]
+10-07 13:59:05.402  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(1684.8,1640.9,0.0) worldNode_id=48 world=(1684.824,1640.900,0.000) world_scale=1.0000
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=48 eff[0].0: out='_rt_effect_pingpong_b_133086465386800' cam='effect' blend=3 texs=[_rt_effect_pingpong_a_133086465386800, masks/waterwaves_mask_c5a13948, util/black]
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=48 eff[1].0: out='_rt_effect_pingpong_a_133086465386800' cam='effect' blend=3 texs=[_rt_effect_pingpong_b_133086465386800, masks/opacity_mask_cc7e7bfa]
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=48 eff[2].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_a_133086465386800, (empty), (empty)]
+10-07 13:59:05.402  3552  5043 I WE      : INFO ResolveEffect final: output='_rt_default' blend=1 (actual=1) passthrough=0 inherit_parent=0 offscreen=0 translate=(524.1,288.6,0.0) worldNode_id=555 world=(524.091,288.572,0.000) world_scale=2.1579
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id=555 eff[0].0: out='_rt_default' cam='' blend=1 texs=[_rt_effect_pingpong_a_133086465380976]
+10-07 13:59:05.402  3552  5043 I WE      : INFO resolving 0 link textures, id_link_map has 34 entries
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[18] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[24] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[28] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[32] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[36] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[40] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[44] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[48] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[126] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[176] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[286] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[293] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[299] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[314] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[348] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[509] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[555] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[775] = '_rt_default'
+10-07 13:59:05.402  3552  5043 I WE      : INFO   id_link_map[830] = '_rt_default'
+10-07 13:59:05.403  3552  5043 I WE      : INFO   id_link_map[957] = '_rt_default'
+10-07 13:59:05.403  3552  5043 I WE      : INFO   id_link_map[976] = '_rt_default'
+10-07 13:59:05.403  3552  5043 I WE      : INFO   id_link_map[983] = '_rt_default'
+10-07 13:59:05.403  3552  5043 I WE      : INFO   id_link_map[1005] = '_rt_default'
+10-07 13:59:05.403  3552  5043 I WE      : INFO   id_link_map[1041] = '_rt_default'
+10-07 13:59:05.403  3552  5043 I WE      : INFO   id_link_map[1115] = '_rt_default'
+10-07 13:59:05.403  3552  5043 I WE      : INFO   id_link_map[1263] = '_rt_default'
+10-07 13:59:05.403  3552  5043 I WE      : INFO   id_link_map[1291] = '_rt_default'
+10-07 13:59:05.403  3552  5043 I WE      : INFO   id_link_map[1616] = '_rt_default'
+10-07 13:59:05.403  3552  5043 I WE      : INFO   id_link_map[1785] = '_rt_default'
+10-07 13:59:05.403  3552  5043 I WE      : INFO   id_link_map[1842] = '_rt_default'
+10-07 13:59:05.403  3552  5043 I WE      : INFO   id_link_map[3000] = '_rt_default'
+10-07 13:59:05.403  3552  5043 I WE      : INFO   id_link_map[22489] = '_rt_default'
+10-07 13:59:05.403  3552  5043 I WE      : INFO   id_link_map[22527] = '_rt_default'
+10-07 13:59:05.403  3552  5043 I WE      : INFO   id_link_map[18446744073709551615] = '_rt_default'
+10-07 13:59:05.404  3552  5472 I WE      : INFO tex 'particle/fog/fog1': 128x128 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.404  3552  5043 I WE      : INFO tex 'particle/капля': 121x144 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.404  3552  5473 I WE      : INFO tex 'particle/drop': 32x128 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.405  3552  5043 I WE      : INFO tex 'presets/fern1': 300x512 fmt=ETC2_RGBA8 sprite=0 count=1
+10-07 13:59:05.405  3552  5472 I WE      : INFO tex 'workshop/2511104820/particle/birdspritesheet1': 516x516 fmt=RGBA8 sprite=1 count=1
+10-07 13:59:05.405  3552  5043 I WE      : INFO tex 'masks/foliagesway_mask_b0e3a554': 787x1080 fmt=R8 sprite=0 count=1
+10-07 13:59:05.407  3552  5043 I WE      : INFO tex 'masks/shake_mask_aba32d98': 787x1080 fmt=RG8 sprite=0 count=1
+10-07 13:59:05.411  3552  5043 I WE      : INFO tex 'masks/waterwaves_mask_976468e9': 787x1080 fmt=R8 sprite=0 count=1
+10-07 13:59:05.412  3552  5043 I WE      : INFO tex 'masks/shake_mask_e90950eb': 787x1080 fmt=R8 sprite=0 count=1
+10-07 13:59:05.415  3552  5043 I WE      : INFO tex 'GUWEIZ-artist-art-девушка-art-6085703мин': 1920x1080 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.488  3552  5474 I WE      : INFO tex 'util/noise': 256x256 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.488  3552  5474 I WE      : INFO tex 'masks/foliagesway_mask_92185f47': 960x540 fmt=R8 sprite=0 count=1
+10-07 13:59:05.489  3552  5474 I WE      : INFO tex 'particle/normal_pinch_rotate': 64x64 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.490  3552  5474 I WE      : INFO tex 'нитка': 678x636 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.501  3552  5474 I WE      : INFO tex 'девка 2': 1279x1761 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.507  3552  5043 I WE      : INFO tex 'masks/opacity_mask_cc7e7bfa': 239x304 fmt=R8 sprite=0 count=1
+10-07 13:59:05.507  3552  5043 I WE      : INFO tex 'masks/waterwaves_mask_c5a13948': 239x304 fmt=R8 sprite=0 count=1
+10-07 13:59:05.508  3552  5043 I WE      : INFO tex 'masks/shake_mask_20d7f0c4': 787x1080 fmt=R8 sprite=0 count=1
+10-07 13:59:05.511  3552  5043 I WE      : INFO tex 'masks/waterwaves_mask_57b21fbe': 787x1080 fmt=R8 sprite=0 count=1
+10-07 13:59:05.520  3552  5043 I WE      : INFO tex 'челка зад': 429x661 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.529  3552  5043 I WE      : INFO tex 'коса': 847x1080 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.554  3552  5043 I WE      : INFO tex 'effects/waterflowphase': 32x32 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.554  3552  5043 I WE      : INFO tex 'util/black': 4x4 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.554  3552  5043 I WE      : INFO tex 'masks/waterwaves_mask_9fdadc16': 423x540 fmt=R8 sprite=0 count=1
+10-07 13:59:05.554  3552  5043 I WE      : INFO tex 'masks/opacity_mask_5ccb680c': 787x1080 fmt=R8 sprite=0 count=1
+10-07 13:59:05.555  3552  5043 I WE      : INFO tex 'particle/chromaticdot': 64x64 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.560  3552  5043 I WE      : INFO tex 'masks/waterwaves_mask_aa2f1b8e': 787x1080 fmt=R8 sprite=0 count=1
+10-07 13:59:05.563  3552  5043 I WE      : INFO tex 'particle/debris/debris1': 64x64 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.564  3552  5043 I WE      : INFO tex 'masks/foliagesway_mask_df7c6272': 787x1080 fmt=R8 sprite=0 count=1
+10-07 13:59:05.565  3552  5472 I WE      : INFO tex 'masks/waterflow_mask_499e456d': 639x880 fmt=RG8 sprite=0 count=1
+10-07 13:59:05.565  3552  5043 I WE      : INFO tex 'кусты': 1920x1080 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.598  3552  5472 I WE      : INFO tex 'masks/waterwaves_mask_728de645': 214x330 fmt=R8 sprite=0 count=1
+10-07 13:59:05.599  3552  5473 I WE      : INFO tex 'masks/waterwaves_mask_0afc93e4': 639x880 fmt=R8 sprite=0 count=1
+10-07 13:59:05.613  3552  5472 I WE      : INFO tex 'particle/nature/rain1': 256x512 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.618  3552  5473 I WE      : INFO tex 'masks/shake_mask_90d0f7af': 787x1080 fmt=RG8 sprite=0 count=1
+10-07 13:59:05.624  3552  5472 I WE      : INFO tex 'masks/shake_mask_1007a06f': 639x880 fmt=RG8 sprite=0 count=1
+10-07 13:59:05.626  3552  5472 I WE      : INFO tex 'девка 1': 1575x2160 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.680  3552  5473 I WE      : INFO tex 'челка': 479x609 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.683  3552  5473 I WE      : INFO tex 'masks/waterwaves_mask_f37a1950': 639x880 fmt=R8 sprite=0 count=1
+10-07 13:59:05.691  3552  5473 I WE      : INFO tex 'masks/waterwaves_mask_803c2518': 339x318 fmt=R8 sprite=0 count=1
+10-07 13:59:05.692  3552  5473 I WE      : INFO tex 'util/white': 4x4 fmt=RGBA8 sprite=0 count=1
+10-07 13:59:05.813  3552  5043 I WE      : INFO PREPASS clear target '_rt_default' img=0x79094b845890 clear=(0.70,0.70,0.70)
+10-07 13:59:05.814  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:05.820  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465386800': CLEAR (force=0 already_cleared=0)
+10-07 13:59:05.832  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_effect_pingpong_a_133086465386800' node_id=48 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:05.832  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:05.834  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465368880': CLEAR (force=0 already_cleared=0)
+10-07 13:59:05.837  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_effect_pingpong_a_133086465368880' node_id=1785 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:05.837  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:05.892  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465230896': CLEAR (force=0 already_cleared=0)
+10-07 13:59:05.894  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_effect_pingpong_a_133086465230896' node_id=24 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:05.894  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/opacity' vertCount=1
+10-07 13:59:05.906  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465230896': CLEAR (force=0 already_cleared=0)
+10-07 13:59:05.908  3552  5043 I WE      : INFO pipeline: shader='effects/opacity' out='_rt_effect_pingpong_b_133086465230896' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:05.908  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:05.929  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465257328': CLEAR (force=0 already_cleared=0)
+10-07 13:59:05.932  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_effect_pingpong_a_133086465257328' node_id=32 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:05.932  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:05.936  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465229552': CLEAR (force=0 already_cleared=0)
+10-07 13:59:05.938  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_effect_pingpong_a_133086465229552' node_id=1263 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:05.938  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:05.943  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465290032': CLEAR (force=0 already_cleared=0)
+10-07 13:59:05.945  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_effect_pingpong_a_133086465290032' node_id=44 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:05.946  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:06.004  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465294960': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.006  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_effect_pingpong_a_133086465294960' node_id=28 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:06.007  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/waterwaves' vertCount=1
+10-07 13:59:06.012  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465257328': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.040  3552  5043 I WE      : INFO pipeline: shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465257328' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.041  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/waterwaves' vertCount=1
+10-07 13:59:06.050  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465294960': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.067  3552  5043 I WE      : INFO pipeline: shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465294960' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.068  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/waterwaves' vertCount=1
+10-07 13:59:06.070  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465290032': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.073  3552  5043 I WE      : INFO pipeline: shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465290032' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.073  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/waterwaves' vertCount=1
+10-07 13:59:06.076  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465294960': LOAD (force=0 already_cleared=1)
+10-07 13:59:06.080  3552  5043 I WE      : INFO pipeline: shader='effects/waterwaves' out='_rt_effect_pingpong_a_133086465294960' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.096  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/shake' vertCount=1
+10-07 13:59:06.107  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465294960': LOAD (force=0 already_cleared=1)
+10-07 13:59:06.111  3552  5043 I WE      : INFO pipeline: shader='effects/shake' out='_rt_effect_pingpong_b_133086465294960' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.112  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/waterflow' vertCount=1
+10-07 13:59:06.135  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465294960': LOAD (force=0 already_cleared=1)
+10-07 13:59:06.138  3552  5043 I WE      : INFO pipeline: shader='effects/waterflow' out='_rt_effect_pingpong_a_133086465294960' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.138  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/waterwaves' vertCount=1
+10-07 13:59:06.141  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465230896': LOAD (force=0 already_cleared=1)
+10-07 13:59:06.144  3552  5043 I WE      : INFO pipeline: shader='effects/waterwaves' out='_rt_effect_pingpong_a_133086465230896' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.144  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/waterwaves' vertCount=1
+10-07 13:59:06.145  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465229552': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.148  3552  5043 I WE      : INFO pipeline: shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465229552' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.164  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/waterwaves' vertCount=1
+10-07 13:59:06.177  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465230896': LOAD (force=0 already_cleared=1)
+10-07 13:59:06.211  3552  5043 I WE      : INFO pipeline: shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465230896' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.225  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/waterwaves' vertCount=1
+10-07 13:59:06.229  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465368880': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.232  3552  5043 I WE      : INFO pipeline: shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465368880' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.232  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/opacity' vertCount=1
+10-07 13:59:06.235  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465368880': LOAD (force=0 already_cleared=1)
+10-07 13:59:06.237  3552  5043 I WE      : INFO pipeline: shader='effects/opacity' out='_rt_effect_pingpong_a_133086465368880' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.238  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/waterwaves' vertCount=1
+10-07 13:59:06.238  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465386800': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.241  3552  5043 I WE      : INFO pipeline: shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465386800' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.241  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/opacity' vertCount=1
+10-07 13:59:06.241  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465386800': LOAD (force=0 already_cleared=1)
+10-07 13:59:06.243  3552  5043 I WE      : INFO pipeline: shader='effects/opacity' out='_rt_effect_pingpong_a_133086465386800' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.244  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:06.253  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465236272': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.255  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_effect_pingpong_a_133086465236272' node_id=126 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:06.266  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/waterwaves' vertCount=1
+10-07 13:59:06.272  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465236272': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.275  3552  5043 I WE      : INFO pipeline: shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465236272' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.276  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:06.276  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465346480': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.278  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_effect_pingpong_a_133086465346480' node_id=1842 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:06.278  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/waterwaves' vertCount=1
+10-07 13:59:06.280  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465346480': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.283  3552  5043 I WE      : INFO pipeline: shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465346480' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.285  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/tint' vertCount=1
+10-07 13:59:06.286  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465346480': LOAD (force=0 already_cleared=1)
+10-07 13:59:06.300  3552  5043 I WE      : INFO pipeline: shader='effects/tint' out='_rt_effect_pingpong_a_133086465346480' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.303  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:06.303  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465293168': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.305  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_effect_pingpong_a_133086465293168' node_id=1616 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:06.305  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/waterwaves' vertCount=1
+10-07 13:59:06.308  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465293168': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.314  3552  5043 I WE      : INFO pipeline: shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465293168' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.314  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:06.314  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465328560': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.321  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_effect_pingpong_a_133086465328560' node_id=40 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:06.321  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/waterwaves' vertCount=1
+10-07 13:59:06.323  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465328560': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.330  3552  5043 I WE      : INFO pipeline: shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465328560' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.334  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:06.334  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465289584': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.337  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_effect_pingpong_a_133086465289584' node_id=775 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:06.337  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/waterwaves' vertCount=1
+10-07 13:59:06.339  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465289584': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.346  3552  5043 I WE      : INFO pipeline: shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465289584' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.352  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:06.392  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465286896': CLEAR (force=0 already_cleared=0)
+10-07 13:59:06.403  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_effect_pingpong_a_133086465286896' node_id=36 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:06.403  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/foliagesway' vertCount=1
+10-07 13:59:06.409  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465230896': LOAD (force=0 already_cleared=1)
+10-07 13:59:06.413  3552  5043 I WE      : INFO pipeline: shader='effects/foliagesway' out='_rt_effect_pingpong_a_133086465230896' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.413  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/shake' vertCount=1
+10-07 13:59:06.448  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465230896': LOAD (force=0 already_cleared=1)
+10-07 13:59:06.457  3552  5043 I WE      : INFO pipeline: shader='effects/shake' out='_rt_effect_pingpong_b_133086465230896' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:06.457  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/waterwaves' vertCount=1
+10-07 13:59:06.460  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465230896': LOAD (force=0 already_cleared=1)
+10-07 13:59:06.464  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/shake' vertCount=1
+10-07 13:59:06.472  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465230896': LOAD (force=0 already_cleared=1)
+10-07 13:59:06.476  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/foliagesway' vertCount=1
+10-07 13:59:06.477  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465230896': LOAD (force=0 already_cleared=1)
+10-07 13:59:06.482  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.123  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465300336': CLEAR (force=0 already_cleared=0)
+10-07 13:59:07.125  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_effect_pingpong_a_133086465300336' node_id=957 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:07.144  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/foliagesway' vertCount=1
+10-07 13:59:07.146  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465300336': CLEAR (force=0 already_cleared=0)
+10-07 13:59:07.156  3552  5043 I WE      : INFO pipeline: shader='effects/foliagesway' out='_rt_effect_pingpong_b_133086465300336' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:07.156  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.156  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465314672': CLEAR (force=0 already_cleared=0)
+10-07 13:59:07.158  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_effect_pingpong_a_133086465314672' node_id=976 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:07.158  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/foliagesway' vertCount=1
+10-07 13:59:07.159  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465314672': CLEAR (force=0 already_cleared=0)
+10-07 13:59:07.163  3552  5043 I WE      : INFO pipeline: shader='effects/foliagesway' out='_rt_effect_pingpong_b_133086465314672' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:07.163  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.164  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465326768': CLEAR (force=0 already_cleared=0)
+10-07 13:59:07.167  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_effect_pingpong_a_133086465326768' node_id=176 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:07.168  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/foliagesway' vertCount=1
+10-07 13:59:07.179  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_b_133086465326768': CLEAR (force=0 already_cleared=0)
+10-07 13:59:07.186  3552  5043 I WE      : INFO pipeline: shader='effects/foliagesway' out='_rt_effect_pingpong_b_133086465326768' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:07.186  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.270  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': CLEAR (force=0 already_cleared=0)
+10-07 13:59:07.272  3552  5043 I WE      : INFO pipeline: shader='genericimage2' out='_rt_default' node_id=1291 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:07.272  3552  5043 I WE      : INFO MVP diag id=1291 cam='' translate=(1920.0,1080.0) model=[-2.822,-2.822,1920.000,1080.000] clip_center=(0.000,0.000) blend=1
+10-07 13:59:07.272  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.272  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.274  3552  5043 I WE      : INFO MVP diag id=18 cam='' translate=(1920.0,1080.0) model=[2.228,2.228,1920.000,1080.000] clip_center=(0.000,0.000) blend=1
+10-07 13:59:07.274  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericparticle' vertCount=1
+10-07 13:59:07.312  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.317  3552  5043 I WE      : INFO pipeline: shader='genericparticle' out='_rt_default' node_id=348 draw=0 indexed=1 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:07.317  3552  5043 I WE      : INFO MVP diag id=348 cam='' translate=(-1230.7,-988.1) model=[-0.609,0.619,-1284.542,-1023.468] clip_center=(-1.669,-1.948) blend=1
+10-07 13:59:07.317  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericparticle' vertCount=1
+10-07 13:59:07.318  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.323  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(0.0,0.0) model=[-0.609,0.619,-1230.666,-988.103] clip_center=(-1.641,-1.915) blend=1
+10-07 13:59:07.323  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericparticle' vertCount=1
+10-07 13:59:07.323  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.327  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(0.0,0.0) model=[-0.609,0.619,-1230.666,-988.103] clip_center=(-1.641,-1.915) blend=1
+10-07 13:59:07.327  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericparticle' vertCount=1
+10-07 13:59:07.328  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.336  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(0.0,0.0) model=[-0.609,0.619,-1230.666,-988.103] clip_center=(-1.641,-1.915) blend=1
+10-07 13:59:07.336  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericparticle' vertCount=1
+10-07 13:59:07.337  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.341  3552  5043 I WE      : INFO MVP diag id=3000 cam='' translate=(1016.4,1770.6) model=[0.559,0.559,1000.020,1783.058] clip_center=(-0.479,0.651) blend=2
+10-07 13:59:07.341  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericparticle' vertCount=1
+10-07 13:59:07.341  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.345  3552  5043 I WE      : INFO MVP diag id=830 cam='' translate=(2986.8,1686.1) model=[0.475,0.475,2999.066,1693.035] clip_center=(0.562,0.568) blend=2
+10-07 13:59:07.345  3552  5043 I WE      : INFO CSP_PREPARE: shader='composelayer' vertCount=1
+10-07 13:59:07.345  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465318704': CLEAR (force=0 already_cleared=0)
+10-07 13:59:07.347  3552  5043 I WE      : INFO pipeline: shader='composelayer' out='_rt_effect_pingpong_a_133086465318704' node_id=1005 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:07.347  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/blur_downsample4' vertCount=1
+10-07 13:59:07.348  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt__rt_QuarterCompoBuffer1_133082170532296': CLEAR (force=0 already_cleared=0)
+10-07 13:59:07.351  3552  5043 I WE      : INFO pipeline: shader='effects/blur_downsample4' out='_rt__rt_QuarterCompoBuffer1_133082170532296' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:07.351  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/blur_gaussian' vertCount=1
+10-07 13:59:07.351  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt__rt_QuarterCompoBuffer2_133082170532296': CLEAR (force=0 already_cleared=0)
+10-07 13:59:07.355  3552  5043 I WE      : INFO pipeline: shader='effects/blur_gaussian' out='_rt__rt_QuarterCompoBuffer2_133082170532296' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:07.367  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/blur_gaussian' vertCount=1
+10-07 13:59:07.367  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt__rt_QuarterCompoBuffer1_133082170532296': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.371  3552  5043 I WE      : INFO pipeline: shader='effects/blur_gaussian' out='_rt__rt_QuarterCompoBuffer1_133082170532296' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=3
+10-07 13:59:07.371  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/blur_combine' vertCount=1
+10-07 13:59:07.371  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.373  3552  5043 I WE      : INFO pipeline: shader='effects/blur_combine' out='_rt_default' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:07.374  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(1920.0,1080.0) model=[1.000,1.000,1920.000,1080.000] clip_center=(0.000,0.000) blend=1
+10-07 13:59:07.374  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericparticle' vertCount=1
+10-07 13:59:07.374  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.377  3552  5043 I WE      : INFO MVP diag id=293 cam='' translate=(1898.8,1456.5) model=[1.784,1.784,1898.577,1460.864] clip_center=(-0.011,0.353) blend=2
+10-07 13:59:07.377  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericropeparticle' vertCount=1
+10-07 13:59:07.378  3552  5043 I WE      : INFO new buffer block(0x79099b811bf0), size: 2293760, index: 1 / 2
+10-07 13:59:07.425  3552  5043 I WE      : INFO increase buffer size: 2293760 (all 2 slots)
+10-07 13:59:07.428  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.430  3552  5043 I WE      : INFO pipeline: shader='genericropeparticle' out='_rt_default' node_id=314 draw=0 indexed=1 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:07.431  3552  5043 I WE      : INFO MVP diag id=314 cam='' translate=(2600.1,1588.2) model=[3.809,3.809,2579.655,1572.909] clip_center=(0.344,0.456) blend=1
+10-07 13:59:07.431  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericropeparticle' vertCount=1
+10-07 13:59:07.432  3552  5043 I WE      : INFO new buffer block(0x79099b811bf0), size: 29360128, index: 2 / 3
+10-07 13:59:07.477  3552  5043 I WE      : INFO increase buffer size: 29360128 (all 2 slots)
+10-07 13:59:07.477  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.481  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericparticle' vertCount=1
+10-07 13:59:07.482  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.486  3552  5043 I WE      : INFO CopyPass: '_rt_default' 320x640 -> '_rt_default_12_copy' 160x320 (blit)
+10-07 13:59:07.486  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericparticle' vertCount=1
+10-07 13:59:07.493  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.497  3552  5043 I WE      : INFO MVP diag id=286 cam='' translate=(1506.3,1236.7) model=[5.704,8.212,1506.252,1236.668] clip_center=(-0.215,0.145) blend=2
+10-07 13:59:07.497  3552  5043 I WE      : INFO CopyPass: '_rt_default' 320x640 -> '_rt_default_13_copy' 160x320 (blit)
+10-07 13:59:07.497  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericparticle' vertCount=1
+10-07 13:59:07.497  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.501  3552  5043 I WE      : INFO MVP diag id=1041 cam='' translate=(741.6,240.7) model=[5.704,8.212,741.607,240.720] clip_center=(-0.614,-0.777) blend=2
+10-07 13:59:07.501  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericparticle' vertCount=1
+10-07 13:59:07.502  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.506  3552  5043 I WE      : INFO MVP diag id=22527 cam='' translate=(2511.2,1176.1) model=[-2.653,-1.815,2523.060,1177.992] clip_center=(0.314,0.091) blend=2
+10-07 13:59:07.506  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericparticle' vertCount=1
+10-07 13:59:07.507  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.510  3552  5043 I WE      : INFO MVP diag id=22489 cam='' translate=(2905.3,943.7) model=[0.936,0.936,2905.308,943.670] clip_center=(0.513,-0.126) blend=1
+10-07 13:59:07.510  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/tint' vertCount=1
+10-07 13:59:07.511  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.522  3552  5043 I WE      : INFO pipeline: shader='effects/tint' out='_rt_default' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:07.522  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(3966.1,733.5) model=[3.978,3.978,4007.073,726.528] clip_center=(1.087,-0.327) blend=1
+10-07 13:59:07.522  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/tint' vertCount=1
+10-07 13:59:07.522  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.533  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(608.7,1801.6) model=[2.651,2.651,590.054,1811.816] clip_center=(-0.693,0.678) blend=1
+10-07 13:59:07.533  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/tint' vertCount=1
+10-07 13:59:07.533  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.543  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(3653.7,1077.1) model=[1.129,1.129,3688.324,1077.030] clip_center=(0.921,-0.003) blend=1
+10-07 13:59:07.543  3552  5043 I WE      : INFO CSP_PREPARE: shader='effects/foliagesway' vertCount=1
+10-07 13:59:07.545  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.549  3552  5043 I WE      : INFO pipeline: shader='effects/foliagesway' out='_rt_default' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:07.550  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(1920.0,1080.0) model=[2.228,2.228,1920.000,1080.000] clip_center=(0.000,0.000) blend=1
+10-07 13:59:07.550  3552  5043 I WE      : INFO CopyPass: '_rt_default' 320x640 -> '_rt_default_20_copy' 160x320 (blit)
+10-07 13:59:07.550  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericparticle' vertCount=1
+10-07 13:59:07.550  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.554  3552  5043 I WE      : INFO MVP diag id=1115 cam='' translate=(266.4,1179.9) model=[1.415,2.353,257.490,1180.458] clip_center=(-0.866,0.093) blend=2
+10-07 13:59:07.554  3552  5043 I WE      : INFO CopyPass: '_rt_default' 320x640 -> '_rt_default_21_copy' 160x320 (blit)
+10-07 13:59:07.554  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericparticle' vertCount=1
+10-07 13:59:07.554  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.558  3552  5043 I WE      : INFO MVP diag id=509 cam='' translate=(3724.5,549.5) model=[1.089,1.811,3734.289,546.664] clip_center=(0.945,-0.494) blend=2
+10-07 13:59:07.558  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.558  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.561  3552  5043 I WE      : INFO genFrame frame0: bones=6 total_blend=1.00 matched_anims=1/1 max_dY=0.00 max_dX=0.00@bone-1
+10-07 13:59:07.561  3552  5043 I WE      : INFO uploading g_Bones: 6 bones, frameTime=0.0000
+10-07 13:59:07.561  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(2175.2,1446.3) model=[0.577,0.577,2175.159,1446.348] clip_center=(0.133,0.339) blend=1
+10-07 13:59:07.561  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.561  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.564  3552  5043 I WE      : INFO genFrame frame0: bones=15 total_blend=0.00 matched_anims=0/2 max_dY=0.00 max_dX=0.00@bone-1
+10-07 13:59:07.564  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(2574.5,860.3) model=[1.000,1.000,2574.500,860.273] clip_center=(0.341,-0.203) blend=1
+10-07 13:59:07.564  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.565  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.568  3552  5043 I WE      : INFO genFrame frame0: bones=6 total_blend=1.00 matched_anims=1/1 max_dY=0.00 max_dX=0.00@bone-1
+10-07 13:59:07.568  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(1445.5,1700.6) model=[-0.218,0.251,1445.548,1700.555] clip_center=(-0.247,0.575) blend=1
+10-07 13:59:07.568  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.568  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.571  3552  5043 I WE      : INFO genFrame frame0: bones=5 total_blend=2.00 matched_anims=2/2 max_dY=0.00 max_dX=0.00@bone-1
+10-07 13:59:07.571  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(1855.9,1657.0) model=[1.109,1.000,1855.944,1656.995] clip_center=(-0.033,0.534) blend=1
+10-07 13:59:07.571  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.571  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.574  3552  5043 I WE      : INFO genFrame frame0: bones=6 total_blend=1.00 matched_anims=1/1 max_dY=0.00 max_dX=0.00@bone-1
+10-07 13:59:07.574  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(1257.3,1657.0) model=[-0.248,0.247,1257.265,1657.018] clip_center=(-0.345,0.534) blend=1
+10-07 13:59:07.574  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.574  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.578  3552  5043 I WE      : INFO genFrame frame0: bones=6 total_blend=0.00 matched_anims=0/0 max_dY=0.00 max_dX=0.00@bone-1
+10-07 13:59:07.578  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(1418.4,1638.6) model=[0.969,0.969,1418.445,1638.584] clip_center=(-0.261,0.517) blend=1
+10-07 13:59:07.578  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.578  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.581  3552  5043 I WE      : INFO genFrame frame0: bones=6 total_blend=3.00 matched_anims=3/3 max_dY=0.00 max_dX=0.00@bone-1
+10-07 13:59:07.581  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(1312.7,1563.4) model=[1.000,1.000,1312.746,1563.441] clip_center=(-0.316,0.448) blend=1
+10-07 13:59:07.581  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.581  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.584  3552  5043 I WE      : INFO genFrame frame0: bones=36 total_blend=2.00 matched_anims=2/2 max_dY=0.00 max_dX=0.00@bone-1
+10-07 13:59:07.584  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(1557.6,1036.5) model=[1.000,1.000,1557.599,1036.546] clip_center=(-0.189,-0.040) blend=1
+10-07 13:59:07.584  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.584  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.595  3552  5043 I WE      : INFO genFrame frame0: bones=6 total_blend=1.00 matched_anims=1/1 max_dY=0.00 max_dX=0.00@bone-1
+10-07 13:59:07.595  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(1287.5,1738.0) model=[1.000,1.000,1287.545,1738.038] clip_center=(-0.329,0.609) blend=1
+10-07 13:59:07.595  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.595  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.598  3552  5043 I WE      : INFO genFrame frame0: bones=3 total_blend=2.00 matched_anims=2/2 max_dY=0.00 max_dX=0.00@bone-1
+10-07 13:59:07.598  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(1698.2,1611.9) model=[0.661,1.000,1698.188,1611.886] clip_center=(-0.116,0.492) blend=1
+10-07 13:59:07.598  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.599  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.602  3552  5043 I WE      : INFO genFrame frame0: bones=6 total_blend=1.00 matched_anims=1/1 max_dY=0.00 max_dX=0.00@bone-1
+10-07 13:59:07.602  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(1795.3,1749.5) model=[0.208,0.208,1795.292,1749.450] clip_center=(-0.065,0.620) blend=1
+10-07 13:59:07.602  3552  5043 I WE      : INFO CSP_PREPARE: shader='genericimage2' vertCount=1
+10-07 13:59:07.602  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.618  3552  5043 I WE      : INFO genFrame frame0: bones=3 total_blend=2.00 matched_anims=2/2 max_dY=0.00 max_dX=0.00@bone-1
+10-07 13:59:07.618  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(1684.8,1640.9) model=[1.000,1.000,1684.824,1640.900] clip_center=(-0.122,0.519) blend=1
+10-07 13:59:07.618  3552  5043 I WE      : INFO CSP_PREPARE: shader='composelayer' vertCount=1
+10-07 13:59:07.619  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_effect_pingpong_a_133086465380976': CLEAR (force=0 already_cleared=0)
+10-07 13:59:07.621  3552  5043 I WE      : INFO pipeline: shader='composelayer' out='_rt_effect_pingpong_a_133086465380976' node_id=555 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:07.621  3552  5043 I WE      : INFO CSP_PREPARE: shader='workshop/2084198056/effects/Simple_Audio_Bars' vertCount=1
+10-07 13:59:07.621  3552  5043 I WE      : INFO CSP_PREPARE loadOp for '_rt_default': LOAD (force=0 already_cleared=1)
+10-07 13:59:07.636  3552  5043 I WE      : INFO pipeline: shader='workshop/2084198056/effects/Simple_Audio_Bars' out='_rt_default' node_id=-1 draw=4 indexed=0 depthTest=0 depthWrite=0 cull=nocull blend=1
+10-07 13:59:07.636  3552  5043 I WE      : INFO Audio spectrum uniforms detected for node -1
+10-07 13:59:07.636  3552  5043 I WE      : INFO MVP diag id=-1 cam='' translate=(524.1,288.6) model=[2.158,1.602,524.091,288.572] clip_center=(-0.727,-0.733) blend=1
+10-07 13:59:07.746  3552  5043 I WE      : INFO compileRenderGraph: 89 passes prepared, 0 FAILED, 89 total (+prepass+finpass)
+10-07 13:59:07.746  3552  5043 I WE      : INFO   cached pass#6 shader='genericimage2' out='_rt_effect_pingpong_a_133086465229552' node_id=1263
+10-07 13:59:07.746  3552  5043 I WE      : INFO   cached pass#7 shader='genericimage2' out='_rt_effect_pingpong_a_133086465290032' node_id=44
+10-07 13:59:07.746  3552  5043 I WE      : INFO   cached pass#33 shader='genericimage2' out='_rt_effect_pingpong_a_133086465286896' node_id=36
+10-07 13:59:07.746  3552  5043 I WE      : INFO pass cache: 43 cacheable, 3 safe-to-skip → can skip on re-exec
+10-07 13:59:07.746  3552  5043 I WE      : INFO pass merge: 4 groups over 33 passes, 29 fewer render pass instances (91 passes total)
+10-07 13:59:07.749  3552  5043 I WE      : INFO ParticleSystem::Emitt: 13 subsystems, elapsed=0.000000
+10-07 13:59:07.749  3552  5043 I WE      : INFO spritetrail: alive=31 renderable=0 capacity=20 particles=31
+10-07 13:59:07.749  3552  5043 I WE      : INFO spritetrail GenGLData: segs=0 instances=1 gs=0
+10-07 13:59:07.815  3552  5043 I WE      : INFO ParticleSystem::PreSimulate: advanced 469 ticks (15.0s) at dt=0.0320s
+10-07 13:59:07.815  3552  5043 I WE      : INFO DRAW: pending transforms=0 visible=0 alpha=0 nodeById=33
+10-07 13:59:07.815  3552  5043 I WE      : INFO DRAW: transform hit=0 miss=0 effectRedirects=0, visible hit=0 miss=0, alpha=0
+10-07 13:59:07.818  3552  5043 I WE      : INFO EXEC[0] pass#0 id=48 shader='genericimage2' out='_rt_effect_pingpong_a_133086465386800' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b83f250 out_view=0x79094b830910 out_ext=479x609
+10-07 13:59:07.818  3552  5043 I WE      : INFO   tex[0] binding=1 extent=479x609 handle=0x79094b8531d0
+10-07 13:59:07.819  3552  5043 I WE      : INFO EXEC[0] pass#1 id=1785 shader='genericimage2' out='_rt_effect_pingpong_a_133086465368880' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b84d6d0 out_view=0x79094b8183d0 out_ext=479x609
+10-07 13:59:07.819  3552  5043 I WE      : INFO   tex[0] binding=1 extent=479x609 handle=0x79094b8531d0
+10-07 13:59:07.819  3552  5043 I WE      : INFO EXEC[0] pass#2 id=24 shader='genericimage2' out='_rt_effect_pingpong_a_133086465230896' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b840510 out_view=0x79094b830590 out_ext=1575x2160
+10-07 13:59:07.819  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1575x2160 handle=0x79094b8507d0
+10-07 13:59:07.819  3552  5043 I WE      : INFO EXEC[0] pass#3 id=-1 shader='effects/opacity' out='_rt_effect_pingpong_b_133086465230896' draw=4 visible=1 depth=0 blend=1 tex_count=2 out_img=0x79094b851f50 out_view=0x79094b7fb010 out_ext=1575x2160
+10-07 13:59:07.819  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1575x2160 handle=0x79094b840510
+10-07 13:59:07.819  3552  5043 I WE      : INFO   tex[1] binding=2 extent=787x1080 handle=0x79094b820b10
+10-07 13:59:07.819  3552  5043 I WE      : INFO EXEC[0] pass#4 id=32 shader='genericimage2' out='_rt_effect_pingpong_a_133086465257328' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b84c410 out_view=0x79094b81dd90 out_ext=847x1080
+10-07 13:59:07.819  3552  5043 I WE      : INFO   tex[0] binding=1 extent=847x1080 handle=0x79094b80b650
+10-07 13:59:07.819  3552  5043 I WE      : INFO EXEC[0] pass#5 id=1263 shader='genericimage2' out='_rt_effect_pingpong_a_133086465229552' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b8418d0 out_view=0x79094b850c50 out_ext=847x1080
+10-07 13:59:07.819  3552  5043 I WE      : INFO   tex[0] binding=1 extent=847x1080 handle=0x79094b80b650
+10-07 13:59:07.819  3552  5043 I WE      : INFO EXEC[0] pass#6 id=44 shader='genericimage2' out='_rt_effect_pingpong_a_133086465290032' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b8462d0 out_view=0x79094b825b90 out_ext=429x661
+10-07 13:59:07.819  3552  5043 I WE      : INFO   tex[0] binding=1 extent=429x661 handle=0x79094b823450
+10-07 13:59:07.820  3552  5043 I WE      : INFO EXEC[0] pass#7 id=28 shader='genericimage2' out='_rt_effect_pingpong_a_133086465294960' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b7eae50 out_view=0x79094b82fc50 out_ext=1279x1761
+10-07 13:59:07.820  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1279x1761 handle=0x79094b825e90
+10-07 13:59:07.820  3552  5043 I WE      : INFO EXEC[0] pass#8 id=-1 shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465257328' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b852150 out_view=0x79094b84d010 out_ext=847x1080
+10-07 13:59:07.820  3552  5043 I WE      : INFO   tex[0] binding=1 extent=847x1080 handle=0x79094b84c410
+10-07 13:59:07.820  3552  5043 I WE      : INFO   tex[1] binding=2 extent=423x540 handle=0x79094b82d690
+10-07 13:59:07.820  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b82e7d0
+10-07 13:59:07.820  3552  5043 I WE      : INFO EXEC[0] pass#9 id=-1 shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465294960' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b84c910 out_view=0x79094b826390 out_ext=1279x1761
+10-07 13:59:07.820  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1279x1761 handle=0x79094b7eae50
+10-07 13:59:07.820  3552  5043 I WE      : INFO   tex[1] binding=2 extent=639x880 handle=0x79094b84df90
+10-07 13:59:07.820  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b82e7d0
+10-07 13:59:07.820  3552  5043 I WE      : INFO EXEC[0] pass#10 id=-1 shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465290032' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b848590 out_view=0x79094b84e450 out_ext=429x661
+10-07 13:59:07.820  3552  5043 I WE      : INFO   tex[0] binding=1 extent=429x661 handle=0x79094b8462d0
+10-07 13:59:07.820  3552  5043 I WE      : INFO   tex[1] binding=2 extent=214x330 handle=0x79094b851990
+10-07 13:59:07.820  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b82e7d0
+10-07 13:59:07.820  3552  5043 I WE      : INFO EXEC[0] pass#11 id=-1 shader='effects/waterwaves' out='_rt_effect_pingpong_a_133086465294960' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b7eae50 out_view=0x79094b82fc50 out_ext=1279x1761
+10-07 13:59:07.820  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1279x1761 handle=0x79094b84c910
+10-07 13:59:07.820  3552  5043 I WE      : INFO   tex[1] binding=2 extent=639x880 handle=0x79094b845c10
+10-07 13:59:07.820  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b82e7d0
+10-07 13:59:07.820  3552  5043 I WE      : INFO EXEC[0] pass#12 id=-1 shader='effects/shake' out='_rt_effect_pingpong_b_133086465294960' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b84c910 out_view=0x79094b826390 out_ext=1279x1761
+10-07 13:59:07.820  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1279x1761 handle=0x79094b7eae50
+10-07 13:59:07.820  3552  5043 I WE      : INFO   tex[1] binding=2 extent=639x880 handle=0x79094b84ea10
+10-07 13:59:07.820  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b84f810
+10-07 13:59:07.821  3552  5043 I WE      : INFO EXEC[0] pass#13 id=-1 shader='effects/waterflow' out='_rt_effect_pingpong_a_133086465294960' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b7eae50 out_view=0x79094b82fc50 out_ext=1279x1761
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1279x1761 handle=0x79094b84c910
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[1] binding=2 extent=639x880 handle=0x79094b852650
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[2] binding=3 extent=32x32 handle=0x79094b852e50
+10-07 13:59:07.821  3552  5043 I WE      : INFO EXEC[0] pass#14 id=-1 shader='effects/waterwaves' out='_rt_effect_pingpong_a_133086465230896' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b840510 out_view=0x79094b830590 out_ext=1575x2160
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1575x2160 handle=0x79094b851f50
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[1] binding=2 extent=787x1080 handle=0x79094b854290
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b82e7d0
+10-07 13:59:07.821  3552  5043 I WE      : INFO EXEC[0] pass#15 id=-1 shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465229552' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b84c410 out_view=0x79094b81dd90 out_ext=847x1080
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[0] binding=1 extent=847x1080 handle=0x79094b8418d0
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[1] binding=2 extent=423x540 handle=0x79094b82d690
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b82e7d0
+10-07 13:59:07.821  3552  5043 I WE      : INFO EXEC[0] pass#16 id=-1 shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465230896' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b851f50 out_view=0x79094b7fb010 out_ext=1575x2160
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1575x2160 handle=0x79094b840510
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[1] binding=2 extent=787x1080 handle=0x79094b854bd0
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b82e7d0
+10-07 13:59:07.821  3552  5043 I WE      : INFO EXEC[0] pass#17 id=-1 shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465368880' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b855b10 out_view=0x79094b855f10 out_ext=479x609
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[0] binding=1 extent=479x609 handle=0x79094b84d6d0
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[1] binding=2 extent=239x304 handle=0x79094b854750
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b82e7d0
+10-07 13:59:07.821  3552  5043 I WE      : INFO EXEC[0] pass#18 id=-1 shader='effects/opacity' out='_rt_effect_pingpong_a_133086465368880' draw=4 visible=1 depth=0 blend=1 tex_count=2 out_img=0x79094b84d6d0 out_view=0x79094b8183d0 out_ext=479x609
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[0] binding=1 extent=479x609 handle=0x79094b855b10
+10-07 13:59:07.821  3552  5043 I WE      : INFO   tex[1] binding=2 extent=239x304 handle=0x79094b855090
+10-07 13:59:07.822  3552  5043 I WE      : INFO EXEC[0] pass#19 id=-1 shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465386800' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b855b10 out_view=0x79094b855f10 out_ext=479x609
+10-07 13:59:07.822  3552  5043 I WE      : INFO   tex[0] binding=1 extent=479x609 handle=0x79094b83f250
+10-07 13:59:07.822  3552  5043 I WE      : INFO   tex[1] binding=2 extent=239x304 handle=0x79094b854750
+10-07 13:59:07.822  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b82e7d0
+10-07 13:59:07.822  3552  5043 I WE      : INFO EXEC[0] pass#20 id=-1 shader='effects/opacity' out='_rt_effect_pingpong_a_133086465386800' draw=4 visible=1 depth=0 blend=1 tex_count=2 out_img=0x79094b83f250 out_view=0x79094b830910 out_ext=479x609
+10-07 13:59:07.822  3552  5043 I WE      : INFO   tex[0] binding=1 extent=479x609 handle=0x79094b855b10
+10-07 13:59:07.822  3552  5043 I WE      : INFO   tex[1] binding=2 extent=239x304 handle=0x79094b855090
+10-07 13:59:07.822  3552  5043 I WE      : INFO EXEC[0] pass#21 id=126 shader='genericimage2' out='_rt_effect_pingpong_a_133086465236272' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b856f50 out_view=0x79094b856dd0 out_ext=678x636
+10-07 13:59:07.822  3552  5043 I WE      : INFO   tex[0] binding=1 extent=678x636 handle=0x79094b856290
+10-07 13:59:07.822  3552  5043 I WE      : INFO EXEC[0] pass#22 id=-1 shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465236272' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b857d10 out_view=0x79094b858590 out_ext=678x636
+10-07 13:59:07.822  3552  5043 I WE      : INFO   tex[0] binding=1 extent=678x636 handle=0x79094b856f50
+10-07 13:59:07.822  3552  5043 I WE      : INFO   tex[1] binding=2 extent=339x318 handle=0x79094b857290
+10-07 13:59:07.822  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b82e7d0
+10-07 13:59:07.822  3552  5043 I WE      : INFO EXEC[0] pass#23 id=1842 shader='genericimage2' out='_rt_effect_pingpong_a_133086465346480' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b856f50 out_view=0x79094b856dd0 out_ext=678x636
+10-07 13:59:07.822  3552  5043 I WE      : INFO   tex[0] binding=1 extent=678x636 handle=0x79094b856290
+10-07 13:59:07.822  3552  5043 I WE      : INFO EXEC[0] pass#24 id=-1 shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465346480' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b857c90 out_view=0x79094b858c50 out_ext=678x636
+10-07 13:59:07.822  3552  5043 I WE      : INFO   tex[0] binding=1 extent=678x636 handle=0x79094b856f50
+10-07 13:59:07.822  3552  5043 I WE      : INFO   tex[1] binding=2 extent=339x318 handle=0x79094b857290
+10-07 13:59:07.822  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b82e7d0
+10-07 13:59:07.823  3552  5043 I WE      : INFO EXEC[0] pass#25 id=-1 shader='effects/tint' out='_rt_effect_pingpong_a_133086465346480' draw=4 visible=1 depth=0 blend=1 tex_count=1 out_img=0x79094b856f50 out_view=0x79094b856dd0 out_ext=678x636
+10-07 13:59:07.823  3552  5043 I WE      : INFO   tex[0] binding=1 extent=678x636 handle=0x79094b857c90
+10-07 13:59:07.823  3552  5043 I WE      : INFO EXEC[0] pass#26 id=1616 shader='genericimage2' out='_rt_effect_pingpong_a_133086465293168' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b857c90 out_view=0x79094b858c50 out_ext=678x636
+10-07 13:59:07.823  3552  5043 I WE      : INFO   tex[0] binding=1 extent=678x636 handle=0x79094b856290
+10-07 13:59:07.823  3552  5043 I WE      : INFO EXEC[0] pass#27 id=-1 shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465293168' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b8598d0 out_view=0x79094b859c10 out_ext=678x636
+10-07 13:59:07.823  3552  5043 I WE      : INFO   tex[0] binding=1 extent=678x636 handle=0x79094b857c90
+10-07 13:59:07.823  3552  5043 I WE      : INFO   tex[1] binding=2 extent=339x318 handle=0x79094b857290
+10-07 13:59:07.823  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b82e7d0
+10-07 13:59:07.823  3552  5043 I WE      : INFO EXEC[0] pass#28 id=40 shader='genericimage2' out='_rt_effect_pingpong_a_133086465328560' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b857c90 out_view=0x79094b858c50 out_ext=678x636
+10-07 13:59:07.823  3552  5043 I WE      : INFO   tex[0] binding=1 extent=678x636 handle=0x79094b856290
+10-07 13:59:07.823  3552  5043 I WE      : INFO EXEC[0] pass#29 id=-1 shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465328560' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b85a810 out_view=0x79094b85a7d0 out_ext=678x636
+10-07 13:59:07.823  3552  5043 I WE      : INFO   tex[0] binding=1 extent=678x636 handle=0x79094b857c90
+10-07 13:59:07.823  3552  5043 I WE      : INFO   tex[1] binding=2 extent=339x318 handle=0x79094b857290
+10-07 13:59:07.823  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b82e7d0
+10-07 13:59:07.824  3552  5043 I WE      : INFO EXEC[0] pass#30 id=775 shader='genericimage2' out='_rt_effect_pingpong_a_133086465289584' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b857c90 out_view=0x79094b858c50 out_ext=678x636
+10-07 13:59:07.824  3552  5043 I WE      : INFO   tex[0] binding=1 extent=678x636 handle=0x79094b856290
+10-07 13:59:07.824  3552  5043 I WE      : INFO EXEC[0] pass#31 id=-1 shader='effects/waterwaves' out='_rt_effect_pingpong_b_133086465289584' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b85cb10 out_view=0x79094b85ca50 out_ext=678x636
+10-07 13:59:07.824  3552  5043 I WE      : INFO   tex[0] binding=1 extent=678x636 handle=0x79094b857c90
+10-07 13:59:07.824  3552  5043 I WE      : INFO   tex[1] binding=2 extent=339x318 handle=0x79094b857290
+10-07 13:59:07.824  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b82e7d0
+10-07 13:59:07.824  3552  5043 I WE      : INFO EXEC[0] pass#32 id=36 shader='genericimage2' out='_rt_effect_pingpong_a_133086465286896' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b85d750 out_view=0x79094b85df10 out_ext=1920x1080
+10-07 13:59:07.824  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1920x1080 handle=0x79094b85d310
+10-07 13:59:07.824  3552  5043 I WE      : INFO EXEC[0] pass#33 id=-1 shader='effects/foliagesway' out='_rt_effect_pingpong_a_133086465230896' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b840510 out_view=0x79094b830590 out_ext=1575x2160
+10-07 13:59:07.824  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1575x2160 handle=0x79094b851f50
+10-07 13:59:07.824  3552  5043 I WE      : INFO   tex[1] binding=2 extent=787x1080 handle=0x79094b85dd50
+10-07 13:59:07.824  3552  5043 I WE      : INFO   tex[2] binding=3 extent=256x256 handle=0x79094b85e210
+10-07 13:59:07.824  3552  5043 I WE      : INFO EXEC[0] pass#34 id=-1 shader='effects/shake' out='_rt_effect_pingpong_b_133086465230896' draw=4 visible=1 depth=0 blend=1 tex_count=4 out_img=0x79094b851f50 out_view=0x79094b7fb010 out_ext=1575x2160
+10-07 13:59:07.824  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1575x2160 handle=0x79094b840510
+10-07 13:59:07.824  3552  5043 I WE      : INFO   tex[1] binding=2 extent=787x1080 handle=0x79094b85e650
+10-07 13:59:07.824  3552  5043 I WE      : INFO   tex[2] binding=3 extent=787x1080 handle=0x79094b85d6d0
+10-07 13:59:07.824  3552  5043 I WE      : INFO   tex[3] binding=4 extent=787x1080 handle=0x79094b85e390
+10-07 13:59:07.824  3552  5043 I WE      : INFO EXEC[0] pass#35 id=-1 shader='effects/waterwaves' out='_rt_effect_pingpong_a_133086465230896' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b840510 out_view=0x79094b830590 out_ext=1575x2160
+10-07 13:59:07.824  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1575x2160 handle=0x79094b851f50
+10-07 13:59:07.824  3552  5043 I WE      : INFO   tex[1] binding=2 extent=787x1080 handle=0x79094b85f410
+10-07 13:59:07.824  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b82e7d0
+10-07 13:59:07.825  3552  5043 I WE      : INFO EXEC[0] pass#36 id=-1 shader='effects/shake' out='_rt_effect_pingpong_b_133086465230896' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b851f50 out_view=0x79094b7fb010 out_ext=1575x2160
+10-07 13:59:07.825  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1575x2160 handle=0x79094b840510
+10-07 13:59:07.825  3552  5043 I WE      : INFO   tex[1] binding=2 extent=787x1080 handle=0x79094b85f690
+10-07 13:59:07.825  3552  5043 I WE      : INFO   tex[2] binding=3 extent=4x4 handle=0x79094b84f810
+10-07 13:59:07.825  3552  5043 I WE      : INFO EXEC[0] pass#37 id=-1 shader='effects/foliagesway' out='_rt_effect_pingpong_a_133086465230896' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b840510 out_view=0x79094b830590 out_ext=1575x2160
+10-07 13:59:07.825  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1575x2160 handle=0x79094b851f50
+10-07 13:59:07.825  3552  5043 I WE      : INFO   tex[1] binding=2 extent=787x1080 handle=0x79094b85fd10
+10-07 13:59:07.825  3552  5043 I WE      : INFO   tex[2] binding=3 extent=256x256 handle=0x79094b85e210
+10-07 13:59:07.825  3552  5043 I WE      : INFO EXEC[0] pass#38 id=957 shader='genericimage2' out='_rt_effect_pingpong_a_133086465300336' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b818310 out_view=0x79094b8200d0 out_ext=299x512
+10-07 13:59:07.825  3552  5043 I WE      : INFO   tex[0] binding=1 extent=300x512 handle=0x79094b861010
+10-07 13:59:07.825  3552  5043 I WE      : INFO EXEC[0] pass#39 id=-1 shader='effects/foliagesway' out='_rt_effect_pingpong_b_133086465300336' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b812a50 out_view=0x79094b82a5d0 out_ext=299x512
+10-07 13:59:07.825  3552  5043 I WE      : INFO   tex[0] binding=1 extent=299x512 handle=0x79094b818310
+10-07 13:59:07.825  3552  5043 I WE      : INFO   tex[2] binding=2 extent=256x256 handle=0x79094b85e210
+10-07 13:59:07.825  3552  5043 I WE      : INFO EXEC[0] pass#40 id=976 shader='genericimage2' out='_rt_effect_pingpong_a_133086465314672' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b818310 out_view=0x79094b8200d0 out_ext=299x512
+10-07 13:59:07.825  3552  5043 I WE      : INFO   tex[0] binding=1 extent=300x512 handle=0x79094b861010
+10-07 13:59:07.826  3552  5043 I WE      : INFO EXEC[0] pass#41 id=-1 shader='effects/foliagesway' out='_rt_effect_pingpong_b_133086465314672' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b82f090 out_view=0x79094b817690 out_ext=299x512
+10-07 13:59:07.826  3552  5043 I WE      : INFO   tex[0] binding=1 extent=299x512 handle=0x79094b818310
+10-07 13:59:07.826  3552  5043 I WE      : INFO   tex[2] binding=2 extent=256x256 handle=0x79094b85e210
+10-07 13:59:07.826  3552  5043 I WE      : INFO EXEC[0] pass#42 id=176 shader='genericimage2' out='_rt_effect_pingpong_a_133086465326768' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b818310 out_view=0x79094b8200d0 out_ext=299x512
+10-07 13:59:07.826  3552  5043 I WE      : INFO   tex[0] binding=1 extent=300x512 handle=0x79094b861010
+10-07 13:59:07.826  3552  5043 I WE      : INFO EXEC[0] pass#43 id=-1 shader='effects/foliagesway' out='_rt_effect_pingpong_b_133086465326768' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b804550 out_view=0x79094b83f410 out_ext=299x512
+10-07 13:59:07.826  3552  5043 I WE      : INFO   tex[0] binding=1 extent=299x512 handle=0x79094b818310
+10-07 13:59:07.826  3552  5043 I WE      : INFO   tex[2] binding=2 extent=256x256 handle=0x79094b85e210
+10-07 13:59:07.826  3552  5043 I WE      : INFO EXEC[0] pass#44 id=1291 shader='genericimage2' out='_rt_default' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.826  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1920x1080 handle=0x79094b842bd0
+10-07 13:59:07.826  3552  5043 I WE      : INFO EXEC[0] pass#45 id=18 shader='genericimage2' out='_rt_default' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.826  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1920x1080 handle=0x79094b842bd0
+10-07 13:59:07.826  3552  5043 I WE      : INFO EXEC[0] pass#46 id=348 shader='genericparticle' out='_rt_default' draw=12 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.826  3552  5043 I WE      : INFO   tex[0] binding=1 extent=516x516 handle=0x79094b81e1d0
+10-07 13:59:07.826  3552  5043 I WE      : INFO EXEC[0] pass#47 id=-1 shader='genericparticle' out='_rt_default' draw=12 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.826  3552  5043 I WE      : INFO   tex[0] binding=1 extent=516x516 handle=0x79094b81e1d0
+10-07 13:59:07.827  3552  5043 I WE      : INFO EXEC[0] pass#48 id=-1 shader='genericparticle' out='_rt_default' draw=12 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.827  3552  5043 I WE      : INFO   tex[0] binding=1 extent=516x516 handle=0x79094b81e1d0
+10-07 13:59:07.827  3552  5043 I WE      : INFO EXEC[0] pass#49 id=-1 shader='genericparticle' out='_rt_default' draw=0 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.827  3552  5043 I WE      : INFO   tex[0] binding=1 extent=516x516 handle=0x79094b81e1d0
+10-07 13:59:07.827  3552  5043 I WE      : INFO EXEC[0] pass#50 id=3000 shader='genericparticle' out='_rt_default' draw=276 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.827  3552  5043 I WE      : INFO   tex[0] binding=1 extent=256x512 handle=0x79094b862990
+10-07 13:59:07.827  3552  5043 I WE      : INFO EXEC[0] pass#51 id=830 shader='genericparticle' out='_rt_default' draw=282 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.827  3552  5043 I WE      : INFO   tex[0] binding=1 extent=256x512 handle=0x79094b862990
+10-07 13:59:07.827  3552  5043 I WE      : INFO EXEC[0] pass#52 id=1005 shader='composelayer' out='_rt_effect_pingpong_a_133086465318704' draw=4 visible=1 depth=0 blend=1 tex_count=1 out_img=0x79094b863350 out_view=0x79094b863b10 out_ext=320x640
+10-07 13:59:07.827  3552  5043 I WE      : INFO   tex[0] binding=1 extent=320x640 handle=0x79094b845890
+10-07 13:59:07.827  3552  5043 I WE      : INFO EXEC[0] pass#53 id=-1 shader='effects/blur_downsample4' out='_rt__rt_QuarterCompoBuffer1_133082170532296' draw=4 visible=1 depth=0 blend=1 tex_count=1 out_img=0x79094b863610 out_view=0x79094b864c90 out_ext=80x160
+10-07 13:59:07.827  3552  5043 I WE      : INFO   tex[0] binding=1 extent=320x640 handle=0x79094b863350
+10-07 13:59:07.827  3552  5043 I WE      : INFO EXEC[0] pass#54 id=-1 shader='effects/blur_gaussian' out='_rt__rt_QuarterCompoBuffer2_133082170532296' draw=4 visible=1 depth=0 blend=1 tex_count=1 out_img=0x79094b8641d0 out_view=0x79094b864090 out_ext=80x160
+10-07 13:59:07.827  3552  5043 I WE      : INFO   tex[0] binding=1 extent=80x160 handle=0x79094b863610
+10-07 13:59:07.828  3552  5043 I WE      : INFO EXEC[0] pass#55 id=-1 shader='effects/blur_gaussian' out='_rt__rt_QuarterCompoBuffer1_133082170532296' draw=4 visible=1 depth=0 blend=1 tex_count=1 out_img=0x79094b863610 out_view=0x79094b864c90 out_ext=80x160
+10-07 13:59:07.828  3552  5043 I WE      : INFO   tex[0] binding=1 extent=80x160 handle=0x79094b8641d0
+10-07 13:59:07.828  3552  5043 I WE      : INFO EXEC[0] pass#56 id=-1 shader='effects/blur_combine' out='_rt_default' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.828  3552  5043 I WE      : INFO   tex[0] binding=1 extent=80x160 handle=0x79094b863610
+10-07 13:59:07.828  3552  5043 I WE      : INFO   tex[2] binding=2 extent=320x640 handle=0x79094b863350
+10-07 13:59:07.828  3552  5043 I WE      : INFO EXEC[0] pass#57 id=293 shader='genericparticle' out='_rt_default' draw=294 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.828  3552  5043 I WE      : INFO   tex[0] binding=1 extent=256x512 handle=0x79094b862990
+10-07 13:59:07.828  3552  5043 I WE      : INFO EXEC[0] pass#58 id=314 shader='genericropeparticle' out='_rt_default' draw=2820 visible=1 depth=0 blend=1 tex_count=2 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.828  3552  5043 I WE      : INFO   tex[0] binding=1 extent=32x128 handle=0x79094b864250
+10-07 13:59:07.835  3552  5043 I WE      : INFO EXEC[0] pass#59 id=983 shader='genericropeparticle' out='_rt_default' draw=37086 visible=1 depth=0 blend=1 tex_count=1 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.835  3552  5043 I WE      : INFO   tex[0] binding=1 extent=32x128 handle=0x79094b864250
+10-07 13:59:07.836  3552  5043 I WE      : INFO EXEC[0] pass#60 id=299 shader='genericparticle' out='_rt_default' draw=96 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.836  3552  5043 I WE      : INFO   tex[0] binding=1 extent=64x64 handle=0x79094b826a10
+10-07 13:59:07.836  3552  5043 I WE      : INFO EXEC[0] pass#61 COPY '_rt_default' 320x640 -> '_rt_default_12_copy' 160x320
+10-07 13:59:07.836  3552  5043 I WE      : INFO EXEC[0] pass#62 id=286 shader='genericparticle' out='_rt_default' draw=1458 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.836  3552  5043 I WE      : INFO   tex[0] binding=1 extent=121x144 handle=0x79094b867250
+10-07 13:59:07.836  3552  5043 I WE      : INFO   tex[1] binding=2 extent=64x64 handle=0x79094b866810
+10-07 13:59:07.836  3552  5043 I WE      : INFO   tex[2] binding=3 extent=160x320 handle=0x79094b866150
+10-07 13:59:07.836  3552  5043 I WE      : INFO EXEC[0] pass#63 COPY '_rt_default' 320x640 -> '_rt_default_13_copy' 160x320
+10-07 13:59:07.836  3552  5043 I WE      : INFO EXEC[0] pass#64 id=1041 shader='genericparticle' out='_rt_default' draw=1368 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.836  3552  5043 I WE      : INFO   tex[0] binding=1 extent=121x144 handle=0x79094b867250
+10-07 13:59:07.836  3552  5043 I WE      : INFO   tex[1] binding=2 extent=64x64 handle=0x79094b866810
+10-07 13:59:07.836  3552  5043 I WE      : INFO   tex[2] binding=3 extent=160x320 handle=0x79094b866150
+10-07 13:59:07.836  3552  5043 I WE      : INFO EXEC[0] pass#65 id=22527 shader='genericparticle' out='_rt_default' draw=30 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.836  3552  5043 I WE      : INFO   tex[0] binding=1 extent=128x128 handle=0x79094b8675d0
+10-07 13:59:07.836  3552  5043 I WE      : INFO EXEC[0] pass#66 id=22489 shader='genericparticle' out='_rt_default' draw=54 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.836  3552  5043 I WE      : INFO   tex[0] binding=1 extent=64x64 handle=0x79094b867810
+10-07 13:59:07.836  3552  5043 I WE      : INFO EXEC[0] pass#67 id=-1 shader='effects/tint' out='_rt_default' draw=4 visible=1 depth=0 blend=1 tex_count=1 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.836  3552  5043 I WE      : INFO   tex[0] binding=1 extent=299x512 handle=0x79094b804550
+10-07 13:59:07.837  3552  5043 I WE      : INFO EXEC[0] pass#68 id=-1 shader='effects/tint' out='_rt_default' draw=4 visible=1 depth=0 blend=1 tex_count=1 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.837  3552  5043 I WE      : INFO   tex[0] binding=1 extent=299x512 handle=0x79094b812a50
+10-07 13:59:07.837  3552  5043 I WE      : INFO EXEC[0] pass#69 id=-1 shader='effects/tint' out='_rt_default' draw=4 visible=1 depth=0 blend=1 tex_count=1 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.837  3552  5043 I WE      : INFO   tex[0] binding=1 extent=299x512 handle=0x79094b82f090
+10-07 13:59:07.837  3552  5043 I WE      : INFO EXEC[0] pass#70 id=-1 shader='effects/foliagesway' out='_rt_default' draw=4 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.837  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1920x1080 handle=0x79094b85d750
+10-07 13:59:07.837  3552  5043 I WE      : INFO   tex[1] binding=2 extent=960x540 handle=0x79094b868c10
+10-07 13:59:07.837  3552  5043 I WE      : INFO   tex[2] binding=3 extent=256x256 handle=0x79094b85e210
+10-07 13:59:07.837  3552  5043 I WE      : INFO EXEC[0] pass#71 COPY '_rt_default' 320x640 -> '_rt_default_20_copy' 160x320
+10-07 13:59:07.837  3552  5043 I WE      : INFO EXEC[0] pass#72 id=1115 shader='genericparticle' out='_rt_default' draw=54 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.837  3552  5043 I WE      : INFO   tex[0] binding=1 extent=121x144 handle=0x79094b867250
+10-07 13:59:07.837  3552  5043 I WE      : INFO   tex[1] binding=2 extent=64x64 handle=0x79094b866810
+10-07 13:59:07.837  3552  5043 I WE      : INFO   tex[2] binding=3 extent=160x320 handle=0x79094b866150
+10-07 13:59:07.837  3552  5043 I WE      : INFO EXEC[0] pass#73 COPY '_rt_default' 320x640 -> '_rt_default_21_copy' 160x320
+10-07 13:59:07.837  3552  5043 I WE      : INFO EXEC[0] pass#74 id=509 shader='genericparticle' out='_rt_default' draw=42 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.837  3552  5043 I WE      : INFO   tex[0] binding=1 extent=121x144 handle=0x79094b867250
+10-07 13:59:07.837  3552  5043 I WE      : INFO   tex[1] binding=2 extent=64x64 handle=0x79094b866810
+10-07 13:59:07.837  3552  5043 I WE      : INFO   tex[2] binding=3 extent=160x320 handle=0x79094b866150
+10-07 13:59:07.838  3552  5043 I WE      : INFO EXEC[0] pass#75 id=-1 shader='genericimage2' out='_rt_default' draw=1329 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.838  3552  5043 I WE      : INFO   tex[0] binding=1 extent=678x636 handle=0x79094b85cb10
+10-07 13:59:07.838  3552  5043 I WE      : INFO EXEC[0] pass#76 id=-1 shader='genericimage2' out='_rt_default' draw=2040 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.838  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1279x1761 handle=0x79094b7eae50
+10-07 13:59:07.838  3552  5043 I WE      : INFO EXEC[0] pass#77 id=-1 shader='genericimage2' out='_rt_default' draw=1329 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.838  3552  5043 I WE      : INFO   tex[0] binding=1 extent=678x636 handle=0x79094b8598d0
+10-07 13:59:07.838  3552  5043 I WE      : INFO EXEC[0] pass#78 id=-1 shader='genericimage2' out='_rt_default' draw=1887 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.838  3552  5043 I WE      : INFO   tex[0] binding=1 extent=429x661 handle=0x79094b848590
+10-07 13:59:07.838  3552  5043 I WE      : INFO EXEC[0] pass#79 id=-1 shader='genericimage2' out='_rt_default' draw=1476 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.838  3552  5043 I WE      : INFO   tex[0] binding=1 extent=847x1080 handle=0x79094b84c410
+10-07 13:59:07.838  3552  5043 I WE      : INFO EXEC[0] pass#80 id=-1 shader='genericimage2' out='_rt_default' draw=1329 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.838  3552  5043 I WE      : INFO   tex[0] binding=1 extent=678x636 handle=0x79094b857d10
+10-07 13:59:07.839  3552  5043 I WE      : INFO EXEC[0] pass#81 id=-1 shader='genericimage2' out='_rt_default' draw=1476 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.839  3552  5043 I WE      : INFO   tex[0] binding=1 extent=847x1080 handle=0x79094b852150
+10-07 13:59:07.839  3552  5043 I WE      : INFO EXEC[0] pass#82 id=-1 shader='genericimage2' out='_rt_default' draw=3018 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.839  3552  5043 I WE      : INFO   tex[0] binding=1 extent=1575x2160 handle=0x79094b840510
+10-07 13:59:07.839  3552  5043 I WE      : INFO EXEC[0] pass#83 id=-1 shader='genericimage2' out='_rt_default' draw=1329 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.839  3552  5043 I WE      : INFO   tex[0] binding=1 extent=678x636 handle=0x79094b85a810
+10-07 13:59:07.839  3552  5043 I WE      : INFO EXEC[0] pass#84 id=-1 shader='genericimage2' out='_rt_default' draw=1104 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.839  3552  5043 I WE      : INFO   tex[0] binding=1 extent=479x609 handle=0x79094b84d6d0
+10-07 13:59:07.839  3552  5043 I WE      : INFO EXEC[0] pass#85 id=-1 shader='genericimage2' out='_rt_default' draw=1329 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.839  3552  5043 I WE      : INFO   tex[0] binding=1 extent=678x636 handle=0x79094b856f50
+10-07 13:59:07.840  3552  5043 I WE      : INFO EXEC[0] pass#86 id=-1 shader='genericimage2' out='_rt_default' draw=1104 visible=1 depth=0 blend=1 tex_count=3 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.840  3552  5043 I WE      : INFO   tex[0] binding=1 extent=479x609 handle=0x79094b83f250
+10-07 13:59:07.840  3552  5043 I WE      : INFO EXEC[0] pass#87 id=555 shader='composelayer' out='_rt_effect_pingpong_a_133086465380976' draw=4 visible=1 depth=0 blend=1 tex_count=1 out_img=0x79094b862e50 out_view=0x79094b862f90 out_ext=512x512
+10-07 13:59:07.840  3552  5043 I WE      : INFO   tex[0] binding=1 extent=320x640 handle=0x79094b845890
+10-07 13:59:07.840  3552  5043 I WE      : INFO EXEC[0] pass#88 id=-1 shader='workshop/2084198056/effects/Simple_Audio_Bars' out='_rt_default' draw=4 visible=1 depth=0 blend=1 tex_count=1 out_img=0x79094b845890 out_view=0x79094b850090 out_ext=320x640
+10-07 13:59:07.840  3552  5043 I WE      : INFO   tex[0] binding=1 extent=512x512 handle=0x79094b862e50
+10-07 13:59:07.840  3552  5043 I WE      : INFO EXEC[0] pass#89 FINPASS present=320x640 result_handle=0x79094b845890
+10-07 13:59:07.840  3552  5043 I WE      : INFO render frame: 91 passes executed, 0 skipped (not prepared), 91 total
+10-07 13:59:07.841  3552  5042 I WE      : first frame
+10-07 13:59:07.904  3552  3552 I WeWall  : ready 3840,2160| visible=true paused=false
+10-07 13:59:11.131  3552  3552 I WeWall  : paused=true

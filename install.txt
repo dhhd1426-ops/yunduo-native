@@ -1,0 +1,3 @@
++ timeout 60 adb install -r out/test.apk
+Performing Streamed Install
+Success

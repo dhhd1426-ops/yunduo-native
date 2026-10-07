@@ -1,0 +1,10 @@
+--------- beginning of main
+10-07 13:58:30.978  3552  3552 I WeWall  : surface size 320x640 (window 320x640)
+10-07 13:58:31.357  3552  3552 I WeWall  : create 320x640 h=133086733679088 web=320
+10-07 13:59:07.904  3552  3552 I WeWall  : ready 3840,2160| visible=true paused=false
+10-07 13:59:11.131  3552  3552 I WeWall  : paused=true
+10-07 14:00:05.086  3552  3552 I WeWall  : create 320x640 h=133086733754800 web=320
+10-07 14:00:09.842  3552  3552 I WeWall  : ready 3840,2160| visible=true paused=true
+10-07 14:00:21.026  3552  3552 I WeWall  : surface size 640x320 (window 640x320)
+10-07 14:00:21.027  3552  3552 I WeWall  : create 640x320 h=133086733754800 web=640
+10-07 14:00:27.438  3552  3552 I WeWall  : ready 3840,2160| visible=true paused=true

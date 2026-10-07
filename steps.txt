@@ -1,0 +1,10 @@
+== 13:57:45 launch
+== 13:58:28 import
+== 13:59:11 first native frame after 40s
+== 13:59:54 background
+== 14:00:05 resume
+== 14:00:10 native frame again after 5s
+== 14:00:20 rotate to landscape (like unfolding a foldable: surface transform 90°)
+== 14:00:31 native frame after rotation 10s
+== 14:00:55 settings page (blur snapshot behind)
+== 14:00:57 collect

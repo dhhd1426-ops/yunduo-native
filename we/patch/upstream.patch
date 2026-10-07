@@ -1,0 +1,117 @@
+diff --git a/src/Vulkan/Device.cpp b/src/Vulkan/Device.cpp
+index 1672f8b..fa2cc5d 100644
+--- a/src/Vulkan/Device.cpp
++++ b/src/Vulkan/Device.cpp
+@@ -227,6 +227,7 @@ bool Device::Create(Instance& inst, std::span<const Extension> exts, VkExtent2D
+                                        .queueFamilyIndex = device.m_graphics_queue.family_index };
+         VVK_CHECK_BOOL_RE(device.m_device.CreateCommandPool(info, device.m_command_pool));
+     }
++    vvk::pde::init(*device.m_device, &device.m_device.Dispatch(), device.supportExt(VK_KHR_PUSH_DESCRIPTOR_EXTENSION_NAME));
+     {
+         VmaAllocatorCreateInfo allocatorInfo = {};
+         allocatorInfo.vulkanApiVersion       = WP_VULKAN_VERSION;
+diff --git a/src/Vulkan/GraphicsPipeline.cpp b/src/Vulkan/GraphicsPipeline.cpp
+index 0214801..8b61184 100644
+--- a/src/Vulkan/GraphicsPipeline.cpp
++++ b/src/Vulkan/GraphicsPipeline.cpp
+@@ -175,7 +175,7 @@ bool GraphicsPipeline::create(const Device& device, vvk::RenderPass& pass,
+             .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO, .pNext = nullptr
+         };
+         VkDescriptorSetLayoutCreateFlags flags {};
+-        if (info.push_descriptor) flags |= VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR;
++        if (info.push_descriptor && ! vvk::pde::active()) flags |= VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR;
+ 
+         create_info.bindingCount = (u32)info.bindings.size();
+         create_info.pBindings    = info.bindings.data();
+@@ -196,6 +196,8 @@ bool GraphicsPipeline::create(const Device& device, vvk::RenderPass& pass,
+         };
+         LOG_DEBUG("GraphicsPipeline::create: setLayoutCount=%zu", layouts.size());
+         VVK_CHECK(device.handle().CreatePipelineLayout(ci, pipeline.layout));
++        for (size_t i = 0; i < m_descriptor_set_infos.size() && i < layouts.size(); i++)
++            if (m_descriptor_set_infos[i].push_descriptor) vvk::pde::registerLayout(*pipeline.layout, (uint32_t)i, layouts[i]);
+     }
+ 
+     std::vector<VkPipelineShaderStageCreateInfo> shaderStages;
+diff --git a/src/Vulkan/include/vvk/vulkan_wrapper.hpp b/src/Vulkan/include/vvk/vulkan_wrapper.hpp
+index 2b953ca..b86f25a 100644
+--- a/src/Vulkan/include/vvk/vulkan_wrapper.hpp
++++ b/src/Vulkan/include/vvk/vulkan_wrapper.hpp
+@@ -8,6 +8,9 @@
+ #include <utility>
+ #include <vector>
+ #include <cassert>
++#include <cstdlib>
++#include <mutex>
++#include <unordered_map>
+ 
+ // vulkan loader dynamically
+ #define VK_NO_PROTOTYPES
+@@ -197,6 +200,10 @@ struct DeviceDispatch : InstanceDispatch {
+     PFN_vkSetDebugUtilsObjectTagEXT  vkSetDebugUtilsObjectTagEXT {};
+ };
+ 
++// 云朵天气安卓移植：推送描述符兼容垫片
++#include "vvk_push_emu.inl"
++
++
+ template<typename THandle, typename Type = typename THandle::handle_type>
+ std::vector<Type> ToVector(std::span<THandle> handles) {
+     std::vector<Type> res(handles.size());
+@@ -544,6 +551,7 @@ class CommandBuffer : public Handle<VkCommandBuffer, NoOwnerLife, DeviceDispatch
+ 
+ public:
+     VkResult Begin(const VkCommandBufferBeginInfo& begin_info) const {
++        pde::onBegin();
+         return dld->vkBeginCommandBuffer(handle, &begin_info);
+     }
+ 
+@@ -581,6 +589,7 @@ public:
+     void PushDescriptorSetKHR(VkPipelineBindPoint bind_point, VkPipelineLayout layout, uint32_t set,
+                               Span<const VkWriteDescriptorSet> wsets) const noexcept {
+         assert(wsets[0].sType == VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET);
++        if (pde::active()) { pde::push(handle, bind_point, layout, set, (uint32_t)wsets.size(), wsets.data()); return; }
+         dld->vkCmdPushDescriptorSetKHR(handle, bind_point, layout, set, wsets.size(), wsets.data());
+     }
+ 
+diff --git a/src/VulkanRender/VulkanRender.cpp b/src/VulkanRender/VulkanRender.cpp
+index ef2aea0..ca5ca48 100644
+--- a/src/VulkanRender/VulkanRender.cpp
++++ b/src/VulkanRender/VulkanRender.cpp
+@@ -59,7 +59,7 @@
+ 
+ using namespace wallpaper::vulkan;
+ 
+-constexpr uint64_t vk_wait_time { 10u * 1000u * 1000000u };
++constexpr uint64_t vk_wait_time { 10ull * 1000ull * 1000000ull };   // 云朵天气移植：原写法按 32 位算会溢出成 1.41 秒
+ // 2 frames in flight: lets CPU record frame N+1 while GPU executes frame N,
+ // collapsing drawFrame wallclock from (CPU + GPU) to max(CPU, GPU) at
+ // steady state.  Per-slot resources: command buffer, fence, semaphore pair,
+@@ -93,11 +93,11 @@ constexpr std::array base_inst_exts {
+ };
+ constexpr std::array base_device_exts {
+     Extension { false, VK_EXT_MEMORY_BUDGET_EXTENSION_NAME },
+-    Extension { true, VK_KHR_PUSH_DESCRIPTOR_EXTENSION_NAME },
+-    Extension { true, VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME },
+-    Extension { true, VK_KHR_EXTERNAL_SEMAPHORE_EXTENSION_NAME },
+-    Extension { true, VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME },
+-    Extension { true, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME }
++    Extension { false, VK_KHR_PUSH_DESCRIPTOR_EXTENSION_NAME },
++    Extension { false, VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME },
++    Extension { false, VK_KHR_EXTERNAL_SEMAPHORE_EXTENSION_NAME },
++    Extension { false, VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME },
++    Extension { false, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME }
+ };
+ 
+ struct VulkanRender::Impl {
+diff --git a/src/WPTexImageHelpers.h b/src/WPTexImageHelpers.h
+index ef13f48..cc5b3a0 100644
+--- a/src/WPTexImageHelpers.h
++++ b/src/WPTexImageHelpers.h
+@@ -25,6 +25,7 @@ inline TextureFormat ToTexFormate(int type) {
+     switch (type) {
+     case 0: return TextureFormat::RGBA8;
+     case 4: return TextureFormat::BC3;
++    case 5: return TextureFormat::BC3; // 云朵天气移植：WE 自带预设素材（presets/fern1 等）用的格式 5，块结构同 DXT5
+     case 6: return TextureFormat::BC2;
+     case 7: return TextureFormat::BC1;
+     case 8: return TextureFormat::RG8;

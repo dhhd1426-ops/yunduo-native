@@ -1,0 +1,66 @@
+name: we-native
+# Wallpaper Engine 原生渲染移植（第一步：可行性）——NDK 交叉编译 + 模拟器里离屏渲染一帧
+on:
+  push:
+    branches: [main]
+    paths: ['we/**', '.github/workflows/we.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  we:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch upstream + deps, apply port patch
+        run: bash we/fetch.sh $HOME/wesrc
+      - name: Test wallpaper (branch we-testdata)
+        run: |
+          git fetch -q --depth 1 origin we-testdata
+          mkdir -p testdata && git --work-tree=testdata checkout FETCH_HEAD -- .
+          git reset -q
+          ls -la testdata
+      - name: NDK build (x86_64 for emulator, arm64-v8a for phones)
+        run: |
+          mkdir -p out/we
+          NDK=${ANDROID_NDK_LATEST_HOME:-$ANDROID_NDK_HOME}
+          echo "ndk=$NDK" | tee out/we/toolchain.txt
+          for abi in x86_64 arm64-v8a; do
+            cmake -S we -B build-$abi -G Ninja -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_TOOLCHAIN_FILE=$NDK/build/cmake/android.toolchain.cmake \
+              -DANDROID_ABI=$abi -DANDROID_PLATFORM=29 -DANDROID_STL=c++_static \
+              -DWSR_DIR=$HOME/wesrc/wsr -DLZ4_DIR=$HOME/wesrc/lz4 -DFREETYPE_DIR=$HOME/wesrc/freetype \
+              > out/we/cmake-$abi.log 2>&1 || { tail -50 out/we/cmake-$abi.log; exit 1; }
+            ninja -C build-$abi werender > out/we/build-$abi.log 2>&1 || { tail -80 out/we/build-$abi.log; exit 1; }
+            ls -la build-$abi/werender | tee -a out/we/toolchain.txt
+          done
+          cp build-arm64-v8a/werender out/we/werender-arm64
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Render in emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: bash we/ci/emu-run.sh
+      - name: Publish to ci-we
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          P=/tmp/pub; rm -rf $P; mkdir -p $P; cp -r out/we/. $P/ 2>/dev/null || true
+          python3 -c "from PIL import Image; Image.open('$P/out.ppm').save('$P/out.png')" 2>/dev/null || pip install -q pillow && python3 -c "from PIL import Image; Image.open('$P/out.ppm').save('$P/out.png')" || true
+          rm -f $P/out.ppm
+          echo "sha=$GITHUB_SHA run=$GITHUB_RUN_ID job=$JOB_STATUS at=$(date -u +%FT%TZ)" > $P/RESULT.txt
+          cd $P && git init -q && git checkout -q -b ci-we
+          git -c user.name=ci -c user.email=ci@users.noreply.github.com add -A
+          git -c user.name=ci -c user.email=ci@users.noreply.github.com commit -qm "WE CI $GITHUB_SHA"
+          git push -qf "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci-we

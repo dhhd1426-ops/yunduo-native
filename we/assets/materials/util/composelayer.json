@@ -1,0 +1,13 @@
+{
+	"passes" :
+	[
+		{
+			"blending" : "translucent",
+			"cullmode" : "nocull",
+			"depthtest" : "disabled",
+			"depthwrite" : "disabled",
+			"shader" : "composelayer",
+			"textures" : [ "_rt_FullFrameBuffer" ]
+		}
+	]
+}

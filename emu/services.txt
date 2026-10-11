@@ -1,0 +1,59 @@
+ACTIVITY MANAGER SERVICES (dumpsys activity services)
+  User 0 active services:
+  * ServiceRecord{a16b36e u0 com.cloudweather.xiaoyu/.KeepService}
+    intent={cmp=com.cloudweather.xiaoyu/.KeepService}
+    packageName=com.cloudweather.xiaoyu
+    processName=com.cloudweather.xiaoyu
+    baseDir=/data/app/~~SJC7-ZV8ZmzqaOJK-gRYKQ==/com.cloudweather.xiaoyu-19LcehsSnpVE3_E57vXndw==/base.apk
+    dataDir=/data/user/0/com.cloudweather.xiaoyu
+    app=ProcessRecord{2ea6b4e 6256:com.cloudweather.xiaoyu/u0a192}
+    mAllowWhileInUsePermissionInFgsReason=PROC_STATE_TOP
+    allowUiJobScheduling=true
+    recentCallingPackage=com.cloudweather.xiaoyu
+    recentCallingUid=10192
+    allowStartForeground=PROC_STATE_TOP
+    startForegroundCount=1
+    infoAllowStartForeground=[callingPackage: com.cloudweather.xiaoyu; callingUid: 10192; uidState: TOP ; uidBFSL: [BFSL]; intent: Intent { cmp=com.cloudweather.xiaoyu/.KeepService }; code:PROC_STATE_TOP; tempAllowListReason:<null>; targetSdkVersion:29; callerTargetSdkVersion:29; startForegroundCount:0; bindFromPackage:null: isBindService:false]
+    isForeground=true foregroundId=7 types=00000000 foregroundNoti=Notification(channel=keep shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x62 color=0xffa0505d category=service vis=SECRET)
+    createTime=-11s820ms startingBgTimeout=--
+    lastActivity=-1s282ms restartTime=-11s820ms createdFromFg=true
+    startRequested=true delayedStop=false stopIfKilled=false callStart=true lastStartId=2
+ startCommandResult=1
+
+  * ServiceRecord{96c0ea4 u0 com.cloudweather.xiaoyu/org.chromium.content.app.SandboxedProcessService0:0}
+    intent={cmp=com.cloudweather.xiaoyu/org.chromium.content.app.SandboxedProcessService0:0}
+    packageName=com.cloudweather.xiaoyu
+    processName=com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+    baseDir=/data/app/~~ocPcuUvw5s4vJK2WHl8T2Q==/com.google.android.webview-fuN4rwZL1VVa6XDqpvmhsg==/WebViewGoogle.apk
+    dataDir=/data/user/0/com.google.android.webview
+    app=ProcessRecord{eb1a8ae 6285:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0a192i1}
+    isolationHostProc=ProcessRecord{eb1a8ae 6285:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0a192i1}
+    mAllowWhileInUsePermissionInFgsReason=PROC_STATE_TOP
+    allowUiJobScheduling=false
+    recentCallingPackage=com.cloudweather.xiaoyu
+    recentCallingUid=10192
+    allowStartForeground=PROC_STATE_TOP
+    startForegroundCount=0
+    infoAllowStartForeground=[callingPackage: com.cloudweather.xiaoyu; callingUid: 10192; uidState: TOP ; uidBFSL: [BFSL]; intent: Intent { cmp=com.cloudweather.xiaoyu/org.chromium.content.app.SandboxedProcessService0:0 (has extras) }; code:PROC_STATE_TOP; tempAllowListReason:<null>; targetSdkVersion:34; callerTargetSdkVersion:29; startForegroundCount:0; bindFromPackage:null: isBindService:true]
+    createTime=-12s183ms startingBgTimeout=--
+    lastActivity=-11s809ms restartTime=-12s154ms createdFromFg=true
+    Bindings:
+    * IntentBindRecord{e4d131a CREATE}:
+      intent={cmp=com.cloudweather.xiaoyu/org.chromium.content.app.SandboxedProcessService0:0}
+      binder=android.os.BinderProxy@2bf3e4b
+      requested=true received=true hasBound=true doRebind=false
+      * Client AppBindRecord{96a9028 ProcessRecord{2ea6b4e 6256:com.cloudweather.xiaoyu/u0a192}}
+        Per-process Connections:
+          ConnectionRecord{84dc246 u0 CR IMP com.cloudweather.xiaoyu/org.chromium.content.app.SandboxedProcessService0:0:@d118e21 flags=0x80000041}
+          ConnectionRecord{f7632e5 u0 CR WPRI com.cloudweather.xiaoyu/org.chromium.content.app.SandboxedProcessService0:0:@44ef1dc flags=0x80000021}
+    All Connections:
+      ConnectionRecord{f7632e5 u0 CR WPRI com.cloudweather.xiaoyu/org.chromium.content.app.SandboxedProcessService0:0:@44ef1dc flags=0x80000021}
+      ConnectionRecord{84dc246 u0 CR IMP com.cloudweather.xiaoyu/org.chromium.content.app.SandboxedProcessService0:0:@d118e21 flags=0x80000041}
+
+  Connection bindings to services:
+  * ConnectionRecord{f7632e5 u0 CR WPRI com.cloudweather.xiaoyu/org.chromium.content.app.SandboxedProcessService0:0:@44ef1dc flags=0x80000021}
+    binding=AppBindRecord{96a9028 com.cloudweather.xiaoyu/org.chromium.content.app.SandboxedProcessService0:0:com.cloudweather.xiaoyu}
+    conn=android.os.BinderProxy@44ef1dc flags=0x80000021
+  * ConnectionRecord{84dc246 u0 CR IMP com.cloudweather.xiaoyu/org.chromium.content.app.SandboxedProcessService0:0:@d118e21 flags=0x80000041}
+    binding=AppBindRecord{96a9028 com.cloudweather.xiaoyu/org.chromium.content.app.SandboxedProcessService0:0:com.cloudweather.xiaoyu}
+    conn=android.os.BinderProxy@d118e21 flags=0x80000041

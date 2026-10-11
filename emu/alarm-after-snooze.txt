@@ -1,0 +1,20 @@
+    ELAPSED #1: Alarm{cd04e3b type 3 origWhen 205541 whenElapsed 205541 com.google.android.gms}
+    ELAPSED_WAKEUP #12: Alarm{d11a221 type 2 origWhen 641449 whenElapsed 641449 com.google.android.gms}
+      whenElapsed=+7m14s798ms maxWhenElapsed=+7m14s798ms
+    RTC_WAKEUP #13: Alarm{92774f2 type 0 origWhen 1791697818524 whenElapsed 803416 com.cloudweather.xiaoyu}
+      tag=*walarm*:com.cloudweather.xiaoyu.ALARM
+      whenElapsed=+9m56s765ms maxWhenElapsed=+9m56s765ms
+        showIntent=PendingIntent{9ab743: PendingIntentRecord{de57e9c com.cloudweather.xiaoyu startActivity}}
+    ELAPSED #19: Alarm{e1b7459 type 3 origWhen 2251009 whenElapsed 2251009 com.google.android.gms}
+      whenElapsed=+34m4s358ms maxWhenElapsed=+1h0m49s351ms
+    ELAPSED #20: Alarm{eb3ee3e type 3 origWhen 3539985 whenElapsed 3539985 com.google.android.gms}
+      whenElapsed=+55m33s334ms maxWhenElapsed=+1h37m21s61ms
+    ELAPSED #21: Alarm{d05fd15 type 3 origWhen 4084892 whenElapsed 4084892 com.google.android.gms}
+      whenElapsed=+1h4m38s241ms maxWhenElapsed=+1h54m18s642ms
+    RTC_WAKEUP #22: Alarm{83619ec type 0 origWhen 1791702000000 whenElapsed 4984893 android}
+    ELAPSED #24: Alarm{30068f7 type 3 origWhen 7199999 whenElapsed 7199999 com.google.android.gms}
+      whenElapsed=+1h56m33s348ms maxWhenElapsed=+2h56m33s348ms
+    ELAPSED #25: Alarm{879b9cd type 3 origWhen 14511208 whenElapsed 14511208 com.google.android.gms}
+    ELAPSED #26: Alarm{5489d93 type 3 origWhen 14575819 whenElapsed 14575819 com.google.android.gms}
+      whenElapsed=+3h59m29s168ms maxWhenElapsed=+6h59m29s168ms
+    RTC #27: Alarm{3363e1b type 1 origWhen 1791716400000 whenElapsed 19384893 com.google.android.apps.wellbeing}

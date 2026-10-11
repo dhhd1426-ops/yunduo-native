@@ -60,7 +60,7 @@ let pass = 0, fail = 0; const ok = (n, c, x) => { console.log((c ? 'PASS ' : 'FA
   await p.evaluate(() => history.back()); await p.waitForTimeout(900);
   ok('设置页返回手势 → 首页', await tab() === 'today', await tab());
   // 5.11.1 关聊天后壁纸接着动；磨砂玻璃时聊天窗后面的壁纸在动
-  const running = () => p.evaluate(() => __Wall.state().running);
+  const running = () => p.evaluate(() => __Wall.isRunning());   // 5.19 壁纸是图片 / 视频：live = 视频在播、雨在下
   await p.click('.dk-in'); await p.waitForTimeout(1200);
   ok('简洁：聊天时壁纸停帧', !(await running()));
   await p.evaluate(() => history.back()); await p.waitForTimeout(1500);
@@ -68,8 +68,8 @@ let pass = 0, fail = 0; const ok = (n, c, x) => { console.log((c ? 'PASS ' : 'FA
   await p.evaluate(() => { const w = JSON.parse(localStorage.getItem('cloud-weather-walls-v1')); w.ui = 'glass'; localStorage.setItem('cloud-weather-walls-v1', JSON.stringify(w)); });
   await p.reload(); await p.waitForFunction(() => document.querySelector('#wall.ready'), null, { timeout: 120000 }); await p.waitForTimeout(1500);
   await p.click('.dk-in'); await p.waitForTimeout(1500);
-  const gl = await p.evaluate(() => { const g = document.querySelector('#wall .wl-glass'); return { cls: document.body.classList.contains('glass-ui'), shared: g.classList.contains('on') && /path\(/.test(g.style.clipPath), bf: getComputedStyle(document.querySelector('.chat-main')).backdropFilter, run: __Wall.state().running }; });
-  ok('磨砂玻璃：聊天窗半透明 + 共用模糊图露在玻璃下面（不再 backdrop-filter），后面的壁纸在动', gl.cls && gl.shared && gl.bf === 'none' && gl.run, gl);
+  const gl = await p.evaluate(() => ({ cls: document.body.classList.contains('glass-ui'), bf: getComputedStyle(document.querySelector('.chat-main')).backdropFilter, run: __Wall.isRunning() }));
+  ok('磨砂玻璃：聊天窗半透明 + 背景模糊，后面的壁纸照常显示', gl.cls && /blur/.test(gl.bf) && gl.run, gl);
   await p.screenshot({ path: `${OUT}/5-glass-chat.png` });
   await p.evaluate(() => history.back()); await p.waitForTimeout(1200);
   await swipe(100, 520, 220); await p.waitForTimeout(500);

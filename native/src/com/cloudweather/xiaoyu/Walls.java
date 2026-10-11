@@ -13,8 +13,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * 5.0 壁纸：把用户选的（或用「云朵天气打开」的）壁纸文件复制进 App 自己的文件夹 files/amor/walls/，
- * 网页再用 file:// 读出来渲染。支持 Wallpaper Engine 的 .mpkg / scene.pkg，也支持普通图片和视频。
+ * 5.0 壁纸：把用户选的图片、视频复制进 App 自己的文件夹 files/amor/walls/，网页再用 file:// 读出来显示。
+ * 5.19 起不再支持 Wallpaper Engine 的 .mpkg / scene.pkg（壁纸引擎删了）；以前导入时解出来的 *.assets 目录删壁纸时一起清掉。
  * 壁纸是用户自己的文件，不上传、不分发。
  */
 final class Walls {
@@ -29,19 +29,19 @@ final class Walls {
         return n == null ? "壁纸" : n;
     }
 
-    /** 看文件头判断是什么：mpkg / pkg / 图片 / 视频；别的不收 */
+    /** 看文件头判断是什么：图片 / 视频；别的不收（Wallpaper Engine 壁纸包返回 pkg，网页提示不再支持） */
     static String kind(byte[] h, int n, String name) {
         String low = name.toLowerCase();
         if (n >= 12) {
             String s = new String(h, 4, 8, java.nio.charset.StandardCharsets.ISO_8859_1);
-            if (s.startsWith("PKGM") || s.startsWith("PKGV")) return "scene";
+            if (s.startsWith("PKGM") || s.startsWith("PKGV")) return "pkg";
         }
         if (n >= 3 && (h[0] & 0xFF) == 0xFF && (h[1] & 0xFF) == 0xD8) return "image";
         if (n >= 4 && (h[0] & 0xFF) == 0x89 && h[1] == 'P' && h[2] == 'N' && h[3] == 'G') return "image";
         if (n >= 12 && h[8] == 'W' && h[9] == 'E' && h[10] == 'B' && h[11] == 'P') return "image";
         if (n >= 8 && h[4] == 'f' && h[5] == 't' && h[6] == 'y' && h[7] == 'p') return "video";
         if (n >= 4 && (h[0] & 0xFF) == 0x1A && (h[1] & 0xFF) == 0x45) return "video";   // webm
-        if (low.endsWith(".mpkg") || low.endsWith(".pkg")) return "scene";
+        if (low.endsWith(".mpkg") || low.endsWith(".pkg")) return "pkg";
         return null;
     }
 
@@ -67,18 +67,14 @@ final class Walls {
                 }
             }
             String k = kind(head, hn, name);
-            if (k == null) { f.delete(); o.put("err", "这不是壁纸包、图片或视频"); return o; }
+            if ("pkg".equals(k)) { f.delete(); o.put("err", "不再支持 Wallpaper Engine 壁纸包了，可以导入图片或视频（mp4）"); return o; }
+            if (k == null) { f.delete(); o.put("err", "这不是图片或视频"); return o; }
             o.put("path", "file://" + f.getAbsolutePath());
             o.put("name", name);
             o.put("size", size);
             o.put("kind", k);
-            if ("scene".equals(k)) {
-                JSONObject unpacked = WallPackage.extract(f);
-                o.put("pack", unpacked.getString("pack"));
-                if (unpacked.has("mediaPath")) o.put("mediaPath", unpacked.getString("mediaPath"));
-            }
         } catch (Throwable t) {
-            if (f != null) { WallPackage.remove(WallPackage.directory(f)); f.delete(); }
+            if (f != null) f.delete();
             try { o.put("err", String.valueOf(t.getMessage())); } catch (Throwable ignore) { }
             Store.err(c, "wallCopy", t);
         }
@@ -90,8 +86,13 @@ final class Walls {
         try {
             File f = AmorFiles.local(c, path);
             if (!f.getParentFile().getCanonicalPath().equals(dir(c).getCanonicalPath())) return false;
-            WallPackage.remove(WallPackage.directory(f));
+            remove(new File(f.getPath() + ".assets"));   // 以前导入的场景壁纸解包目录
             return f.delete();
         } catch (Throwable t) { return false; }
+    }
+
+    static void remove(File f) {
+        if (f.isDirectory()) { File[] kids = f.listFiles(); if (kids != null) for (File k : kids) remove(k); }
+        f.delete();
     }
 }

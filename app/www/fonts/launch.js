@@ -93,18 +93,17 @@ window.Launch = (function () {
     ctx.clearRect(0, 0, W, H);
     if (bp < 0) {
       ctx.fillStyle = '#0b0d10'; ctx.fillRect(0, 0, W, H);
-      drawA(t, cam); word(t, cam); field_ = null;
+      drawA(t, cam); word(t, cam);
     } else {
       if (!strands.length) makeStrands();
       if (!revealed) { if (cv.style.background) cv.style.background = ''; reveal({ skip: false, strands: true }); }
-      var ang = LEG_ANG, nx = Math.cos(ang), ny = Math.sin(ang), cx = W / 2, cy = H / 2, list = [];
+      var ang = LEG_ANG, cx = W / 2, cy = H / 2, list = [];
       strands.forEach(function (st) {
         var life = cl(bp / 0.06) * (1 - cl((bp - st.die) / 0.22));
         if (life <= 0) return;
         var x = (st.u - .5) * SPAN * (0.32 + 1.25 * eo(cl(bp))) + st.v * bp * 140, w = st.w * (1 + bp * 0.8) * (0.5 + 0.5 * life);
         list.push([x, w / 2, st.a * life, st.c]);
       });
-      field_ = { cx: cx, cy: cy, nx: nx, ny: ny, list: list };
       var dark = 1 - cl((bp - 0.04) / 0.42), red = 1 - cl(bp / 0.16), tint = 1 - cl(bp / 0.4);
       if (dark > 0) { ctx.globalAlpha = dark * (1 - red); ctx.fillStyle = '#0b0d10'; ctx.fillRect(0, 0, W, H); }
       if (red > 0) { ctx.globalAlpha = red; ctx.fillStyle = '#c8434e'; ctx.fillRect(0, 0, W, H); }
@@ -123,12 +122,12 @@ window.Launch = (function () {
       });
       ctx.restore(); ctx.globalAlpha = 1;
       if (!opened && bp > 0.5) open();   // 光束快散完：时间、问候、回信栏、导航依次出来
-      if (bp >= 1) { field_ = null; return done(); }
+      if (bp >= 1) return done();
     }
     raf = requestAnimationFrame(frame);
   }
   // 光束：和左笔一样斜；位置是垂直于光束方向的坐标（CSS 像素，相对屏幕中心）
-  var LEG_ANG = Math.atan2(240, 124 - 66) - Math.PI / 2, SPAN = 0, strands = [], field_ = null;
+  var LEG_ANG = Math.atan2(240, 124 - 66) - Math.PI / 2, SPAN = 0, strands = [];
   var TINT = ['#d24e57', '#e8774f', '#f2c7a0', '#6fb7c6', '#4f86cf', '#e0565a'];
   function makeStrands() {
     SPAN = Math.hypot(W, H); strands = [];
@@ -147,5 +146,5 @@ window.Launch = (function () {
     opt = o || {}; if (!cv) mount(); t0 = now(); raf = requestAnimationFrame(frame);
   }
   function skip() { if (!skipAt) skipAt = now(); }
-  return { field: function () { return finished ? null : field_; }, mount: mount, start: start, skip: skip, active: function () { return !!cv && !finished; }, T: T };
+  return { mount: mount, start: start, skip: skip, active: function () { return !!cv && !finished; }, T: T };
 })();

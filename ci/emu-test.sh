@@ -135,37 +135,6 @@ sleep 3; shot 9d-after-slide
 T --ez ringOff true; sleep 2; shot 9e-after-off
 adb shell dumpsys notification --noredact | grep -c "id=8 " > $O/ring-notif-after-off.txt || true
 
-note "10 viz: Visualizer on the global output (wallpaper follows the music)"
-adb shell pm grant $PKG android.permission.RECORD_AUDIO || true
-T --ez viz true; sleep 4
-adb shell run-as $PKG cat shared_prefs/amor.xml | grep -o "viz[^&]*" | head -5 > $O/viz.txt 2>&1 || true
-
-note "11 native Wallpaper Engine renderer (5.18): import the test .mpkg, wait for the first native frame"
-A() { timeout 40 adb "$@"; }   # 这一段每条 adb 都限时，卡住也能往下走、留下日志
-if [ -f testdata/scene.pkg ]; then
-  A shell input keyevent KEYCODE_WAKEUP; A shell wm dismiss-keyguard
-  A shell am start -f 0x30000000 -n $PKG/.MainActivity; sleep 3
-  A shell input keyevent KEYCODE_BACK; sleep 1; A shell input keyevent KEYCODE_BACK; sleep 1   # 关掉前面测试打开的聊天，回到首页
-  A shell am start -f 0x30000000 -n $PKG/.MainActivity; sleep 2
-  timeout 60 adb exec-in "run-as $PKG sh -c 'mkdir -p files && cat > files/ci_wall.mpkg'" < testdata/scene.pkg
-  A logcat -c
-  A shell am start -a android.intent.action.VIEW -d "file:///data/user/0/$PKG/files/ci_wall.mpkg" -n $PKG/.MainActivity
-  for i in $(seq 1 60); do
-    sleep 5
-    if A logcat -d -s WE:I | grep -q "first frame"; then echo "first native frame after $((i*5))s" | tee -a $O/steps.txt; break; fi
-  done
-  echo "11 shot" >> $O/steps.txt
-  sleep 8; timeout 30 adb exec-out screencap -p > $O/11-native-wall.png
-  sleep 20; timeout 30 adb exec-out screencap -p > $O/11a-native-wall-later.png
-  A shell dumpsys SurfaceFlinger > $O/we-sf.txt 2>&1
-  A logcat -d | grep -E "chromium|WeWall|\[we\]" | tail -200 > $O/we-console.txt
-  echo "11 log" >> $O/steps.txt
-  A logcat -d -s 'WE:*' > $O/we-log.txt
-  A shell "run-as $PKG ls -la files/amor/walls" > $O/we-walls.txt 2>&1
-  # 退到后台再回来的测试在 guest 那个任务里做（这里的模拟器回来后容易被软件渲染拖垮，后面的收尾就跑不完）
-  echo "11 done" >> $O/steps.txt
-fi
-
 note "8 collect"
 (adb shell pidof $PKG || echo DEAD) > $O/pid-end.txt
 adb shell run-as $PKG cat shared_prefs/amor.xml > $O/prefs.xml 2>&1 || true

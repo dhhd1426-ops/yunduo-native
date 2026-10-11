@@ -1,14 +1,14 @@
-// 换动态壁纸后来回换城市：壁纸不能变回别的
+// 换壁纸后来回换城市：壁纸不能变回别的
 const {chromium}=require('playwright');const assert=require('node:assert/strict');const boot=require('./_boot515');
 (async()=>{
- const b=await chromium.launch({args:['--allow-file-access-from-files','--disable-web-security','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+ const b=await chromium.launch({args:['--allow-file-access-from-files','--disable-web-security']});
  try{
   for(const tagged of [false,true]){
    const {p,ctx,errs}=await boot(b,{init:`const w=JSON.parse(localStorage.getItem('cloud-weather-walls-v1'));w.dyn=true;${tagged?"w.list=[{id:'builtin',tags:['sun','cloud','rain','snow','fog','night'],focus:[.5,.5],zoom:1,align:'auto',at:0}];":''}localStorage.setItem('cloud-weather-walls-v1',JSON.stringify(w));const a=JSON.parse(localStorage.getItem('cloud-weather-app-v2'));a.cities=['hz','sh','bj','cc','ls','hrb','gz','sy'];localStorage.setItem('cloud-weather-app-v2',JSON.stringify(a));`});
    await p.waitForTimeout(500);
    const id=await p.evaluate(async(tagged)=>{
-    const manifest='file://'+location.pathname.replace(/apk\/www\/index.html$/, 'tests/generated-wall/__yunduo_manifest.json');
-    let take=JSON.stringify({name:'new.mpkg',path:manifest.replace(/\/[^/]+$/,'/x.mpkg'),pack:manifest,kind:'scene',size:1000});window.AmorNative={takeWall:()=>{let v=take;take='';return v;}};__wallIn();
+    const img='file://'+location.pathname.replace(/index.html$/, 'walls/default-thumb.jpg');
+    let take=JSON.stringify({name:'new.jpg',path:img,kind:'image',size:1000});window.AmorNative={takeWall:()=>{let v=take;take='';return v;}};__wallIn();
     await new Promise(r=>setTimeout(r,2500));
     const w=JSON.parse(localStorage.getItem('cloud-weather-walls-v1'));return w.cur;
    },tagged);

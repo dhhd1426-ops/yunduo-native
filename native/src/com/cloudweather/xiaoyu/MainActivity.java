@@ -28,14 +28,13 @@ import org.json.JSONObject;
 /**
  * 整个 App：一个全屏 WebView 加载 assets/index.html。
  * 3.8 起从手写 DEX 改为 Java 编译；另外挂上 AmorNative（通知模块）。
- * 5.0：网页的文件选择框、导入壁纸（也能从别的 App「用云朵天气打开」.mpkg）、网页定位（只要大概位置，用来找最近的气象站）。
+ * 5.0：网页的文件选择框、导入壁纸（图片、视频）、网页定位（只要大概位置，用来找最近的气象站）。
  */
 public class MainActivity extends Activity {
     private static final int WV_ID = 0x0100;
     static volatile String oauthUrl;   // 5.8：连接器登录授权的回调
     static final int REQ_FILE = 41, REQ_WALL = 42, REQ_LOC = 43, REQ_WMIC = 46, REQ_CAM = 48;
     private WebView web;
-    private WeWall weWall;             // 5.18 原生 Wallpaper Engine 渲染（WebView 后面的 SurfaceView）
     private ValueCallback<Uri[]> fileCb;
     private GeolocationPermissions.Callback geoCb;
     private String geoOrigin;
@@ -43,7 +42,6 @@ public class MainActivity extends Activity {
     private PermissionRequest micReq;   // 5.5：网页要麦克风（语音模式自己录音、云端识别）
     Voice voice;                 // 5.4：麦克风听写 / 语音模式 / 系统朗读兜底
     Mic mic;                     // 5.5.2：语音对话的原生录音（通话模式，带回声消除）
-    Viz viz;                     // 5.11：动态壁纸跟着手机里正在放的声音动（Visualizer 频谱）
     volatile String insets = "0,0,0,0";   // 5.13 状态栏 / 手势条 / 刘海占掉的边（CSS 像素：上,下,左,右）
     private boolean darkIcons = false;
 
@@ -136,17 +134,12 @@ public class MainActivity extends Activity {
         }
         voice = new Voice(this);
         mic = new Mic(this);
-        viz = new Viz(this);
         Store.saveLaunch(this, getIntent());
         takeShared(getIntent());
         web.loadUrl("file:///android_asset/index.html");
-        // 5.18：WebView 下面垫一块 SurfaceView 给原生壁纸渲染（默认藏着，网页要用时才显示）
         android.widget.FrameLayout rootView = new android.widget.FrameLayout(this);
         rootView.setBackgroundColor(0xFF0B0F12);
-        android.view.SurfaceView weSurface = new android.view.SurfaceView(this);
-        rootView.addView(weSurface, new android.widget.FrameLayout.LayoutParams(-1, -1));
         rootView.addView(web, new android.widget.FrameLayout.LayoutParams(-1, -1));
-        try { weWall = new WeWall(this, weSurface); } catch (Throwable t) { Store.err(this, "weWall", t); }
         setContentView(rootView);
         edgeToEdge();
     }
@@ -207,12 +200,6 @@ public class MainActivity extends Activity {
         runOnUiThread(new Runnable() { public void run() { try { if (dark != darkIcons) { darkIcons = dark; applyBars(); } } catch (Throwable t) { Store.err(MainActivity.this, "bars", t); } } });
     }
 
-    WeWall weWall() { return weWall; }
-
-    /** 5.18 原生壁纸在画时 WebView 要透明，才露得出后面的 SurfaceView */
-    void setWebTransparent(boolean t) {
-        try { if (web != null) web.setBackgroundColor(t ? Color.TRANSPARENT : 0xFF141A2D); } catch (Throwable e) { Store.err(this, "webBg", e); }
-    }
 
     boolean hasLoc() {
         return Build.VERSION.SDK_INT < 23 || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -315,10 +302,6 @@ public class MainActivity extends Activity {
             }
             return;
         }
-        if (req == Viz.REQ_VIZ) {
-            if (viz != null) viz.onPermission(g.length > 0 && g[0] == PackageManager.PERMISSION_GRANTED);
-            return;
-        }
         if (req == Mic.REQ_NMIC) {
             if (mic != null) mic.onPermission(g.length > 0 && g[0] == PackageManager.PERMISSION_GRANTED);
             return;
@@ -347,7 +330,6 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         js("window.__amorResume&&window.__amorResume()");
-        if (weWall != null) weWall.onResume();
         try {
             Scheduler.rescheduleFire(getApplicationContext());   // 被小米“清理后台”强停过的话闹钟已经没了，这里补回来
             KeepService.sync(getApplicationContext());
@@ -361,18 +343,14 @@ public class MainActivity extends Activity {
     protected void onPause() {
         super.onPause();
         js("window.__amorPause&&window.__amorPause()");      // 5.0：动态壁纸在后台停帧
-        if (weWall != null) weWall.onPause();
         if (voice != null) voice.onPause();                    // 切到后台就别再听了
         if (mic != null) mic.stop(true);
-        if (viz != null) viz.stop();                           // 5.11：后台不读声音
     }
 
     @Override
     protected void onDestroy() {
-        if (weWall != null) { try { weWall.stop(); } catch (Throwable t) { Store.err(this, "weStop", t); } }
         if (voice != null) voice.destroy();
         if (mic != null) mic.stop(false);
-        if (viz != null) viz.stop();
         super.onDestroy();
     }
 
